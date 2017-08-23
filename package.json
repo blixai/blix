@@ -1,0 +1,22 @@
+{
+  "name": "enzo",
+  "version": "1.0.0",
+  "description": "Quickly Create Applications",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [
+    "express",
+    "postgres",
+    "knex",
+    "react",
+    "rails",
+    "mongodb"
+  ],
+  "author": "Devon Bull",
+  "license": "ISC",
+  "bin": {
+    "enzo": "./index.js"
+  }
+}
