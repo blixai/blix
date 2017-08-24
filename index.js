@@ -10,29 +10,141 @@ let fs = require('fs')
 let path = require('path')
 let shell = require('shelljs')
 
-let name = process.argv[2]
-// need to check if project already exists
+
+let command = process.argv[2]
+let name = process.argv[3]
+
 let server = `let express = require('express')\nlet app = express()\nlet bodyParser = require('body-parser')\nconst routes = require('./routes')\nlet port = (process.env.PORT || 3000)\napp.use(bodyParser.json())\n\napp.use('/api/v1', routes)\napp.listen(port, () => {\n\tconsole.log('Listening at port 3000')\n})`
 let routes = `const express = require('express')\nconst r = express.Router()\nmodule.exports = r`
-let pck = `{\n\t"name": "${name}",\n\t"scripts": {\n\t\t"start": "nodemon server/server.js",\n\t\t"new-endpoints": "create-endpoints"\n\t},\n\t"dependencies": {\n\t\t"create-endpoints": "^1.0.1",\n\t\t"body-parser": "^1.17.2",\n\t\t"express": "^4.15.3",\n\t\t"nodemon": "^1.11.0"\n\t}\n}`
+let pck = `{\n\t"name": "${name}",\n\t"scripts": {\n\t\t"start": "nodemon server/server.js"\n\t},\n\t"dependencies": {\n\t\t"body-parser": "^1.17.2",\n\t\t"express": "^4.15.3",\n\t\t"nodemon": "^1.11.0"\n\t}\n}`
 let pgpck = `{\n\t"name": "${name}",\n\t"scripts": {\n\t\t"start": "nodemon server/server.js",\n\t\t"new-endpoints": "pg-endpoints"\n\t},\n\t"dependencies": {\n\t\t"pg-endpoints": "^1.0.2",\n\t\t"body-parser": "^1.17.2",\n\t\t"express": "^4.15.3",\n\t\t"nodemon": "^1.11.0",\n\t\t"knex": "^0.13.0",\n\t\t"pg": "^7.1.2"\n\t}\n}`
 let gitignore = 'node_modules\n.DS_Store'
-let readme = '## bootstrapped with rapid-express'
+let readme = '## bootstrapped with enzo'
 
-if (name) {
-  fs.mkdirSync(`./${name}`)
+// backend serving standard frontend
+let pageRoutes = `const express = require('express')\nconst r = express.Router()\nmodule.exports = r`
+let frontendServer = `let express = require('express')\nlet app = express()\nlet bodyParser = require('body-parser')\nconst routes = require('./routes')\nconst pages = require('./pages')\nlet port = (process.env.PORT || 3000)\napp.use(bodyParser.json())\n\napp.use('/api/v1', routes)\napp.listen(port, () => {\n\tconsole.log('Listening at port 3000')\n})`
 
+
+
+let createProject = () => {
+  if (name) {
+    fs.mkdirSync(`./${name}`)
+    
+    rl.question('Do you want a client side? (Y/N) ', (answer) => {
+      answer = answer.toLowerCase()
+      if (answer === 'y') {
+        rl.question('Will you be using React? (Y/N) ', (react) => {
+          react = react.toLowerCase()
+          if (react === 'y') {
+            rl.question('Is this a Singe Page Application? (Y/N) ', (spa) => {
+              spa = spa.toLowerCase()
+              if (spa === 'y') {
+               createReactSPA() 
+              } else {
+                createReactRedux()
+              }
+            })
+          } else {
+            createBackendWithFrontend()
+          }
+        })
+      } else {
+        createBackend()
+      }
+    })
+  } else {
+    rl.close()
+  }
+}
+
+let createBackend = () => {
+  rl.question('Do you need a backend? (Y/N) ', (backend) => {
+    backend = backend.toLowerCase()
+    if (backend === 'y') {
+      rl.question('Would you like to configure a postgres database with knex.js? (Y/N) ', (answer) => {
+        answer = answer.toLowerCase()
+        if (answer === 'y') {
+          writeFiles()
+          fs.writeFile(`./${name}/package.json`, pgpck, (err) => {
+            if (err) throw err
+            rl.close();
+            runPGInstall()
+          })
+        } else {
+          writeFiles()
+          fs.writeFile(`./${name}/package.json`, pck, (err) => {
+            if (err) throw err
+            rl.close();
+            runInstall()
+          })
+        }
+      })
+    } else {
+      // create a gitignore and readme
+      fs.writeFile(`./${name}/.gitignore`, gitignore, (err) => {
+        if (err) throw err
+      })
+
+      fs.writeFile(`./${name}/README.md`, readme, (err) => {
+        if (err) throw err
+      })
+    }
+  })
+}
+
+let createReactSPA = () => {
+
+}
+
+let createReactRedux = () => {
+  rl.question('Do you need a backend? (Y/N) ', (backend) => {
+    backend = backend.toLowerCase()
+    if (backend === 'y') {
+      rl.question('Would you like to configure a postgres database with knex.js? (Y/N) ', (answer) => {
+        answer = answer.toLowerCase()
+        if (answer === 'y') {
+          writeFilesWithoutReact()
+          fs.writeFile(`./${name}/package.json`, pgpck, (err) => {
+            if (err) throw err
+            rl.close();
+            runPGInstall()
+          })
+        } else {
+          writeFilesWithoutReact()
+          fs.writeFile(`./${name}/package.json`, pck, (err) => {
+            if (err) throw err
+            rl.close();
+            runInstall()
+          })
+        }
+    
+      })
+    } else {
+      // create a gitignore and readme
+      fs.writeFile(`./${name}/.gitignore`, gitignore, (err) => {
+        if (err) throw err
+      })
+
+      fs.writeFile(`./${name}/README.md`, readme, (err) => {
+        if (err) throw err
+      })
+    }
+  })
+}
+
+let createBackendWithFrontend = () => {
   rl.question('Would you like to configure a postgres database with knex.js? (Y/N) ', (answer) => {
     answer = answer.toLowerCase()
     if (answer === 'y') {
-      writeFiles()
+      writeFilesWithoutReact()
       fs.writeFile(`./${name}/package.json`, pgpck, (err) => {
         if (err) throw err
         rl.close();
         runPGInstall()
       })
     } else {
-      writeFiles()
+      writeFilesWithoutReact()
       fs.writeFile(`./${name}/package.json`, pck, (err) => {
         if (err) throw err
         rl.close();
@@ -41,9 +153,23 @@ if (name) {
     }
 
   })
-} else {
-  rl.close()
 }
+
+let checkCommand = (command) => {
+  switch (command) {
+    case "new":
+      createProject()
+      break;
+
+    default:
+    break;
+  }
+}
+
+checkCommand(command)
+
+// need to check if project already exists
+
 
 let writeFiles = () => {
   fs.mkdirSync(`./${name}/server`)
@@ -54,6 +180,31 @@ let writeFiles = () => {
   })
 
   fs.writeFile(`./${name}/server/routes.js`, routes, (err) => {
+    if (err) throw err
+  })
+
+  fs.writeFile(`./${name}/.gitignore`, gitignore, (err) => {
+    if (err) throw err
+  })
+
+  fs.writeFile(`./${name}/README.md`, readme, (err) => {
+    if (err) throw err
+  })
+}
+
+let writeFilesWithoutReact = () => {
+  fs.mkdirSync(`./${name}/server`)
+  fs.mkdirSync(`./${name}/server/models`)
+  fs.mkdirSync(`./${name}/server/public`)
+  fs.writeFile(`./${name}/server/server.js`, frontendServer, (err) => {
+    if (err) throw err
+  })
+
+  fs.writeFile(`./${name}/server/routes.js`, routes, (err) => {
+    if (err) throw err
+  })
+
+  fs.writeFile(`./${name}/server/pages.js`, pageRoutes, (err) => {
     if (err) throw err
   })
 
@@ -98,4 +249,8 @@ let modifyKnex = () => {
       shell.exec('knex migrate:make initial')
     })
   }
+}
+
+let createPage = () => {
+
 }

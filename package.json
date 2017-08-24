@@ -18,5 +18,8 @@
   "license": "ISC",
   "bin": {
     "enzo": "./index.js"
+  },
+  "dependencies": {
+    "shelljs": "^0.7.8"
   }
 }
