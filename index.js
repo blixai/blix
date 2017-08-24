@@ -31,7 +31,7 @@ let createProject = () => {
   if (name) {
     fs.mkdirSync(`./${name}`)
     
-    rl.question('Do you want a client side? (Y/N) ', (answer) => {
+    rl.question('Do you need a client side? (Y/N) ', (answer) => {
       answer = answer.toLowerCase()
       if (answer === 'y') {
         rl.question('Will you be using React? (Y/N) ', (react) => {
@@ -58,40 +58,7 @@ let createProject = () => {
   }
 }
 
-let createBackend = () => {
-  rl.question('Do you need a backend? (Y/N) ', (backend) => {
-    backend = backend.toLowerCase()
-    if (backend === 'y') {
-      rl.question('Would you like to configure a postgres database with knex.js? (Y/N) ', (answer) => {
-        answer = answer.toLowerCase()
-        if (answer === 'y') {
-          writeFiles()
-          fs.writeFile(`./${name}/package.json`, pgpck, (err) => {
-            if (err) throw err
-            rl.close();
-            runPGInstall()
-          })
-        } else {
-          writeFiles()
-          fs.writeFile(`./${name}/package.json`, pck, (err) => {
-            if (err) throw err
-            rl.close();
-            runInstall()
-          })
-        }
-      })
-    } else {
-      // create a gitignore and readme
-      fs.writeFile(`./${name}/.gitignore`, gitignore, (err) => {
-        if (err) throw err
-      })
 
-      fs.writeFile(`./${name}/README.md`, readme, (err) => {
-        if (err) throw err
-      })
-    }
-  })
-}
 
 let createReactSPA = () => {
 
@@ -152,6 +119,41 @@ let createBackendWithFrontend = () => {
       })
     }
 
+  })
+}
+
+let createBackend = () => {
+  rl.question('Do you need a backend? (Y/N) ', (backend) => {
+    backend = backend.toLowerCase()
+    if (backend === 'y') {
+      rl.question('Would you like to configure a postgres database with knex.js? (Y/N) ', (answer) => {
+        answer = answer.toLowerCase()
+        if (answer === 'y') {
+          writeFiles()
+          fs.writeFile(`./${name}/package.json`, pgpck, (err) => {
+            if (err) throw err
+            rl.close();
+            runPGInstall()
+          })
+        } else {
+          writeFiles()
+          fs.writeFile(`./${name}/package.json`, pck, (err) => {
+            if (err) throw err
+            rl.close();
+            runInstall()
+          })
+        }
+      })
+    } else {
+      // create a gitignore and readme
+      fs.writeFile(`./${name}/.gitignore`, gitignore, (err) => {
+        if (err) throw err
+      })
+
+      fs.writeFile(`./${name}/README.md`, readme, (err) => {
+        if (err) throw err
+      })
+    }
   })
 }
 
