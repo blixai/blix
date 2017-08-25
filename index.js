@@ -72,47 +72,63 @@ let createProject = () => {
 }
 
 
-// need to modify the json packages to include webpack, react, react-dom, etc
 let createReactSPA = () => {
   rl.question('Do you need a backend? (Y/N) ', (backend) => {
     backend = backend.toLowerCase()
     if (backend === 'y') {
-      rl.question('Would you like to configure a postgres database with knex.js? (Y/N) ', (answer) => {
-        answer = answer.toLowerCase()
-        if (answer === 'y') {
-          writeFilesWithSPAReact()
-          fs.writeFile(`./${name}/package.json`, spaNoSQLPck, (err) => {
-            if (err) throw err
-            rl.close();
-            shell.cd(`${name}`)
-            console.log('Downloading dependencies and setting up the project, this may take a moment')
-            shell.exec('npm install --save express nodemon pg knex body-parser react react-dom webpack babel-loader css-loader babel-core babel-preset-es2015 babel-preset-react')
-            shell.exec('npm install -g knex')
-            shell.exec('knex init')
-            modifyKnex()
-            process.stdout.write('\033c')
-            console.log('The project was created!')
-            console.log(`cd into ${name} and run npm start`)
-          })
-        } else {
-          writeFilesWithSPAReact()
-          fs.writeFile(`./${name}/package.json`, spaNoSQLPck, (err) => {
-            if (err) throw err
-            rl.close();
-            shell.cd(`${name}`)
-            console.log('Downloading dependencies and setting up the project, this may take a moment')
-            shell.exec('npm install --save express nodemon body-parser react react-dom webpack babel-loader css-loader babel-core babel-preset-es2015 babel-preset-react')
-            process.stdout.write('\033c')
-            console.log('The project was created!')
-            console.log(`cd into ${name} and run npm start`)
-          })
-        }
-
-      })
-    } else {
-      reactSPAWithoutBackend()
-    }
-  })
+      rl.question('Will you use a postgres or mongo database? (Y/N) ', (database) => {
+        database = database.toLowerCase()
+        if (database === 'y') {
+          rl.question('Postgres or MongoDB? (P/M) ', (type) => {
+            type = type.toLowerCase()
+            if (type === 'p') {
+              writeFilesWithSPAReact()
+              fs.writeFile(`./${name}/package.json`, spaNoSQLPck, (err) => {
+                if (err) throw err
+                rl.close();
+                shell.cd(`${name}`)
+                console.log('Downloading dependencies and setting up the project, this may take a moment')
+                shell.exec('npm install --save express nodemon pg knex body-parser react react-dom webpack babel-loader css-loader babel-core babel-preset-es2015 babel-preset-react')
+                shell.exec('npm install -g knex')
+                shell.exec('knex init')
+                modifyKnex()
+                process.stdout.write('\033c')
+                console.log('The project was created!')
+                console.log(`cd into ${name} and run npm start`)
+              })
+            } else {
+              writeFilesWithSPAReact()
+              fs.writeFile(`./${name}/package.json`, spaNoSQLPck, (err) => {
+                if (err) throw err
+                rl.close();
+                fs.writeFileSync(`./${name}/.env`)
+                shell.cd(`${name}`)
+                console.log('Downloading dependencies and setting up the project, this may take a moment')
+                shell.exec('npm install --save express nodemon mongo dotenv body-parser react react-dom webpack babel-loader css-loader babel-core babel-preset-es2015 babel-preset-react')
+                process.stdout.write('\033c')
+                console.log('The project was created!')
+                console.log(`cd into ${name} and run npm start`)
+              })
+            }
+        })
+      } else {
+        writeFilesWithSPAReact()
+        fs.writeFile(`./${name}/package.json`, spaNoSQLPck, (err) => {
+          if (err) throw err
+          rl.close();
+          shell.cd(`${name}`)
+          console.log('Downloading dependencies and setting up the project, this may take a moment')
+          shell.exec('npm install --save express nodemon body-parser react react-dom webpack babel-loader css-loader babel-core babel-preset-es2015 babel-preset-react')
+          process.stdout.write('\033c')
+          console.log('The project was created!')
+          console.log(`cd into ${name} and run npm start`)
+        })
+      }  
+    }) 
+  } else {
+    reactSPAWithoutBackend()
+  }
+  })   
 }
 
 let reactSPAWithoutBackend = () => {
@@ -197,34 +213,23 @@ let createReactRedux = () => {
   rl.question('Do you need a backend? (Y/N) ', (backend) => {
     backend = backend.toLowerCase()
     if (backend === 'y') {
-      rl.question('Would you like to configure a postgres database with knex.js? (Y/N) ', (answer) => {
+      rl.question('Do you need a Postgres or MongoDB database? (Y/N) ', (answer) => {
         answer = answer.toLowerCase()
         if (answer === 'y') {
-          writeFilesWithoutReact()
-          fs.writeFile(`./${name}/package.json`, pgpck, (err) => {
-            if (err) throw err
-            rl.close();
-            runPGInstall()
+          rl.question('Postgres or MongoDB? (P/M) ', (database) => {
+            database = database.toLowerCase()
+            if (database === 'p') {
+              // build a react/redux with postgres and knex
+            } else {
+              // build a react/redux with mongo backend
+            }
           })
         } else {
-          writeFilesWithoutReact()
-          fs.writeFile(`./${name}/package.json`, pck, (err) => {
-            if (err) throw err
-            rl.close();
-            runInstall()
-          })
+          // build a react/redux without a db
         }
-    
       })
     } else {
-      // create a gitignore and readme
-      fs.writeFile(`./${name}/.gitignore`, gitignore, (err) => {
-        if (err) throw err
-      })
-
-      fs.writeFile(`./${name}/README.md`, readme, (err) => {
-        if (err) throw err
-      })
+      // create react redux without a backend
     }
   })
 }
