@@ -41,6 +41,7 @@ let spaNoBE = `{\n\t"name": "${name}",\n\t"version": "1.0.0",\n\t"scripts": {\n\
 
 
 // redux apps
+let reactReduxServer = `let express = require('express')\nlet app = express()\nlet path = require('path')\nlet bodyParser = require('body-parser')\nconst routes = require('./routes')\nlet port = (process.env.PORT || 3000)\napp.use(bodyParser.json())\n\napp.use('/api/v1', routes)\n\napp.use("/build", express.static(path.join(__dirname, "../build")))\n\napp.get('/*', (req, res) => res.sendFile(path.join(__dirname, '../public/index.html')))\n\napp.listen(port, () => {\n\tconsole.log('Listening at port 3000')\n})`
 let rootReducer = `import { combineReducers } from 'redux'\n\n\nconst rootReducer = combineReducers({})\n\nexport default rootReducer`
 let configStore = `import { createStore, applyMiddleware } from 'redux'\nimport rootReducer from './reducers/rootReducer'\n\nconst devTools = window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()\n\nexport const configureStore = () => {\n\treturn createStore(\n\t\trootReducer,\n\t\tdevTools\n\t)\n}`
 let reactReduxIndex = `import React from 'react'\nimport ReactDOM from 'react-dom'\nimport App from './containers/App/AppContainer'\nimport { BrowserRouter as Router, Route } from 'react-router-dom'\nimport { configureStore } from './configStore'\nimport { Provider } from 'react-redux'\nimport createHistory from 'history/createBrowserHistory'\n\n\nconst history = createHistory()\nconst store = configureStore()\n\n\nReactDOM.render(\n\t<Provider store= { store }>\n\t\t<Router history= { history }>\n\t\t\t<Route path='/' component={App}/>\n\t\t</Router>\n\t</Provider>\n, document.getElementById('root'))`
@@ -48,6 +49,7 @@ let appContainer = `import { connect } from 'react-redux'\nimport App from './Ap
 let appRouter = `import React, { Component } from 'react'\nimport { Route, Switch, Redirect } from 'react-router-dom'\nimport Home from '../Home/HomeContainer'\n\n\nclass App extends Component {\n\trender() {\n\t\treturn (\n\t\t\t<section>\n\t\t\t\t<Switch>\n\t\t\t\t\t<Route exact path='/' render={(history) => {\n\t\t\t\t\t\treturn <Home history={history}/>\n\t\t\t\t\t}}/>\n\t\t\t\t</Switch>\n\t\t\t</section>\n\t\t)\n\t}\n}\n\nexport default App`
 let homeContainer = `import { connect } from 'react-redux'\nimport Home from './Home'\n\nconst mapStateToProps = (state) => {\n\t return state\n}\n\nexport default connect(mapStateToProps)(Home)`
 let home = `import React, { Component } from 'react'\n\nclass Home extends Component {\n\tconstructor(props) {\n\t\tsuper(props)\n\t\tthis.state = {}\n\t}\n\n\trender() {\n\t\treturn (\n\t\t\t<div>Hello world!</div>\n\t\t)\n\t}\n}\n\nexport default Home`
+let appRouterNoBackend = `import React, { Component } from 'react'\nimport { Route, Switch, Redirect } from 'react-router-dom'\nimport Home from '../Home/HomeContainer'\n\n\nclass App extends Component {\n\trender() {\n\t\treturn (\n\t\t\t<section>\n\t\t\t\t<Switch>\n\t\t\t\t\t<Route path='/' render={(history) => {\n\t\t\t\t\t\treturn <Home history={history}/>\n\t\t\t\t\t}}/>\n\t\t\t\t</Switch>\n\t\t\t</section>\n\t\t)\n\t}\n}\n\nexport default App`
 
 let shouldUseYarn = () => {
   try {
@@ -103,6 +105,7 @@ let createProject = () => {
       }
     })
   } else {
+    // need to include a message
     rl.close()
   }
 }
@@ -280,7 +283,6 @@ let createReactRedux = () => {
               ReactReduxWithBackend()
               fs.writeFile(`./${name}/package.json`, spaNoSQLPck, (err) => {
                 if (err) throw err
-                fs.writeFileSync(`./${name}/.env`, '')
                 rl.close();
                 shell.cd(`${name}`)
                 process.stdout.write('\033c')                
@@ -295,18 +297,44 @@ let createReactRedux = () => {
           })
         } else {
           // build a react/redux without a db
+          ReactReduxWithBackend()
+          fs.writeFile(`./${name}/package.json`, spaNoSQLPck, (err) => {
+            if (err) throw err
+            rl.close();
+            shell.cd(`${name}`)
+            process.stdout.write('\033c')
+            console.log('Downloading dependencies and setting up the project, this may take a moment')
+            install('redux react-router-dom react-redux express nodemon dotenv body-parser react react-dom webpack')
+            installDevDependencies('babel-loader css-loader babel-core babel-preset-es2015 babel-preset-react')
+            process.stdout.write('\033c')
+            console.log('The project was created!')
+            console.log(`cd into ${name} and run npm start`)
+          })
         }
       })
     } else {
       // create react redux without a backend
+      reactReduxWithoutBackend()
+      fs.writeFile(`./${name}/package.json`, spaNoBE, (err) => {
+        if (err) throw err
+        rl.close();
+        shell.cd(`${name}`)
+        process.stdout.write('\033c')
+        console.log('Downloading dependencies and setting up the project, this may take a moment')
+        install('redux react-router-dom react-redux body-parser react react-dom webpack')
+        installDevDependencies('babel-loader css-loader babel-core babel-preset-es2015 babel-preset-react')
+        process.stdout.write('\033c')
+        console.log('The project was created!')
+        console.log(`cd into ${name} and run npm start`)
+      })
     }
   })
 }
 
 
 let ReactReduxWithBackend = () => {
+  
   //frontend
-
   fs.mkdirSync(`./${name}/src`)
   fs.mkdirSync(`./${name}/build`)
   fs.mkdirSync(`./${name}/public`)
@@ -316,7 +344,6 @@ let ReactReduxWithBackend = () => {
   fs.writeFile(`./${name}/webpack.config.js`, spaWebpack, (err) => {
     if (err) throw err
   })
-  // change the index js to have browser history and redux store
   fs.writeFile(`./${name}/src/index.js`, reactReduxIndex, (err) => {
     if (err) throw err
   })
@@ -354,7 +381,7 @@ let ReactReduxWithBackend = () => {
   //backend
   fs.mkdirSync(`./${name}/server`)
   fs.mkdirSync(`./${name}/server/models`)
-  fs.writeFile(`./${name}/server/server.js`, spaServer, (err) => {
+  fs.writeFile(`./${name}/server/server.js`, reactReduxServer, (err) => {
     if (err) throw err
   })
 
@@ -370,9 +397,64 @@ let ReactReduxWithBackend = () => {
   fs.writeFile(`./${name}/README.md`, readme, (err) => {
     if (err) throw err
   })
+  fs.writeFile(`./${name}/.env`, '', (err) => {
+    if (err) throw err 
+  }) 
 }
 
+let reactReduxWithoutBackend = () => {
+  //frontend
+  fs.mkdirSync(`./${name}/src`)
+  fs.mkdirSync(`./${name}/build`)
+  fs.writeFile(`./${name}/index.html`, spaHtmlFile, (err) => {
+    if (err) throw err
+  })
+  fs.writeFile(`./${name}/webpack.config.js`, spaWebpack, (err) => {
+    if (err) throw err
+  })
+  fs.writeFile(`./${name}/src/index.js`, reactReduxIndex, (err) => {
+    if (err) throw err
+  })
+  fs.mkdirSync(`./${name}/src/containers`)
+  fs.mkdirSync(`./${name}/src/containers/App`)
+  fs.writeFile(`./${name}/src/containers/App/App.js`, appRouterNoBackend, (err) => {
+    if (err) throw err
+  })
+  fs.writeFile(`./${name}/src/containers/App/AppContainer.js`, appContainer, (err) => {
+    if (err) throw err
+  })
+  // need to write home folder, file and home container
+  fs.mkdirSync(`./${name}/src/containers/Home`)
+  fs.writeFile(`./${name}/src/containers/Home/Home.js`, home, (err) => {
+    if (err) throw err
+  })
+  fs.writeFile(`./${name}/src/containers/Home/HomeContainer.js`, homeContainer, (err) => {
+    if (err) throw err
+  })
+  fs.writeFile(`./${name}/src/configStore.js`, configStore, (err) => {
+    if (err) throw err
+  })
+  fs.writeFile(`./${name}/.babelrc`, babel, (err) => {
+    if (err) throw err
+  })
+  fs.mkdirSync(`./${name}/src/actions`)
+  fs.writeFile(`./${name}/src/actions/index.js`, '', (err) => {
+    if (err) throw err
+  })
+  fs.mkdirSync(`./${name}/src/reducers`)
+  fs.writeFile(`./${name}/src/reducers/rootReducer.js`, rootReducer, (err) => {
+    if (err) throw err
+  })
 
+  //other files
+  fs.writeFile(`./${name}/.gitignore`, gitignore, (err) => {
+    if (err) throw err
+  })
+
+  fs.writeFile(`./${name}/README.md`, readme, (err) => {
+    if (err) throw err
+  })
+}
 
 let createBackendWithFrontend = () => {
   rl.question('Would you like to configure a postgres database with knex.js? (Y/N) ', (answer) => {
