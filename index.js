@@ -51,6 +51,11 @@ let homeContainer = `import { connect } from 'react-redux'\nimport Home from './
 let home = `import React, { Component } from 'react'\n\nclass Home extends Component {\n\tconstructor(props) {\n\t\tsuper(props)\n\t\tthis.state = {}\n\t}\n\n\trender() {\n\t\treturn (\n\t\t\t<div>Hello world!</div>\n\t\t)\n\t}\n}\n\nexport default Home`
 let appRouterNoBackend = `import React, { Component } from 'react'\nimport { Route, Switch, Redirect } from 'react-router-dom'\nimport Home from '../Home/HomeContainer'\n\n\nclass App extends Component {\n\trender() {\n\t\treturn (\n\t\t\t<section>\n\t\t\t\t<Switch>\n\t\t\t\t\t<Route path='/' render={(history) => {\n\t\t\t\t\t\treturn <Home history={history}/>\n\t\t\t\t\t}}/>\n\t\t\t\t</Switch>\n\t\t\t</section>\n\t\t)\n\t}\n}\n\nexport default App`
 
+//rails apps
+let railsServer = `let express = require('express')\nlet app = express()\nlet path = require('path')\nlet bodyParser = require('body-parser')\nconst routes = require('./routes')\nconst pages = require('./pages')\nlet port = (process.env.PORT || 3000)\napp.use(bodyParser.json())\n\napp.use('/api/v1', routes)\napp.use('/', pages)\n\napp.use("/public", express.static(path.join(__dirname, "../public")))\n\n\n\napp.listen(port, () => {\n\tconsole.log('Listening at port 3000')\n})`
+let railsHtmlFile = `<!DOCTYPE html>\n<html>\n\t<head>\n\t\t<meta charset="utf-8">\n\t\t<meta name="viewport" content="width=device-width, initial-scale=1">\n\t\t<title>Home</title>\n\t</head>\n\t<body>\n\t\t<div>Hello World!</div>\n\t\t<script src="public/home/index.js"></script>\n\t</body>\n</htlm>`
+let pagesRoutes = `const express = require('express')\nconst r = express.Router()\nconst path = require('path')\nmodule.exports = r\n\nr.get('/', (req, res) => res.sendFile(path.join(__dirname, '../public/home/index.html')))`
+
 let shouldUseYarn = () => {
   try {
     execSync('yarnpkg --version', { stdio: 'ignore' });
@@ -97,7 +102,7 @@ let createProject = () => {
               }
             })
           } else {
-            createBackendWithFrontend()
+            createAppWithoutReact()
           }
         })
       } else {
@@ -456,61 +461,113 @@ let reactReduxWithoutBackend = () => {
   })
 }
 
-let createBackendWithFrontend = () => {
-  rl.question('Would you like to configure a postgres database with knex.js? (Y/N) ', (answer) => {
-    answer = answer.toLowerCase()
-    if (answer === 'y') {
-      writeFilesWithoutReact()
-      fs.writeFile(`./${name}/package.json`, pgpck, (err) => {
-        if (err) throw err
-        rl.close();
-        runPGInstall()
-      })
-    } else {
-      writeFilesWithoutReact()
-      fs.writeFile(`./${name}/package.json`, pck, (err) => {
-        if (err) throw err
-        rl.close();
-        runInstall()
-      })
-    }
-
-  })
-}
-
-let createBackend = () => {
+let createAppWithoutReact = () => {
   rl.question('Do you need a backend? (Y/N) ', (backend) => {
     backend = backend.toLowerCase()
     if (backend === 'y') {
-      rl.question('Would you like to configure a postgres database with knex.js? (Y/N) ', (answer) => {
+      rl.question('Do you want to use a Postgres or MongoDB database? (Y/N) ', (answer) => {
         answer = answer.toLowerCase()
         if (answer === 'y') {
-          writeFiles()
-          fs.writeFile(`./${name}/package.json`, pgpck, (err) => {
-            if (err) throw err
-            rl.close();
-            runPGInstall()
+          rl.question('Postgres or MongoDB? (P/M) ', (database) => {
+            database = database.toLowerCase()
+            if (database === 'p') {
+              // create project with postgres
+              railsApp()
+              fs.writeFile(`./${name}/package.json`, spaNoSQLPck, (err) => {
+                if (err) throw err
+                rl.close();
+                shell.cd(`${name}`)
+                console.log('Downloading dependencies and setting up the project, this may take a moment')
+                install('express nodemon pg knex body-parser')
+                if (shouldUseYarn()) {
+                  shell.exec('yarn global add knex')
+                  shell.exec('knex init')
+                } else {
+                  shell.exec('npm install -g knex')
+                  shell.exec('knex init')
+                }
+                modifyKnex()
+                process.stdout.write('\033c')
+                console.log('The project was created!')
+                console.log(`cd into ${name} and run npm start`)
+              })
+            } else {
+              // create project with mongoDB
+              railsApp()
+              fs.writeFile(`./${name}/package.json`, spaNoSQLPck, (err) => {
+                if (err) throw err
+                rl.close();
+                shell.cd(`${name}`)
+                console.log('Downloading dependencies and setting up the project, this may take a moment')
+                install('express nodemon mongo body-parser')
+                process.stdout.write('\033c')
+                console.log('The project was created!')
+                console.log(`cd into ${name} and run npm start`)
+              })
+            }
           })
         } else {
-          writeFiles()
-          fs.writeFile(`./${name}/package.json`, pck, (err) => {
+          // create project without db
+          railsApp()
+          fs.writeFile(`./${name}/package.json`, spaNoSQLPck, (err) => {
             if (err) throw err
             rl.close();
-            runInstall()
+            shell.cd(`${name}`)
+            console.log('Downloading dependencies and setting up the project, this may take a moment')
+            install('express nodemon body-parser')
+            process.stdout.write('\033c')
+            console.log('The project was created!')
+            console.log(`cd into ${name} and run npm start`)
           })
         }
       })
     } else {
-      // create a gitignore and readme
-      fs.writeFile(`./${name}/.gitignore`, gitignore, (err) => {
-        if (err) throw err
-      })
-
-      fs.writeFile(`./${name}/README.md`, readme, (err) => {
-        if (err) throw err
-      })
+      // create project without react or backend
     }
   })
+}
+
+let railsApp = () => {
+  fs.mkdirSync(`./${name}/public`)
+  fs.mkdirSync(`./${name}/public/home`)
+  fs.writeFile(`./${name}/public/home/index.html`, railsHtmlFile, (err) => {
+    if (err) throw err
+  })
+  fs.writeFile(`./${name}/public/home/index.js`, `console.log('hello world!')`, (err) => {
+    if (err) throw err
+  })
+
+  //backend
+  fs.mkdirSync(`./${name}/server`)
+  fs.mkdirSync(`./${name}/server/models`)
+  fs.writeFile(`./${name}/server/server.js`, railsServer, (err) => {
+    if (err) throw err
+  })
+
+  fs.writeFile(`./${name}/server/routes.js`, routes, (err) => {
+    if (err) throw err
+  })
+  fs.writeFile(`./${name}/server/pages.js`, pagesRoutes, (err) => {
+    if (err) throw err
+  })
+
+  //other files
+  fs.writeFile(`./${name}/.gitignore`, gitignore, (err) => {
+    if (err) throw err
+  })
+
+  fs.writeFile(`./${name}/README.md`, readme, (err) => {
+    if (err) throw err
+  })
+  fs.writeFile(`./${name}/.env`, '', (err) => {
+    if (err) throw err
+  })
+}
+
+
+// create a backend only project
+let createBackend = () => {
+ 
 }
 
 let checkCommand = (command) => {
@@ -529,73 +586,6 @@ checkCommand(command)
 // need to check if project already exists
 
 
-let writeFiles = () => {
-  fs.mkdirSync(`./${name}/server`)
-  fs.mkdirSync(`./${name}/server/models`)
-
-  fs.writeFile(`./${name}/server/server.js`, server, (err) => {
-    if (err) throw err
-  })
-
-  fs.writeFile(`./${name}/server/routes.js`, routes, (err) => {
-    if (err) throw err
-  })
-
-  fs.writeFile(`./${name}/.gitignore`, gitignore, (err) => {
-    if (err) throw err
-  })
-
-  fs.writeFile(`./${name}/README.md`, readme, (err) => {
-    if (err) throw err
-  })
-}
-
-let writeFilesWithoutReact = () => {
-  fs.mkdirSync(`./${name}/server`)
-  fs.mkdirSync(`./${name}/server/models`)
-  fs.mkdirSync(`./${name}/server/public`)
-  fs.writeFile(`./${name}/server/server.js`, frontendServer, (err) => {
-    if (err) throw err
-  })
-
-  fs.writeFile(`./${name}/server/routes.js`, routes, (err) => {
-    if (err) throw err
-  })
-
-  fs.writeFile(`./${name}/server/pages.js`, routes, (err) => {
-    if (err) throw err
-  })
-
-  fs.writeFile(`./${name}/.gitignore`, gitignore, (err) => {
-    if (err) throw err
-  })
-
-  fs.writeFile(`./${name}/README.md`, readme, (err) => {
-    if (err) throw err
-  })
-}
-
-
-let runInstall = () => {
-  console.log('Installing dependencies and running setup, this may take a moment')
-  shell.cd(`${name}`)
-  shell.exec('npm install')
-  process.stdout.write('\033c')
-  console.log('The server was created!')
-  console.log(`cd into ${name} and run npm start`)
-}
-
-let runPGInstall = () => {
-  console.log('Installing express and other packages, this may take a second')
-  shell.cd(`${name}`)
-  shell.exec('npm install')
-  shell.exec('npm install -g knex')
-  shell.exec('knex init')
-  modifyKnex()
-  process.stdout.write('\033c')
-  console.log('The server was created!')
-  console.log(`cd into ${name} and run npm start`)
-}
 
 let newKnex = `module.exports = {\n\n\tdevelopment: {\n\t\tclient: 'pg',\n\t\tconnection: 'postgres://localhost/${name}',\n\t\tmigrations: {\n\t\t\tdirectory: './db/seeds/dev'\n\t\t},\n\t\tuseNullAsDefault: true\n\t},\n\n\tproduction: {\n\t\tclient: 'pg',\n\t\tconnection: process.env.DATABASE_URL + '?ssl=true',\n\t\tmigrations: {\n\t\t\tdirectory: 'db/migrations'\n\t\t},\n\t\tseeds: {\n\t\t\tdirectory: 'db/seeds/dev'\n\t\t},\n\t\tuseNullAsDefault: true\n\t}\n\n};`
 
@@ -607,8 +597,4 @@ let modifyKnex = () => {
       shell.exec('knex migrate:make initial')
     })
   }
-}
-
-let createPage = () => {
-
 }
