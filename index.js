@@ -56,6 +56,11 @@ let railsServer = `let express = require('express')\nlet app = express()\nlet pa
 let railsHtmlFile = `<!DOCTYPE html>\n<html>\n\t<head>\n\t\t<meta charset="utf-8">\n\t\t<meta name="viewport" content="width=device-width, initial-scale=1">\n\t\t<title>Home</title>\n\t</head>\n\t<body>\n\t\t<div>Hello World!</div>\n\t\t<script src="public/home/index.js"></script>\n\t</body>\n</htlm>`
 let pagesRoutes = `const express = require('express')\nconst r = express.Router()\nconst path = require('path')\nmodule.exports = r\n\nr.get('/', (req, res) => res.sendFile(path.join(__dirname, '../public/home/index.html')))`
 
+let indexHtml = `<!DOCTYPE html>\n<html>\n\t<head>\n\t\t<meta charset="utf-8">\n\t\t<meta name="viewport" content="width=device-width, initial-scale=1">\n\t\t<title>Home</title>\n\t\t<link rel='stylesheet' type='text/css' href='main.css'/>\n\t</head>\n\t<body>\n\t\t<h1>Hello World</h1>\n\t\t<script src="index.js"></script>\n\t</body>\n</htlm>`
+let mainCss = `h1 {\n\tcolor: blue\n}`
+
+let frontend;
+
 let shouldUseYarn = () => {
   try {
     execSync('yarnpkg --version', { stdio: 'ignore' });
@@ -87,7 +92,7 @@ let createProject = () => {
   if (name) {
     fs.mkdirSync(`./${name}`)
     
-    rl.question('Do you need a client side? (Y/N) ', (answer) => {
+    rl.question('Do you need a Frontend? (Y/N) ', (answer) => {
       answer = answer.toLowerCase()
       if (answer === 'y') {
         rl.question('Will you be using React? (Y/N) ', (react) => {
@@ -106,6 +111,7 @@ let createProject = () => {
           }
         })
       } else {
+        frontend = false 
         createBackend()
       }
     })
@@ -523,6 +529,10 @@ let createAppWithoutReact = () => {
       })
     } else {
       // create project without react or backend
+      // readme, gitignore, index.html, index.js, main.css
+      createBasicApp()
+      rl.close()
+      console.log(`Project created! cd into ${name} and open index.html`)
     }
   })
 }
@@ -564,6 +574,23 @@ let railsApp = () => {
   })
 }
 
+let createBasicApp = () => {
+  fs.writeFile(`./${name}/README.md`, readme, (err) => {
+    if (err) throw err
+  })
+  fs.writeFile(`./${name}/.gitignore`, gitignore, (err) => {
+    if (err) throw err
+  })
+  fs.writeFile(`./${name}/index.js`, `console.log('hello world!')`, (err) => {
+    if (err) throw err
+  })
+  fs.writeFile(`./${name}/index.html`, indexHtml, (err) => {
+    if (err) throw err
+  })
+  fs.writeFile(`./${name}/main.css`, mainCss, (err) => {
+    if (err) throw err 
+  })
+}
 
 // create a backend only project
 let createBackend = () => {
