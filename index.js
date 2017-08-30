@@ -23,21 +23,18 @@ let babel = `{\n\t"presets": [\n\t\t"es2015",\n\t\t"react"\n\t]\n}`
 // backend files 
 let server = `let express = require('express')\nlet app = express()\nlet bodyParser = require('body-parser')\nconst routes = require('./routes')\nlet port = (process.env.PORT || 3000)\napp.use(bodyParser.json())\n\napp.use('/api/v1', routes)\n\napp.listen(port, () => {\n\tconsole.log('Listening at port 3000')\n})`
 
-// backend serving standard frontend
-let frontendServer = `let express = require('express')\nlet app = express()\nlet bodyParser = require('body-parser')\nconst routes = require('./routes')\nconst pages = require('./pages')\nlet port = (process.env.PORT || 3000)\napp.use(bodyParser.json())\n\napp.use('/api/v1', routes)\napp.listen(port, () => {\n\tconsole.log('Listening at port 3000')\n})`
-
 // spa 
-let spaServer = `let express = require('express')\nlet app = express()\nlet path = require('path')\nlet bodyParser = require('body-parser')\nconst routes = require('./routes')\nlet port = (process.env.PORT || 3000)\napp.use(bodyParser.json())\n\napp.use('/api/v1', routes)\n\napp.use("/build", express.static(path.join(__dirname, "../build")))\n\napp.get('/', (req, res) => res.sendFile(path.join(__dirname, '../public/index.html')))\n\napp.listen(port, () => {\n\tconsole.log('Listening at port 3000')\n})`
+let spaServer = `let express = require('express')\nlet app = express()\nlet path = require('path')\nlet bodyParser = require('body-parser')\nconst routes = require('./routes')\nlet port = (process.env.PORT || 3000)\nlet compression = require('compression')\napp.use(compression())\napp.use(bodyParser.json())\n\napp.use('/api/v1', routes)\n\napp.use("/build", express.static(path.join(__dirname, "../build")))\n\napp.get('/', (req, res) => res.sendFile(path.join(__dirname, '../public/index.html')))\n\napp.listen(port, () => {\n\tconsole.log('Listening at port 3000')\n})`
 let spaWebpack = `const path = require('path')\n\nmodule.exports = {\n\tentry: './src/index.js',\n\toutput: {\n\t\tfilename: 'bundle.js',\n\t\tpath: path.resolve(__dirname, 'build')\n\t},\n\tmodule: {\n\t\tloaders: [\n\t\t\t{\n\t\t\t\ttest: /\\.js$/,\n\t\t\t\tloaders: "babel-loader",\n\t\t\t\texclude: /node_modules/\n\t\t\t},\n\t\t\t{\n\t\t\t\ttest: /\\.jsx$/,\n\t\t\t\tloaders: "babel-loader",\n\t\t\t\texclude: /node_modules/\n\t\t\t},\n\t\t\t{\n\t\t\t\ttest: /\\.css$/,\n\t\t\t\tloaders: "style-loader!css-loader"\n\t\t\t}\n\t\t]\n\t},\n\tresolve: {\n\t\textensions: ['.js', '.jsx', '.css']\n\t}\n}`
 let spaIndex = `import React from 'react'\nimport ReactDOM from 'react-dom'\nimport App from './App/App'\n\nReactDOM.render(\n\t<App/>,\n\tdocument.getElementById('root')\n)`
-let spaReact = `import React, { Component } from 'react' \n \nclass App extends Component {\n\tconstructor(props) {\n\t\tsuper(props) \n \t\tthis.state = {}\n\t } \n\n\trender() {\n\t\treturn(\n\t\t\t < div ></div >\n\t\t) \n\t } \n } \n\n export default App`
+let spaReact = `import React, { Component } from 'react' \n \nclass App extends Component {\n\tconstructor(props) {\n\t\tsuper(props) \n \t\tthis.state = {}\n\t } \n\n\trender() {\n\t\treturn(\n\t\t\t<div>Hello World</div>\n\t\t)\n\t}\n}\n\nexport default App`
 let spaNoSQLPck = `{\n\t"name": "${name}",\n\t"version": "1.0.0",\n\t"scripts": {\n\t\t"start": "nodemon server/server.js",\n\t\t"build": "webpack --watch"\n\t}\n}`
 let spaHtmlFile = `<!DOCTYPE html>\n<html>\n\t<head>\n\t\t<meta charset="utf-8">\n\t\t<meta name="viewport" content="width=device-width, initial-scale=1">\n\t\t<title>Home</title>\n\t</head>\n\t<body>\n\t\t<div id="root"></div>\n\t\t<script src="build/bundle.js"></script>\n\t</body>\n</htlm>`
 let spaNoBE = `{\n\t"name": "${name}",\n\t"version": "1.0.0",\n\t"scripts": {\n\t\t"start": "open index.html && webpack --watch"\n\t}\n}`
 
 
 // redux apps
-let reactReduxServer = `let express = require('express')\nlet app = express()\nlet path = require('path')\nlet bodyParser = require('body-parser')\nconst routes = require('./routes')\nlet port = (process.env.PORT || 3000)\napp.use(bodyParser.json())\n\napp.use('/api/v1', routes)\n\napp.use("/build", express.static(path.join(__dirname, "../build")))\n\napp.get('/*', (req, res) => res.sendFile(path.join(__dirname, '../public/index.html')))\n\napp.listen(port, () => {\n\tconsole.log('Listening at port 3000')\n})`
+let reactReduxServer = `let express = require('express')\nlet app = express()\nlet path = require('path')\nlet bodyParser = require('body-parser')\nlet compression = require('compression')\napp.use(compression())\nconst routes = require('./routes')\nlet port = (process.env.PORT || 3000)\napp.use(bodyParser.json())\n\napp.use('/api/v1', routes)\n\napp.use("/build", express.static(path.join(__dirname, "../build")))\n\napp.get('/*', (req, res) => res.sendFile(path.join(__dirname, '../public/index.html')))\n\napp.listen(port, () => {\n\tconsole.log('Listening at port 3000')\n})`
 let rootReducer = `import { combineReducers } from 'redux'\n\n\nconst rootReducer = combineReducers({})\n\nexport default rootReducer`
 let configStore = `import { createStore, applyMiddleware } from 'redux'\nimport rootReducer from './reducers/rootReducer'\n\nconst devTools = window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()\n\nexport const configureStore = () => {\n\treturn createStore(\n\t\trootReducer,\n\t\tdevTools\n\t)\n}`
 let reactReduxIndex = `import React from 'react'\nimport ReactDOM from 'react-dom'\nimport App from './containers/App/AppContainer'\nimport { BrowserRouter as Router, Route } from 'react-router-dom'\nimport { configureStore } from './configStore'\nimport { Provider } from 'react-redux'\nimport createHistory from 'history/createBrowserHistory'\n\n\nconst history = createHistory()\nconst store = configureStore()\n\n\nReactDOM.render(\n\t<Provider store= { store }>\n\t\t<Router history= { history }>\n\t\t\t<Route path='/' component={App}/>\n\t\t</Router>\n\t</Provider>\n, document.getElementById('root'))`
@@ -48,7 +45,7 @@ let home = `import React, { Component } from 'react'\n\nclass Home extends Compo
 let appRouterNoBackend = `import React, { Component } from 'react'\nimport { Route, Switch, Redirect } from 'react-router-dom'\nimport Home from '../Home/HomeContainer'\n\n\nclass App extends Component {\n\trender() {\n\t\treturn (\n\t\t\t<section>\n\t\t\t\t<Switch>\n\t\t\t\t\t<Route path='/' render={(history) => {\n\t\t\t\t\t\treturn <Home history={history}/>\n\t\t\t\t\t}}/>\n\t\t\t\t</Switch>\n\t\t\t</section>\n\t\t)\n\t}\n}\n\nexport default App`
 
 //rails apps
-let railsServer = `let express = require('express')\nlet app = express()\nlet path = require('path')\nlet bodyParser = require('body-parser')\nconst routes = require('./routes')\nconst pages = require('./pages')\nlet port = (process.env.PORT || 3000)\napp.use(bodyParser.json())\n\napp.use('/api/v1', routes)\napp.use('/', pages)\n\napp.use("/public", express.static(path.join(__dirname, "../public")))\n\n\n\napp.listen(port, () => {\n\tconsole.log('Listening at port 3000')\n})`
+let railsServer = `let express = require('express')\nlet app = express()\nlet path = require('path')\nlet bodyParser = require('body-parser')\nlet compression = require('compression')\napp.use(compression())\nconst routes = require('./routes')\nconst pages = require('./pages')\nlet port = (process.env.PORT || 3000)\napp.use(bodyParser.json())\n\napp.use('/api/v1', routes)\napp.use('/', pages)\n\napp.use("/public", express.static(path.join(__dirname, "../public")))\n\n\n\napp.listen(port, () => {\n\tconsole.log('Listening at port 3000')\n})`
 let railsHtmlFile = `<!DOCTYPE html>\n<html>\n\t<head>\n\t\t<meta charset="utf-8">\n\t\t<meta name="viewport" content="width=device-width, initial-scale=1">\n\t\t<title>Home</title>\n\t</head>\n\t<body>\n\t\t<div>Hello World!</div>\n\t\t<script src="public/home/index.js"></script>\n\t</body>\n</htlm>`
 let pagesRoutes = `const express = require('express')\nconst r = express.Router()\nconst path = require('path')\nmodule.exports = r\n\nr.get('/', (req, res) => res.sendFile(path.join(__dirname, '../public/home/index.html')))`
 
@@ -81,6 +78,16 @@ let installDevDependencies = (packages) => {
     shell.exec(`yarn add ${packages} --dev`)
   } else {
     shell.exec(`npm install --save-dev ${packages}`)
+  }
+}
+
+let installKnexGlobal = () => {
+  if (shouldUseYarn()) {
+    shell.exec('yarn global add knex')
+    shell.exec('knex init')
+  } else {
+    shell.exec('npm install -g knex')
+    shell.exec('knex init')
   }
 }
 
@@ -122,58 +129,51 @@ let createReactSPA = () => {
   rl.question('Do you need a backend? (Y/N) ', (backend) => {
     backend = backend.toLowerCase()
     if (backend === 'y') {
-      rl.question('Will you use a postgres or mongo database? (Y/N) ', (database) => {
+      rl.question('Will you use a Postgres or MongoDB database? (Y/N) ', (database) => {
         database = database.toLowerCase()
         if (database === 'y') {
           rl.question('Postgres or MongoDB? (P/M) ', (type) => {
             type = type.toLowerCase()
             if (type === 'p') {
+              rl.close();
               writeFilesWithSPAReact()
-              fs.writeFile(`./${name}/package.json`, spaNoSQLPck, (err) => {
-                if (err) throw err
-                rl.close();
-                shell.cd(`${name}`)
-                console.log('Downloading dependencies and setting up the project, this may take a moment')
-                shell.exec('npm install --save express nodemon pg knex body-parser react react-dom webpack babel-loader css-loader babel-core babel-preset-es2015 babel-preset-react')
-                shell.exec('npm install -g knex')
-                shell.exec('knex init')
-                modifyKnex()
-                try {
-                  execSync(`createdb ${name};`, { stdio: 'ignore' });
-                } catch (e) {
-                  // need some variable to indicate this failed and the user needs to make a new database
-                }
-                process.stdout.write('\033c')
-                console.log('The project was created!')
-                console.log(`cd into ${name} and run npm start`)
-              })
+              shell.cd(`${name}`)
+              install('express nodemon pg knex body-parser compression react react-dom webpack')
+              installDevDependencies('babel-loader css-loader babel-core babel-preset-es2015 babel-preset-react')
+              console.log('Downloading dependencies and setting up the project, this may take a moment')
+              installKnexGlobal()
+              modifyKnex()
+              try {
+                execSync(`createdb ${name};`, { stdio: 'ignore' });
+              } catch (e) {
+                // need some variable to indicate this failed and the user needs to make a new database
+              }
+              process.stdout.write('\033c')
+              console.log('The project was created!')
+              console.log(`cd into ${name} and run npm run build then run npm start`)
             } else {
               writeFilesWithSPAReact()
-              fs.writeFile(`./${name}/package.json`, spaNoSQLPck, (err) => {
-                if (err) throw err
-                rl.close();
-                fs.writeFileSync(`./${name}/.env`)
-                shell.cd(`${name}`)
-                console.log('Downloading dependencies and setting up the project, this may take a moment')
-                shell.exec('npm install --save express nodemon mongo dotenv body-parser react react-dom webpack babel-loader css-loader babel-core babel-preset-es2015 babel-preset-react')
-                process.stdout.write('\033c')
-                console.log('The project was created!')
-                console.log(`cd into ${name} and run npm start`)
-              })
+              rl.close();
+              fs.writeFileSync(`./${name}/.env`)
+              shell.cd(`${name}`)
+              console.log('Downloading dependencies and setting up the project, this may take a moment')
+              install('express nodemon compression mongo dotenv body-parser react react-dom webpack')
+              installDevDependencies('babel-loader css-loader babel-core babel-preset-es2015 babel-preset-react')
+              process.stdout.write('\033c')
+              console.log('The project was created!')
+              console.log(`cd into ${name} and run npm run build then run npm start`)
             }
         })
       } else {
+        rl.close();
         writeFilesWithSPAReact()
-        fs.writeFile(`./${name}/package.json`, spaNoSQLPck, (err) => {
-          if (err) throw err
-          rl.close();
-          shell.cd(`${name}`)
-          console.log('Downloading dependencies and setting up the project, this may take a moment')
-          shell.exec('npm install --save express nodemon body-parser react react-dom webpack babel-loader css-loader babel-core babel-preset-es2015 babel-preset-react')
-          process.stdout.write('\033c')
-          console.log('The project was created!')
-          console.log(`cd into ${name} and run npm start`)
-        })
+        shell.cd(`${name}`)
+        console.log('Downloading dependencies and setting up the project, this may take a moment')
+        install('express nodemon compression body-parser react react-dom webpack')
+        installDevDependencies('babel-loader css-loader babel-core babel-preset-es2015 babel-preset-react')
+        process.stdout.write('\033c')
+        console.log('The project was created!')
+        console.log(`cd into ${name} and run npm run build then run npm start`)
       }  
     }) 
   } else {
@@ -212,7 +212,12 @@ let reactSPAWithoutBackend = () => {
   rl.close();
   console.log('Installing dependencies and running setup, this may take a moment')
   shell.cd(`${name}`)
-  shell.exec('npm install --save react react-dom webpack babel-loader css-loader babel-core babel-preset-es2015 babel-preset-react')
+  install('react react-dom webpack')
+  installDevDependencies('babel-loader css-loader babel-core babel-preset-es2015 babel-preset-react')
+  process.stdout.write('\033c')
+  console.log('The project was created!')
+  console.log(`cd into ${name} and run npm start, then refresh the page after a second`)
+  // need to examine create react app more for hot reloading or use webpack dev server
 }
 
 
@@ -256,6 +261,7 @@ let writeFilesWithSPAReact = () => {
   fs.writeFile(`./${name}/README.md`, readme, (err) => {
     if (err) throw err
   })
+  fs.writeFileSync(`./${name}/package.json`, spaNoSQLPck)
 }
 
 
@@ -271,79 +277,61 @@ let createReactRedux = () => {
             database = database.toLowerCase()
             if (database === 'p') {
               ReactReduxWithBackend()
-              fs.writeFile(`./${name}/package.json`, spaNoSQLPck, (err) => {
-                if (err) throw err
-                rl.close();
-                shell.cd(`${name}`)
-                console.log('Downloading dependencies and setting up the project, this may take a moment')
-                install('redux react-router-dom react-redux express nodemon pg knex body-parser react react-dom webpack')
-                installDevDependencies('babel-loader css-loader babel-core babel-preset-es2015 babel-preset-react')
-                if (shouldUseYarn()) {
-                  shell.exec('yarn global add knex')
-                  shell.exec('knex init')
-                } else {
-                  shell.exec('npm install -g knex')
-                  shell.exec('knex init')
-                }
-                modifyKnex()
-                try {
-                  execSync(`createdb ${name};`, { stdio: 'ignore' });
-                } catch (e) {
-                  // need some variable to indicate this failed and the user needs to make a new database
-                }
-                process.stdout.write('\033c')
-                console.log('The project was created!')
-                console.log(`cd into ${name} and run npm start`)
-              })
+              rl.close();
+              shell.cd(`${name}`)
+              console.log('Downloading dependencies and setting up the project, this may take a moment')
+              install('redux react-router-dom react-redux express nodemon pg knex body-parser compression react react-dom webpack')
+              installDevDependencies('babel-loader css-loader babel-core babel-preset-es2015 babel-preset-react')
+              installKnexGlobal()
+              modifyKnex()
+              try {
+                execSync(`createdb ${name};`, { stdio: 'ignore' });
+              } catch (e) {
+                // need some variable to indicate this failed and the user needs to make a new database
+              }
+              process.stdout.write('\033c')
+              console.log('The project was created!')
+              console.log(`cd into ${name} and run npm start`)
             } else {
               // build a react/redux with mongo backend
+              rl.close();
               ReactReduxWithBackend()
-              fs.writeFile(`./${name}/package.json`, spaNoSQLPck, (err) => {
-                if (err) throw err
-                rl.close();
-                shell.cd(`${name}`)
-                process.stdout.write('\033c')                
-                console.log('Downloading dependencies and setting up the project, this may take a moment')
-                install('redux react-router-dom react-redux express nodemon mongo dotenv body-parser react react-dom webpack')
-                installDevDependencies('babel-loader css-loader babel-core babel-preset-es2015 babel-preset-react')
-                process.stdout.write('\033c')
-                console.log('The project was created!')
-                console.log(`cd into ${name} and run npm start`)
-              })
+              shell.cd(`${name}`)
+              process.stdout.write('\033c')                
+              console.log('Downloading dependencies and setting up the project, this may take a moment')
+              install('redux react-router-dom react-redux express nodemon compression mongo dotenv body-parser react react-dom webpack')
+              installDevDependencies('babel-loader css-loader babel-core babel-preset-es2015 babel-preset-react')
+              process.stdout.write('\033c')
+              console.log('The project was created!')
+              console.log(`cd into ${name} and run npm start`)
             }
           })
         } else {
           // build a react/redux without a db
+          rl.close();
           ReactReduxWithBackend()
-          fs.writeFile(`./${name}/package.json`, spaNoSQLPck, (err) => {
-            if (err) throw err
-            rl.close();
-            shell.cd(`${name}`)
-            process.stdout.write('\033c')
-            console.log('Downloading dependencies and setting up the project, this may take a moment')
-            install('redux react-router-dom react-redux express nodemon dotenv body-parser react react-dom webpack')
-            installDevDependencies('babel-loader css-loader babel-core babel-preset-es2015 babel-preset-react')
-            process.stdout.write('\033c')
-            console.log('The project was created!')
-            console.log(`cd into ${name} and run npm start`)
-          })
+          shell.cd(`${name}`)
+          process.stdout.write('\033c')
+          console.log('Downloading dependencies and setting up the project, this may take a moment')
+          install('redux react-router-dom react-redux express nodemon dotenv body-parser compression react react-dom webpack')
+          installDevDependencies('babel-loader css-loader babel-core babel-preset-es2015 babel-preset-react')
+          process.stdout.write('\033c')
+          console.log('The project was created!')
+          console.log(`cd into ${name} and run npm start`)
         }
       })
     } else {
       // create react redux without a backend
+      rl.close();
       reactReduxWithoutBackend()
-      fs.writeFile(`./${name}/package.json`, spaNoBE, (err) => {
-        if (err) throw err
-        rl.close();
-        shell.cd(`${name}`)
-        process.stdout.write('\033c')
-        console.log('Downloading dependencies and setting up the project, this may take a moment')
-        install('redux react-router-dom react-redux body-parser react react-dom webpack')
-        installDevDependencies('babel-loader css-loader babel-core babel-preset-es2015 babel-preset-react')
-        process.stdout.write('\033c')
-        console.log('The project was created!')
-        console.log(`cd into ${name} and run npm start`)
-      })
+      shell.cd(`${name}`)
+      process.stdout.write('\033c')
+      console.log('Downloading dependencies and setting up the project, this may take a moment')
+      install('redux react-router-dom react-redux react react-dom webpack')
+      installDevDependencies('babel-loader css-loader babel-core babel-preset-es2015 babel-preset-react')
+      process.stdout.write('\033c')
+      console.log('The project was created!')
+      console.log(`cd into ${name} and run npm start`)
     }
   })
 }
@@ -417,6 +405,7 @@ let ReactReduxWithBackend = () => {
   fs.writeFile(`./${name}/.env`, '', (err) => {
     if (err) throw err 
   }) 
+  fs.writeFileSync(`./${name}/package.json`, spaNoSQLPck)
 }
 
 let reactReduxWithoutBackend = () => {
@@ -471,6 +460,7 @@ let reactReduxWithoutBackend = () => {
   fs.writeFile(`./${name}/README.md`, readme, (err) => {
     if (err) throw err
   })
+  fs.writeFileSync(`./${name}/package.json`, spaNoSQLPck)
 }
 
 let createAppWithoutReact = () => {
@@ -484,58 +474,43 @@ let createAppWithoutReact = () => {
             database = database.toLowerCase()
             if (database === 'p') {
               // create project with postgres
+              rl.close();
               railsApp()
-              fs.writeFile(`./${name}/package.json`, spaNoSQLPck, (err) => {
-                if (err) throw err
-                rl.close();
-                shell.cd(`${name}`)
-                console.log('Downloading dependencies and setting up the project, this may take a moment')
-                install('express nodemon pg knex body-parser')
-                if (shouldUseYarn()) {
-                  shell.exec('yarn global add knex')
-                  shell.exec('knex init')
-                } else {
-                  shell.exec('npm install -g knex')
-                  shell.exec('knex init')
-                }
-                modifyKnex()
-                try {
-                  execSync(`createdb ${name};`, { stdio: 'ignore' });
-                } catch (e) {
-                  // need some variable to indicate this failed and the user needs to make a new database
-                }
-                process.stdout.write('\033c')
-                console.log('The project was created!')
-                console.log(`cd into ${name} and run npm start`)
-              })
+              shell.cd(`${name}`)
+              console.log('Downloading dependencies and setting up the project, this may take a moment')
+              install('express nodemon pg knex body-parser compression')
+              installKnexGlobal()
+              modifyKnex()
+              try {
+                execSync(`createdb ${name};`, { stdio: 'ignore' });
+              } catch (e) {
+                // need some variable to indicate this failed and the user needs to make a new database
+              }
+              process.stdout.write('\033c')
+              console.log('The project was created!')
+              console.log(`cd into ${name} and run npm start`)
             } else {
               // create project with mongoDB
+              rl.close();
               railsApp()
-              fs.writeFile(`./${name}/package.json`, spaNoSQLPck, (err) => {
-                if (err) throw err
-                rl.close();
-                shell.cd(`${name}`)
-                console.log('Downloading dependencies and setting up the project, this may take a moment')
-                install('express nodemon mongo body-parser')
-                process.stdout.write('\033c')
-                console.log('The project was created!')
-                console.log(`cd into ${name} and run npm start`)
-              })
+              shell.cd(`${name}`)
+              console.log('Downloading dependencies and setting up the project, this may take a moment')
+              install('express nodemon mongo body-parser compression')
+              process.stdout.write('\033c')
+              console.log('The project was created!')
+              console.log(`cd into ${name} and run npm start`)
             }
           })
         } else {
           // create project without db
+          rl.close();
           railsApp()
-          fs.writeFile(`./${name}/package.json`, spaNoSQLPck, (err) => {
-            if (err) throw err
-            rl.close();
-            shell.cd(`${name}`)
-            console.log('Downloading dependencies and setting up the project, this may take a moment')
-            install('express nodemon body-parser')
-            process.stdout.write('\033c')
-            console.log('The project was created!')
-            console.log(`cd into ${name} and run npm start`)
-          })
+          shell.cd(`${name}`)
+          console.log('Downloading dependencies and setting up the project, this may take a moment')
+          install('express nodemon body-parser compression')
+          process.stdout.write('\033c')
+          console.log('The project was created!')
+          console.log(`cd into ${name} and run npm start`)
         }
       })
     } else {
@@ -583,7 +558,9 @@ let railsApp = () => {
   fs.writeFile(`./${name}/.env`, '', (err) => {
     if (err) throw err
   })
+  fs.writeFileSync(`./${name}/package.json`, spaNoSQLPck)
 }
+
 
 let createBasicApp = () => {
   fs.writeFile(`./${name}/README.md`, readme, (err) => {
@@ -620,13 +597,7 @@ let createBackend = () => {
               shell.cd(`${name}`)
               console.log('Downloading dependencies and setting up the project, this may take a moment')
               install('express nodemon pg knex body-parser')
-              if (shouldUseYarn()) {
-                shell.exec('yarn global add knex')
-                shell.exec('knex init')
-              } else {
-                shell.exec('npm install -g knex')
-                shell.exec('knex init')
-              }
+              installKnexGlobal()
               modifyKnex()
               try {
                 execSync(`createdb ${name};`, { stdio: 'ignore' }); 
