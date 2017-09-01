@@ -6,20 +6,20 @@ let spaNoSQLPck = `{\n\t"name": "${name}",\n\t"version": "1.0.0",\n\t"scripts": 
 let spaWebpack = `const path = require('path')\n\nmodule.exports = {\n\tentry: './src/index.js',\n\toutput: {\n\t\tfilename: 'bundle.js',\n\t\tpath: path.resolve(__dirname, 'build')\n\t},\n\tmodule: {\n\t\tloaders: [\n\t\t\t{\n\t\t\t\ttest: /\\.js$/,\n\t\t\t\tloaders: "babel-loader",\n\t\t\t\texclude: /node_modules/\n\t\t\t},\n\t\t\t{\n\t\t\t\ttest: /\\.jsx$/,\n\t\t\t\tloaders: "babel-loader",\n\t\t\t\texclude: /node_modules/\n\t\t\t},\n\t\t\t{\n\t\t\t\ttest: /\\.css$/,\n\t\t\t\tloaders: "style-loader!css-loader"\n\t\t\t}\n\t\t]\n\t},\n\tresolve: {\n\t\textensions: ['.js', '.jsx', '.css']\n\t}\n}`
 let spaHtmlFile = `<!DOCTYPE html>\n<html>\n\t<head>\n\t\t<meta charset="utf-8">\n\t\t<meta name="viewport" content="width=device-width, initial-scale=1">\n\t\t<title>Home</title>\n\t</head>\n\t<body>\n\t\t<div id="root"></div>\n\t\t<script src="build/bundle.js"></script>\n\t</body>\n</htlm>`
 
-let gitignore = 'node_modules\n.DS_Store\n.env'
-let readme = '## bootstrapped with enzo'
-let routes = `const express = require('express')\nconst r = express.Router()\nmodule.exports = r`
-let babel = `{\n\t"presets": [\n\t\t"es2015",\n\t\t"react"\n\t]\n}`
+let gitignore = fs.readFileSync(path.resolve(__dirname, '../filesToCopy/commonFiles/.gitignore'), 'utf8')
+let readme = fs.readFileSync(path.resolve(__dirname, '../filesToCopy/commonFiles/readme.md'), 'utf8')
+let routes = fs.readFileSync(path.resolve(__dirname, '../filesToCopy/commonFiles/routes.js'), 'utf8')
+let babel = fs.readFileSync(path.resolve(__dirname, '../filesToCopy/commonFiles/.babelrc'), 'utf8')
 
-let reactReduxServer = `let express = require('express')\nlet app = express()\nlet path = require('path')\nlet bodyParser = require('body-parser')\nlet compression = require('compression')\napp.use(compression())\nconst routes = require('./routes')\nlet port = (process.env.PORT || 3000)\napp.use(bodyParser.json())\n\napp.use('/api/v1', routes)\n\napp.use("/build", express.static(path.join(__dirname, "../build")))\n\napp.get('/*', (req, res) => res.sendFile(path.join(__dirname, '../public/index.html')))\n\napp.listen(port, () => {\n\tconsole.log('Listening at port 3000')\n})`
-let rootReducer = `import { combineReducers } from 'redux'\n\n\nconst rootReducer = combineReducers({})\n\nexport default rootReducer`
-let configStore = `import { createStore, applyMiddleware } from 'redux'\nimport rootReducer from './reducers/rootReducer'\n\nconst devTools = window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()\n\nexport const configureStore = () => {\n\treturn createStore(\n\t\trootReducer,\n\t\tdevTools\n\t)\n}`
-let reactReduxIndex = `import React from 'react'\nimport ReactDOM from 'react-dom'\nimport App from './containers/App/AppContainer'\nimport { BrowserRouter as Router, Route } from 'react-router-dom'\nimport { configureStore } from './configStore'\nimport { Provider } from 'react-redux'\nimport createHistory from 'history/createBrowserHistory'\n\n\nconst history = createHistory()\nconst store = configureStore()\n\n\nReactDOM.render(\n\t<Provider store= { store }>\n\t\t<Router history= { history }>\n\t\t\t<Route path='/' component={App}/>\n\t\t</Router>\n\t</Provider>\n, document.getElementById('root'))`
-let appContainer = `import { connect } from 'react-redux'\nimport App from './App'\n\nconst mapStateToProps = (state) => {\n\t return state\n}\n\nexport default connect(mapStateToProps)(App)`
-let appRouter = `import React, { Component } from 'react'\nimport { Route, Switch, Redirect } from 'react-router-dom'\nimport Home from '../Home/HomeContainer'\n\n\nclass App extends Component {\n\trender() {\n\t\treturn (\n\t\t\t<section>\n\t\t\t\t<Switch>\n\t\t\t\t\t<Route exact path='/' render={(history) => {\n\t\t\t\t\t\treturn <Home history={history}/>\n\t\t\t\t\t}}/>\n\t\t\t\t</Switch>\n\t\t\t</section>\n\t\t)\n\t}\n}\n\nexport default App`
-let homeContainer = `import { connect } from 'react-redux'\nimport Home from './Home'\n\nconst mapStateToProps = (state) => {\n\t return state\n}\n\nexport default connect(mapStateToProps)(Home)`
-let home = `import React, { Component } from 'react'\n\nclass Home extends Component {\n\tconstructor(props) {\n\t\tsuper(props)\n\t\tthis.state = {}\n\t}\n\n\trender() {\n\t\treturn (\n\t\t\t<div>Hello world!</div>\n\t\t)\n\t}\n}\n\nexport default Home`
-let appRouterNoBackend = `import React, { Component } from 'react'\nimport { Route, Switch, Redirect } from 'react-router-dom'\nimport Home from '../Home/HomeContainer'\n\n\nclass App extends Component {\n\trender() {\n\t\treturn (\n\t\t\t<section>\n\t\t\t\t<Switch>\n\t\t\t\t\t<Route path='/' render={(history) => {\n\t\t\t\t\t\treturn <Home history={history}/>\n\t\t\t\t\t}}/>\n\t\t\t\t</Switch>\n\t\t\t</section>\n\t\t)\n\t}\n}\n\nexport default App`
+let reactReduxServer = fs.readFileSync(path.resolve(__dirname, './files/reactReduxServer.js'), 'utf8')
+let rootReducer = fs.readFileSync(path.resolve(__dirname, './files/rootReducer.js'), 'utf8')
+let configStore = fs.readFileSync(path.resolve(__dirname, './files/configStore.js'), 'utf8')
+let reactReduxIndex = fs.readFileSync(path.resolve(__dirname, './files/reactReduxIndex.js'), 'utf8')
+let appContainer = fs.readFileSync(path.resolve(__dirname, './files/appContainer.js'), 'utf8')
+let appRouter = fs.readFileSync(path.resolve(__dirname, './files/appRouter.js'), 'utf8')
+let homeContainer = fs.readFileSync(path.resolve(__dirname, './files/homeContainer.js'), 'utf8')
+let home = fs.readFileSync(path.resolve(__dirname, './files/home.js'), 'utf8')
+let appRouterNoBackend = fs.readFileSync(path.resolve(__dirname, './files/appRouterNoBackend.js'), 'utf8')
 
 
 

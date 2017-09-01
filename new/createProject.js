@@ -143,6 +143,14 @@ let createReactSPA = () => {
       })
     } else {
       spaBuild.reactSPAWithoutBackend()
+      console.log('Installing dependencies and running setup, this may take a moment')
+      rl.close()
+      shell.cd(`${name}`)
+      install('react react-dom webpack')
+      installDevDependencies('babel-loader css-loader babel-core babel-preset-es2015 babel-preset-react')
+      process.stdout.write('\033c')
+      console.log('The project was created!')
+      console.log(`cd into ${name} and run npm start, then refresh the page after a second`)
     }
   })
 }
@@ -340,8 +348,6 @@ let createBackend = () => {
     }
   })
 }
-
-// need to check if project already exists
 
 
 
