@@ -244,7 +244,8 @@ let createAppWithoutReact = () => {
               noReactApp.railsApp()
               shell.cd(`${name}`)
               console.log('Downloading dependencies and setting up the project, this may take a moment')
-              install('express nodemon pg knex body-parser compression')
+              install('express nodemon pg knex body-parser compression helmet')
+              installDevDependencies('babel-core babel-preset-es2015 babelify browserify gulp gulp-babel gulp-rename gulp-uglify vinyl-buffer vinyl-source-stream gulp-htmlmin')
               installKnexGlobal()
               modifyKnex()
               try {
@@ -261,7 +262,8 @@ let createAppWithoutReact = () => {
               noReactApp.railsApp()
               shell.cd(`${name}`)
               console.log('Downloading dependencies and setting up the project, this may take a moment')
-              install('express nodemon mongo body-parser compression')
+              install('express nodemon mongo body-parser compression helmet')
+              installDevDependencies('babel-core babel-preset-es2015 babelify browserify gulp gulp-babel gulp-rename gulp-uglify vinyl-buffer vinyl-source-stream gulp-htmlmin')
               process.stdout.write('\033c')
               console.log('The project was created!')
               console.log(`cd into ${name} and run npm start`)
@@ -271,9 +273,11 @@ let createAppWithoutReact = () => {
           // create project without db
           rl.close();
           noReactApp.railsApp()
+          process.stdout.write('\033c')
           shell.cd(`${name}`)
           console.log('Downloading dependencies and setting up the project, this may take a moment')
-          install('express nodemon body-parser compression')
+          install('express nodemon body-parser compression helmet')
+          installDevDependencies('babel-core babel-preset-es2015 babelify browserify gulp gulp-babel gulp-rename gulp-uglify vinyl-buffer vinyl-source-stream gulp-htmlmin')
           process.stdout.write('\033c')
           console.log('The project was created!')
           console.log(`cd into ${name} and run npm start`)
