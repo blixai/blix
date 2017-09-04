@@ -5,6 +5,9 @@ let bodyParser = require('body-parser')
 const routes = require('./routes') 
 let port = (process.env.PORT || 3000) 
 let compression = require('compression') 
+let helmet = require('helmet')
+
+app.use(helmet())
 app.use(compression()) 
 app.use(bodyParser.json()) 
 
