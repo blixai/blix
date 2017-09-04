@@ -59,7 +59,7 @@ let installKnexGlobal = () => {
 let createProject = () => {
   if (name) {
     fs.mkdirSync(`./${name}`)
-
+    process.stdout.write('\033c')
     rl.question('Do you need a Frontend? (Y/N) ', (answer) => {
       answer = answer.toLowerCase()
       if (answer === 'y') {
@@ -103,7 +103,7 @@ let createReactSPA = () => {
               rl.close();
               spaBuild.writeFilesWithSPAReact()
               shell.cd(`${name}`)
-              install('express nodemon pg knex body-parser compression react react-dom webpack')
+              install('express nodemon pg knex body-parser compression helmet react react-dom webpack')
               installDevDependencies('babel-loader css-loader babel-core babel-preset-es2015 babel-preset-react')
               console.log('Downloading dependencies and setting up the project, this may take a moment')
               installKnexGlobal()
@@ -122,7 +122,7 @@ let createReactSPA = () => {
               fs.writeFileSync(`./${name}/.env`)
               shell.cd(`${name}`)
               console.log('Downloading dependencies and setting up the project, this may take a moment')
-              install('express nodemon compression mongo dotenv body-parser react react-dom webpack')
+              install('express nodemon compression helmet mongo dotenv body-parser react react-dom webpack')
               installDevDependencies('babel-loader css-loader babel-core babel-preset-es2015 babel-preset-react')
               process.stdout.write('\033c')
               console.log('The project was created!')
@@ -134,7 +134,7 @@ let createReactSPA = () => {
           spaBuild.writeFilesWithSPAReact()
           shell.cd(`${name}`)
           console.log('Downloading dependencies and setting up the project, this may take a moment')
-          install('express nodemon compression body-parser react react-dom webpack')
+          install('express nodemon compression helmet body-parser react react-dom webpack')
           installDevDependencies('babel-loader css-loader babel-core babel-preset-es2015 babel-preset-react')
           process.stdout.write('\033c')
           console.log('The project was created!')
@@ -171,7 +171,7 @@ let createReactRedux = () => {
               rl.close();
               shell.cd(`${name}`)
               console.log('Downloading dependencies and setting up the project, this may take a moment')
-              install('redux react-router-dom react-redux express nodemon pg knex body-parser compression react react-dom webpack')
+              install('redux react-router-dom react-redux express nodemon pg knex body-parser compression helmet react react-dom webpack')
               installDevDependencies('babel-loader css-loader babel-core babel-preset-es2015 babel-preset-react')
               installKnexGlobal()
               modifyKnex()
@@ -190,7 +190,7 @@ let createReactRedux = () => {
               shell.cd(`${name}`)
               process.stdout.write('\033c')
               console.log('Downloading dependencies and setting up the project, this may take a moment')
-              install('redux react-router-dom react-redux express nodemon compression mongo dotenv body-parser react react-dom webpack')
+              install('redux react-router-dom react-redux express nodemon compression helmet mongo dotenv body-parser react react-dom webpack')
               installDevDependencies('babel-loader css-loader babel-core babel-preset-es2015 babel-preset-react')
               process.stdout.write('\033c')
               console.log('The project was created!')
@@ -204,7 +204,7 @@ let createReactRedux = () => {
           shell.cd(`${name}`)
           process.stdout.write('\033c')
           console.log('Downloading dependencies and setting up the project, this may take a moment')
-          install('redux react-router-dom react-redux express nodemon dotenv body-parser compression react react-dom webpack')
+          install('redux react-router-dom react-redux express nodemon dotenv body-parser compression helmet react react-dom webpack')
           installDevDependencies('babel-loader css-loader babel-core babel-preset-es2015 babel-preset-react')
           process.stdout.write('\033c')
           console.log('The project was created!')
@@ -311,7 +311,7 @@ let createBackend = () => {
               rl.close();
               shell.cd(`${name}`)
               console.log('Downloading dependencies and setting up the project, this may take a moment')
-              install('express nodemon pg knex body-parser')
+              install('express nodemon pg knex body-parser helmet')
               installKnexGlobal()
               modifyKnex()
               try {
@@ -329,7 +329,7 @@ let createBackend = () => {
               rl.close();
               shell.cd(`${name}`)
               console.log('Downloading dependencies and setting up the project, this may take a moment')
-              install('express nodemon mongo body-parser')
+              install('express nodemon mongo body-parser helmet')
               process.stdout.write('\033c')
               console.log('The project was created!')
               console.log(`cd into ${name} and run npm start`)
@@ -341,7 +341,7 @@ let createBackend = () => {
           rl.close();
           shell.cd(`${name}`)
           console.log('Downloading dependencies and setting up the project, this may take a moment')
-          install('express nodemon body-parser')
+          install('express nodemon body-parser helmet')
           process.stdout.write('\033c')
           console.log('The project was created!')
           console.log(`cd into ${name} and run npm start`)
