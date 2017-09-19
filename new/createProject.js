@@ -109,7 +109,7 @@ let createReactSPA = () => {
               installKnexGlobal()
               modifyKnex()
               try {
-                execSync(`createdb ${name};`, { stdio: 'ignore' });
+                execSync(`createdb ${name}`, { stdio: 'ignore' });
               } catch (e) {
                 // need some variable to indicate this failed and the user needs to make a new database
               }
@@ -244,8 +244,8 @@ let createAppWithoutReact = () => {
               noReactApp.railsApp()
               shell.cd(`${name}`)
               console.log('Downloading dependencies and setting up the project, this may take a moment')
-              install('express nodemon pg knex body-parser compression helmet')
-              installDevDependencies('babel-core babel-preset-es2015 babelify browserify gulp gulp-babel gulp-rename gulp-uglify vinyl-buffer vinyl-source-stream gulp-htmlmin')
+              install('express nodemon pg knex body-parser compression helmet dotenv')
+              installDevDependencies('babel-core babel-preset-es2015 babelify browserify gulp gulp-babel gulp-rename gulp-uglify vinyl-buffer vinyl-source-stream gulp-htmlmin gulp-clean-css')
               installKnexGlobal()
               modifyKnex()
               try {
@@ -262,8 +262,8 @@ let createAppWithoutReact = () => {
               noReactApp.railsApp()
               shell.cd(`${name}`)
               console.log('Downloading dependencies and setting up the project, this may take a moment')
-              install('express nodemon mongo body-parser compression helmet')
-              installDevDependencies('babel-core babel-preset-es2015 babelify browserify gulp gulp-babel gulp-rename gulp-uglify vinyl-buffer vinyl-source-stream gulp-htmlmin')
+              install('express nodemon mongo body-parser compression helmet dotenv')
+              installDevDependencies('babel-core babel-preset-es2015 babelify browserify gulp gulp-babel gulp-rename gulp-uglify vinyl-buffer vinyl-source-stream gulp-htmlmin gulp-clean-css')
               process.stdout.write('\033c')
               console.log('The project was created!')
               console.log(`cd into ${name} and run npm start`)
@@ -276,8 +276,8 @@ let createAppWithoutReact = () => {
           process.stdout.write('\033c')
           shell.cd(`${name}`)
           console.log('Downloading dependencies and setting up the project, this may take a moment')
-          install('express nodemon body-parser compression helmet')
-          installDevDependencies('babel-core babel-preset-es2015 babelify browserify gulp gulp-babel gulp-rename gulp-uglify vinyl-buffer vinyl-source-stream gulp-htmlmin')
+          install('express nodemon body-parser compression helmet dotenv')
+          installDevDependencies('babel-core babel-preset-es2015 babelify browserify gulp gulp-babel gulp-rename gulp-uglify vinyl-buffer vinyl-source-stream gulp-htmlmin gulp-clean-css')
           process.stdout.write('\033c')
           console.log('The project was created!')
           console.log(`cd into ${name} and run npm start`)
