@@ -43,7 +43,9 @@ let addDatabase = () => {
   rl.question('Postgres or MongoDB? ', (answer) => {
     let type = answer.toLowerCase()
     if (type === 'p') {
-      rl.question('What is the name of the database? ', (name) => {
+      rl.question('What is the name of the database? ', (answer) => {
+        let name = answer
+        rl.close()
         installKnexGlobal()
         let newKnex = `module.exports = {\n\n\tdevelopment: {\n\t\tclient: 'pg',\n\t\tconnection: 'postgres://localhost/${name}',\n\t\tmigrations: {\n\t\t\tdirectory: './db/migrations'\n\t\t}\n\t\tseeds: {\n\t\t\tdirectory: './db/seeds/dev'\n\t\t},\n\t\tuseNullAsDefault: true\n\t},\n\n\tproduction: {\n\t\tclient: 'pg',\n\t\tconnection: process.env.DATABASE_URL + '?ssl=true',\n\t\tmigrations: {\n\t\t\tdirectory: 'db/migrations'\n\t\t},\n\t\tseeds: {\n\t\t\tdirectory: 'db/seeds/dev'\n\t\t},\n\t\tuseNullAsDefault: true\n\t}\n\n};`
         let modifyKnex = () => {
@@ -59,12 +61,14 @@ let addDatabase = () => {
         install('knex')
         try {
           execSync(`createdb ${name};`, { stdio: 'ignore' });
-        } catch (e) {
+        } catch (err) {
+          if (err) throw err
           // need some variable to indicate this failed and the user needs to make a new database
         }
 
       })
     } else if (type === 'm') {
+      rl.close()
       install('mongo')
       // could see if dotenv is installed, maybe also ask to modify the enzo api file
       if (fs.existsSync('./.env')) {
