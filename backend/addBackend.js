@@ -11,7 +11,7 @@ let shell = require('shelljs')
 const execSync = require('child_process').execSync;
 
 let BE = require('./create')
-let name = process.argv[3]
+let name = process.argv[3] || 'none'
 
 let shouldUseYarn = () => {
   try {
@@ -64,6 +64,7 @@ let addScript = (command, script) => {
 // also maybe modify or add a gulp file
 // also need if they want an html server see if they already have a source directory for pages
 let addBackend = () => {
+  process.stdout.write('\033c')
   rl.question('Do you need a Postgres or MongoDB database? (Y/N) ', (database) => {
     database = database.toLowerCase()
     if (database === 'y') {
