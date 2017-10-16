@@ -45,8 +45,6 @@ let addDatabase = () => {
     if (type === 'p') {
       rl.question('What is the name of the database? ', (name) => {
         installKnexGlobal()
-        modifyKnex()
-        install('knex')
         let newKnex = `module.exports = {\n\n\tdevelopment: {\n\t\tclient: 'pg',\n\t\tconnection: 'postgres://localhost/${name}',\n\t\tmigrations: {\n\t\t\tdirectory: './db/migrations'\n\t\t}\n\t\tseeds: {\n\t\t\tdirectory: './db/seeds/dev'\n\t\t},\n\t\tuseNullAsDefault: true\n\t},\n\n\tproduction: {\n\t\tclient: 'pg',\n\t\tconnection: process.env.DATABASE_URL + '?ssl=true',\n\t\tmigrations: {\n\t\t\tdirectory: 'db/migrations'\n\t\t},\n\t\tseeds: {\n\t\t\tdirectory: 'db/seeds/dev'\n\t\t},\n\t\tuseNullAsDefault: true\n\t}\n\n};`
         let modifyKnex = () => {
           if (fs.existsSync('./knexfile.js')) {
@@ -57,6 +55,8 @@ let addDatabase = () => {
             })
           }
         }
+        modifyKnex()
+        install('knex')
         try {
           execSync(`createdb ${name};`, { stdio: 'ignore' });
         } catch (e) {
