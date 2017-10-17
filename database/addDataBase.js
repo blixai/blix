@@ -40,7 +40,7 @@ let installKnexGlobal = () => {
 
 let addDatabase = () => {
   process.stdout.write('\033c')
-  rl.question('Postgres or MongoDB? ', (answer) => {
+  rl.question('Postgres or MongoDB (P/M)? ', (answer) => {
     let type = answer.toLowerCase()
     if (type === 'p') {
       rl.question('What is the name of the database? ', (answer) => {
@@ -77,6 +77,15 @@ let addDatabase = () => {
         }) 
       } else {
         fs.writeFileSync('./.env', `MONGODB_URI=''`)
+        fs.readFile('./package.json', (err, data) => {
+          if (err) throw err 
+          let json = JSON.stringify(data)
+          if (json.dependencies.dotenv) {
+            console.log('it has dotenv!')
+          } else {
+            install('dotenv')
+          }
+        })
       }
     } else {
       console.log(`Looks like you didn't enter P or M. Please try again. `)
