@@ -19,9 +19,16 @@ let backendOnly = () => {
       if (err) throw err
     })
     // need to see if enzo exists, if not make folder sync then create this file
-    fs.writeFile(`./enzo/api.js`, enzoCreateEndpoints, (err) => {
-      if (err) throw err
-    })
+    if (fs.existsSync('./enzo')) {
+      fs.writeFile(`./enzo/api.js`, enzoCreateEndpoints, (err) => {
+        if (err) throw err
+      })
+    } else {
+      fs.mkdirSync('./enzo')
+      fs.writeFile(`./enzo/api.js`, enzoCreateEndpoints, (err) => {
+        if (err) throw err
+      })
+    }
 
   } else {
     console.log(`You don't appear to be within a project, please cd into a project and try again.`)

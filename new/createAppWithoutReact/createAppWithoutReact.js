@@ -6,7 +6,7 @@ let name = process.argv[3]
 
 
 // files that dont change
-let gitignore = fs.readFileSync(path.resolve(__dirname, '../filesToCopy/commonFiles/.gitignore'), 'utf8')
+let gitignore = fs.readFileSync(path.resolve(__dirname, '../filesToCopy/commonFiles/gitIgnore.js'), 'utf8')
 let readme = fs.readFileSync(path.resolve(__dirname, '../filesToCopy/commonFiles/readme.md'), 'utf8')
 let routes = fs.readFileSync(path.resolve(__dirname, '../filesToCopy/commonFiles/routes.js'), 'utf8')
 let spaNoSQLPck = `{\n\t"name": "${name}",\n\t"version": "1.0.0",\n\t"scripts": {\n\t\t"start": "gulp | nodemon --watch public server/server.js",\n\t\t"generate":"node enzo/index.js"\n\t}\n}`

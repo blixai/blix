@@ -7,7 +7,7 @@ let server = fs.readFileSync(path.resolve(__dirname, './files/server.js'), 'utf8
 
 // files that dont change
 
-let gitignore = fs.readFileSync(path.resolve(__dirname, '../filesToCopy/commonFiles/.gitignore'), 'utf8')
+let gitignore = fs.readFileSync(path.resolve(__dirname, '../filesToCopy/commonFiles/gitIgnore.js'), 'utf8')
 let readme = fs.readFileSync(path.resolve(__dirname, '../filesToCopy/commonFiles/readme.md'), 'utf8')
 let routes = fs.readFileSync(path.resolve(__dirname, '../filesToCopy/commonFiles/routes.js'), 'utf8')
 
