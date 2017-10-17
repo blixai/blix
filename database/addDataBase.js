@@ -79,7 +79,7 @@ let addDatabase = () => {
         fs.writeFileSync('./.env', `MONGODB_URI=''`)
         fs.readFile('./package.json', (err, data) => {
           if (err) throw err 
-          let json = JSON.stringify(data)
+          let json = JSON.parse(data)
           if ("dotenv" in json.dependencies) {
             console.log('it has dotenv!')
           } else {
