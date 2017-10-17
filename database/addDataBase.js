@@ -80,7 +80,7 @@ let addDatabase = () => {
         fs.readFile('./package.json', (err, data) => {
           if (err) throw err 
           let json = JSON.stringify(data)
-          if (json.dependencies.dotenv != undefined) {
+          if ("dotenv" in json.dependencies) {
             console.log('it has dotenv!')
           } else {
             install('dotenv')
