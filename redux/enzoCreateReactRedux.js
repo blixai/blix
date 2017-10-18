@@ -1,6 +1,10 @@
 let fs = require('fs')
 
 let name = process.argv[2]
+let capitalizeFirstLetter = (string) => {
+  return string.charAt(0).toUpperCase() + string.slice(1)
+}
+name = capitalizeFirstLetter(name)
 let type = process.argv[3]
 
 let dumbComponent = `import React from 'react'\n\nexport const ${name} = (props) => {\n\treturn(\n\t\t<div></div>\n\t)\n}`
@@ -36,7 +40,7 @@ if (name) {
     if (fs.existsSync('./src/containers/AppRoutes/AppRoutes.js')) {
       let search = '<Switch>'
       let body = fs.readFileSync('./src/containers/AppRoutes/AppRoutes.js', 'utf8').toString().split('\n')
-      body.splice(1, 0, `import ${name}Container from '../${name}/${name}Container'`)
+      body.splice(4, 0, `import ${name}Container from '../${name}/${name}Container'`)
       let newBody = body.join('\n')
       let position = newBody.indexOf(search)
       let newRoute = `\n\t\t\t\t  <Route exact path='/${name.toLowerCase()}' render={(history) => {\n\t\t\t\t\u0020\u0020\u0020\u0020return <${name}Container/>\n\t\t\t\t  }}/>`
