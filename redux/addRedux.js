@@ -38,6 +38,14 @@ let installDevDependencies = (packages) => {
   }
 }
 
+let addScript = (command, script) => {
+  let buffer = fs.readFileSync('package.json')
+  let json = JSON.parse(buffer)
+  json.scripts[command] = script
+  let newPackage = JSON.stringify(json, null, 2)
+  fs.writeFileSync('package.json', newPackage)
+}
+
 let rootReducer = `import { combineReducers } from 'redux'\n\n\nconst rootReducer = combineReducers({})\n\n\nexport default rootReducer`
 let configStore = `import { createStore, applyMiddleware } from 'redux'\nimport rootReducer from './reducers/rootReducer'\n\nconst devTools = window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()\n\nexport const configureStore = () => {\n\treturn createStore(\n\t\trootReducer,\n\t\tdevTools\n\t)\n}`
 let index = `import React from 'react'\nimport ReactDOM from 'react-dom'\nimport App from './containers/App/AppContainer'\nimport { BrowserRouter as Router, Route } from 'react-router-dom'\nimport { configureStore } from './configStore'\nimport { Provider } from 'react-redux'\nimport createHistory from 'history/createBrowserHistory'\n\n\nconst history = createHistory()\nconst store = configureStore()\n\n\nReactDOM.render(\n\t<Provider store={store}>\n\t\t<Router history={history}>\n\t\t\t<Route path='/' component={App}/>\n\t\t</Router>\n\t</Provider>\n, document.getElementById('root'))`
@@ -76,6 +84,26 @@ let createContainer = (name) => {
   return container
 }
 
+let enzo = () => {
+  if (fs.existsSync('./enzo')) {
+    // add new redux react creation command
+    let file = fs.readFileSync(path.resolve(__dirname, './enzoCreateReactRedux.js'), 'utf8')
+    fs.writeFile('./enzo/createReactRedux.js', file, (err) => {
+      if (err) console.error(err)
+    })
+    addScript('redux', 'node ./enzo/createReactRedux.js')
+  } else {
+    // create enzo 
+    fs.mkdirSync('./enzo')
+    let file = fs.readFileSync(path.resolve(__dirname, './enzoCreateReactRedux.js'), 'utf8')
+    fs.writeFile('./enzo/createReactRedux.js', file, (err) => {
+      if (err) console.error(err)
+    })
+    addScript('redux', 'node ./enzo/createReactRedux.js')
+    // add react redux creation command
+  }
+}
+
 let createReactApp = () => {
   if (fs.existsSync('./src/containers')) {
     // if it already exists this could be a problem. 
@@ -105,6 +133,24 @@ let createReactApp = () => {
   fs.writeFile(`./src/containers/App/AppContainer.js`, AppContainer, (err) => {
     if (err) throw err
   })
+  // maybe also move the App.css file into the App folder. 
+  if (fs.existsSync('./src/App.css')) {
+    fs.rename('./src/App.css', './src/containers/App/App.css', (err) => {
+      if (err) console.error(err)
+    })
+  }
+  // move the damn logo if it exists
+  if (fs.existsSync('./src/logo.svg')) {
+    fs.rename('./src/logo.svg', './src/containers/App/logo.svg', (err) => {
+      if (err) console.error(err)
+    })
+  }
+  // move the test file if it exists
+  if (fs.existsSync('./src/App.test.js')) {
+    fs.rename('./src/App.test.js', './src/containers/App/App.test.js', (err) => {
+      if (err) console.error(err)
+    })
+  }
 
   try {
     fs.unlinkSync('./src/App.js')
@@ -112,10 +158,54 @@ let createReactApp = () => {
   } catch (err) {
     if (err) console.error(err)
   }
+  enzo()
 }
 
+
+
 let createdByEnzo = () => {
-  console.log('fired')
+  if (fs.existsSync('./src/containers')) {
+    process.exit()
+  } else if (fs.existsSync('./src/containers/AppRoutes') || fs.existsSync('./src/containers/App')) {
+    process.exit()
+  } else {
+    let name = 'AppRoutes'
+    createIndex(name)
+    fs.mkdirSync('./src/containers')
+    fs.mkdirSync('./src/containers/App')
+    fs.mkdirSync('./src/containers/AppRoutes')
+  }
+
+  let router = fs.readFileSync(path.resolve(__dirname, './router.js'), 'utf8')
+  fs.writeFile('./src/containers/AppRoutes/AppRoutes.js', router, (err) => {
+    if (err) throw err
+  })
+  let AppRoutesContainer = createContainer('AppRoutes')
+  fs.writeFile('./src/containers/AppRoutes/AppRoutesContainer.js', AppRoutesContainer, (err) => {
+    if (err) console.error(err)
+  })
+
+  let app = fs.readFileSync('./src/App/App.js', 'utf8')
+  fs.writeFile('./src/containers/App/App.js', app, (err) => {
+    if (err) console.error(err)
+  })
+  let AppContainer = createContainer('App')
+  fs.writeFile(`./src/containers/App/AppContainer.js`, AppContainer, (err) => {
+    if (err) console.error(err)
+  })
+  if (fs.existsSync('./src/App/App.css')) {
+    fs.rename('./src/App/App.css', './src/containers/App/App.css', (err) => {
+      if (err) console.error(err)
+    })
+  }
+  try {
+    fs.unlinkSync('./src/App/App.js')
+    fs.unlinkSync('./src/App/App.css')
+    fs.unlinkSync('./src/App')
+  } catch (err) {
+    if (err) console.error(err)
+  }
+  enzo()
 }
 
 
@@ -123,18 +213,13 @@ let createFilesWithRouter = () => {
   redux()
 
     if (fs.existsSync('./src/App.js')) {
-      // if it exists it was probz created with create-react-app
       createReactApp()
     } else if (fs.existsSync('./src/App/App.js')) {
       createdByEnzo()
-      // probably created by enzo 
-         // need to copy App file to Home, making sure Home doesn't already exist 
     } else {
        // the router into a router file? not really sure 
     }
-    // need to write app container
-    // need to create enzo commands and files
-    // maybe create configured router file????
+
     install('redux react-redux react-router-dom')
 }
 
@@ -157,7 +242,7 @@ let createFilesWithoutRouter = () => {
   // need to install without react router
 }
 
-// need to ask if they want react router?
+
 let addRedux = () => {
   process.stdout.write('\033c')
   console.log('Mutating a project can cause loss of files. Make sure you have everything committed.')
