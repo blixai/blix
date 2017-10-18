@@ -3,6 +3,7 @@
 let createProject = require('./new/createProject')
 let addBackend = require('./backend/addBackend')
 let addDatabase = require('./database/addDataBase')
+let addRedux = require('./redux/addRedux')
 let command = process.argv[2]
 
 
@@ -17,6 +18,8 @@ let checkCommand = (command) => {
     case "database":
       addDatabase();
       break;
+    case "redux":
+      addRedux()
     default:
       break;
   }
