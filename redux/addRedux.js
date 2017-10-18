@@ -139,6 +139,18 @@ let createReactApp = () => {
       if (err) console.error(err)
     })
   }
+  // move the damn logo if it exists
+  if (fs.existsSync('./src/logo.svg')) {
+    fs.rename('./src/logo.svg', './src/containers/App/logo.svg', (err) => {
+      if (err) console.error(err)
+    })
+  }
+  // move the test file if it exists
+  if (fs.existsSync('./src/App.test.js')) {
+    fs.rename('./src/App.test.js', './src/containers/App/App.test.js', (err) => {
+      if (err) console.error(err)
+    })
+  }
 
   try {
     fs.unlinkSync('./src/App.js')
@@ -160,7 +172,6 @@ let createFilesWithRouter = () => {
   redux()
 
     if (fs.existsSync('./src/App.js')) {
-      // if it exists it was probz created with create-react-app
       createReactApp()
     } else if (fs.existsSync('./src/App/App.js')) {
       createdByEnzo()
@@ -169,9 +180,7 @@ let createFilesWithRouter = () => {
     } else {
        // the router into a router file? not really sure 
     }
-    // need to write app container
-    // need to create enzo commands and files
-    // maybe create configured router file????
+
     install('redux react-redux react-router-dom')
 }
 
@@ -194,7 +203,7 @@ let createFilesWithoutRouter = () => {
   // need to install without react router
 }
 
-// need to ask if they want react router?
+
 let addRedux = () => {
   process.stdout.write('\033c')
   console.log('Mutating a project can cause loss of files. Make sure you have everything committed.')
