@@ -164,7 +164,46 @@ let createReactApp = () => {
 
 
 let createdByEnzo = () => {
-  console.log('fired')
+  if (fs.existsSync('./src/containers')) {
+    process.exit()
+  } else if (fs.existsSync('./src/containers/AppRoutes') || fs.existsSync('./src/containers/App')) {
+    process.exit()
+  } else {
+    let name = 'AppRoutes'
+    createIndex(name)
+    fs.mkdirSync('./src/containers')
+    fs.mkdirSync('./src/containers/App')
+    fs.mkdirSync('./src/containers/AppRoutes')
+  }
+
+  let router = fs.readFileSync(path.resolve(__dirname, './router.js'), 'utf8')
+  fs.writeFile('./src/containers/AppRoutes/AppRoutes.js', router, (err) => {
+    if (err) throw err
+  })
+  let AppRoutesContainer = createContainer('AppRoutes')
+  fs.writeFile('./src/containers/AppRoutes/AppRoutesContainer.js', AppRoutesContainer, (err) => {
+    if (err) console.error(err)
+  })
+
+  let app = fs.readFileSync('./src/App/App.js', 'utf8')
+  fs.writeFile('./src/containers/App/App.js', app, (err) => {
+    if (err) console.error(err)
+  })
+  let AppContainer = createContainer('App')
+  fs.writeFile(`./src/containers/App/AppContainer.js`, AppContainer, (err) => {
+    if (err) console.error(err)
+  })
+  if (fs.existsSync('./src/App/App.css')) {
+    fs.rename('./src/App/App.css', './src/containers/App/App.css', (err) => {
+      if (err) console.error(err)
+    })
+  }
+  try {
+    fs.unlinkSync('./src/App')
+  } catch (err) {
+    if (err) console.error(err)
+  }
+  enzo()
 }
 
 
@@ -175,8 +214,6 @@ let createFilesWithRouter = () => {
       createReactApp()
     } else if (fs.existsSync('./src/App/App.js')) {
       createdByEnzo()
-      // probably created by enzo 
-         // need to copy App file to Home, making sure Home doesn't already exist 
     } else {
        // the router into a router file? not really sure 
     }
