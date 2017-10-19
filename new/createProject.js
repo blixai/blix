@@ -183,8 +183,8 @@ let createReactRedux = () => {
               process.stdout.write('\033c')
               console.log('The project was created!')
               console.log(`cd into ${name}`)
-              console.log("\x1b[45m", `First start webpack: npm run build`)
-              console.log("\x1b[44m", `To start server: npm start`)
+              console.log("\x1b[35m", `First start webpack: npm run build`)
+              console.log("\x1b[34m", `To start server: npm start`)
             } else {
               // build a react/redux with mongo backend
               rl.close();
@@ -197,8 +197,8 @@ let createReactRedux = () => {
               process.stdout.write('\033c')
               console.log('The project was created!')
               console.log(`cd into ${name}`)
-              console.log("\x1b[45m", `First start webpack: npm run build`)
-              console.log("\x1b[44m", `To start server: npm start`)
+              console.log("\x1b[35m", `First start webpack: npm run build`)
+              console.log("\x1b[34m", `To start server: npm start`)
             }
           })
         } else {
@@ -213,8 +213,8 @@ let createReactRedux = () => {
           process.stdout.write('\033c')
           console.log('The project was created!')
           console.log(`cd into ${name}`)
-          console.log("\x1b[45m", `First start webpack: npm run build`)
-          console.log("\x1b[44m", `To start server: npm start`)
+          console.log("\x1b[35m", `First start webpack: npm run build`)
+          console.log("\x1b[34m", `To start server: npm start`)
         }
       })
     } else {
@@ -230,8 +230,8 @@ let createReactRedux = () => {
       process.stdout.write('\033c')
       console.log('The project was created!')
       console.log(`cd into ${name}`)
-      console.log("\x1b[45m", `First start webpack: npm run build`)
-      console.log("\x1b[44m", `To open project: npm start`)
+      console.log("\x1b[35m", `First start webpack: npm run build`)
+      console.log("\x1b[34m", `To open project: npm start`)
     }
   })
 }
