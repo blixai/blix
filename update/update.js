@@ -6,6 +6,7 @@ let install = (packages) => {
 
 let update = () => {
   install('@dbull7/enzo')
+  process.exit()
 }
 
 module.exports = update
