@@ -75,8 +75,8 @@ let ReactReduxWithBackend = () => {
 
   // enzo
 
-  fs.mkdirSync('./enzo')
-  fs.writeFile('./enzo/createComponentAndContainer.js', enzoCreateContainer, (err) => {
+  fs.mkdirSync(`./${name}/enzo`)
+  fs.writeFile(`./${name}/enzo/createComponentAndContainer.js`, enzoCreateContainer, (err) => {
     if (err) console.error(err)
   })
 
@@ -155,8 +155,8 @@ let reactReduxWithoutBackend = () => {
 
   // enzo
 
-  fs.mkdirSync('./enzo')
-  fs.writeFile('./enzo/createComponentAndContainer.js', enzoCreateContainer, (err) => {
+  fs.mkdirSync(`./${name}/enzo`)
+  fs.writeFile(`./${name}/enzo/createComponentAndContainer.js`, enzoCreateContainer, (err) => {
     if (err) console.error(err)
   })
 
