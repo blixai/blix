@@ -66,12 +66,12 @@ let createProject = () => {
         rl.question('Will you be using React? (Y/N) ', (react) => {
           react = react.toLowerCase()
           if (react === 'y') {
-            rl.question('Is this a Singe Page Application? (Y/N) ', (spa) => {
+            rl.question('Do you need Redux and React Router? (Y/N) ', (spa) => {
               spa = spa.toLowerCase()
               if (spa === 'y') {
-                createReactSPA()
-              } else {
                 createReactRedux()
+              } else {
+                createReactSPA()
               }
             })
           } else {
@@ -103,7 +103,7 @@ let createReactSPA = () => {
               rl.close();
               spaBuild.writeFilesWithSPAReact()
               shell.cd(`${name}`)
-              install('express nodemon pg knex body-parser compression helmet react react-dom webpack')
+              install('express nodemon pg knex body-parser compression helmet react react-dom webpack dotenv')
               installDevDependencies('babel-loader css-loader babel-core babel-preset-es2015 babel-preset-react style-loader')
               console.log('Downloading dependencies and setting up the project, this may take a moment')
               installKnexGlobal()
@@ -122,7 +122,7 @@ let createReactSPA = () => {
               fs.writeFileSync(`./${name}/.env`)
               shell.cd(`${name}`)
               console.log('Downloading dependencies and setting up the project, this may take a moment')
-              install('express nodemon compression helmet mongo dotenv body-parser react react-dom webpack')
+              install('express nodemon compression helmet mongo dotenv body-parser react react-dom webpack dotenv')
               installDevDependencies('babel-loader css-loader babel-core babel-preset-es2015 babel-preset-react style-loader')
               process.stdout.write('\033c')
               console.log('The project was created!')
@@ -134,7 +134,7 @@ let createReactSPA = () => {
           spaBuild.writeFilesWithSPAReact()
           shell.cd(`${name}`)
           console.log('Downloading dependencies and setting up the project, this may take a moment')
-          install('express nodemon compression helmet body-parser react react-dom webpack')
+          install('express nodemon compression helmet body-parser react react-dom webpack dotenv')
           installDevDependencies('babel-loader css-loader babel-core babel-preset-es2015 babel-preset-react style-loader')
           process.stdout.write('\033c')
           console.log('The project was created!')
@@ -171,8 +171,8 @@ let createReactRedux = () => {
               rl.close();
               shell.cd(`${name}`)
               console.log('Downloading dependencies and setting up the project, this may take a moment')
-              install('redux react-router-dom react-redux express nodemon pg knex body-parser compression helmet react react-dom webpack')
-              installDevDependencies('babel-loader css-loader babel-core babel-preset-es2015 babel-preset-react')
+              install('redux react-router-dom react-redux express dotenv nodemon pg knex body-parser compression helmet react react-dom webpack')
+              installDevDependencies('babel-loader css-loader babel-core babel-preset-es2015 babel-preset-react style-loader')
               installKnexGlobal()
               modifyKnex()
               try {
@@ -182,7 +182,9 @@ let createReactRedux = () => {
               }
               process.stdout.write('\033c')
               console.log('The project was created!')
-              console.log(`cd into ${name} and run npm start`)
+              console.log(`cd into ${name}`)
+              console.log("\x1b[35m", `First start webpack: npm run build`)
+              console.log("\x1b[34m", `To start server: npm start`)
             } else {
               // build a react/redux with mongo backend
               rl.close();
@@ -190,11 +192,13 @@ let createReactRedux = () => {
               shell.cd(`${name}`)
               process.stdout.write('\033c')
               console.log('Downloading dependencies and setting up the project, this may take a moment')
-              install('redux react-router-dom react-redux express nodemon compression helmet mongo dotenv body-parser react react-dom webpack')
-              installDevDependencies('babel-loader css-loader babel-core babel-preset-es2015 babel-preset-react')
+              install('redux react-router-dom react-redux express nodemon dotenv compression helmet mongo dotenv body-parser react react-dom webpack')
+              installDevDependencies('babel-loader css-loader babel-core babel-preset-es2015 babel-preset-react style-loader')
               process.stdout.write('\033c')
               console.log('The project was created!')
-              console.log(`cd into ${name} and run npm start`)
+              console.log(`cd into ${name}`)
+              console.log("\x1b[35m", `First start webpack: npm run build`)
+              console.log("\x1b[34m", `To start server: npm start`)
             }
           })
         } else {
@@ -205,24 +209,29 @@ let createReactRedux = () => {
           process.stdout.write('\033c')
           console.log('Downloading dependencies and setting up the project, this may take a moment')
           install('redux react-router-dom react-redux express nodemon dotenv body-parser compression helmet react react-dom webpack')
-          installDevDependencies('babel-loader css-loader babel-core babel-preset-es2015 babel-preset-react')
+          installDevDependencies('babel-loader css-loader babel-core babel-preset-es2015 babel-preset-react style-loader')
           process.stdout.write('\033c')
           console.log('The project was created!')
-          console.log(`cd into ${name} and run npm start`)
+          console.log(`cd into ${name}`)
+          console.log("\x1b[35m", `First start webpack: npm run build`)
+          console.log("\x1b[34m", `To start server: npm start`)
         }
       })
     } else {
       // create react redux without a backend
+      //  This part could probably use webpack-dev-server similar to create-react-app
       rl.close();
       reactRedux.reactReduxWithoutBackend()
       shell.cd(`${name}`)
       process.stdout.write('\033c')
       console.log('Downloading dependencies and setting up the project, this may take a moment')
       install('redux react-router-dom react-redux react react-dom webpack')
-      installDevDependencies('babel-loader css-loader babel-core babel-preset-es2015 babel-preset-react')
+      installDevDependencies('babel-loader css-loader babel-core babel-preset-es2015 babel-preset-react style-loader')
       process.stdout.write('\033c')
       console.log('The project was created!')
-      console.log(`cd into ${name} and run npm start`)
+      console.log(`cd into ${name}`)
+      console.log("\x1b[35m", `First start webpack: npm run build`)
+      console.log("\x1b[34m", `To open project: npm start`)
     }
   })
 }
@@ -311,7 +320,7 @@ let createBackend = () => {
               rl.close();
               shell.cd(`${name}`)
               console.log('Downloading dependencies and setting up the project, this may take a moment')
-              install('express nodemon pg knex body-parser helmet')
+              install('express nodemon pg knex body-parser helmet dotenv')
               installKnexGlobal()
               modifyKnex()
               try {
@@ -329,7 +338,7 @@ let createBackend = () => {
               rl.close();
               shell.cd(`${name}`)
               console.log('Downloading dependencies and setting up the project, this may take a moment')
-              install('express nodemon mongo body-parser helmet')
+              install('express nodemon mongo body-parser helmet dotenv')
               process.stdout.write('\033c')
               console.log('The project was created!')
               console.log(`cd into ${name} and run npm start`)
@@ -341,7 +350,7 @@ let createBackend = () => {
           rl.close();
           shell.cd(`${name}`)
           console.log('Downloading dependencies and setting up the project, this may take a moment')
-          install('express nodemon body-parser helmet')
+          install('express nodemon body-parser helmet dotenv')
           process.stdout.write('\033c')
           console.log('The project was created!')
           console.log(`cd into ${name} and run npm start`)
