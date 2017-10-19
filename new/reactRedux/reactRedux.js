@@ -21,7 +21,7 @@ let homeContainer = fs.readFileSync(path.resolve(__dirname, './files/homeContain
 let home = fs.readFileSync(path.resolve(__dirname, './files/home.js'), 'utf8')
 let appRouterNoBackend = fs.readFileSync(path.resolve(__dirname, './files/appRouterNoBackend.js'), 'utf8')
 
-
+let packageJSONWithoutBackend = `{\n\t"name": "${name}",\n\t"version": "1.0.0",\n\t"scripts": {\n\t\t"start": "open index.html",\n\t\t"build": "webpack --watch"\n\t}\n}`
 
 let ReactReduxWithBackend = () => {
 
@@ -52,6 +52,9 @@ let ReactReduxWithBackend = () => {
     if (err) throw err
   })
   fs.writeFile(`./${name}/src/containers/Home/HomeContainer.js`, homeContainer, (err) => {
+    if (err) throw err
+  })
+  fs.writeFile(`./${name}/src/containers/Home/Home.css`, '', (err) => {
     if (err) throw err
   })
   fs.writeFile(`./${name}/src/configStore.js`, configStore, (err) => {
@@ -124,6 +127,9 @@ let reactReduxWithoutBackend = () => {
   fs.writeFile(`./${name}/src/containers/Home/HomeContainer.js`, homeContainer, (err) => {
     if (err) throw err
   })
+  fs.writeFile(`./${name}/src/containers/Home/Home.css`, '', (err) => {
+    if (err) throw err
+  })
   fs.writeFile(`./${name}/src/configStore.js`, configStore, (err) => {
     if (err) throw err
   })
@@ -147,7 +153,7 @@ let reactReduxWithoutBackend = () => {
   fs.writeFile(`./${name}/README.md`, readme, (err) => {
     if (err) throw err
   })
-  fs.writeFileSync(`./${name}/package.json`, spaNoSQLPck)
+  fs.writeFileSync(`./${name}/package.json`, packageJSONWithoutBackend)
 }
 
 module.exports = {

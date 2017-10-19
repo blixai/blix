@@ -86,6 +86,9 @@ let writeFilesWithSPAReact = () => {
   fs.writeFile(`./${name}/.gitignore`, gitignore, (err) => {
     if (err) throw err
   })
+  fs.writeFile(`./${name}/.env`, '', (err) => {
+    if (err) throw err 
+  })
 
   fs.writeFile(`./${name}/README.md`, readme, (err) => {
     if (err) throw err
