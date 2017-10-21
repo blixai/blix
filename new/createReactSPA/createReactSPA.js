@@ -20,6 +20,7 @@ let spaNoBE = `{\n\t"name": "${name}",\n\t"version": "1.0.0",\n\t"scripts": {\n\
 //enzo
 let stateless = fs.readFileSync(path.resolve(__dirname, './files/statelessComponent.js'), 'utf8')
 let stateful = fs.readFileSync(path.resolve(__dirname, './files/statefulComponent.js'), 'utf8')
+let enzoReact = fs.readFileSync(path.resolve(__dirname, './files/enzoReact.js'), 'utf8')
 
 // this needs to be modified as the readline doesnt exist within this context
 let reactSPAWithoutBackend = () => {
@@ -42,7 +43,9 @@ let reactSPAWithoutBackend = () => {
   //enzo files 
   fs.mkdirSync(`./${name}/enzo`)
   fs.mkdirSync(`./${name}/enzo/templates`)
-  fs.writeFile(`./${name}/enzo/react.js`)
+  fs.writeFile(`./${name}/enzo/react.js`, enzoReact, (err) => {
+    if (err) console.error(err)
+  })
   fs.writeFile(`./${name}/enzo/templates/statelessComponent.js`, stateless, (err) => {
     if (err) console.error(err)
   })
