@@ -4,42 +4,47 @@ const rl = readline.createInterface({
   output: process.stdout
 });
 
+
 let fs = require('fs')
+let path = require('path')
+let name = process.argv[2]
 
-let name = process.arv[2]
-let stateful;
-let stateless;
-
-if (name) {
-  fs.readFile('./templates/statefulComponent.js', 'utf8', (err, data) => {
+let createStateful = (name) => {
+  let data = fs.readFileSync(path.resolve(__dirname, './templates/statefulComponent.js'), 'utf8')
+  let stateful = data.replace(/Name/g, `${name}`);
+  fs.mkdirSync(`./src/${name}`)
+  fs.writeFile(`./src/${name}/${name}.js`, stateful, (err) => {
     if (err) console.error(err)
-    var stateful = data.replace(/Name/g, `${name}`);
   })
-  fs.readFile('./templates/statelessComponent.js', 'utf8', (err, data) => {
+  fs.writeFile(`./src/${name}/${name}.css`, '', (err) => {
     if (err) console.error(err)
-    var stateless = data.replace(/Name/g, `${name}`);
+  })
+}
+
+let createStateless = (name) => {
+  let stateless = fs.readFileSync(path.resolve(__dirname, './templates/statelessComponent.js'), 'utf8')
+  stateless = stateless.replace(/Name/g, `${name}`);
+  fs.mkdirSync(`./src/${name}`)
+  fs.writeFile(`./src/${name}/${name}.js`, stateless, (err) => {
+    if (err) console.error(err)
+  })
+  fs.writeFile(`./src/${name}/${name}.css`, '', (err) => {
+    if (err) console.error(err)
   })
 }
 
 if (name) {
+  process.stdout.write('\033c')
   rl.question('Stateful Component? (Y/N) ', (answer) => {
     answer = answer.toLowerCase()
     if (answer === 'y') {
-      fs.mkdirSync(`./src/${name}`)
-      fs.writeFile(`./src/${name}/${name}.js`, stateful, (err) => {
-        if (err) console.error(err)
-      })
-      fs.writeFile(`./src/${name}/${name}.css`, '', (err) => {
-        if (err) console.error(err)
-      })
+      rl.close()
+      createStateful(name)
     } else if (answer === 'n') {
-      fs.mkdirSync(`./src/${name}`)
-      fs.writeFile(`./src/${name}/${name}.js`, stateless, (err) => {
-        if (err) console.error(err)
-      })
-      fs.writeFile(`./src/${name}/${name}.css`, '', (err) => {
-        if (err) console.error(err)
-      })
+      rl.close()
+      createStateless(name)
+    } else {
+      return
     }
   })
 }
