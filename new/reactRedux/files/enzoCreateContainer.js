@@ -8,7 +8,7 @@ let capitalizeFirstLetter = (string) => {
 name = capitalizeFirstLetter(name)
 let type = process.argv[3]
 
-let dumbComponentTemplate = fs.readFileSync(path.resolve(__dirname, './templates/dumbComponentTemplate.js'), 'utf8')
+let dumbComponentTemplate = fs.readFileSync(path.resolve(__dirname, './templates/enzoDumbComponentTemplate.js'), 'utf8')
 dumbComponentTemplate = dumbComponentTemplate.replace(/Name/g, `${name}`)
 
 let dumbReduxContainerTemplate = fs.readFileSync(path.resolve(__dirname, './templates/dumbReduxContainerTemplate.js'), 'utf8')
