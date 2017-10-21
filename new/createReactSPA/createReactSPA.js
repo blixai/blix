@@ -15,9 +15,11 @@ let spaIndex = fs.readFileSync(path.resolve(__dirname, './files/spaIndex.js'), '
 let spaReact = fs.readFileSync(path.resolve(__dirname, './files/spaReact.js'), 'utf8')
 let spaNoSQLPck = `{\n\t"name": "${name}",\n\t"version": "1.0.0",\n\t"scripts": {\n\t\t"start": "nodemon server/server.js",\n\t\t"build": "webpack --watch"\n\t}\n}`
 let spaHtmlFile = fs.readFileSync(path.resolve(__dirname, './files/spaHtmlFile.html'), 'utf8')
-let spaNoBE = `{\n\t"name": "${name}",\n\t"version": "1.0.0",\n\t"scripts": {\n\t\t"start": "open index.html && webpack --watch"\n\t}\n}`
+let spaNoBE = `{\n\t"name": "${name}",\n\t"version": "1.0.0",\n\t"scripts": {\n\t\t"start": "open index.html && webpack --watch",\n\t\t"react": "node enzo/react.js"\n\t}\n}`
 
-
+//enzo
+let stateless = fs.readFileSync(path.resolve(__dirname, './files/statelessComponent.js'), 'utf8')
+let stateful = fs.readFileSync(path.resolve(__dirname, './files/statefulComponent.js'), 'utf8')
 
 // this needs to be modified as the readline doesnt exist within this context
 let reactSPAWithoutBackend = () => {
@@ -36,6 +38,20 @@ let reactSPAWithoutBackend = () => {
   fs.writeFile(`./${name}/src/App/App.js`, spaReact, (err) => {
     if (err) throw err
   })
+
+  //enzo files 
+  fs.mkdirSync(`./${name}/enzo`)
+  fs.mkdirSync(`./${name}/enzo/templates`)
+  fs.writeFile(`./${name}/enzo/react.js`)
+  fs.writeFile(`./${name}/enzo/templates/statelessComponent.js`, stateless, (err) => {
+    if (err) console.error(err)
+  })
+  fs.writeFile(`./${name}/enzo/templates/statefulComponent.js`, stateful, (err) => {
+    if (err) console.error(err)
+  })
+  
+
+  // other files
   fs.writeFile(`./${name}/.gitignore`, gitignore, (err) => {
     if (err) throw err
   })

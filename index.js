@@ -24,6 +24,7 @@ let checkCommand = (command) => {
     case "update":
       update()
     default:
+      console.log(`? Try: enzo help to see a list of commands`)
       break;
   }
 }
