@@ -101,6 +101,19 @@ let writeFilesWithSPAReact = () => {
     if (err) throw err
   })
 
+  //enzo files 
+  fs.mkdirSync(`./${name}/enzo`)
+  fs.mkdirSync(`./${name}/enzo/templates`)
+  fs.writeFile(`./${name}/enzo/react.js`, enzoReact, (err) => {
+    if (err) console.error(err)
+  })
+  fs.writeFile(`./${name}/enzo/templates/statelessComponent.js`, stateless, (err) => {
+    if (err) console.error(err)
+  })
+  fs.writeFile(`./${name}/enzo/templates/statefulComponent.js`, stateful, (err) => {
+    if (err) console.error(err)
+  })
+
   //other files
   fs.writeFile(`./${name}/.gitignore`, gitignore, (err) => {
     if (err) throw err
