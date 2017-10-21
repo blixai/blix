@@ -24,6 +24,13 @@ let appRouterNoBackend = fs.readFileSync(path.resolve(__dirname, './files/appRou
 let packageJSONWithoutBackend = `{\n\t"name": "${name}",\n\t"version": "1.0.0",\n\t"scripts": {\n\t\t"start": "open index.html",\n\t\t"build": "webpack --watch"\n\t}\n}`
 let enzoCreateContainer = fs.readFileSync(path.resolve(__dirname, './files/enzoCreateContainer.js'), 'utf8')
 let enzoCreateAPI = fs.readFileSync(path.resolve(__dirname, './files/enzoCreateAPI.js'), 'utf8')
+let enzoEndpointTemplate = fs.readFileSync(path.resolve(__dirname, './templates/enzoEndpointTemplate.js'), 'utf8')
+let enzoModelTemplate = fs.readFileSync(path.resolve(__dirname, './templates/enzoModelTemplate.js'), 'utf8')
+let dumbReduxContainerTemplate = fs.readFileSync(path.resolve(__dirname, './templates/dumbReduxContainerTemplate.js'), 'utf8')
+let enzoDumbComponentTemplate = fs.readFileSync(path.resolve(__dirname, './templates/enzoDumbComponentTemplate.js'), 'utf8')
+let smartComponentTemplate = fs.readFileSync(path.resolve(__dirname, './templates/smartComponentTemplate.js'), 'utf8')
+let reduxContainerTemplate = fs.readFileSync(path.resolve(__dirname, './templates/reduxContainerTemplate.js'), 'utf8')
+
 
 let ReactReduxWithBackend = () => {
 
@@ -77,10 +84,33 @@ let ReactReduxWithBackend = () => {
   // enzo
 
   fs.mkdirSync(`./${name}/enzo`)
+  fs.mkdirSync(`./${name}/enzo/templates`)
+
+  // create React Components/Containers
   fs.writeFile(`./${name}/enzo/createComponentAndContainer.js`, enzoCreateContainer, (err) => {
     if (err) console.error(err)
   })
+  fs.writeFile(`./${name}/enzo/templates/dumbReduxContainerTemplate.js`, dumbReduxContainerTemplate, (err) => {
+    if (err) console.error(err)
+  })
+  fs.writeFile(`./${name}/enzo/templates/enzoDumbComponentTemplate.js`, enzoDumbComponentTemplate, (err) => {
+    if (err) console.error(err)
+  })
+  fs.writeFile(`./${name}/enzo/templates/smartComponentTemplate.js`, smartComponentTemplate, (err) => {
+    if (err) console.error(err)
+  })
+  fs.writeFile(`./${name}/enzo/templates/reduxContainerTemplate.js`, reduxContainerTemplate, (err) => {
+    if (err) console.error(err)
+  })
+
+  // create API
   fs.writeFile(`./${name}/enzo/enzoCreateAPI.js`, enzoCreateAPI, (err) => {
+    if (err) console.error(err)
+  })
+  fs.writeFile(`./${name}/enzo/templates/enzoEndpointTemplate.js`, enzoEndpointTemplate, (err) => {
+    if (err) console.error(err)
+  })
+  fs.writeFile(`./${name}/enzo/templates/enzoModelTemplate.js`, enzoModelTemplate, (err) => {
     if (err) console.error(err)
   })
 
@@ -161,6 +191,24 @@ let reactReduxWithoutBackend = () => {
 
   fs.mkdirSync(`./${name}/enzo`)
   fs.writeFile(`./${name}/enzo/createComponentAndContainer.js`, enzoCreateContainer, (err) => {
+    if (err) console.error(err)
+  })
+  fs.mkdirSync(`./${name}/enzo/templates`)
+
+  // create React Components/Containers
+  fs.writeFile(`./${name}/enzo/createComponentAndContainer.js`, enzoCreateContainer, (err) => {
+    if (err) console.error(err)
+  })
+  fs.writeFile(`./${name}/enzo/templates/dumbReduxContainerTemplate.js`, dumbReduxContainerTemplate, (err) => {
+    if (err) console.error(err)
+  })
+  fs.writeFile(`./${name}/enzo/templates/enzoDumbComponentTemplate.js`, enzoDumbComponentTemplate, (err) => {
+    if (err) console.error(err)
+  })
+  fs.writeFile(`./${name}/enzo/templates/smartComponentTemplate.js`, smartComponentTemplate, (err) => {
+    if (err) console.error(err)
+  })
+  fs.writeFile(`./${name}/enzo/templates/reduxContainerTemplate.js`, reduxContainerTemplate, (err) => {
     if (err) console.error(err)
   })
 

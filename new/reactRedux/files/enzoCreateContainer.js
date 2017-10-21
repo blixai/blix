@@ -1,4 +1,5 @@
 let fs = require('fs')
+let path = require('path')
 
 let name = process.argv[2]
 let capitalizeFirstLetter = (string) => {
@@ -7,29 +8,35 @@ let capitalizeFirstLetter = (string) => {
 name = capitalizeFirstLetter(name)
 let type = process.argv[3]
 
-let dumbComponent = `import React from 'react'\n\nexport const ${name} = (props) => {\n\treturn(\n\t\t<div></div>\n\t)\n}`
-let dumbReduxContainer = `import { connect } from react-redux\nimport { ${name} } from './${name}'\n\nconst mapStateToProps = (state) => {\n\treturn state\n}\n\nexport default connect(mapStateToProps, null)(${name})`
+let dumbComponentTemplate = fs.readFileSync(path.resolve(__dirname, './templates/dumbComponentTemplate.js'), 'utf8')
+dumbComponentTemplate = dumbComponentTemplate.replace(/Name/g, `${name}`)
 
-let smartComponent = `import React, { Component } from 'react'\nimport './${name}.css'\n\nclass ${name} extends Component {\n\tconstructor(props) {\n\t\tsuper(props)\n \t\tthis.state = {}\n\t}\n\n\trender() {\n\t\treturn (\n\t\t\t<div>Hello ${name}</div>\n\t\t)\n\t}\n}\n\n export default ${name}`
-let reduxContainer = `import { connect } from 'react-redux'\nimport ${name} from './${name}'\n\nconst mapStateToProps = (state) => {\n\treturn state\n}\n\nexport default connect(mapStateToProps, null)(${name})`
+let dumbReduxContainerTemplate = fs.readFileSync(path.resolve(__dirname, './templates/dumbReduxContainerTemplate.js'), 'utf8')
+dumbReduxContainerTemplate = dumbReduxContainerTemplate.replace(/Name/g, `${name}`)
+
+let smartComponentTemplate = fs.readFileSync(path.resolve(__dirname, './templates/smartComponentTemplate.js'), 'utf8')
+smartComponentTemplate = smartComponentTemplate.replace(/Name/g, `${name}`)
+
+let reduxContainerTemplate = fs.readFileSync(path.resolve(__dirname, './templates/reduxContainerTemplate.js'), 'utf8')
+reduxContainerTemplate = reduxContainerTemplate.replace(/Name/g, `${name}`)
 
 if (name) {
   fs.mkdirSync(`./src/containers/${name}`)
   if (type === 'dumb') {
-    fs.writeFile(`./src/containers/${name}/${name}.js`, dumbComponent, (err) => {
+    fs.writeFile(`./src/containers/${name}/${name}.js`, dumbComponentTemplate, (err) => {
       if (err) return console.log(err)
       console.log(`The Component ${name} was created!`)
     })
-    fs.writeFile(`./src/containers/${name}/${name}Container.js`, dumbReduxContainer, (err) => {
+    fs.writeFile(`./src/containers/${name}/${name}Container.js`, dumbReduxContainerTemplate, (err) => {
       if (err) return console.log(err)
       console.log(`The Container ${name} was created!`)
     })
   } else {
-    fs.writeFile(`./src/containers/${name}/${name}.js`, smartComponent, (err) => {
+    fs.writeFile(`./src/containers/${name}/${name}.js`, smartComponentTemplate, (err) => {
       if (err) return console.log(err)
       console.log(`The Component ${name} was created!`)
     })
-    fs.writeFile(`./src/containers/${name}/${name}Container.js`, reduxContainer, (err) => {
+    fs.writeFile(`./src/containers/${name}/${name}Container.js`, reduxContainerTemplate, (err) => {
       if (err) return console.log(err)
       console.log(`The Container ${name} was created!`)
     })
