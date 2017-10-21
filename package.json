@@ -1,6 +1,6 @@
 {
   "name": "@dbull7/enzo",
-  "version": "1.0.27",
+  "version": "1.0.28",
   "description": "Quickly Create Applications",
   "main": "index.js",
   "scripts": {
