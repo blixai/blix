@@ -22,10 +22,13 @@ let checkCommand = (command) => {
       break;
     case "redux":
       addRedux()
+      break
     case "update":
       update()
+      break
     case "help": 
       help()
+      break
     default:
       console.log(`? Try: enzo help to see a list of commands`)
       break;
