@@ -42,6 +42,7 @@ let railsApp = () => {
   //backend
   fs.mkdirSync(`./${name}/server`)
   fs.mkdirSync(`./${name}/server/models`)
+  fs.mkdirSync(`./${name}/assets`)
   fs.writeFile(`./${name}/server/server.js`, railsServer, (err) => {
     if (err) throw err
   })

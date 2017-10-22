@@ -19,6 +19,7 @@ const pages = require('./pages')
 app.use('/api/v1', routes)
 app.use('/', pages)
 app.use(express.static('public'))
+app.use(express.static('assets'))
 
 
 app.listen(port, () => {
