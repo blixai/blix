@@ -1,7 +1,9 @@
 let command = process.argv[3]
 
 let noCommand = () => {
-  console.log('List of enzo commands')
+  console.log('List of enzo commands:')
+  console.log('')
+  console.log('')
   console.log('enzo new <projectName>')
   console.log('enzo redux')
   console.log('enzo backend')
@@ -11,6 +13,7 @@ let noCommand = () => {
 }
 
 let help = () => {
+  process.stdout.write('\033c')
   switch (command) {
     case 'backend':
       console.log('Adds an Express.js server along with a MongoDB or Postgres database to your project after asking a series of questions')
@@ -34,6 +37,7 @@ let help = () => {
       noCommand()
       break;
   }
+  return
 
 }
 
