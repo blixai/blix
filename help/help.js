@@ -37,8 +37,7 @@ let help = () => {
       noCommand()
       break;
   }
-  return
-
+  process.exit()
 }
 
 module.exports = help 
