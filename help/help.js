@@ -1,4 +1,4 @@
-let command = process.argv[2]
+let command = process.argv[3]
 
 let noCommand = () => {
   console.log('List of enzo commands')
