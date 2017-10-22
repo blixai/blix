@@ -3,7 +3,8 @@ let path = require('path')
 
 let name = process.argv[2]
 
-let html = `<!DOCTYPE html>\n<html lang="en">\n\t<head>\n\t\t<title>${name}</title>\n\t\t<meta charset="UTF-8">\n\t\t<meta name="viewport" content="width=device-width, initial-scale=1">\n\t\t<link href="${name}/main.css" rel="stylesheet">\n\t</head>\n\t<body>Hello World ${name}\n<script src='${name}/bundle.js' async></script>\n\t</body>\n</html>`
+let html = fs.readFileSync(path.resolve(__dirname, './templates/htmlPageTemplate.html'), 'utf8')
+html = html.replace(/Name/g, `${name}`)
 let css = `body {\n\tcolor: 'blue'\n}`
 let js = `console.log('hello world')`
 let route = `\nr.get('/${name}', (req, res) => res.sendFile(path.join(__dirname, '../public/${name}/index.html')))`
@@ -24,4 +25,6 @@ let newPage = () => {
   })
 }
 
-newPage()
+if (name) {
+  newPage()
+}
