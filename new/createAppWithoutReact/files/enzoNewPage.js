@@ -25,4 +25,6 @@ let newPage = () => {
   })
 }
 
-newPage()
+if (name) {
+  newPage()
+}
