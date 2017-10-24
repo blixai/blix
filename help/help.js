@@ -3,12 +3,12 @@ let command = process.argv[3]
 let noCommand = () => {
   console.log('List of enzo commands:')
   console.log('')
-  console.log('enzo new <projectName>')
-  console.log('enzo redux')
-  console.log('enzo backend')
-  console.log('enzo database')
-  console.log('enzo help <command>')
-  console.log('enzo update')
+  console.log('new <projectName>')
+  console.log('redux')
+  console.log('backend <databaseName>')
+  console.log('database')
+  console.log('help <command>')
+  console.log('update')
   console.log('')
 }
 

@@ -1,17 +1,17 @@
 import React, { Component } from 'react'
-import './App.css'
+import './Name.css'
 
-class App extends Component {
+class Name extends Component {
   constructor(props) {
     super(props)
     this.state = {}
   }
-
+  
   render() {
     return (
-      <div>Hello World</div>
+      <div>Hello Name</div>
     )
   }
 }
 
-export default App
+export default Name
