@@ -84,6 +84,26 @@ let createContainer = (name) => {
   return container
 }
 
+let dumbReduxContainerTemplate = fs.readFileSync(path.resolve(__dirname, './templates/dumbReduxContainerTemplate.js'), 'utf8')
+let enzoDumbComponentTemplate = fs.readFileSync(path.resolve(__dirname, './templates/enzoDumbComponentTemplate.js'), 'utf8')
+let reduxContainerTemplate = fs.readFileSync(path.resolve(__dirname, './templates/reduxContainerTemplate.js'), 'utf8')
+let smartComponentTemplate = fs.readFileSync(path.resolve(__dirname, './templates/smartComponentTemplate.js'), 'utf8')
+
+let makeTemplates = () => {
+  fs.writeFile('./enzo/templates/dumbReduxContainerTemplate.js', dumbReduxContainerTemplate, (err) => {
+    if (err) console.error(err)
+  })
+  fs.writeFile('./enzo/templates/enzoDumbComponentTemplate.js', enzoDumbComponentTemplate, (err) => {
+    if (err) console.error(err)
+  })
+  fs.writeFile('./enzo/templates/reduxContainerTemplate.js', reduxContainerTemplate, (err) => {
+    if (err) console.error(err)
+  })
+  fs.writeFile('./enzo/templates/smartComponentTemplate.js', smartComponentTemplate, (err) => {
+    if (err) console.error(err)
+  })
+}
+
 let enzo = () => {
   if (fs.existsSync('./enzo')) {
     // add new redux react creation command
@@ -91,7 +111,14 @@ let enzo = () => {
     fs.writeFile('./enzo/createReactRedux.js', file, (err) => {
       if (err) console.error(err)
     })
-    addScript('redux', 'node ./enzo/createReactRedux.js')
+    if (fs.existsSync('./enzo/templates')) {
+      addScript('redux', 'node ./enzo/createReactRedux.js')
+      makeTemplates()
+    } else {
+      mkdirSync('./enzo/templates')
+      makeTemplates()
+      addScript('redux', 'node ./enzo/createReactRedux.js')
+    }
   } else {
     // create enzo 
     fs.mkdirSync('./enzo')
@@ -99,8 +126,9 @@ let enzo = () => {
     fs.writeFile('./enzo/createReactRedux.js', file, (err) => {
       if (err) console.error(err)
     })
+    fs.mkdirSync('./enzo/templates')
+    makeTemplates()
     addScript('redux', 'node ./enzo/createReactRedux.js')
-    // add react redux creation command
   }
 }
 
