@@ -44,15 +44,15 @@ if (name) {
       if (err) return console.log(err)
       console.log('CSS File was Created')
     })
-    if (fs.existsSync('./src/containers/App/App.js')) {
+    if (fs.existsSync('./src/containers/AppRoutes/AppRoutes.js')) {
       let search = '<Switch>'
-      let body = fs.readFileSync('./src/containers/App/App.js', 'utf8').toString().split('\n')
+      let body = fs.readFileSync('./src/containers/AppRoutes/AppRoutes.js', 'utf8').toString().split('\n')
       body.splice(4, 0, `import ${name}Container from '../${name}/${name}Container'`)
       let newBody = body.join('\n')
       let position = newBody.indexOf(search)
       let newRoute = `\n\t\t\t\t  <Route exact path='/${name.toLowerCase()}' render={(history) => {\n\t\t\t\t\u0020\u0020\u0020\u0020return <${name}Container/>\n\t\t\t\t  }}/>`
       let output = [newBody.slice(0, position + 8), newRoute, newBody.slice(position + 8)].join('')
-      fs.writeFile('./src/containers/App/App.js', output, (err) => {
+      fs.writeFile('./src/containers/AppRoutes/AppRoutes.js', output, (err) => {
         if (err) console.error(err)
       })
     }
