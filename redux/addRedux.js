@@ -201,7 +201,7 @@ let createdByEnzo = () => {
   try {
     fs.unlinkSync('./src/App/App.js')
     fs.unlinkSync('./src/App/App.css')
-    fs.unlinkSync('./src/App')
+    fs.rmdirSync('./src/App')
   } catch (err) {
     if (err) console.error(err)
   }

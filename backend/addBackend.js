@@ -59,9 +59,7 @@ let addScript = (command, script) => {
 }
 
 
-//needs to add server, models, new enzo command to make api or page 
 // also need to ask if they'll be serving html
-// also maybe modify or add a gulp file
 // also need if they want an html server see if they already have a source directory for pages
 let addBackend = () => {
   if (name) {
@@ -115,6 +113,8 @@ let addBackend = () => {
         console.log(`to start server enter npm run server`)
       }
     })
+  } else {
+    process.exit()
   }
 }
 
