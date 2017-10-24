@@ -221,11 +221,10 @@ let createdByEnzo = () => {
   fs.writeFile(`./src/containers/App/AppContainer.js`, AppContainer, (err) => {
     if (err) console.error(err)
   })
-  if (fs.existsSync('./src/App/App.css')) {
-    fs.rename('./src/App/App.css', './src/containers/App/App.css', (err) => {
-      if (err) console.error(err)
-    })
-  }
+  let css = fs.readFileSync('./src/App/App.css')
+  fs.writeFile('./src/containers/App/App.css', css, (err) => {
+    if (err) console.error(err)
+  })
   try {
     fs.unlinkSync('./src/App/App.js')
     fs.unlinkSync('./src/App/App.css')
