@@ -11,7 +11,7 @@ let shell = require('shelljs')
 const execSync = require('child_process').execSync;
 
 let BE = require('./create')
-let name = process.argv[3] || 'none'
+let name = process.argv[3]
 
 let shouldUseYarn = () => {
   try {
@@ -64,56 +64,58 @@ let addScript = (command, script) => {
 // also maybe modify or add a gulp file
 // also need if they want an html server see if they already have a source directory for pages
 let addBackend = () => {
-  process.stdout.write('\033c')
-  rl.question('Do you need a Postgres or MongoDB database? (Y/N) ', (database) => {
-    database = database.toLowerCase()
-    if (database === 'y') {
-      rl.question('Postgres or Mongo? (P/M) ', (answer) => {
-        answer = answer.toLowerCase()
-        if (answer === 'p') {
-          // postgres database
-          BE.backendOnly()
-          rl.close();
-          console.log('Downloading dependencies and creating files, this may take a moment')
-          install('express nodemon pg knex body-parser helmet')
-          installKnexGlobal()
-          modifyKnex()
-          try {
-            execSync(`createdb ${name};`, { stdio: 'ignore' });
-          } catch (e) {
-            // need some variable to indicate this failed and the user needs to make a new database
+  if (name) {
+    process.stdout.write('\033c')
+    rl.question('Do you need a Postgres or MongoDB database? (Y/N) ', (database) => {
+      database = database.toLowerCase()
+      if (database === 'y') {
+        rl.question('Postgres or Mongo? (P/M) ', (answer) => {
+          answer = answer.toLowerCase()
+          if (answer === 'p') {
+            // postgres database
+            BE.backendOnly()
+            rl.close();
+            console.log('Downloading dependencies and creating files, this may take a moment')
+            install('express nodemon pg knex body-parser helmet')
+            installKnexGlobal()
+            modifyKnex()
+            try {
+              execSync(`createdb ${name};`, { stdio: 'ignore' });
+            } catch (e) {
+              // need some variable to indicate this failed and the user needs to make a new database
+            }
+            addScript('server', 'nodemon server/server.js')
+            addScript('api', 'node enzo/api.js')
+            process.stdout.write('\033c')
+            console.log('The backend was created!')
+            console.log(`to start server enter npm run server`)
+          } else {
+            // express with mongodb
+            BE.backendOnly()
+            rl.close();
+            console.log('Downloading dependencies and creating files, this may take a moment')
+            install('express nodemon mongo body-parser helmet')
+            addScript('server', 'nodemon server/server.js')
+            addScript('api', 'node enzo/api.js')
+            process.stdout.write('\033c')
+            console.log('The backend was created!')
+            console.log(`to start server enter npm run server`)
           }
-          addScript('server', 'nodemon server/server.js')
-          addScript('api', 'node enzo/api.js')
-          process.stdout.write('\033c')
-          console.log('The backend was created!')
-          console.log(`to start server enter npm run server`)
-        } else {
-          // express with mongodb
-          BE.backendOnly()
-          rl.close();
-          console.log('Downloading dependencies and creating files, this may take a moment')
-          install('express nodemon mongo body-parser helmet')
-          addScript('server', 'nodemon server/server.js')
-          addScript('api', 'node enzo/api.js')
-          process.stdout.write('\033c')
-          console.log('The backend was created!')
-          console.log(`to start server enter npm run server`)
-        }
-      })
-    } else {
-      // backend without db
-      BE.backendOnly()
-      rl.close();
-      console.log('Downloading dependencies and creating files, this may take a moment')
-      install('express nodemon body-parser helmet')
-      addScript('server', 'nodemon server/server.js')
-      addScript('api', 'node enzo/api.js')
-      process.stdout.write('\033c')
-      console.log('The backend was created!')
-      console.log(`to start server enter npm run server`)
-    }
-  })
+        })
+      } else {
+        // backend without db
+        BE.backendOnly()
+        rl.close();
+        console.log('Downloading dependencies and creating files, this may take a moment')
+        install('express nodemon body-parser helmet')
+        addScript('server', 'nodemon server/server.js')
+        addScript('api', 'node enzo/api.js')
+        process.stdout.write('\033c')
+        console.log('The backend was created!')
+        console.log(`to start server enter npm run server`)
+      }
+    })
+  }
 }
 
 // need a condition if the name is not given

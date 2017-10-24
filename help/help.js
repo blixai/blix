@@ -5,7 +5,7 @@ let noCommand = () => {
   console.log('')
   console.log('new <projectName>')
   console.log('redux')
-  console.log('backend')
+  console.log('backend <databaseName>')
   console.log('database')
   console.log('help <command>')
   console.log('update')
