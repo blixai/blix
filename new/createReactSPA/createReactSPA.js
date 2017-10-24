@@ -43,6 +43,9 @@ let reactSPAWithoutBackend = () => {
   fs.writeFile(`./${name}/src/App/App.js`, spaReact, (err) => {
     if (err) throw err
   })
+  fs.writeFile(`./${name}/src/App/App.css`, '', (err) => {
+    if (err) throw err
+  })
 
   //enzo files 
   fs.mkdirSync(`./${name}/enzo`)
@@ -92,6 +95,9 @@ let writeFilesWithSPAReact = () => {
   })
   fs.mkdirSync(`./${name}/src/App`)
   fs.writeFile(`./${name}/src/App/App.js`, spaReact, (err) => {
+    if (err) throw err
+  })
+  fs.writeFile(`./${name}/src/App/App.css`, '', (err) => {
     if (err) throw err
   })
   fs.writeFile(`./${name}/.babelrc`, babel, (err) => {
