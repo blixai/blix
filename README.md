@@ -1,6 +1,8 @@
 # enzo
 
-In development: the goal of this project is to help Javascript developers create projects quickly and easily. Types of applications: React/Redux, Express, and Full Stack JS. It embeds customizable templates in an enzo folder within the project structure. These templete can be run using npm commands. 
+In development: the goal of this project is to help Javascript developers create cutting edge projects quickly and easily. It also embeds customizable templates in an enzo folder within the project structure to help developers automate common tasks like creating a new API endpoint or generating a new Redux/React component. These templates can be run using customizable npm commands. 
+
+Listed are a series of commmands to get started with enzo
 
 Commands: 
 ```
