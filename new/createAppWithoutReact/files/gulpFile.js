@@ -22,7 +22,7 @@ let compile = () => {
   if (process.env.NODE_ENV === 'production') {
     folders.forEach(folder => {
       browserify({ entries: `./src/${folder}/index.js`, debug: false })
-        .transform("babelify", { presets: ["es2015"] })
+        .transform("babelify", { presets: ["env"] })
         .on('error', onError)
         .bundle()
         .pipe(source('index.js'))
@@ -34,7 +34,7 @@ let compile = () => {
   } else {
     folders.forEach(folder => {
       browserify({ entries: `./src/${folder}/index.js`, debug: true })
-        .transform("babelify", { presets: ["es2015"] })
+        .transform("babelify", { presets: ["env"] })
         .on('error', onError)
         .bundle()
         .pipe(source('index.js'))
