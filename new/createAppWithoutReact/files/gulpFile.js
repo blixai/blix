@@ -1,80 +1,86 @@
 var gulp = require('gulp');
 var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
-let babel = require('gulp-babel')
 var browserify = require('browserify');
-var babelify = require('babelify');
-var source = require('vinyl-source-stream');
-var buffer = require('vinyl-buffer');
+
 var htmlmin = require('gulp-htmlmin');
 let cleanCSS = require('gulp-clean-css');
 
-let folders = []
+var gutil = require('gulp-util');
+var tap = require('gulp-tap');
+var buffer = require('gulp-buffer');
 
-const fs = require('fs');
+var del = require('del');
+var runSequence = require('run-sequence');
 
-fs.readdirSync('./src').forEach(file => {
-  folders.push(file)
+
+var collapse = require('bundle-collapser/plugin')
+let envify = require('envify/custom')
+
+gulp.task('js', function () {
+  return gulp.src('src/**/*.js', { read: false })
+    .pipe(tap(function (file) {
+      gutil.log('bundling ' + file.path);
+      file.contents = browserify(file.path, { debug: true }).transform("babelify", { presets: ["env"] }).plugin(collapse).bundle();
+    }))
+    .on('error', onError)
+    .pipe(buffer())
+    .pipe(gulp.dest('public'));
 })
 
+gulp.task('min-js', function () {
+  return gulp.src('src/**/*.js', { read: false })
+    .pipe(tap(function (file) {
+      gutil.log('bundling ' + file.path);
+      file.contents = browserify(file.path, { debug: false }).transform("babelify", { presets: ["env"] }).transform({ global: true }, envify({ NODE_ENV: 'production' })).plugin(collapse).bundle();
+    }))
+    .on('error', onError)
+    .pipe(buffer())
+    .pipe(uglify())
+    .on('error', onError)
+    .pipe(gulp.dest('public'));
+})
 
-let compile = () => {
-  if (process.env.NODE_ENV === 'production') {
-    folders.forEach(folder => {
-      browserify({ entries: `./src/${folder}/index.js`, debug: false })
-        .transform("babelify", { presets: ["env"] })
-        .on('error', onError)
-        .bundle()
-        .pipe(source('index.js'))
-        .pipe(buffer())
-        .pipe(uglify())
-        .pipe(rename('bundle.js'))
-        .pipe(gulp.dest(`public/${folder}/`))
-    })
-  } else {
-    folders.forEach(folder => {
-      browserify({ entries: `./src/${folder}/index.js`, debug: true })
-        .transform("babelify", { presets: ["env"] })
-        .on('error', onError)
-        .bundle()
-        .pipe(source('index.js'))
-        .pipe(buffer())
-        .pipe(rename('bundle.js'))
-        .pipe(gulp.dest(`public/${folder}/`))
-    })
-  }
-}
-
-gulp.task('scripts', function () {
-  compile()
+gulp.task('html', function () {
+  return gulp.src('src/**/*.html').pipe(gulp.dest('public').on('error', onError));
 });
 
 gulp.task('minify-html', () => {
-  folders.forEach(folder => {
-    gulp.src(`./src/${folder}/index.html`)
-      .pipe(htmlmin({ collapseWhitespace: true }))
-      .on('error', onError)
-      .pipe(gulp.dest(`public/${folder}/`))
-  })
+  return gulp.src(`./src/**/*.html`)
+    .pipe(htmlmin({ collapseWhitespace: true }))
+    .on('error', onError)
+    .pipe(gulp.dest(`public`))
 })
+
+gulp.task('css', function () {
+  return gulp.src('src/**/*.css').pipe(gulp.dest('public').on('error', onError));
+});
 
 gulp.task('minify-css', () => {
-  folders.forEach(folder => {
-    gulp.src(`./src/${folder}/*css`)
-      .pipe(cleanCSS({ compatibility: 'ie8' }))
-      .on('error', onError)
-      .pipe(gulp.dest(`public/${folder}/`));
+  return gulp.src(`./src/**/*css`)
+    .pipe(cleanCSS({ compatibility: 'ie8' }))
+    .on('error', onError)
+    .pipe(gulp.dest(`public`));
+})
+
+gulp.task('clean', function () {
+  return del(['public']);
+});
+
+gulp.task('watch', () => {
+  runSequence(
+    'clean',
+    ['js', 'html', 'css']
+  )
+  gulp.watch('src/**/*', () => {
+    runSequence(
+      'clean',
+      ['js', 'html', 'css']
+    )
   })
 })
 
 
-gulp.task('watch', function () {
-  folders.forEach(folder => {
-    gulp.watch(`./src/${folder}/main.css`, ['minify-css'])
-    gulp.watch(`./src/${folder}/index.html`, ['minify-html'])
-    gulp.watch(`./src/${folder}/index.js`, ['scripts'])
-  })
-});
 
 function onError(err) {
   console.log(err);
@@ -83,4 +89,5 @@ function onError(err) {
 
 
 
-gulp.task('default', ['scripts', 'minify-html', 'minify-css', 'watch'])
+gulp.task('default', ['watch'])
+gulp.task('production', ['min-js', 'minify-html', 'minify-css'])
