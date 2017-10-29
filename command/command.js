@@ -25,26 +25,33 @@ let command = () => {
   process.stdout.write('\033c')
   console.log('Here are pre made enzo commands and what they do: ')
   console.log('')
-  console.log('react: create a new react statefull or stateless component')
-  console.log('redux: create a new react component, a redux container, and a new route in your routing component')
-  console.log('api: create new api endpoints and model')
-  console.log('page: create a new folder, html, css, and js files along with adding the route in pages.js')
+  console.log('\treact: create a new react statefull or stateless component')
+  console.log('')
+  console.log('\tredux: create a new react component, a redux container, and a new route in your routing component')
+  console.log('')
+  console.log('\tapi: create new api endpoints and model')
+  console.log('')
+  console.log('\tpage: create a new folder, html, css, and js files along with adding the route in pages.js')
   console.log('')
   console.log('')
-  rl.question('Enter one of the listed commands or enter your own ', (answer) => {
+  rl.question('Enter one of the listed commands or enter your own: ', (answer) => {
     answer = answer.toLowerCase()
     switch (answer) {
       case "react":
         addReact()
+        rl.close()
         break;
       case "redux":
         addRedux()
+        rl.close()
         break;
       case "api":
         addAPI()
+        rl.close()
         break;
       case "page":
         addPage()
+        rl.close()
         break;
       default:
         createNew(answer)
@@ -140,7 +147,11 @@ let createNew = (name) => {
         rl.question('What is the template file name? ', (ans) => {
           ans = ans.toLowerCase()
           rl.close()
-          fs.writeFile(`./enzo/templates/${ans}`, '', (err) => {
+          let importTemplate = `let fs = require('fs')\nlet path = require('path')\n\nlet ${ans}Template = fs.readFileSync(path.resolve(__dirname, './templates/${ans}.js), 'utf8')`
+          fs.appendFile(`./enzo/${name}.js`, importTemplate, (err) => {
+            if (err) console.error(err)
+          })
+          fs.writeFile(`./enzo/templates/${ans}.js`, '', (err) => {
             if (err) console.error(err)
           }) 
         })
