@@ -80,7 +80,7 @@ let addReact = () => {
 
 let addRedux = () => {
   addScript('redux', 'node enzo/redux.js')
-  let redux = fs.readFileSync(path.resolve(__dirname, './files/enzoCreateContainer'), 'utf8')
+  let redux = fs.readFileSync(path.resolve(__dirname, './files/enzoCreateContainer.js'), 'utf8')
   let dumbComponentTemplate = fs.readFileSync(path.resolve(__dirname, './templates/enzoDumbComponentTemplate.js'), 'utf8')
   let dumbReduxContainerTemplate = fs.readFileSync(path.resolve(__dirname, './templates/dumbReduxContainerTemplate.js'), 'utf8') 
   let smartComponentTemplate = fs.readFileSync(path.resolve(__dirname, './templates/smartComponentTemplate.js'), 'utf8')
