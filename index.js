@@ -6,6 +6,7 @@ let addDatabase = require('./database/addDataBase')
 let addRedux = require('./redux/addRedux')
 let update = require('./update/update')
 let help = require('./help/help.js')
+let createCommand = require('./command/command.js')
 let command = process.argv[2]
 
 
@@ -28,6 +29,9 @@ let checkCommand = (command) => {
       break
     case "help": 
       help()
+      break
+    case "command":
+      createCommand()
       break
     default:
       console.log(`? Try: enzo help to see a list of commands`)
