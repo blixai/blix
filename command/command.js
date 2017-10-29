@@ -86,7 +86,7 @@ let addReact = () => {
 let addRedux = () => {
   addScript('redux', 'node enzo/redux.js')
   let redux = fs.readFileSync(path.resolve(__dirname, './files/enzoCreateContainer.js'), 'utf8')
-  let dumbComponentTemplate = fs.readFileSync(path.resolve(__dirname, './templates/enzoDumbComponentTemplate.js'), 'utf8')
+  let enzoDumbComponentTemplate = fs.readFileSync(path.resolve(__dirname, './templates/enzoDumbComponentTemplate.js'), 'utf8')
   let dumbReduxContainerTemplate = fs.readFileSync(path.resolve(__dirname, './templates/dumbReduxContainerTemplate.js'), 'utf8') 
   let smartComponentTemplate = fs.readFileSync(path.resolve(__dirname, './templates/smartComponentTemplate.js'), 'utf8')
   let reduxContainerTemplate = fs.readFileSync(path.resolve(__dirname, './templates/reduxContainerTemplate.js'), 'utf8')
@@ -94,7 +94,7 @@ let addRedux = () => {
   fs.writeFile('./enzo/redux.js', redux, (err) => {
     if (err) console.error(err)
   })
-  fs.writeFile('./enzo/templates/dumbComponentTemplate.js', dumbComponentTemplate, (err) => {
+  fs.writeFile('./enzo/templates/enzoDumbComponentTemplate.js', enzoDumbComponentTemplate, (err) => {
     if (err) console.error(err)
   })
   fs.writeFile('./enzo/templates/dumbReduxContainerTemplate.js', dumbReduxContainerTemplate, (err) => {
@@ -152,7 +152,7 @@ let createNew = (name) => {
         rl.question('What is the template file name? ', (ans) => {
           ans = ans.toLowerCase()
           rl.close()
-          let importTemplate = `let fs = require('fs')\nlet path = require('path')\n\nlet ${ans}Template = fs.readFileSync(path.resolve(__dirname, './templates/${ans}.js), 'utf8')`
+          let importTemplate = `let fs = require('fs')\nlet path = require('path')\n\nlet ${ans}Template = fs.readFileSync(path.resolve(__dirname, './templates/${ans}.js'), 'utf8')`
           fs.appendFile(`./enzo/${name}.js`, importTemplate, (err) => {
             if (err) console.error(err)
           })
