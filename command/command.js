@@ -40,21 +40,26 @@ let command = () => {
       case "react":
         addReact()
         rl.close()
+        console.log('Done!')
         break;
       case "redux":
         addRedux()
         rl.close()
+        console.log('Done!')
         break;
       case "api":
         addAPI()
         rl.close()
+        console.log('Done!')
         break;
       case "page":
         addPage()
         rl.close()
+        console.log('Done!')
         break;
       default:
         createNew(answer)
+        console.log('Done!')
         break;
     }
   })
