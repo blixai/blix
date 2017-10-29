@@ -59,7 +59,6 @@ let command = () => {
         break;
       default:
         createNew(answer)
-        console.log('Done!')
         break;
     }
   })
@@ -156,12 +155,12 @@ let createNew = (name) => {
           fs.appendFile(`./enzo/${name}.js`, importTemplate, (err) => {
             if (err) console.error(err)
           })
-          fs.writeFile(`./enzo/templates/${ans}.js`, '', (err) => {
-            if (err) console.error(err)
-          }) 
+          fs.writeFileSync(`./enzo/templates/${ans}.js`, '', 'utf8')
+          console.log('Done!')
         })
       } else {
         rl.close()
+        console.log('Done!')
       }
     })
   })
