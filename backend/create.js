@@ -44,7 +44,7 @@ let backendOnly = () => {
       fs.writeFile(`./enzo/templates/enzoEndpointTemplate.js`, enzoEndpointTemplate, (err) => {
         if (err) console.error(err)
       })
-      fs.writeFile(`./enzo/templates/enzoModelTemplate.js`, enzoModelTemplate, (err) => {
+      fs.writeFile(`./enzo/templates/enzoControllerTemplate.js`, enzoControllerTemplate, (err) => {
         if (err) console.error(err)
       })
     }
