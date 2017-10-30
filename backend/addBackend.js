@@ -74,7 +74,7 @@ let addBackend = () => {
             BE.backendOnly()
             rl.close();
             console.log('Downloading dependencies and creating files, this may take a moment')
-            install('express nodemon pg knex body-parser helmet')
+            install('express nodemon pg knex body-parser helmet bookshelf')
             installKnexGlobal()
             modifyKnex()
             try {

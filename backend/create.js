@@ -7,12 +7,13 @@ let enzoCreateEndpoints = fs.readFileSync(path.resolve(__dirname, './files/enzoC
 
 let routes = `const express = require('express')\nconst r = express.Router()\nmodule.exports = r`
 let enzoEndpointTemplate = fs.readFileSync(path.resolve(__dirname, './templates/enzoEndpointTemplate.js'), 'utf8')
-let enzoModelTemplate = fs.readFileSync(path.resolve(__dirname, './templates/enzoModelTemplate.js'), 'utf8')
+let enzoControllerTemplate = fs.readFileSync(path.resolve(__dirname, './templates/enzoControllerTemplate.js'), 'utf8')
 
 let backendOnly = () => {
   if (fs.existsSync('./package.json')) {
     fs.mkdirSync(`./server`)
     fs.mkdirSync(`./server/models`)
+    fs.mkdirSync(`./server/controllers`)
     fs.writeFile(`./server/server.js`, server, (err) => {
       if (err) throw err
     })  
@@ -30,7 +31,7 @@ let backendOnly = () => {
         fs.writeFile(`./enzo/templates/enzoEndpointTemplate.js`, enzoEndpointTemplate, (err) => {
           if (err) console.error(err)
         })
-        fs.writeFile(`./enzo/templates/enzoModelTemplate.js`, enzoModelTemplate, (err) => {
+        fs.writeFile(`./enzo/templates/enzoControllerTemplate.js`, enzoControllerTemplate, (err) => {
           if (err) console.error(err)
         })
       }
