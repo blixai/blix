@@ -5,15 +5,20 @@ let name = process.argv[2]
 if (name) {
   let endpoints = fs.readFileSync(path.resolve(__dirname, './templates/enzoEndpointTemplate.js'), 'utf8')
   endpoints = endpoints.replace(/Name/g, `${name}`)
-  let models = fs.readFileSync(path.resolve(__dirname, './templates/enzoModelTemplate.js'), 'utf8')
-  models = models.replace(/Name/g, `${name}`)
+  let controller = fs.readFileSync(path.resolve(__dirname, './templates/enzoControllerTemplate.js'), 'utf8')
+  controller = controller.replace(/Name/g, `${name}`)
   fs.appendFile('./server/routes.js', endpoints, (err) => {
     if (err) throw err
-    console.log('controller endpoints created')
+    console.log('Created Routes:')
+    console.log('')
+    console.log(`GET:    api/v1/${name}`)
+    console.log(`PUT:    api/v1/${name}/:id`)
+    console.log(`DELETE: api/v1/${name}/:id `)
+    console.log(`POST:   api/v1/${name} `)
   })
 
-  fs.writeFile(`./server/models/${name}.js`, models, (err) => {
+  fs.writeFile(`./server/controllers/${name}.js`, controller, (err) => {
     if (err) throw err
-    console.log(`${name} models created`)
+    console.log(`${name} controller created`)
   })
 }

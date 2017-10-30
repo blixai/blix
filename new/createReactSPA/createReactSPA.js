@@ -105,6 +105,7 @@ let writeFilesWithSPAReact = () => {
   })
   //backend
   fs.mkdirSync(`./${name}/server`)
+  fs.mkdirSync(`./${name}/server/controllers`)
   fs.mkdirSync(`./${name}/server/models`)
   fs.writeFile(`./${name}/server/server.js`, spaServer, (err) => {
     if (err) throw err

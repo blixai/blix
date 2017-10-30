@@ -24,7 +24,7 @@ let enzoNewPage = fs.readFileSync(path.resolve(__dirname, './files/enzoNewPage.j
 let htmlPageTemplate = fs.readFileSync(path.resolve(__dirname, './templates/htmlPageTemplate.html'), 'utf8')
 let enzoAPI = fs.readFileSync(path.resolve(__dirname, './files/enzoAPI.js'), 'utf8')
 let enzoEndpointTemplate = fs.readFileSync(path.resolve(__dirname, './templates/enzoEndpointTemplate.js'), 'utf8')
-let enzoModelTemplate = fs.readFileSync(path.resolve(__dirname, './templates/enzoModelTemplate.js'), 'utf8')
+let enzoControllerTemplate = fs.readFileSync(path.resolve(__dirname, './templates/enzoControllerTemplate.js'), 'utf8')
 
 let railsApp = () => {
   fs.mkdirSync(`./${name}/src`)
@@ -42,6 +42,7 @@ let railsApp = () => {
   //backend
   fs.mkdirSync(`./${name}/server`)
   fs.mkdirSync(`./${name}/server/models`)
+  fs.mkdirSync(`./${name}/server/controllers`)
   fs.mkdirSync(`./${name}/assets`)
   fs.writeFile(`./${name}/server/server.js`, railsServer, (err) => {
     if (err) throw err
@@ -85,7 +86,7 @@ let railsApp = () => {
   fs.writeFile(`./${name}/enzo/templates/enzoEndpointTemplate.js`, enzoEndpointTemplate, (err) => {
     if (err) console.error(err)
   })
-  fs.writeFile(`./${name}/enzo/templates/enzoModelTemplate.js`, enzoModelTemplate, (err) => {
+  fs.writeFile(`./${name}/enzo/templates/enzoControllerTemplate.js`, enzoControllerTemplate, (err) => {
     if (err) console.error(err)
   })
 }
