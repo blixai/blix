@@ -74,7 +74,7 @@ let addBackend = () => {
             BE.backendOnly()
             rl.close();
             console.log('Downloading dependencies and creating files, this may take a moment')
-            install('express nodemon pg knex body-parser helmet')
+            install('express nodemon pg knex body-parser helmet bookshelf')
             installKnexGlobal()
             modifyKnex()
             try {
@@ -92,7 +92,7 @@ let addBackend = () => {
             BE.backendOnly()
             rl.close();
             console.log('Downloading dependencies and creating files, this may take a moment')
-            install('express nodemon mongo body-parser helmet')
+            install('express nodemon mongo body-parser helmet mongoose')
             addScript('server', 'nodemon server/server.js')
             addScript('api', 'node enzo/api.js')
             process.stdout.write('\033c')
@@ -114,12 +114,13 @@ let addBackend = () => {
       }
     })
   } else {
+    console.log(`Make sure you provided a name: enzo backend <name>`)
     process.exit()
   }
 }
 
 // need a condition if the name is not given
-let newKnex = `module.exports = {\n\n\tdevelopment: {\n\t\tclient: 'pg',\n\t\tconnection: 'postgres://localhost/${name}',\n\t\tmigrations: {\n\t\t\tdirectory: './db/seeds/dev'\n\t\t},\n\t\tuseNullAsDefault: true\n\t},\n\n\tproduction: {\n\t\tclient: 'pg',\n\t\tconnection: process.env.DATABASE_URL + '?ssl=true',\n\t\tmigrations: {\n\t\t\tdirectory: 'db/migrations'\n\t\t},\n\t\tseeds: {\n\t\t\tdirectory: 'db/seeds/dev'\n\t\t},\n\t\tuseNullAsDefault: true\n\t}\n\n};`
+let newKnex = `module.exports = {\n\n\tdevelopment: {\n\t\tclient: 'pg',\n\t\tconnection: 'postgres://localhost/${name}',\n\t\tmigrations: {\n\t\t\tdirectory: './db/migrations'\n\t\t},\n\t\tseeds: {\n\t\t\tdirectory: 'db/seeds/dev'\n\t\t},\n\t\tuseNullAsDefault: true\n\t},\n\n\tproduction: {\n\t\tclient: 'pg',\n\t\tconnection: process.env.DATABASE_URL + '?ssl=true',\n\t\tmigrations: {\n\t\t\tdirectory: 'db/migrations'\n\t\t},\n\t\tseeds: {\n\t\t\tdirectory: 'db/seeds/dev'\n\t\t},\n\t\tuseNullAsDefault: true\n\t}\n\n};`
 
 let modifyKnex = () => {
   if (fs.existsSync('./knexfile.js')) {

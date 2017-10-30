@@ -25,7 +25,7 @@ let packageJSONWithoutBackend = `{\n\t"name": "${name}",\n\t"version": "1.0.0",\
 let enzoCreateContainer = fs.readFileSync(path.resolve(__dirname, './files/enzoCreateContainer.js'), 'utf8')
 let enzoCreateAPI = fs.readFileSync(path.resolve(__dirname, './files/enzoCreateAPI.js'), 'utf8')
 let enzoEndpointTemplate = fs.readFileSync(path.resolve(__dirname, './templates/enzoEndpointTemplate.js'), 'utf8')
-let enzoModelTemplate = fs.readFileSync(path.resolve(__dirname, './templates/enzoModelTemplate.js'), 'utf8')
+let enzoControllerTemplate = fs.readFileSync(path.resolve(__dirname, './templates/enzoControllerTemplate.js'), 'utf8')
 let dumbReduxContainerTemplate = fs.readFileSync(path.resolve(__dirname, './templates/dumbReduxContainerTemplate.js'), 'utf8')
 let enzoDumbComponentTemplate = fs.readFileSync(path.resolve(__dirname, './templates/enzoDumbComponentTemplate.js'), 'utf8')
 let smartComponentTemplate = fs.readFileSync(path.resolve(__dirname, './templates/smartComponentTemplate.js'), 'utf8')
@@ -113,13 +113,14 @@ let ReactReduxWithBackend = () => {
   fs.writeFile(`./${name}/enzo/templates/enzoEndpointTemplate.js`, enzoEndpointTemplate, (err) => {
     if (err) console.error(err)
   })
-  fs.writeFile(`./${name}/enzo/templates/enzoModelTemplate.js`, enzoModelTemplate, (err) => {
+  fs.writeFile(`./${name}/enzo/templates/enzoControllerTemplate.js`, enzoControllerTemplate, (err) => {
     if (err) console.error(err)
   })
 
   //backend
   fs.mkdirSync(`./${name}/server`)
   fs.mkdirSync(`./${name}/server/models`)
+  fs.mkdirSync(`./${name}/server/controllers`)
   fs.writeFile(`./${name}/server/server.js`, reactReduxServer, (err) => {
     if (err) throw err
   })

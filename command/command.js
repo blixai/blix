@@ -110,13 +110,13 @@ let addRedux = () => {
 let addAPI = () => {
   addScript('api', 'node enzo/api.js')
   let api = fs.readFileSync(path.resolve(__dirname, './files/enzoCreateAPI.js'), 'utf8')
-  let enzoModelTemplate = fs.readFileSync(path.resolve(__dirname, './templates/enzoModelTemplate.js'), 'utf8')
+  let enzoControllerTemplate = fs.readFileSync(path.resolve(__dirname, './templates/enzoControllerTemplate.js'), 'utf8')
   let enzoEndpointTemplate = fs.readFileSync(path.resolve(__dirname, './templates/enzoEndpointTemplate.js'), 'utf8')
   checkEnzoExists()
   fs.writeFile('./enzo/api.js', api, (err) => {
     if (err) console.error(err)
   })
-  fs.writeFile('./enzo/templates/enzoModelTemplate.js', enzoModelTemplate, (err) => {
+  fs.writeFile('./enzo/templates/enzoControllerTemplate.js', enzoControllerTemplate, (err) => {
     if (err) console.error(err)
   })
   fs.writeFile('./enzo/templates/enzoEndpointTemplate.js', enzoEndpointTemplate, (err) => {
