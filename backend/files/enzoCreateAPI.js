@@ -11,10 +11,10 @@ if (name) {
     if (err) throw err
     console.log('Created Routes:')
     console.log('')
-    console.log(`\tGET: api/v1/${name}`)
-    console.log(`\tPUT: api/v1/${name}/:id`)
-    console.log(`\tDELETE: api/v1/${name}/:id `)
-    console.log(`\tPOST: api/v1/${name} `)
+    console.log(`GET:    api/v1/${name}`)
+    console.log(`PUT:    api/v1/${name}/:id`)
+    console.log(`DELETE: api/v1/${name}/:id `)
+    console.log(`POST:   api/v1/${name} `)
   })
 
   fs.writeFile(`./server/controllers/${name}.js`, controller, (err) => {

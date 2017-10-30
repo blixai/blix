@@ -92,7 +92,7 @@ let addBackend = () => {
             BE.backendOnly()
             rl.close();
             console.log('Downloading dependencies and creating files, this may take a moment')
-            install('express nodemon mongo body-parser helmet')
+            install('express nodemon mongo body-parser helmet mongoose')
             addScript('server', 'nodemon server/server.js')
             addScript('api', 'node enzo/api.js')
             process.stdout.write('\033c')
@@ -114,6 +114,7 @@ let addBackend = () => {
       }
     })
   } else {
+    console.log(`Make sure you provided a name: enzo backend <name>`)
     process.exit()
   }
 }
