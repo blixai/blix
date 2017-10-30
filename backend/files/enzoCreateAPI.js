@@ -19,6 +19,6 @@ if (name) {
 
   fs.writeFile(`./server/controllers/${name}.js`, controller, (err) => {
     if (err) throw err
-    console.log(`${name} controllers created`)
+    console.log(`${name} controller created`)
   })
 }
