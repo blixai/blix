@@ -317,11 +317,11 @@ let createBackend = () => {
             if (answer === 'p') {
               // postgres database
               BE.backendOnly()
+              addBookshelfToEnzo()
               rl.close();
               shell.cd(`${name}`)
               console.log('Downloading dependencies and setting up the project, this may take a moment')
               install('express nodemon pg knex body-parser helmet dotenv bookshelf')
-              addBookshelfToEnzo()
               installKnexGlobal()
               modifyKnex()
               try {
@@ -375,14 +375,14 @@ let addScript = (command, script) => {
 let addBookshelfToEnzo = () => {
   let enzoCreateBookshelfModel = fs.readFileSync(path.resolve(__dirname, './templates/enzoCreateBookshelfModel.js'),'utf8')
   let migrationTemplate = fs.readFileSync(path.resolve(__dirname, './templates/migrationTemplate.js'),'utf8')
-  let enzoBookshelfModel = fs.readFileSync(path.resolve(__dirname, './templates/enzoBookshelfModel.js'),'utf8')
+  let enzoBookshelfModelTemplate = fs.readFileSync(path.resolve(__dirname, './templates/enzoBookshelfModelTemplate.js'),'utf8')
   fs.writeFile(`./${name}/enzo/enzoCreateBookshelfModel.js`, enzoCreateBookshelfModel, (err) => {
     if (err) console.error(err)
   })
   fs.writeFile(`./${name}/enzo/templates/migrationTemplate.js`, migrationTemplate, (err) => {
     if (err) console.error(err)
   })
-  fs.writeFile(`./${name}/enzo/templates/enzoBookshelfModel.js`, enzoBookshelfModel, (err) => {
+  fs.writeFile(`./${name}/enzo/templates/enzoBookshelfModelTemplate.js`, enzoBookshelfModelTemplate, (err) => {
     if (err) console.error(err)
   })
   addScript('model', 'node enzo/enzoCreateBookshelfModel')
