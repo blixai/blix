@@ -363,8 +363,30 @@ let createBackend = () => {
   })
 }
 
+let addScript = (command, script) => {
+  let buffer = fs.readFileSync(`./${name}/package.json`)
+  let json = JSON.parse(buffer)
+  json.scripts[command] = script
+  let newPackage = JSON.stringify(json, null, 2)
+  fs.writeFileSync(`./${name}/package.json`, newPackage)
+}
+
+
 let addBookshelfToEnzo = () => {
-  let enzoModel = fs.readFileSync(path.resolve(__dirname, './'))
+  let enzoCreateBookshelfModel = fs.readFileSync(path.resolve(__dirname, './templates/enzoCreateBookshelfModel.js'),'utf8')
+  let migrationTemplate = fs.readFileSync(path.resolve(__dirname, './templates/migrationTemplate.js'),'utf8')
+  let enzoBookshelfModel = fs.readFileSync(path.resolve(__dirname, './templates/enzoBookshelfModel.js'),'utf8')
+  fs.writeFile('./enzo/enzoCreateBookshelfModel.js', enzoCreateBookshelfModel, (err) => {
+    if (err) console.error(err)
+  })
+  fs.writeFile('./enzo/templates/migrationTemplate.js', migrationTemplate, (err) => {
+    if (err) console.error(err)
+  })
+  fs.writeFile('./enzo/templates/enzoBookshelfModel.js', enzoBookshelfModel, (err) => {
+    if (err) console.error(err)
+  })
+  addScript('model', 'node enzo/enzoCreateBookshelfModel')
+  // need to add script for this to package.json
 }
 
 
