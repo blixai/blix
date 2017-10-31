@@ -102,6 +102,7 @@ let createReactSPA = () => {
             if (type === 'p') {
               rl.close();
               spaBuild.writeFilesWithSPAReact()
+              addBookshelfToEnzo()
               shell.cd(`${name}`)
               install('express nodemon pg knex body-parser compression helmet react react-dom dotenv bookshelf')
               installDevDependencies('webpack babel-loader css-loader babel-core babel-preset-env babel-preset-react style-loader webpack-merge uglifyjs-webpack-plugin')
@@ -168,6 +169,7 @@ let createReactRedux = () => {
             database = database.toLowerCase()
             if (database === 'p') {
               reactRedux.ReactReduxWithBackend()
+              addBookshelfToEnzo()
               rl.close();
               shell.cd(`${name}`)
               console.log('Downloading dependencies and setting up the project, this may take a moment')
@@ -251,6 +253,7 @@ let createAppWithoutReact = () => {
               // create project with postgres
               rl.close();
               noReactApp.railsApp()
+              addBookshelfToEnzo()
               shell.cd(`${name}`)
               console.log('Downloading dependencies and setting up the project, this may take a moment')
               install('express nodemon pg knex body-parser compression helmet dotenv bookshelf')
