@@ -103,7 +103,7 @@ let createReactSPA = () => {
               rl.close();
               spaBuild.writeFilesWithSPAReact()
               shell.cd(`${name}`)
-              install('express nodemon pg knex body-parser compression helmet react react-dom  dotenv')
+              install('express nodemon pg knex body-parser compression helmet react react-dom dotenv bookshelf')
               installDevDependencies('webpack babel-loader css-loader babel-core babel-preset-env babel-preset-react style-loader webpack-merge uglifyjs-webpack-plugin')
               console.log('Downloading dependencies and setting up the project, this may take a moment')
               installKnexGlobal()
@@ -122,7 +122,7 @@ let createReactSPA = () => {
               fs.writeFileSync(`./${name}/.env`)
               shell.cd(`${name}`)
               console.log('Downloading dependencies and setting up the project, this may take a moment')
-              install('express nodemon compression helmet mongo dotenv body-parser react react-dom dotenv')
+              install('express nodemon compression helmet mongo dotenv body-parser react react-dom dotenv mongoose')
               installDevDependencies('webpack babel-loader css-loader babel-core babel-preset-env babel-preset-react style-loader webpack-merge uglifyjs-webpack-plugin')
               process.stdout.write('\033c')
               console.log('The project was created!')
@@ -171,7 +171,7 @@ let createReactRedux = () => {
               rl.close();
               shell.cd(`${name}`)
               console.log('Downloading dependencies and setting up the project, this may take a moment')
-              install('redux react-router-dom react-redux express dotenv nodemon pg knex body-parser compression helmet react react-dom')
+              install('redux react-router-dom react-redux express dotenv nodemon pg knex body-parser compression helmet react react-dom bookshelf')
               installDevDependencies('webpack babel-loader css-loader babel-core babel-preset-env babel-preset-react style-loader webpack-merge uglifyjs-webpack-plugin')
               installKnexGlobal()
               modifyKnex()
@@ -192,7 +192,7 @@ let createReactRedux = () => {
               shell.cd(`${name}`)
               process.stdout.write('\033c')
               console.log('Downloading dependencies and setting up the project, this may take a moment')
-              install('redux react-router-dom react-redux express nodemon dotenv compression helmet mongo dotenv body-parser react react-dom')
+              install('redux react-router-dom react-redux express nodemon dotenv compression helmet mongo dotenv body-parser react react-dom mongoose')
               installDevDependencies(' webpack babel-loader css-loader babel-core babel-preset-env babel-preset-react style-loader webpack-merge uglifyjs-webpack-plugin')
               process.stdout.write('\033c')
               console.log('The project was created!')
@@ -253,7 +253,7 @@ let createAppWithoutReact = () => {
               noReactApp.railsApp()
               shell.cd(`${name}`)
               console.log('Downloading dependencies and setting up the project, this may take a moment')
-              install('express nodemon pg knex body-parser compression helmet dotenv')
+              install('express nodemon pg knex body-parser compression helmet dotenv bookshelf')
               installDevDependencies('babel-core babel-preset-env babelify gulp gulp-uglify gulp-rename browserify gulp-htmlmin gulp-clean-css gulp-tap gulp-buffer del run-sequence envify bundle-collapser')
               installKnexGlobal()
               modifyKnex()
@@ -271,7 +271,7 @@ let createAppWithoutReact = () => {
               noReactApp.railsApp()
               shell.cd(`${name}`)
               console.log('Downloading dependencies and setting up the project, this may take a moment')
-              install('express nodemon mongo body-parser compression helmet dotenv')
+              install('express nodemon mongo body-parser compression helmet dotenv mongoose')
               installDevDependencies('babel-core babel-preset-env babelify gulp gulp-uglify gulp-rename browserify gulp-htmlmin gulp-clean-css gulp-tap gulp-buffer del run-sequence envify bundle-collapser')
               process.stdout.write('\033c')
               console.log('The project was created!')
@@ -320,7 +320,8 @@ let createBackend = () => {
               rl.close();
               shell.cd(`${name}`)
               console.log('Downloading dependencies and setting up the project, this may take a moment')
-              install('express nodemon pg knex body-parser helmet dotenv')
+              install('express nodemon pg knex body-parser helmet dotenv bookshelf')
+              addBookshelfToEnzo()
               installKnexGlobal()
               modifyKnex()
               try {
@@ -338,7 +339,7 @@ let createBackend = () => {
               rl.close();
               shell.cd(`${name}`)
               console.log('Downloading dependencies and setting up the project, this may take a moment')
-              install('express nodemon mongo body-parser helmet dotenv')
+              install('express nodemon mongo body-parser helmet dotenv mongoose')
               process.stdout.write('\033c')
               console.log('The project was created!')
               console.log(`cd into ${name} and run npm start`)
@@ -360,6 +361,10 @@ let createBackend = () => {
       // check to see if frontend is false, if it is....
     }
   })
+}
+
+let addBookshelfToEnzo = () => {
+  let enzoModel = fs.readFileSync(path.resolve(__dirname, './'))
 }
 
 
