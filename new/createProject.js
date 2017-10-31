@@ -373,9 +373,13 @@ let addScript = (command, script) => {
 
 
 let addBookshelfToEnzo = () => {
+  let bookshelf = fs.readFileSync(path.resolve(__dirname, './templates/bookshelf.js'), 'utf8')
   let enzoCreateBookshelfModel = fs.readFileSync(path.resolve(__dirname, './templates/enzoCreateBookshelfModel.js'),'utf8')
   let migrationTemplate = fs.readFileSync(path.resolve(__dirname, './templates/migrationTemplate.js'),'utf8')
   let enzoBookshelfModelTemplate = fs.readFileSync(path.resolve(__dirname, './templates/enzoBookshelfModelTemplate.js'),'utf8')
+  fs.writeFile(`./${name}/server/models/bookshelf.js`, bookshelf, (err) => {
+    if (err) console.error(err)
+  })
   fs.writeFile(`./${name}/enzo/enzoCreateBookshelfModel.js`, enzoCreateBookshelfModel, (err) => {
     if (err) console.error(err)
   })
@@ -385,7 +389,7 @@ let addBookshelfToEnzo = () => {
   fs.writeFile(`./${name}/enzo/templates/enzoBookshelfModelTemplate.js`, enzoBookshelfModelTemplate, (err) => {
     if (err) console.error(err)
   })
-  addScript('model', 'node enzo/enzoCreateBookshelfModel')
+  addScript('model', 'node enzo/enzoCreateBookshelfModel.js')
   // need to add script for this to package.json
 }
 
