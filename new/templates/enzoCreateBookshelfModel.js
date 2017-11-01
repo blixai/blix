@@ -13,9 +13,9 @@ modelName = modelName.toLowerCase()
 modelName = modelName.charAt(0).toUpperCase() + modelName.slice(1)
 
 let enzoBookshelfModelTemplate = fs.readFileSync(path.resolve(__dirname, './templates/enzoBookshelfModelTemplate.js'), 'utf8')
-enzoModelTemplate = enzoBookshelfModelTemplate.replace(/LowerCasePlural/g, `${modelName.toLowerCase()}s`)
-enzoModelTemplate = enzoBookshelfModelTemplate.replace(/ModelName/g, modelName)
-fs.writeFile(`./server/models/${modelName}.js`, enzoModelTemplate, (err) => {
+enzoBookshelfModelTemplate = enzoBookshelfModelTemplate.replace(/LowerCasePlural/g, `${modelName.toLowerCase()}s`)
+enzoBookshelfModelTemplate = enzoBookshelfModelTemplate.replace(/ModelName/g, modelName)
+fs.writeFile(`./server/models/${modelName}.js`, enzoBookshelfModelTemplate, (err) => {
   if (err) console.error(err)
   console.log(`Created Model ${modelName}`)
 })

@@ -119,6 +119,7 @@ let createReactSPA = () => {
               console.log(`cd into ${name} and run npm run build then run npm start`)
             } else {
               spaBuild.writeFilesWithSPAReact()
+              addMongooseToEnzo()
               rl.close();
               fs.writeFileSync(`./${name}/.env`)
               shell.cd(`${name}`)
@@ -191,6 +192,7 @@ let createReactRedux = () => {
               // build a react/redux with mongo backend
               rl.close();
               reactRedux.ReactReduxWithBackend()
+              addMongooseToEnzo()
               shell.cd(`${name}`)
               process.stdout.write('\033c')
               console.log('Downloading dependencies and setting up the project, this may take a moment')
@@ -272,6 +274,7 @@ let createAppWithoutReact = () => {
               // create project with mongoDB
               rl.close();
               noReactApp.railsApp()
+              addMongooseToEnzo()
               shell.cd(`${name}`)
               console.log('Downloading dependencies and setting up the project, this may take a moment')
               install('express nodemon mongo body-parser compression helmet dotenv mongoose')
@@ -339,6 +342,7 @@ let createBackend = () => {
             } else {
               // express with mongodb
               BE.backendOnly()
+              addMongooseToEnzo()
               rl.close();
               shell.cd(`${name}`)
               console.log('Downloading dependencies and setting up the project, this may take a moment')
@@ -394,6 +398,19 @@ let addBookshelfToEnzo = () => {
   })
   addScript('model', 'node enzo/enzoCreateBookshelfModel.js')
   // need to add script for this to package.json
+}
+
+let addMongooseToEnzo = () => {
+  // first need to import mongoose and mongoose connect to the server/server.js file. 
+  let model = fs.readFileSync(path.resolve(__dirname, './templates/enzoCreateMongooseModel.js'), 'utf8')
+  let schemaTemplate = fs.readFileSync(path.resolve(__dirname, './templates/schemaTemplate.js'), 'utf8')
+  fs.writeFile(`./${name}/enzo/model.js`, model, (err) => {
+    if (err) throw err 
+  })
+  fs.writeFile(`./${name}/enzo/templates/schemaTemplate.js`,  schemaTemplate, (err) => {
+    if (err) throw err 
+  })
+  addScript('model', 'node enzo/model.js')
 }
 
 
