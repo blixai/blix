@@ -102,6 +102,7 @@ let createReactSPA = () => {
             if (type === 'p') {
               rl.close();
               spaBuild.writeFilesWithSPAReact()
+              addBookshelfToEnzo()
               shell.cd(`${name}`)
               install('express nodemon pg knex body-parser compression helmet react react-dom dotenv bookshelf')
               installDevDependencies('webpack babel-loader css-loader babel-core babel-preset-env babel-preset-react style-loader webpack-merge uglifyjs-webpack-plugin')
@@ -118,6 +119,7 @@ let createReactSPA = () => {
               console.log(`cd into ${name} and run npm run build then run npm start`)
             } else {
               spaBuild.writeFilesWithSPAReact()
+              addMongooseToEnzo()
               rl.close();
               fs.writeFileSync(`./${name}/.env`)
               shell.cd(`${name}`)
@@ -168,6 +170,7 @@ let createReactRedux = () => {
             database = database.toLowerCase()
             if (database === 'p') {
               reactRedux.ReactReduxWithBackend()
+              addBookshelfToEnzo()
               rl.close();
               shell.cd(`${name}`)
               console.log('Downloading dependencies and setting up the project, this may take a moment')
@@ -189,6 +192,7 @@ let createReactRedux = () => {
               // build a react/redux with mongo backend
               rl.close();
               reactRedux.ReactReduxWithBackend()
+              addMongooseToEnzo()
               shell.cd(`${name}`)
               process.stdout.write('\033c')
               console.log('Downloading dependencies and setting up the project, this may take a moment')
@@ -251,6 +255,7 @@ let createAppWithoutReact = () => {
               // create project with postgres
               rl.close();
               noReactApp.railsApp()
+              addBookshelfToEnzo()
               shell.cd(`${name}`)
               console.log('Downloading dependencies and setting up the project, this may take a moment')
               install('express nodemon pg knex body-parser compression helmet dotenv bookshelf')
@@ -269,6 +274,7 @@ let createAppWithoutReact = () => {
               // create project with mongoDB
               rl.close();
               noReactApp.railsApp()
+              addMongooseToEnzo()
               shell.cd(`${name}`)
               console.log('Downloading dependencies and setting up the project, this may take a moment')
               install('express nodemon mongo body-parser compression helmet dotenv mongoose')
@@ -317,11 +323,11 @@ let createBackend = () => {
             if (answer === 'p') {
               // postgres database
               BE.backendOnly()
+              addBookshelfToEnzo()
               rl.close();
               shell.cd(`${name}`)
               console.log('Downloading dependencies and setting up the project, this may take a moment')
               install('express nodemon pg knex body-parser helmet dotenv bookshelf')
-              addBookshelfToEnzo()
               installKnexGlobal()
               modifyKnex()
               try {
@@ -336,6 +342,7 @@ let createBackend = () => {
             } else {
               // express with mongodb
               BE.backendOnly()
+              addMongooseToEnzo()
               rl.close();
               shell.cd(`${name}`)
               console.log('Downloading dependencies and setting up the project, this may take a moment')
@@ -363,8 +370,47 @@ let createBackend = () => {
   })
 }
 
+let addScript = (command, script) => {
+  let buffer = fs.readFileSync(`./${name}/package.json`)
+  let json = JSON.parse(buffer)
+  json.scripts[command] = script
+  let newPackage = JSON.stringify(json, null, 2)
+  fs.writeFileSync(`./${name}/package.json`, newPackage)
+}
+
+
 let addBookshelfToEnzo = () => {
-  let enzoModel = fs.readFileSync(path.resolve(__dirname, './'))
+  let bookshelf = fs.readFileSync(path.resolve(__dirname, './templates/bookshelf.js'), 'utf8')
+  let enzoCreateBookshelfModel = fs.readFileSync(path.resolve(__dirname, './templates/enzoCreateBookshelfModel.js'),'utf8')
+  let migrationTemplate = fs.readFileSync(path.resolve(__dirname, './templates/migrationTemplate.js'),'utf8')
+  let enzoBookshelfModelTemplate = fs.readFileSync(path.resolve(__dirname, './templates/enzoBookshelfModelTemplate.js'),'utf8')
+  fs.writeFile(`./${name}/server/models/bookshelf.js`, bookshelf, (err) => {
+    if (err) console.error(err)
+  })
+  fs.writeFile(`./${name}/enzo/enzoCreateBookshelfModel.js`, enzoCreateBookshelfModel, (err) => {
+    if (err) console.error(err)
+  })
+  fs.writeFile(`./${name}/enzo/templates/migrationTemplate.js`, migrationTemplate, (err) => {
+    if (err) console.error(err)
+  })
+  fs.writeFile(`./${name}/enzo/templates/enzoBookshelfModelTemplate.js`, enzoBookshelfModelTemplate, (err) => {
+    if (err) console.error(err)
+  })
+  addScript('model', 'node enzo/enzoCreateBookshelfModel.js')
+  // need to add script for this to package.json
+}
+
+let addMongooseToEnzo = () => {
+  // first need to import mongoose and mongoose connect to the server/server.js file. 
+  let model = fs.readFileSync(path.resolve(__dirname, './templates/enzoCreateMongooseModel.js'), 'utf8')
+  let schemaTemplate = fs.readFileSync(path.resolve(__dirname, './templates/schemaTemplate.js'), 'utf8')
+  fs.writeFile(`./${name}/enzo/model.js`, model, (err) => {
+    if (err) throw err 
+  })
+  fs.writeFile(`./${name}/enzo/templates/schemaTemplate.js`,  schemaTemplate, (err) => {
+    if (err) throw err 
+  })
+  addScript('model', 'node enzo/model.js')
 }
 
 
