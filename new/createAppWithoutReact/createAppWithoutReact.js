@@ -29,7 +29,7 @@ let enzoControllerTemplate = fs.readFileSync(path.resolve(__dirname, './template
 // pug
 let enzoPugPage = fs.readFileSync(path.resolve(__dirname, './files/enzoPugPage.js'), 'utf8')
 let pugTemplate = fs.readFileSync(path.resolve(__dirname, './templates/pugTemplate.pug'), 'utf8')
-let pugEndpointTemplate = fs.readFileSync(path.resolve(__dirname, './templates/pugEndpointTemplate.js'), 'utf8')
+let enzoPugEndpoint = fs.readFileSync(path.resolve(__dirname, './templates/pugEndpointTemplate.js'), 'utf8')
 let pugServer = fs.readFileSync(path.resolve(__dirname, './files/pugServer.js'), 'utf8')
 let pugRoutes = fs.readFileSync(path.resolve(__dirname, './files/pugRoutes.js'), 'utf8')
 let pugHomepage = fs.readFileSync(path.resolve(__dirname, './templates/pugHomepage.pug'), 'utf8')
