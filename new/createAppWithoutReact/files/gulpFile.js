@@ -16,14 +16,22 @@ var runSequence = require('run-sequence');
 
 var collapse = require('bundle-collapser/plugin')
 let envify = require('envify/custom')
+let plumber = require('gulp-plumber')
 
 gulp.task('js', function () {
   return gulp.src('src/**/*.js', { read: false })
     .pipe(tap(function (file) {
       gutil.log('bundling ' + file.path);
-      file.contents = browserify(file.path, { debug: true }).transform("babelify", { presets: ["env"] }).plugin(collapse).bundle();
+      file.contents = browserify(file.path, { debug: true })
+      .transform("babelify", { presets: ["env"] })
+      .plugin(collapse)
+      .bundle()
+      .on('error', function (error) {
+        console.log('error');
+        this.emit('end');
+      })
     }))
-    .on('error', onError)
+    .pipe(plumber())
     .pipe(buffer())
     .pipe(gulp.dest('public'));
 })
@@ -32,34 +40,39 @@ gulp.task('min-js', function () {
   return gulp.src('src/**/*.js', { read: false })
     .pipe(tap(function (file) {
       gutil.log('bundling ' + file.path);
-      file.contents = browserify(file.path, { debug: false }).transform("babelify", { presets: ["env"] }).transform({ global: true }, envify({ NODE_ENV: 'production' })).plugin(collapse).bundle();
+      file.contents = browserify(file.path, { debug: false })
+      .transform("babelify", { presets: ["env"] })
+      .transform({ global: true }, envify({ NODE_ENV: 'production' }))
+      .plugin(collapse)
+      .bundle()
+      .on('error', function (error) {
+        console.log('error');
+        this.emit('end');
+      })
     }))
-    .on('error', onError)
+    .pipe(plumber())
     .pipe(buffer())
     .pipe(uglify())
-    .on('error', onError)
     .pipe(gulp.dest('public'));
 })
 
 gulp.task('html', function () {
-  return gulp.src('src/**/*.html').pipe(gulp.dest('public').on('error', onError));
+  return gulp.src('src/**/*.html').pipe(gulp.dest('public'));
 });
 
 gulp.task('minify-html', () => {
   return gulp.src(`./src/**/*.html`)
     .pipe(htmlmin({ collapseWhitespace: true }))
-    .on('error', onError)
     .pipe(gulp.dest(`public`))
 })
 
 gulp.task('css', function () {
-  return gulp.src('src/**/*.css').pipe(gulp.dest('public').on('error', onError));
+  return gulp.src('src/**/*.css').pipe(gulp.dest('public'));
 });
 
 gulp.task('minify-css', () => {
   return gulp.src(`./src/**/*css`)
     .pipe(cleanCSS({ compatibility: 'ie8' }))
-    .on('error', onError)
     .pipe(gulp.dest(`public`));
 })
 
@@ -79,13 +92,6 @@ gulp.task('watch', () => {
     )
   })
 })
-
-
-
-function onError(err) {
-  console.log(err);
-  this.emit('end');
-}
 
 
 
