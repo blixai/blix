@@ -33,6 +33,8 @@ let command = () => {
   console.log('')
   console.log('\tpage: create a new folder, html, css, and js files along with adding the route in pages.js')
   console.log('')
+  console.log('\tmodel: create a new Bookshelf or Mongoose model for your database, with preconfired migration file created for use with Knex.js')
+  console.log('')
   console.log('')
   rl.question('Enter one of the listed commands or enter your own: ', (answer) => {
     answer = answer.toLowerCase()
@@ -56,10 +58,60 @@ let command = () => {
         addPage()
         rl.close()
         console.log('Done!')
+      case "model": 
+        addModel()
+        console.log('Done!')
         break;
       default:
         createNew(answer)
         break;
+    }
+  })
+}
+
+let addModel = () => {
+  addScript('model', 'node enzo/model.js')
+  rl.question('Do you want to use Mongoose.js or Bookshelf.js? (M/B) ', (ans) => {
+    ans = ans.toLowerCase()
+    if (ans === 'm') {
+      checkEnzoExists()
+      let model = fs.readFileSync(path.resolve(__dirname, './templates/enzoCreateMongooseModel.js'), 'utf8')
+      let schemaTemplate = fs.readFileSync(path.resolve(__dirname, './templates/schemaTemplate.js'), 'utf8')
+      fs.writeFile('./enzo/model.js', model, (err) => {
+        if (err) throw err 
+      })
+      fs.writeFile('./enzo/templates/schemaTemplate.js', schemaTemplate, (err) => {
+        if (err) throw err 
+      })
+      // add moongoose
+      rl.close()
+    } else if (ans === 'b') {
+      checkEnzoExists()
+      let model = fs.readFileSync(path.resolve(__dirname, './templates/enzoCreateBookshelfModel.js'), 'utf8')
+      let migrationTemplate = fs.readFileSync(path.resolve(__dirname, './templates/migrationTemplate.js'), 'utf8')
+      let bookshelf = fs.readFileSync(path.resolve(__dirname, './templates/bookshelf.js'), 'utf8')
+      let enzoBookshelfModelTemplate = fs.readFileSync(path.resolve(__dirname, './templates/enzoBookshelfModelTemplate.js'), 'utf8')
+      fs.writeFile('./enzo/model.js', model, (err) => {
+        if (err) throw err 
+      })
+      fs.writeFile('./enzo/templates/migrationTemplate.js', migrationTemplate, (err) => {
+        if (err) throw err 
+      })
+      fs.writeFile('./server/models/bookshelf.js', bookshelf, (err) => {
+        if (err) throw err 
+      })
+      fs.writeFile('./enzo/templates/enzoBookshelfModelTemplate.js', enzoBookshelfModelTemplate, (err) => {
+        if (err) throw err 
+      })
+      rl.close()
+    } else {
+      rl.close()
+      // write a basic model.js file?
+      checkEnzoExists()
+      fs.writeFile('./enzo/model.js', '', (err) => {
+        if (err) throw err 
+      })
+      console.log('Added model command to package.json and empty model.js file to enzo, have fun!')
     }
   })
 }
@@ -139,7 +191,6 @@ let addPage = () => {
 
 let createNew = (name) => {
   rl.question('What do you want to name the enzo file? ', (answer) => {
-    answer = answer.toLowerCase()
     addScript(name, `node enzo/${answer}.js`)
     checkEnzoExists()
     fs.writeFile(`./enzo/${name}.js`, '', (err) => {
@@ -149,7 +200,6 @@ let createNew = (name) => {
       a = a.toLowerCase()
       if (a === 'y') {
         rl.question('What is the template file name? ', (ans) => {
-          ans = ans.toLowerCase()
           rl.close()
           let importTemplate = `let fs = require('fs')\nlet path = require('path')\n\nlet ${ans}Template = fs.readFileSync(path.resolve(__dirname, './templates/${ans}.js'), 'utf8')`
           fs.appendFile(`./enzo/${name}.js`, importTemplate, (err) => {

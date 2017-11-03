@@ -24,5 +24,5 @@ app.use(express.static('assets'))
 
 app.listen(port, () => {
   process.stdout.write('\033c')
-  console.log('Listening at port 3000')
+  console.log(`Listening at port ${port}`)
 })

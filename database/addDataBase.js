@@ -54,7 +54,6 @@ let addDatabase = () => {
             fs.truncateSync('./knexfile.js', 0, function () { console.log('done') })
             fs.appendFile('./knexfile.js', newKnex, (err) => {
               if (err) throw err
-              shell.exec('knex migrate:make initial')
             })
           }
         }

@@ -19,5 +19,5 @@ app.get('/*', (req, res) => res.sendFile(path.join(__dirname, '../public/index.h
 
 app.listen(port, () => { 
   process.stdout.write('\033c')
-  console.log('Listening at port 3000') 
+  console.log(`Listening at port ${port}`) 
 })
