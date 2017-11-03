@@ -125,7 +125,7 @@ let pugApp = () => {
   })
   
   
-  let homeController = `exports.index = (req, res) => \n{\n\tres.render('home/index', {})\n}`
+  let homeController = `exports.index = (req, res) => {\n\tres.render('home/index', {})\n}`
   fs.writeFile(`./${name}/server/controllers/home.js`, homeController, (err) => {
     if (err) throw err 
   })

@@ -17,15 +17,32 @@ let createPages = () => {
     page = page.toLowerCase()
     let pageController = `\n\nexports.${page} = (req, res) => {\n\tres.render('${name}/${page}', {})\n}`
     let pageRoute = `\nr.get('/${name}/${page}', ${name}.${page})`
-    fs.writeFile(`./server/views/${name}/${page}.pug`, pug, (err) => {
+    // take a look at this write file
+    let subPage = fs.readFileSync(path.resolve(__dirname, './templates/pugTemplate.pug'), 'utf8')
+    subPage = subPage.replace(/Name/g, page)
+    fs.writeFile(`./server/views/${name}/${page}.pug`, subPage, (err) => {
       if (err) throw err
+      console.log(`Created page ${page} in server/views/${page}`)
     })
     fs.appendFile('./server/routes.js', pageRoute, (err) => {
       if (err) throw err
+      console.log(`Added ${page} route to routes.js`)
     })
     fs.appendFile(`./server/controllers/${name}.js`, pageController, (err) => {
       if (err) throw err
+      console.log(`Added ${page} to ${name} controller`)
     })
+    fs.mkdirSync(`./src/${name}/${page}`)
+    console.log(`Created ${page} folder in src/${name}/${page}`)
+    fs.writeFile(`./src/${name}/${page}/index.js`, js, (err) => {
+      if (err) throw err
+      console.log(`Created index.js file in src/${name}/${page}`)
+    })
+    fs.writeFile(`./src/${name}/${page}/main.css`, css, (err) => {
+      if (err) throw err
+      console.log(`Created main.css file in src/${name}/${page}`)
+    })
+
   })
 }
 
@@ -34,24 +51,30 @@ let newPage = () => {
   fs.mkdirSync(`./server/views/${name}`)
   fs.writeFile(`./server/views/${name}/index.pug`, pug, (err) => {
     if (err) throw err
+    console.log(`Created index.pug file in server/views/${name}/index.pug`)
   })
   let index = `exports.index = (req, res) => {\n\tres.render('${name}/index', {})\n}`
   fs.writeFile(`./server/controllers/${name}.js`, index, (err) => {
     if (err) throw err
+    console.log(`Created controller ${name} in server/controllers/${name}`)
   })
   let pageRoute = `\n\nconst ${name} = require('./controllers/${name}')\nr.get('/${name}', ${name}.index)`
   fs.appendFile('./server/routes.js', pageRoute, (err) => {
     if (err) throw err
+    console.log(`Added ${name} route to server/routes.js`)
   })
   createPages()
   fs.writeFile(`./src/${name}/main.css`, css, (err) => {
     if (err) throw err
+    console.log(`Created ${name} main.css file`)
   })
   fs.writeFile(`./src/${name}/index.js`, js, (err) => {
     if (err) throw err
+    console.log(`Created ${name} index.js file`)
   })
 }
 
 if (name) {
   newPage()
 }
+
