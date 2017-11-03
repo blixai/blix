@@ -9,6 +9,7 @@ let noCommand = () => {
   console.log('database')
   console.log('help <command>')
   console.log('update')
+  console.log('command')
   console.log('')
 }
 
@@ -33,6 +34,9 @@ let help = () => {
       break
     case 'update':
       console.log('updates enzo from npm')
+      break
+    case 'command':
+      console.log('Asks a series of questions to either add preconfigured commands to a project or build your own')
       break
     default:
       noCommand()
