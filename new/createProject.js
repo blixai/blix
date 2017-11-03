@@ -253,49 +253,105 @@ let createAppWithoutReact = () => {
             database = database.toLowerCase()
             if (database === 'p') {
               // create project with postgres
+              rl.question('Do you want to use the templating engine Pug? (Y/N) ', (answer) => {
+                answer = answer.toLowerCase()
+                if (answer === 'y') {
+                  // create pug postgres rails app 
+                  rl.close();
+                  noReactApp.pugApp()
+                  addBookshelfToEnzo()
+                  shell.cd(`${name}`)
+                  console.log('Downloading dependencies and setting up the project, this may take a moment')
+                  install('express nodemon pg knex body-parser compression helmet dotenv bookshelf pug')
+                  installDevDependencies('babel-core babel-preset-env babelify gulp gulp-uglify gulp-rename browserify gulp-htmlmin gulp-clean-css gulp-tap gulp-buffer del run-sequence envify bundle-collapser gulp-plumber')
+                  installKnexGlobal()
+                  modifyKnex()
+                  try {
+                    execSync(`createdb ${name};`, { stdio: 'ignore' });
+                  } catch (e) {
+                    // need some variable to indicate this failed and the user needs to make a new database
+                  }
+                  process.stdout.write('\033c')
+                  console.log('The project was created!')
+                  console.log(`cd into ${name} and run npm start`)
+                } else {
+                  rl.close();
+                  noReactApp.railsApp()
+                  addBookshelfToEnzo()
+                  shell.cd(`${name}`)
+                  console.log('Downloading dependencies and setting up the project, this may take a moment')
+                  install('express nodemon pg knex body-parser compression helmet dotenv bookshelf')
+                  installDevDependencies('babel-core babel-preset-env babelify gulp gulp-uglify gulp-rename browserify gulp-htmlmin gulp-clean-css gulp-tap gulp-buffer del run-sequence envify bundle-collapser gulp-plumber')
+                  installKnexGlobal()
+                  modifyKnex()
+                  try {
+                    execSync(`createdb ${name};`, { stdio: 'ignore' });
+                  } catch (e) {
+                    // need some variable to indicate this failed and the user needs to make a new database
+                  }
+                  process.stdout.write('\033c')
+                  console.log('The project was created!')
+                  console.log(`cd into ${name} and run npm start`)
+                }
+              })
+            } else {
+              // create project with mongoDB
+              rl.question('Do you want to use the templating engine Pug? (Y/N) ', (answer) => {
+                answer = answer.toLowerCase()
+                if (answer === 'y') {
+                  noReactApp.pugApp()
+                  rl.close();
+                  addMongooseToEnzo()
+                  shell.cd(`${name}`)
+                  console.log('Downloading dependencies and setting up the project, this may take a moment')
+                  install('express nodemon mongo body-parser compression helmet dotenv mongoose pug')
+                  installDevDependencies('babel-core babel-preset-env babelify gulp gulp-uglify gulp-rename browserify gulp-htmlmin gulp-clean-css gulp-tap gulp-buffer del run-sequence envify bundle-collapser gulp-plumber')
+                  process.stdout.write('\033c')
+                  console.log('The project was created!')
+                  console.log(`cd into ${name} and run npm start`)
+                } else {
+                  rl.close();
+                  noReactApp.railsApp()
+                  addMongooseToEnzo()
+                  shell.cd(`${name}`)
+                  console.log('Downloading dependencies and setting up the project, this may take a moment')
+                  install('express nodemon mongo body-parser compression helmet dotenv mongoose')
+                  installDevDependencies('babel-core babel-preset-env babelify gulp gulp-uglify gulp-rename browserify gulp-htmlmin gulp-clean-css gulp-tap gulp-buffer del run-sequence envify bundle-collapser gulp-plumber')
+                  process.stdout.write('\033c')
+                  console.log('The project was created!')
+                  console.log(`cd into ${name} and run npm start`)
+                }
+              })
+            }
+          })
+        } else {
+          // create project without db
+          rl.question('Do you want to use the templating engine Pug? (Y/N) ', (answer) => {
+            answer = answer.toLowerCase()
+            if (answer === 'y') {
               rl.close();
-              noReactApp.railsApp()
-              addBookshelfToEnzo()
+              noReactApp.pugApp()
+              process.stdout.write('\033c')
               shell.cd(`${name}`)
               console.log('Downloading dependencies and setting up the project, this may take a moment')
-              install('express nodemon pg knex body-parser compression helmet dotenv bookshelf')
-              installDevDependencies('babel-core babel-preset-env babelify gulp gulp-uglify gulp-rename browserify gulp-htmlmin gulp-clean-css gulp-tap gulp-buffer del run-sequence envify bundle-collapser')
-              installKnexGlobal()
-              modifyKnex()
-              try {
-                execSync(`createdb ${name};`, { stdio: 'ignore' });
-              } catch (e) {
-                // need some variable to indicate this failed and the user needs to make a new database
-              }
+              install('express nodemon body-parser compression helmet dotenv pug')
+              installDevDependencies('babel-core babel-preset-env babelify gulp gulp-uglify gulp-rename browserify gulp-htmlmin gulp-clean-css gulp-tap gulp-buffer del run-sequence envify bundle-collapser gulp-plumber')
               process.stdout.write('\033c')
               console.log('The project was created!')
               console.log(`cd into ${name} and run npm start`)
             } else {
-              // create project with mongoDB
               rl.close();
               noReactApp.railsApp()
-              addMongooseToEnzo()
+              process.stdout.write('\033c')
               shell.cd(`${name}`)
               console.log('Downloading dependencies and setting up the project, this may take a moment')
-              install('express nodemon mongo body-parser compression helmet dotenv mongoose')
-              installDevDependencies('babel-core babel-preset-env babelify gulp gulp-uglify gulp-rename browserify gulp-htmlmin gulp-clean-css gulp-tap gulp-buffer del run-sequence envify bundle-collapser')
+              install('express nodemon body-parser compression helmet dotenv')
+              installDevDependencies('babel-core babel-preset-env babelify gulp gulp-uglify gulp-rename browserify gulp-htmlmin gulp-clean-css gulp-tap gulp-buffer del run-sequence envify bundle-collapser gulp-plumber')
               process.stdout.write('\033c')
               console.log('The project was created!')
               console.log(`cd into ${name} and run npm start`)
             }
           })
-        } else {
-          // create project without db
-          rl.close();
-          noReactApp.railsApp()
-          process.stdout.write('\033c')
-          shell.cd(`${name}`)
-          console.log('Downloading dependencies and setting up the project, this may take a moment')
-          install('express nodemon body-parser compression helmet dotenv')
-          installDevDependencies('babel-core babel-preset-env babelify gulp gulp-uglify gulp-rename browserify gulp-htmlmin gulp-clean-css gulp-tap gulp-buffer del run-sequence envify bundle-collapser')
-          process.stdout.write('\033c')
-          console.log('The project was created!')
-          console.log(`cd into ${name} and run npm start`)
         }
       })
     } else {

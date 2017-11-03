@@ -26,6 +26,14 @@ let enzoAPI = fs.readFileSync(path.resolve(__dirname, './files/enzoAPI.js'), 'ut
 let enzoEndpointTemplate = fs.readFileSync(path.resolve(__dirname, './templates/enzoEndpointTemplate.js'), 'utf8')
 let enzoControllerTemplate = fs.readFileSync(path.resolve(__dirname, './templates/enzoControllerTemplate.js'), 'utf8')
 
+// pug
+let enzoPugPage = fs.readFileSync(path.resolve(__dirname, './files/enzoPugPage.js'), 'utf8')
+let pugTemplate = fs.readFileSync(path.resolve(__dirname, './templates/pugTemplate.pug'), 'utf8')
+let enzoPugEndpoint = fs.readFileSync(path.resolve(__dirname, './templates/pugEndpointTemplate.js'), 'utf8')
+let pugServer = fs.readFileSync(path.resolve(__dirname, './files/pugServer.js'), 'utf8')
+let pugRoutes = fs.readFileSync(path.resolve(__dirname, './files/pugRoutes.js'), 'utf8')
+let pugHomepage = fs.readFileSync(path.resolve(__dirname, './templates/pugHomepage.pug'), 'utf8')
+
 let railsApp = () => {
   fs.mkdirSync(`./${name}/src`)
   fs.mkdirSync(`./${name}/src/home`)
@@ -83,13 +91,85 @@ let railsApp = () => {
   fs.writeFile(`./${name}/enzo/api.js`, enzoAPI, (err) => {
     if (err) console.error(err) 
   })
-  fs.writeFile(`./${name}/enzo/templates/enzoEndpointTemplate.js`, enzoEndpointTemplate, (err) => {
+  fs.writeFile(`./${name}/enzo/templates/enzoEndpointTemplate.js`, pugEndpointTemplate, (err) => {
     if (err) console.error(err)
   })
   fs.writeFile(`./${name}/enzo/templates/enzoControllerTemplate.js`, enzoControllerTemplate, (err) => {
     if (err) console.error(err)
   })
 }
+
+let pugApp = () => {
+  fs.mkdirSync(`./${name}/src`)
+  fs.mkdirSync(`./${name}/src/home`)
+  fs.writeFile(`./${name}/src/home/index.js`, `console.log('hello world!')`, (err) => {
+    if (err) throw err
+  })
+  fs.writeFile(`./${name}/src/home/main.css`, `body {\ncolor: blue;\n}`, (err) => {
+    if (err) throw err
+  })
+  
+  //backend
+  fs.mkdirSync(`./${name}/server`)
+  fs.mkdirSync(`./${name}/server/models`)
+  fs.mkdirSync(`./${name}/server/controllers`)
+  fs.mkdirSync(`./${name}/assets`)
+  fs.mkdirSync(`./${name}/server/views`)
+  fs.mkdirSync(`./${name}/server/views/home`)
+
+  fs.writeFile(`./${name}/server/views/home/index.pug`, pugHomepage, (err) => {
+    if (err) throw err 
+  })
+  fs.writeFile(`./${name}/server/server.js`, pugServer, (err) => {
+    if (err) throw err
+  })
+  
+  
+  let homeController = `exports.index = (req, res) => {\n\tres.render('home/index', {})\n}`
+  fs.writeFile(`./${name}/server/controllers/home.js`, homeController, (err) => {
+    if (err) throw err 
+  })
+
+  fs.writeFile(`./${name}/server/routes.js`, pugRoutes, (err) => {
+    if (err) throw err
+  })
+
+  //other files
+  fs.writeFile(`./${name}/.gitignore`, gitignore, (err) => {
+    if (err) throw err
+  })
+
+  fs.writeFile(`./${name}/README.md`, readme, (err) => {
+    if (err) throw err
+  })
+  fs.writeFile(`./${name}/.env`, '', (err) => {
+    if (err) throw err
+  })
+  fs.writeFileSync(`./${name}/package.json`, spaNoSQLPck)
+  fs.writeFile(`./${name}/gulpfile.js`, gulpFile, (err) => {
+    if (err) throw err 
+  })
+
+  //enzo files
+  fs.mkdirSync(`./${name}/enzo`)
+  fs.mkdirSync(`./${name}/enzo/templates`)
+  fs.writeFile(`./${name}/enzo/page.js`, enzoPugPage, (err) => {
+    if (err) throw err 
+  })
+  fs.writeFile(`./${name}/enzo/templates/pugTemplate.pug`, pugTemplate, (err) => {
+    if (err) console.error(err)
+  })
+  fs.writeFile(`./${name}/enzo/api.js`, enzoAPI, (err) => {
+    if (err) console.error(err) 
+  })
+  fs.writeFile(`./${name}/enzo/templates/enzoEndpointTemplate.js`, enzoPugEndpoint, (err) => {
+    if (err) console.error(err)
+  })
+  fs.writeFile(`./${name}/enzo/templates/enzoControllerTemplate.js`, enzoControllerTemplate, (err) => {
+    if (err) console.error(err)
+  })
+}
+
 
 let createBasicApp = () => {
   fs.writeFile(`./${name}/README.md`, readme, (err) => {
@@ -111,5 +191,6 @@ let createBasicApp = () => {
 
 module.exports = {
   railsApp,
-  createBasicApp
+  createBasicApp,
+  pugApp
 }
