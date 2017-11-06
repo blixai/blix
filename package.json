@@ -20,6 +20,8 @@
     "enzo": "./index.js"
   },
   "dependencies": {
+    "boxen": "^1.2.2",
+    "chalk": "^2.3.0",
     "shelljs": "^0.7.8"
   }
 }
