@@ -9,7 +9,7 @@ const rl = readline.createInterface({
 let log = console.log
 let lowercase;
 let upperCase;
-let globalReducer
+let globalReducer;
 
 rl.question('? What is the actions name: ', (ans) => {
   lowercase = ans.toLowerCase()
@@ -23,29 +23,28 @@ rl.question('? What is the actions name: ', (ans) => {
     actionTemplate = actionTemplate.replace(/NAME/g, upperCase)
     fs.appendFile('./src/actions/index.js', actionTemplate, (err) => {
       if (err) throw err
-      log(`Added action ${lowercase} to ./src/actions/index.js`)
     })
   }
   rl.question('? What is the reducers name: ', (reducer) => {
     globalReducer = reducer.toLowerCase()
-    if (fs.existsSync(`./src/reducers/${reducer}.js`)) {
+    log(globalReducer)
+    if (fs.existsSync(`./src/reducers/${globalReducer}.js`)) {
       // add it to the switch
-      let body = fs.readFileSync(`./src/reducers/${reducer}.js`, 'utf8').toString()
-      if (body.indexOf(`case "${upperCase}":` !== -1)) {
+      let body = fs.readFileSync(`./src/reducers/${globalReducer}.js`, 'utf8').toString()
+      if (body.indexOf(`case "${upperCase}":`) !== -1) {
         // action exists in reducer, dont add 
-        log(`Action ${lowercase} already exists in ${reducer}`)
+        log(`Action ${lowercase} already exists in ${globalReducer}`)
         importAction()
       } else {
-        let search = `switch(action.type) {`
+        let search = `switch (action.type) {`
         let position = body.indexOf(search)
         if (position !== -1) {
           let newAction = `\n\t\tcase "${upperCase}":\n\t\t\treturn action.payload`
-          let output = [body.slice(0, position + 21), newAction, body.slice(position + 21)].join('')
-          fs.writeFile(`./src/reducers/${reducer}.js`, output, (err) => {
+          let output = [body.slice(0, position + 22), newAction, body.slice(position + 22)].join('')
+          fs.writeFile(`./src/reducers/${globalReducer}.js`, output, (err) => {
             if (err) throw err
             importAction()
           })
-
         } else {
           console.log('Reducer file found but something went wrong. Check the file for a switch statement.')
           rl.close()
@@ -105,7 +104,7 @@ let importAction = () => {
           if (container.indexOf(mapDispatchToProps) !== -1) {
             // if mapDispatch to props function exists then insert the handle action to it
             let capitalizeAction = lowercase.charAt(0).toUpperCase() + lowercase.slice(1)
-            let handler = `\n\t\thandle${capitalizeAction}: (input) => {\n\t\t\tdispatch(${lowercase}(input))\n\t\t},\n\t\t`
+            let handler = `handle${capitalizeAction}: (input) => {\n\t\t\tdispatch(${lowercase}(input))\n\t\t},\n\t\t`
             let find = `const mapDispatchToProps = (dispatch) => {\n\treturn {\n\t\t`
             let foundIndex = container.indexOf(find)
             container = [container.slice(0, foundIndex + find.length), handler, container.slice(foundIndex + find.length)].join('')
@@ -130,7 +129,7 @@ let importAction = () => {
           container = container.split('\n')
           let capitalizeAction = lowercase.charAt(0).toUpperCase() + lowercase.slice(1)
           container.splice(1, 0, `import { ${lowercase} } from '../../actions'`)
-          let addDispatch = `const mapDispatchToProps = (dispatch) => {\n\treturn {\n\t\thandle${capitalizeAction}: (input) =>{\n\t\t\tdispatch(${lowercase}(input))\n\t\t}\n\t}\n}`
+          let addDispatch = `const mapDispatchToProps = (dispatch) => {\n\treturn {\n\t\thandle${capitalizeAction}: (input) => {\n\t\t\tdispatch(${lowercase}(input))\n\t\t}\n\t}\n}\n\n`
           container.splice(8, 0, addDispatch)
           container = container.join('\n')
           container = container.replace(/null/g, 'mapDispatchToProps')

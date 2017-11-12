@@ -21,7 +21,7 @@ let homeContainer = fs.readFileSync(path.resolve(__dirname, './files/homeContain
 let home = fs.readFileSync(path.resolve(__dirname, './files/home.js'), 'utf8')
 let appRouterNoBackend = fs.readFileSync(path.resolve(__dirname, './files/appRouterNoBackend.js'), 'utf8')
 
-let packageJSONWithoutBackend = `{\n\t"name": "${name}",\n\t"version": "1.0.0",\n\t"scripts": {\n\t\t"start": "open index.html",\n\t\t"build": "webpack --watch",\n\t\t"prod": "webpack --config webpack.prod.js"\n\t}\n}`
+let packageJSONWithoutBackend = `{\n\t"name": "${name}",\n\t"version": "1.0.0",\n\t"scripts": {\n\t\t"start": "open index.html",\n\t\t"build": "webpack --watch",\n\t\t"prod": "webpack --config webpack.prod.js",\n\t\t"action": "node enzo/action.js"\n\t}\n}`
 let enzoCreateContainer = fs.readFileSync(path.resolve(__dirname, './files/enzoCreateContainer.js'), 'utf8')
 let enzoCreateAPI = fs.readFileSync(path.resolve(__dirname, './files/enzoCreateAPI.js'), 'utf8')
 let enzoEndpointTemplate = fs.readFileSync(path.resolve(__dirname, './templates/enzoEndpointTemplate.js'), 'utf8')
@@ -232,6 +232,18 @@ let reactReduxWithoutBackend = () => {
     if (err) console.error(err)
   })
   fs.writeFile(`./${name}/enzo/templates/reduxContainerTemplate.js`, reduxContainerTemplate, (err) => {
+    if (err) console.error(err)
+  })
+
+  // enzo create action
+
+  fs.writeFile(`./${name}/enzo/action.js`, action, (err) => {
+    if (err) console.error(err)
+  })
+  fs.writeFile(`./${name}/enzo/templates/actionTemplate.js`, actionTemplate, (err) => {
+    if (err) console.error(err)
+  })
+  fs.writeFile(`./${name}/enzo/templates/reducerTemplate.js`, reducerTemplate, (err) => {
     if (err) console.error(err)
   })
 
