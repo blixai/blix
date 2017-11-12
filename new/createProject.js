@@ -125,7 +125,7 @@ let createReactSPA = () => {
               log('')
               log(boxen(`served at localhost:3000`, { padding: 1, borderColor: 'yellow' }))
               log('')
-              log('Enzo Project Commands')
+              log('Unique package.json Commands')
               log(boxen(`api || example: npm run api <name> || use: quickly create api/v1 get/post/put/delete endpoints for a resource\n\nreact || example: npm run react <componentName> || use: quickly create a stateful or stateless React component\n\nmodel || example: npm run model User email:string || use: create a Bookshelf model + database migration`, { padding: 1, borderColor: 'yellow' }))
               log('')
             } else {
@@ -146,7 +146,7 @@ let createReactSPA = () => {
               log('')
               log(boxen(`served at localhost:3000`, { padding: 1, borderColor: 'yellow' }))
               log('')
-              log('Enzo Project Commands')
+              log('Unique package.json Commands')
               log(boxen(`api || example: npm run api <name> || use: quickly create api/v1 get/post/put/delete endpoints for a resource\n\nreact || example: npm run react <componentName> || use: quickly create a stateful or stateless React component\n\nmodel || example: npm run model User email:String password:String posts:Number || use: create a Mongoose model`, { padding: 1, borderColor: 'yellow' }))
               log('')
             }
@@ -167,7 +167,7 @@ let createReactSPA = () => {
           log('')
           log(boxen(`served at localhost:3000`, { padding: 1, borderColor: 'yellow' }))
           log('')
-          log('Enzo Project Commands')
+          log('Unique package.json Commands')
           log(boxen(`api || example: npm run api <name> || use: quickly create api/v1 get/post/put/delete endpoints for a resource\n\nreact || example: npm run react <componentName> || use: quickly create a stateful or stateless React component`, { padding: 1, borderColor: 'yellow' }))
           log('')
         }
@@ -182,7 +182,7 @@ let createReactSPA = () => {
       process.stdout.write('\033c')
       log('The project was created!')
       log(`cd into ${name} and run npm start, then refresh the page after a second`)
-      log('Enzo Project Commands')
+      log('Unique package.json Commands')
       log(boxen(`react || example: npm run react <componentName> || use: quickly create a stateful or stateless React component`, { padding: 1, borderColor: 'yellow' }))
       log('')
     }
@@ -223,7 +223,7 @@ let createReactRedux = () => {
               log('')
               log(boxen(`served at localhost:3000`, { padding: 1, borderColor: 'yellow' }))
               log('')
-              log('Enzo Project Commands')
+              log('Unique package.json Commands')
               log(boxen(`api || example: npm run api <name> || use: quickly create api/v1 get/post/put/delete endpoints for a resource\n\nredux || example: npm run redux <componentName> || use: redux container + react component + react-router route\n\nmodel || example: npm run model User email:string || use: create a Bookshelf model + knex database migration`, { padding: 1, borderColor: 'yellow' }))
               log('')
             } else {
@@ -244,7 +244,7 @@ let createReactRedux = () => {
               log('')
               log(boxen(`served at localhost:3000`, { padding: 1, borderColor: 'yellow' }))
               log('')
-              log('Enzo Project Commands')
+              log('Unique package.json Commands')
               log(boxen(`api || example: npm run api <name> || use: quickly create api/v1 get/post/put/delete endpoints for a resource\n\nredux || example: npm run redux <componentName> || use: redux container + react component + react-router route\n\nmodel || example: npm run model User email:String posts:Number password:String || use: create a Mongoose model`, { padding: 1, borderColor: 'yellow' }))
               log('')
             }
@@ -266,7 +266,7 @@ let createReactRedux = () => {
           log('')
           log(boxen(`served at localhost:3000`, { padding: 1, borderColor: 'yellow' }))
           log('')
-          log('Enzo Project Commands')
+          log('Unique package.json Commands')
           log(boxen(`api || example: npm run api <name> || use: quickly create api/v1 get/post/put/delete endpoints for a resource\n\nredux || example: npm run redux <componentName> || use: redux container, react component, react-router route`, { padding: 1, borderColor: 'yellow' }))
           log('')
         }
@@ -287,7 +287,7 @@ let createReactRedux = () => {
       log(`First start webpack: npm run build`)
       log(`To open project: npm start`)
       log('')
-      log('Enzo Project Commands')
+      log('Unique package.json Commands')
       log(boxen(`redux || example: npm run redux <componentName> || use: redux container, react component, react-router route`, { padding: 1, borderColor: 'yellow' }))
       log('')
     }
@@ -331,7 +331,7 @@ let createAppWithoutReact = () => {
                   log('')
                   log(boxen(`served at localhost:3000`, { padding: 1, borderColor: 'yellow' }))
                   log('')
-                  log('Enzo Project Commands')
+                  log('Unique package.json Commands')
                   log(boxen(`api || example: npm run api <name> || use: quickly create api/v1 get/post/put/delete endpoints for a resource\n\nmodel || example: npm run model User email:string posts:integer || use: creates Bookshelf model + migration\n\npage || example: npm run page Landing signup login || creates page routes and pug pages`, { padding: 1, borderColor: 'yellow' }))
                   log('')
                 } else {
@@ -355,7 +355,7 @@ let createAppWithoutReact = () => {
                   log('')
                   log(boxen(`served at localhost:3000`, { padding: 1, borderColor: 'yellow' }))
                   log('')
-                  log('Enzo Project Commands')
+                  log('Unique package.json Commands')
                   log(boxen(`api || example: npm run api <name> || use: quickly create api/v1 get/post/put/delete endpoints for a resource\n\nmodel || example: npm run model User email:string posts:integer || use: creates Bookshelf model + migration\n\npage || example: npm run page Landing || use: creates page route and page`, { padding: 1, borderColor: 'yellow' }))
                   log('')
                 }
@@ -378,8 +378,8 @@ let createAppWithoutReact = () => {
                   log('')
                   log(boxen(`served at localhost:3000`, { padding: 1, borderColor: 'yellow' }))
                   log('')
-                  log('Enzo Project Commands')
-                  log(boxen(`api || example: npm run api <name> || use: quickly create api/v1 get/post/put/delete endpoints for a resource\n\nmodel || example: npm run model User email:String posts:Number || use: creates Mongoose model\n\npage || example: npm run page Landing signup || use: creates resource page + sub pages`, { padding: 1, borderColor: 'yellow' }))
+                  log('Unique package.json Commands')
+                  log(boxen(`api || example:` + chalk.bold.cyanBright(` npm run api <name> `) + ` || ` + chalk.yellowBright(`use: quickly create`) + chalk.bold.redBright(` api/v1 get/post/put/delete `) + chalk.yellowBright(` endpoints for a resource`) + `\n\nmodel || example: ` + chalk.bold.cyanBright(`npm run model User email: String posts: Number`) + ` || use: ` + chalk.yellowBright(`creates Mongoose model`) + `\n\npage || example:` + chalk.bold.cyanBright(` npm run page Article new all`) + ` || use:` + chalk.yellowBright(` creates controller and views`), { padding: 1, borderColor: 'yellow' }))
                   log('')
                 } else {
                   rl.close();
@@ -395,8 +395,8 @@ let createAppWithoutReact = () => {
                   log('')
                   log(boxen(`served at localhost:3000`, { padding: 1, borderColor: 'yellow' }))
                   log('')
-                  log('Enzo Project Commands')
-                  log(boxen(`api || example: npm run api <name> || use: quickly create api/v1 get/post/put/delete endpoints for a resource\n\nmodel || example: npm run model User email:String posts:Number || use: creates Mongoose model\n\npage || example: npm run page Landing || use: creates page and route`, { padding: 1, borderColor: 'yellow' }))
+                  log('Unique package.json Commands')
+                  log(boxen(`api || example:` + chalk.bold.cyanBright(` npm run api <name> `) + ` || ` + chalk.yellowBright(`use: quickly create`) + chalk.bold.redBright(` api/v1 get/post/put/delete`) + chalk.yellowBright(` endpoints for a resource`) + `\n\nmodel || example: ` + chalk.bold.cyanBright(`npm run model User email:String posts:Number`) + ` || use: ` + chalk.yellowBright(`creates Mongoose model`) + `\n\npage || example:` + chalk.bold.cyanBright(` npm run page Landing`) + ` || use:` + chalk.yellowBright(` creates page and route`), { padding: 1, borderColor: 'yellow' }))
                   log('')
                 }
               })
@@ -420,8 +420,8 @@ let createAppWithoutReact = () => {
               log('')
               log(boxen(`served at localhost:3000`, { padding: 1, borderColor: 'yellow' }))
               log('')
-              log('Enzo Project Commands')
-              log(boxen(`api || example: npm run api <name> || use: quickly create api/v1 get/post/put/delete endpoints for a resource\n\npage || example: npm run page Landing login || use: creates resource page + sub pages`, { padding: 1, borderColor: 'yellow' }))
+              log('Unique package.json Commands')
+              log(boxen(`api || example:` + chalk.bold.cyanBright(` npm run api <name> `) + ` || ` + chalk.yellowBright(`use: quickly create`) + chalk.bold.redBright(` api/v1 get/post/put/delete`) + chalk.yellowBright(` endpoints for a resource`) + `\n\npage || example:` + chalk.bold.cyanBright(` npm run page Article new all`) + ` || use:` + chalk.yellowBright(` creates resource controller and views`), { padding: 1, borderColor: 'yellow' }))
               log('')
             } else {
               rl.close();
@@ -437,8 +437,8 @@ let createAppWithoutReact = () => {
               log('')
               log(boxen(`served at localhost:3000`, { padding: 1, borderColor: 'yellow' }))
               log('')
-              log('Enzo Project Commands')
-              log(boxen(`api || example: npm run api <name> || use: quickly create api/v1 get/post/put/delete endpoints for a resource\n\npage || example: npm run page Landing login || use: creates resource page + sub pages`, { padding: 1, borderColor: 'yellow' }))
+              log('Unique package.json Commands')
+              log(boxen(`api || example:` + chalk.bold.cyanBright(` npm run api <name> `) + ` || ` + chalk.yellowBright(`use: quickly create`) + chalk.bold.redBright(` api/v1 get/post/put/delete`) + chalk.yellowBright(` endpoints for a resource`) + `\n\npage || example:` + chalk.cyanBright(`npm run page Landing`) + ` || use:` + chalk.yellowBright(` creates page in src folder + routes.js`), { padding: 1, borderColor: 'yellow' }))
               log('')
             }
           })
@@ -488,8 +488,8 @@ let createBackend = () => {
               log('')
               log(boxen(`served at localhost:3000`, { padding: 1, borderColor: 'yellow' }))
               log('')
-              log('Enzo Project Commands')
-              log(boxen(`api || example: npm run api <name> || use: quickly create api/v1 get/post/put/delete endpoints for a resource\n\nmodel || example: npm run model User email:string || use: create Bookshelf model + knex migration`, { padding: 1, borderColor: 'yellow' }))
+              log('Unique package.json Commands')
+              log(boxen(`api || example:` + chalk.bold.cyanBright(` npm run api <name> `) + ` || ` + chalk.yellowBright(`use: quickly create`) + chalk.bold.redBright(` api/v1 get/post/put/delete`) + chalk.yellowBright(` endpoints for a resource`) + `\n\nmodel || example:` + chalk.bold.cyanBright(` npm run model User email:string posts:integer`) + ` || use: ` + chalk.yellowBright(`create Bookshelf model + knex migration`), { padding: 1, borderColor: 'yellow' }))
               log('')
             } else {
               // express with mongodb
@@ -505,8 +505,8 @@ let createBackend = () => {
               log('')
               log(boxen(`served at localhost:3000`, { padding: 1, borderColor: 'yellow' }))
               log('')
-              log('Enzo Project Commands')
-              log(boxen(`api || example: npm run api <name> || use: quickly create api/v1 get/post/put/delete endpoints for a resource\n\nmodel || example: npm run model User email:String posts:Number || use: create Mongoose model`, { padding: 1, borderColor: 'yellow' }))
+              log('Unique package.json Commands')
+              log(boxen(`api || example:` + chalk.bold.cyan(`example: npm run api <name> `) + ` || ` + chalk.yellowBright(`use: quickly create`) + chalk.bold.redBright(` api/v1 get/post/put/delete`) + chalk.yellowBright(` endpoints for a resource`) + `\n\nmodel || example: ` + chalk.bold.cyanBright(`npm run model User email:String posts:Number`) + ` || use: create Mongoose model`, { padding: 1, borderColor: 'yellow' }))
               log('')
             }
           })
@@ -519,12 +519,12 @@ let createBackend = () => {
           install('express nodemon body-parser helmet dotenv')
           process.stdout.write('\033c')
           log('The project was created!')
-          log(`cd into ${name} and run npm start`)
+          log(chalk.cyanBright(`cd into ${name} and run npm start`))
           log('')
           log(boxen(`served at localhost:3000`, { padding: 1, borderColor: 'yellow' }))
           log('')
-          log('Enzo Project Commands')
-          log(boxen(`api || example: npm run api <name> || use: quickly create api/v1 get/post/put/delete endpoints for a resource`, { padding: 1, borderColor: 'yellow' }))
+          log('Unique package.json Commands')
+          log(boxen(`api || example:` + chalk.bold.cyanBright(` npm run api <name>`) + ` || ` + chalk.yellowBright(`use: quickly create`) + chalk.bold.redBright(` api/v1 get/post/put/delete`) + chalk.yellowBright(` endpoints for a resource`), { padding: 1, borderColor: 'yellow' }))
           log('')
         }
       })

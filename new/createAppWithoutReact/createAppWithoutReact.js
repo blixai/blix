@@ -91,7 +91,7 @@ let railsApp = () => {
   fs.writeFile(`./${name}/enzo/api.js`, enzoAPI, (err) => {
     if (err) console.error(err) 
   })
-  fs.writeFile(`./${name}/enzo/templates/enzoEndpointTemplate.js`, pugEndpointTemplate, (err) => {
+  fs.writeFile(`./${name}/enzo/templates/enzoEndpointTemplate.js`, enzoEndpointTemplate, (err) => {
     if (err) console.error(err)
   })
   fs.writeFile(`./${name}/enzo/templates/enzoControllerTemplate.js`, enzoControllerTemplate, (err) => {

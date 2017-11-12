@@ -5,4 +5,4 @@ const mapStateToProps = (state) => {
    return state
 }
   
-export default connect(mapStateToProps)(App)
+export default connect(mapStateToProps, null)(App)
