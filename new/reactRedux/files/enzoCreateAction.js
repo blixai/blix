@@ -27,7 +27,6 @@ rl.question('? What is the actions name: ', (ans) => {
   }
   rl.question('? What is the reducers name: ', (reducer) => {
     globalReducer = reducer.toLowerCase()
-    log(globalReducer)
     if (fs.existsSync(`./src/reducers/${globalReducer}.js`)) {
       // add it to the switch
       let body = fs.readFileSync(`./src/reducers/${globalReducer}.js`, 'utf8').toString()
