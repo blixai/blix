@@ -80,7 +80,7 @@ let createIndex = (name) => {
 }
 
 let createContainer = (name) => {
-  let container = `import { connect } from 'react-redux'\nimport ${name} from './${name}'\n\nconst mapStateToProps = (state) => {\n\treturn state\n}\n\nexport default connect(mapStateToProps)(${name})`
+  let container = `import { connect } from 'react-redux'\nimport ${name} from './${name}'\n\nconst mapStateToProps = (state) => {\n\treturn state\n}\n\nexport default connect(mapStateToProps, null)(${name})`
   return container
 }
 
@@ -88,6 +88,11 @@ let dumbReduxContainerTemplate = fs.readFileSync(path.resolve(__dirname, './temp
 let enzoDumbComponentTemplate = fs.readFileSync(path.resolve(__dirname, './templates/enzoDumbComponentTemplate.js'), 'utf8')
 let reduxContainerTemplate = fs.readFileSync(path.resolve(__dirname, './templates/reduxContainerTemplate.js'), 'utf8')
 let smartComponentTemplate = fs.readFileSync(path.resolve(__dirname, './templates/smartComponentTemplate.js'), 'utf8')
+
+// enzo action
+let action = fs.readFileSync(path.resolve(__dirname, './files/enzoCreateAction.js'), 'utf8')
+let actionTemplate = fs.readFileSync(path.resolve(__dirname, './templates/actionTemplate.js'), 'utf8')
+let reducerTemplate = fs.readFileSync(path.resolve(__dirname, './templates/reducerTemplate.js'), 'utf8')
 
 let makeTemplates = () => {
   fs.writeFile('./enzo/templates/dumbReduxContainerTemplate.js', dumbReduxContainerTemplate, (err) => {
@@ -102,6 +107,16 @@ let makeTemplates = () => {
   fs.writeFile('./enzo/templates/smartComponentTemplate.js', smartComponentTemplate, (err) => {
     if (err) console.error(err)
   })
+  fs.writeFile('./enzo/templates/reducerTemplate.js', reducerTemplate, (err) => {
+    if (err) console.error(err)
+  })
+  fs.writeFile('./enzo/templates/actionTemplate.js', actionTemplate, (err) => {
+    if (err) console.error(err)
+  })
+  fs.writeFile('./enzo/action.js', action, (err) => {
+    if (err) console.error(err)
+  })
+  addScript('action', 'node enzo/action.js')
 }
 
 let enzo = () => {
