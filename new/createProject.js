@@ -126,7 +126,7 @@ let createReactSPA = () => {
               log(boxen(`served at localhost:3000`, { padding: 1, borderColor: 'yellow' }))
               log('')
               log('Unique package.json Commands')
-              log(boxen(`api || example: npm run api <name> || use: quickly create api/v1 get/post/put/delete endpoints for a resource\n\nreact || example: npm run react <componentName> || use: quickly create a stateful or stateless React component\n\nmodel || example: npm run model User email:string || use: create a Bookshelf model + database migration`, { padding: 1, borderColor: 'yellow' }))
+              log(boxen(`api || example: ` + chalk.bold.cyanBright(`npm run api <name>`) + ` || use:` + chalk.yellowBright(` quickly create`) + chalk.bold.redBright(` api/v1 get/post/put/delete`) + chalk.yellowBright(` endpoints for a resource`) + `\n\nreact || example:` + chalk.bold.cyanBright(` npm run react <componentName>`) + ` || use: ` + chalk.yellowBright(`quickly create a stateful or stateless React component`) + `\n\nmodel || example: ` + chalk.bold.cyanBright(`npm run model User email:string`) + ` || use: ` + chalk.yellowBright(`create a Bookshelf model + database migration`), { padding: 1, borderColor: 'yellow' }))
               log('')
             } else {
               spaBuild.writeFilesWithSPAReact()
@@ -147,7 +147,7 @@ let createReactSPA = () => {
               log(boxen(`served at localhost:3000`, { padding: 1, borderColor: 'yellow' }))
               log('')
               log('Unique package.json Commands')
-              log(boxen(`api || example: npm run api <name> || use: quickly create api/v1 get/post/put/delete endpoints for a resource\n\nreact || example: npm run react <componentName> || use: quickly create a stateful or stateless React component\n\nmodel || example: npm run model User email:String password:String posts:Number || use: create a Mongoose model`, { padding: 1, borderColor: 'yellow' }))
+              log(boxen(`api || example: ` + chalk.bold.cyanBright(`npm run api <name>`) + ` || use: ` + chalk.yellowBright(`quickly create`) + chalk.bold.redBright(` api/v1 get/post/put/delete`) + chalk.yellowBright(` endpoints for a resource`) + `\n\nreact || example: ` + chalk.bold.cyanBright(`npm run react <componentName>`) + ` || use: ` + chalk.yellowBright(`quickly create a stateful or stateless React component`) + `\n\nmodel || example: ` + chalk.bold.cyanBright(`npm run model User email:String password:String posts:Number`) + ` || use: ` + chalk.yellowBright(`create a Mongoose model`), { padding: 1, borderColor: 'yellow' }))
               log('')
             }
           })
@@ -168,7 +168,7 @@ let createReactSPA = () => {
           log(boxen(`served at localhost:3000`, { padding: 1, borderColor: 'yellow' }))
           log('')
           log('Unique package.json Commands')
-          log(boxen(`api || example: npm run api <name> || use: quickly create api/v1 get/post/put/delete endpoints for a resource\n\nreact || example: npm run react <componentName> || use: quickly create a stateful or stateless React component`, { padding: 1, borderColor: 'yellow' }))
+          log(boxen(`api || example: ` + chalk.bold.cyanBright(`npm run api <name>`) + ` || use:` + chalk.yellowBright(` quickly create`) + chalk.bold.redBright(` api/v1 get/post/put/delete`) + chalk.yellowBright(` endpoints for a resource`) + `\n\nreact || example: ` + chalk.bold.cyanBright(`npm run react <componentName>`) + ` || use: ` + chalk.yellowBright(`quickly create a stateful or stateless React component`), { padding: 1, borderColor: 'yellow' }))
           log('')
         }
       })
@@ -183,7 +183,7 @@ let createReactSPA = () => {
       log('The project was created!')
       log(`cd into ${name} and run npm start, then refresh the page after a second`)
       log('Unique package.json Commands')
-      log(boxen(`react || example: npm run react <componentName> || use: quickly create a stateful or stateless React component`, { padding: 1, borderColor: 'yellow' }))
+      log(boxen(`react || example: ` + chalk.bold.cyanBright(`npm run react <componentName>`) + ` || use: ` + chalk.yellowBright(`quickly create a stateful or stateless React component`), { padding: 1, borderColor: 'yellow' }))
       log('')
     }
   })
@@ -224,7 +224,7 @@ let createReactRedux = () => {
               log(boxen(`served at localhost:3000`, { padding: 1, borderColor: 'yellow' }))
               log('')
               log('Unique package.json Commands')
-              log(boxen(`api || example: npm run api <name> || use: quickly create api/v1 get/post/put/delete endpoints for a resource\n\nredux || example: npm run redux <componentName> || use: redux container + react component + react-router route\n\nmodel || example: npm run model User email:string || use: create a Bookshelf model + knex database migration`, { padding: 1, borderColor: 'yellow' }))
+              log(boxen(`api || example: ` + chalk.bold.cyanBright(`npm run api <name>`) + ` || use: ` + chalk.yellowBright(`quickly create`) + chalk.bold.redBright(` api/v1 get/post/put/delete`) + chalk.yellowBright(` endpoints for a resource`) + `\n\nredux || example: ` + chalk.bold.cyanBright(`npm run redux <componentName>`) + ` || use:` + chalk.bold.yellowBright(`redux container + react component + react-router route`) + `\n\nmodel || example: ` + chalk.bold.cyanBright(`npm run model User email:string`) + ` || use: ` + chalk.yellowBright(`create a Bookshelf model + knex database migration`) + `\n\naction || example:` + chalk.bold.cyanBright(` npm run action`) + ` || use: ` + chalk.yellowBright(`create/apply action to existing/created reducer and selected containers`), { padding: 1, borderColor: 'yellow' }))
               log('')
             } else {
               // build a react/redux with mongo backend
@@ -245,7 +245,7 @@ let createReactRedux = () => {
               log(boxen(`served at localhost:3000`, { padding: 1, borderColor: 'yellow' }))
               log('')
               log('Unique package.json Commands')
-              log(boxen(`api || example: npm run api <name> || use: quickly create api/v1 get/post/put/delete endpoints for a resource\n\nredux || example: npm run redux <componentName> || use: redux container + react component + react-router route\n\nmodel || example: npm run model User email:String posts:Number password:String || use: create a Mongoose model`, { padding: 1, borderColor: 'yellow' }))
+              log(boxen(`api || example:` + chalk.bold.cyanBright(` npm run api <name>`) + ` || use: quickly create` + chalk.bold.redBright(` api/v1 get/post/put/delete`) + chalk.yellowBright(` endpoints for a resource`) + `\n\nredux || example: ` + chalk.bold.cyanBright(`npm run redux <componentName>`) + ` || use: ` + chalk.yellowBright(`redux container + react component + react-router route`) + `\n\nmodel || example: ` + chalk.bold.cyanBright(`npm run model User email:String posts:Number password:String`) + ` || use: ` + chalk.yellowBright(`create a Mongoose model`) + `\n\naction || example:` + chalk.bold.cyanBright(` npm run action`) + ` || use: ` + chalk.yellowBright(`create/apply action to existing/created reducer and selected containers`), { padding: 1, borderColor: 'yellow' }))
               log('')
             }
           })
@@ -267,7 +267,7 @@ let createReactRedux = () => {
           log(boxen(`served at localhost:3000`, { padding: 1, borderColor: 'yellow' }))
           log('')
           log('Unique package.json Commands')
-          log(boxen(`api || example: npm run api <name> || use: quickly create api/v1 get/post/put/delete endpoints for a resource\n\nredux || example: npm run redux <componentName> || use: redux container, react component, react-router route`, { padding: 1, borderColor: 'yellow' }))
+          log(boxen(`api || example: ` + chalk.bold.cyanBright(`npm run api <name>`) + ` || use: ` + chalk.yellowBright(`quickly create`) + chalk.bold.redBright(` api/v1 get/post/put/delete`) + chalk.yellowBright(` endpoints for a resource`) + `\n\nredux || example: ` + chalk.bold.cyanBright(`npm run redux <componentName>`) + ` || use: ` + chalk.yellowBright(`redux container, react component, react-router route`) + `\n\naction || example:` + chalk.bold.cyanBright(` npm run action`) + ` || use: ` + chalk.yellowBright(`create/apply action to existing/created reducer and selected containers`), { padding: 1, borderColor: 'yellow' }))
           log('')
         }
       })
@@ -288,7 +288,7 @@ let createReactRedux = () => {
       log(`To open project: npm start`)
       log('')
       log('Unique package.json Commands')
-      log(boxen(`redux || example: npm run redux <componentName> || use: redux container, react component, react-router route`, { padding: 1, borderColor: 'yellow' }))
+      log(boxen(`redux || example: ` + chalk.bold.cyanBright(`npm run redux <componentName>`) + ` || use: ` + chalk.yellowBright(`redux container, react component, react-router route`) + `\n\naction || example:` + chalk.bold.cyanBright(` npm run action`) + ` || use: ` + chalk.yellowBright(`create/apply action to existing/created reducer and selected containers`), { padding: 1, borderColor: 'yellow' }))
       log('')
     }
   })
@@ -332,7 +332,7 @@ let createAppWithoutReact = () => {
                   log(boxen(`served at localhost:3000`, { padding: 1, borderColor: 'yellow' }))
                   log('')
                   log('Unique package.json Commands')
-                  log(boxen(`api || example: npm run api <name> || use: quickly create api/v1 get/post/put/delete endpoints for a resource\n\nmodel || example: npm run model User email:string posts:integer || use: creates Bookshelf model + migration\n\npage || example: npm run page Landing signup login || creates page routes and pug pages`, { padding: 1, borderColor: 'yellow' }))
+                  log(boxen(`api || example:` + chalk.bold.cyanBright(` npm run api <name>`) + ` || use:` + chalk.yellowBright(` quickly create`) + chalk.bold.redBright(` api/v1 get/post/put/delete endpoints`) + chalk.yellowBright(` for a resource`) + `\n\nmodel || example: npm run model User email:string posts:integer || use: creates Bookshelf model + migration\n\npage || example: npm run page Landing signup login || creates page routes and pug pages`, { padding: 1, borderColor: 'yellow' }))
                   log('')
                 } else {
                   rl.close();
@@ -356,7 +356,7 @@ let createAppWithoutReact = () => {
                   log(boxen(`served at localhost:3000`, { padding: 1, borderColor: 'yellow' }))
                   log('')
                   log('Unique package.json Commands')
-                  log(boxen(`api || example: npm run api <name> || use: quickly create api/v1 get/post/put/delete endpoints for a resource\n\nmodel || example: npm run model User email:string posts:integer || use: creates Bookshelf model + migration\n\npage || example: npm run page Landing || use: creates page route and page`, { padding: 1, borderColor: 'yellow' }))
+                  log(boxen(`api || example:` + chalk.bold.cyanBright(` npm run api <name>`) + ` || ` + chalk.yellowBright(`use: quickly create`) + chalk.bold.redBright(` api/v1 get/post/put/delete `) + chalk.yellowBright(`endpoints for a resource`) + `\n\nmodel || example: ` + chalk.bold.cyanBright(`npm run model User email:string posts:integer`) + ` || use: ` + chalk.yellowBright(`creates Bookshelf model + migration`) + `\n\npage || example:` + chalk.bold.cyanBright(` npm run page Landing`) + ` || use: ` + chalk.yellowBright(`creates page route and page`), { padding: 1, borderColor: 'yellow' }))
                   log('')
                 }
               })

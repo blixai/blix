@@ -52,20 +52,30 @@ rl.question('? What is the actions name: ', (ans) => {
     } else {
       // create reducer
       let reducerTemplate = fs.readFileSync(path.resolve(__dirname, './templates/reducerTemplate.js'), 'utf8')
-      console.log(lowercase)
       reducerTemplate = reducerTemplate.replace(/NAME/g, upperCase)
       reducerTemplate = reducerTemplate.replace(/name/g, globalReducer)
       fs.writeFile(`./src/reducers/${reducer}.js`, reducerTemplate, (err) => {
         if (err) throw err
       })
+
       // append it to rootreducer
       let search = 'combineReducers({'
       let body = fs.readFileSync('./src/reducers/rootReducer.js', 'utf8').toString().split('\n')
-      body.splice(2, 0, `import ${reducer} from './${reducer}'`)
+      body.splice(1, 0, `import ${reducer} from './${reducer}'`)
       let newBody = body.join('\n')
-      let position = newBody.indexOf(search)
-      let newReducer = `\n\t${reducer}\n`
-      let output = [newBody.slice(0, position + 17), newReducer, newBody.slice(position + 17)].join('')
+      let output;
+      let position;
+      let newReducer;
+      let commaDeterminer = `combineReducers({})`
+      if (newBody.indexOf(commaDeterminer) !== -1) {
+        position = newBody.indexOf(search)
+        newReducer = `\n\t${reducer}\n`
+        output = [newBody.slice(0, position + 17), newReducer, newBody.slice(position + 17)].join('')
+      } else {
+        position = newBody.indexOf(search)
+        newReducer = `\n\t${reducer},`
+        output = [newBody.slice(0, position + 17), newReducer, newBody.slice(position + 17)].join('')
+      }
       fs.writeFile('./src/reducers/rootReducer.js', output, (err) => {
         if (err) throw err
         importAction()
