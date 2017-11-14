@@ -7,6 +7,7 @@ const rl = readline.createInterface({
 
 let fs = require('fs')
 let path = require('path')
+let log = console.log 
 
 let addScript = (command, script) => {
   if (fs.existsSync('./package.json')) {
@@ -23,19 +24,21 @@ let addScript = (command, script) => {
 
 let command = () => {
   process.stdout.write('\033c')
-  console.log('Here are pre made enzo commands and what they do: ')
-  console.log('')
-  console.log('\treact: create a new react statefull or stateless component')
-  console.log('')
-  console.log('\tredux: create a new react component, a redux container, and a new route in your routing component')
-  console.log('')
-  console.log('\tapi: create new api endpoints and model')
-  console.log('')
-  console.log('\tpage: create a new folder, html, css, and js files along with adding the route in pages.js')
-  console.log('')
-  console.log('\tmodel: create a new Bookshelf or Mongoose model for your database, with preconfired migration file created for use with Knex.js')
-  console.log('')
-  console.log('')
+  log('Here are pre made enzo commands and what they do: ')
+  log('')
+  log('\treact: create a new react statefull or stateless component')
+  log('')
+  log('\tredux: create a new react component, a redux container, and a new route in your routing component')
+  log('')
+  log('\tapi: create new api endpoints and model')
+  log('')
+  log('\tpage: create a new folder, html, css, and js files along with adding the route in pages.js')
+  log('')
+  log('\tmodel: create a new Bookshelf or Mongoose model for your database, with preconfired migration file created for use with Knex.js')
+  log('')
+  log('\taction: create or apply existing action to a existing reducer or creates a reducer and applies action to selected containers')
+  log('')
+  log('')
   rl.question('Enter one of the listed commands or enter your own: ', (answer) => {
     answer = answer.toLowerCase()
     switch (answer) {
@@ -62,12 +65,35 @@ let command = () => {
         addModel()
         console.log('Done!')
         break;
+      case "action":
+        addAction()
+        log('Done!')
+        break;
       default:
         createNew(answer)
         break;
     }
   })
 }
+
+
+let addAction = () => {
+  addScript('action', 'node enzo/action.js')
+  checkEnzoExists()
+  let action = fs.readFileSync(path.resolve(__dirname, './files/enzoCreateAction.js'), 'utf8')
+  let actionTemplate = fs.readFileSync(path.resolve(__dirname, './templates/actionTemplate.js'), 'utf8')
+  let reducerTemplate = fs.readFileSync(path.resolve(__dirname, './templates/reducerTemplate.js'), 'utf8')
+  fs.writeFile('./enzo/action.js', action, (err) => {
+    if (err) throw err 
+  })
+  fs.writeFile('./enzo/templates/actionTemplate.js', actionTemplate, (err) => {
+    if (err) throw err 
+  })
+  fs.writeFile('./enzo/templates/reducerTemplate.js', reducerTemplate, (err) => {
+    if (err) throw err 
+  })
+}
+
 
 let addModel = () => {
   addScript('model', 'node enzo/model.js')
