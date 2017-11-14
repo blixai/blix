@@ -67,6 +67,7 @@ let command = () => {
         break;
       case "action":
         addAction()
+        rl.close()
         log('Done!')
         break;
       default:
