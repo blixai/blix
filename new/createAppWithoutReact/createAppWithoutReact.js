@@ -52,6 +52,7 @@ let railsApp = () => {
   fs.mkdirSync(`./${name}/server/models`)
   fs.mkdirSync(`./${name}/server/controllers`)
   fs.mkdirSync(`./${name}/assets`)
+  fs.mkdirSync(`./${name}/public`)
   fs.writeFile(`./${name}/server/server.js`, railsServer, (err) => {
     if (err) throw err
   })
@@ -114,6 +115,7 @@ let pugApp = () => {
   fs.mkdirSync(`./${name}/server/models`)
   fs.mkdirSync(`./${name}/server/controllers`)
   fs.mkdirSync(`./${name}/assets`)
+  fs.mkdirSync(`./${name}/public`)
   fs.mkdirSync(`./${name}/server/views`)
   fs.mkdirSync(`./${name}/server/views/home`)
 
