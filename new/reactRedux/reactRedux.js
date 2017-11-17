@@ -134,6 +134,7 @@ let ReactReduxWithBackend = () => {
   })
 
   //backend
+  fs.mkdirSync(`./${name}/assets`)
   fs.mkdirSync(`./${name}/server`)
   fs.mkdirSync(`./${name}/server/models`)
   fs.mkdirSync(`./${name}/server/controllers`)
