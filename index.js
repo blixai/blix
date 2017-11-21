@@ -7,6 +7,7 @@ let addRedux = require('./redux/addRedux')
 let update = require('./update/update')
 let help = require('./help/help.js')
 let createCommand = require('./command/command.js')
+let addBundler = require('./bundler/bundler.js')
 let command = process.argv[2]
 
 
@@ -33,6 +34,9 @@ let checkCommand = (command) => {
     case "command":
       createCommand()
       break
+    case "bundler":
+      addBundler()
+      break;
     default:
       console.log(`? Try: enzo help to see a list of commands`)
       break;
