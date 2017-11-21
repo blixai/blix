@@ -586,6 +586,8 @@ let modifyKnex = () => {
     fs.truncateSync('./knexfile.js', 0, function () { console.log('done') })
     fs.appendFile('./knexfile.js', newKnex, (err) => {
       if (err) throw err
+      fs.mkdirSync(`./db`)
+      fs.mkdirSync(`./db/migrations`)
     })
   }
 }
