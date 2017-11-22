@@ -57,34 +57,58 @@ let bundler = () => {
 
 let installWebpack = () => {
   // need to ask questions like where is the index.js file
-  installDevDependencies('webpack babel-loader css-loader babel-core babel-preset-env babel-preset-react style-loader webpack-merge uglifyjs-webpack-plugin')
-  addScript('webpack', 'webpack --watch')
-  addScript('prod', 'webpack --config webpack.prod.js')
-  let webpack = fs.readFileSync(path.resolve(__dirname, './files/webpack.config.js'), 'utf8')
-  let webpackProd = fs.readFileSync(path.resolve(__dirname, './files/webpack.prod.js'), 'utf8')
-  fs.writeFile('./webpack.config.js', webpack, (err) => {
-    if (err) throw err 
-    log('Created webpack.config.js file')
+  // probably also need to add babelrc file 
+  log('')
+  rl.question(chalk.cyanBright('What directory holds the index.js file: '), (ans) => {
+    if (fs.existsSync(`./${ans}`)) {
+      log('')
+      rl.question(chalk.cyanBright('What directory should contain the output bundle: '), (output) => {
+        let webpack = fs.readFileSync(path.resolve(__dirname, './files/webpack.config.js'), 'utf8')
+        webpack = webpack.replace(/INPUT/g, ans)
+        webpack = webpack.replace(/OUTPUT/g, output)
+        installDevDependencies('webpack babel-loader css-loader babel-core babel-preset-env babel-preset-react style-loader webpack-merge uglifyjs-webpack-plugin')
+        
+        let webpackProd = fs.readFileSync(path.resolve(__dirname, './files/webpack.prod.js'), 'utf8')
+        fs.writeFile('./webpack.config.js', webpack, (err) => {
+          if (err) throw err 
+          log('Created webpack.config.js file')
+        })
+        fs.writeFile('./webpack.prod.js', webpackProd, (err) => {
+            if (err) throw err 
+            log('Created webpack.prod.js file')
+        })
+        try {
+          addScript('webpack', 'webpack --watch')
+          addScript('webpack-prod', 'webpack --config webpack.prod.js')
+        } catch (e) {
+          log(`Couldn't add the webpack and webpack-prod scripts to package json. `)
+        }
+        rl.close()
+      })
+    } else {
+      log(`Couldn't find directory ${ans}. Please try again`)
+      installWebpack()
+    }
   })
-  fs.writeFile('./webpack.prod.js', webpackProd, (err) => {
-    if (err) throw err 
-    log('Created webpack.prod.js file')
-  })
-  rl.close()
 }
-
+    
 let installGulp = () => {
-  // need to ask what directory to watch, if they want to be setup for react?, and where to direct the output 
+      // need to ask what directory to watch, if they want to be setup for react?, and where to direct the output 
+      // probably also need to add babelrc file 
   installDevDependencies('babel-core babel-preset-env babelify gulp gulp-uglify gulp-rename browserify gulp-htmlmin gulp-clean-css gulp-tap gulp-buffer del run-sequence envify bundle-collapser gulp-plumber')
+  fs.writeFile('./gulp.js', '', (err) => {
+    if (err) throw err 
+    log('Created gulp.js file')
+  })
   rl.close()
 }
 
 let addScript = (command, script) => {
-  let buffer = fs.readFileSync(`./${name}/package.json`)
+  let buffer = fs.readFileSync(`./package.json`)
   let json = JSON.parse(buffer)
   json.scripts[command] = script
   let newPackage = JSON.stringify(json, null, 2)
-  fs.writeFileSync(`./${name}/package.json`, newPackage)
+  fs.writeFileSync(`./package.json`, newPackage)
 }
 
 module.exports = bundler

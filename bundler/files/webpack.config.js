@@ -1,10 +1,10 @@
 const path = require('path')
 
 module.exports = {
-  entry: './src/index.js',
+  entry: `./INPUT/index.js`,
   output: {
     filename: 'bundle.js',
-    path: path.resolve(__dirname, 'build')
+    path: path.resolve(__dirname, 'OUTPUT')
   },
   module: {
     loaders: [
