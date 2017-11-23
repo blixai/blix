@@ -47,7 +47,7 @@ let installWebpack = () => {
         let webpack = fs.readFileSync(path.resolve(__dirname, './files/webpack.config.js'), 'utf8')
         webpack = webpack.replace(/INPUT/g, ans)
         webpack = webpack.replace(/OUTPUT/g, output)
-        installDevDependencies('webpack babel-loader css-loader babel-core babel-preset-env babel-preset-react style-loader webpack-merge uglifyjs-webpack-plugin sass-loader node-sass')
+        installDevDependencies('webpack babel-loader css-loader babel-core babel-preset-env babel-preset-react style-loader webpack-merge uglifyjs-webpack-plugin sass-loader node-sass extract-text-webpack-plugin')
         
         let webpackProd = fs.readFileSync(path.resolve(__dirname, './files/webpack.prod.js'), 'utf8')
         fs.writeFile('./webpack.config.js', webpack, (err) => {
