@@ -37,6 +37,10 @@ let checkCommand = (command) => {
     case "webpack":
       webpack()
       break;
+    case "version":
+      var pjson = require('./package.json');
+      console.log(pjson.version);
+      process.exit()
     default:
       console.log(`? Try: enzo help to see a list of commands`)
       break;
