@@ -1,4 +1,5 @@
 const path = require('path')
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 module.exports = {
   entry: './src/index.js',
@@ -21,10 +22,24 @@ module.exports = {
       {
         test: /\.css$/,
         loaders: "style-loader!css-loader"
+      },
+      {
+        test: /\.scss$/,
+        use: extractSass.extract({
+          fallback: "style-loader",
+          use: [{
+            loader: "css-loader"
+          }, {
+            loader: "sass-loader"
+          }]
+        })
       }
     ]
   },
+  plugins: [
+    new CleanWebpackPlugin("public"),
+  ],
   resolve: {
-    extensions: ['.js', '.jsx', '.css']
+    extensions: ['.js', '.jsx', '.css', '.scss']
   }
 }
