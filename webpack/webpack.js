@@ -22,15 +22,6 @@ let shouldUseYarn = () => {
   }
 }
 
-let install = (packages) => {
-  let yarn = shouldUseYarn()
-  if (yarn) {
-    shell.exec(`yarn add ${packages}`)
-  } else {
-    shell.exec(`npm install --save ${packages}`)
-  }
-}
-
 let installDevDependencies = (packages) => {
   let yarn = shouldUseYarn()
   if (yarn) {
@@ -41,18 +32,8 @@ let installDevDependencies = (packages) => {
 }
 
 
-let bundler = () => {
-  rl.question('Webpack or Gulp? (W/G) ', (ans) => {
-    ans = ans.toLowerCase()
-    if (ans === 'w') {
-      installWebpack()
-    } else if (ans === 'g') {
-      installGulp()
-    } else {
-      log(`You didn't make a selection. Please try again.`)
-      bundler()
-    }
-  })
+let webpack = () => {
+  installWebpack()
 }
 
 let installWebpack = () => {
@@ -66,7 +47,7 @@ let installWebpack = () => {
         let webpack = fs.readFileSync(path.resolve(__dirname, './files/webpack.config.js'), 'utf8')
         webpack = webpack.replace(/INPUT/g, ans)
         webpack = webpack.replace(/OUTPUT/g, output)
-        installDevDependencies('webpack babel-loader css-loader babel-core babel-preset-env babel-preset-react style-loader webpack-merge uglifyjs-webpack-plugin')
+        installDevDependencies('webpack babel-loader css-loader babel-core babel-preset-env babel-preset-react style-loader webpack-merge uglifyjs-webpack-plugin sass-loader node-sass')
         
         let webpackProd = fs.readFileSync(path.resolve(__dirname, './files/webpack.prod.js'), 'utf8')
         fs.writeFile('./webpack.config.js', webpack, (err) => {
@@ -91,17 +72,6 @@ let installWebpack = () => {
     }
   })
 }
-    
-let installGulp = () => {
-      // need to ask what directory to watch, if they want to be setup for react?, and where to direct the output 
-      // probably also need to add babelrc file 
-  installDevDependencies('babel-core babel-preset-env babelify gulp gulp-uglify gulp-rename browserify gulp-htmlmin gulp-clean-css gulp-tap gulp-buffer del run-sequence envify bundle-collapser gulp-plumber')
-  fs.writeFile('./gulp.js', '', (err) => {
-    if (err) throw err 
-    log('Created gulp.js file')
-  })
-  rl.close()
-}
 
 let addScript = (command, script) => {
   let buffer = fs.readFileSync(`./package.json`)
@@ -111,4 +81,4 @@ let addScript = (command, script) => {
   fs.writeFileSync(`./package.json`, newPackage)
 }
 
-module.exports = bundler
+module.exports = webpack
