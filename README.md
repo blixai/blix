@@ -14,5 +14,6 @@ Commands:
   enzo database <databaseName>
   enzo help <optionalCommand>
   enzo redux 
+  enzo webpack
   enzo update 
 ```  
