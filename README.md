@@ -16,4 +16,5 @@ Commands:
   enzo redux 
   enzo webpack
   enzo update 
+  enzo version
 ```  
