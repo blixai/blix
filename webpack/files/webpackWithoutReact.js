@@ -17,11 +17,6 @@ module.exports = {
         exclude: /node_modules/
       },
       {
-        test: /\.jsx$/,
-        loaders: "babel-loader",
-        exclude: /node_modules/
-      },
-      {
         test: /\.css$/,
         use: ExtractTextPlugin.extract({
           fallback: "style-loader",
@@ -47,6 +42,6 @@ module.exports = {
     extractSass
   ],
   resolve: {
-    extensions: ['.js', '.jsx', '.css', '.scss']
+    extensions: ['.js', '.css', '.scss']
   }
 }
