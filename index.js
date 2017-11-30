@@ -8,6 +8,7 @@ let update = require('./update/update')
 let help = require('./help/help.js')
 let createCommand = require('./command/command.js')
 let webpack = require('./webpack/webpack.js')
+let addGulp = require('./gulp/gulp.js')
 let command = process.argv[2]
 
 
@@ -36,6 +37,8 @@ let checkCommand = (command) => {
       break
     case "webpack":
       webpack()
+    case "gulp":
+      addGulp()
       break;
     case "version":
       var pjson = require('./package.json');
