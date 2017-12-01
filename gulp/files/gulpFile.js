@@ -19,7 +19,7 @@ let envify = require('envify/custom')
 let plumber = require('gulp-plumber')
 
 gulp.task('js', function () {
-  return gulp.src('src/**/*.js', { read: false })
+  return gulp.src('INPUT/**/*.js', { read: false })
     .pipe(tap(function (file) {
       gutil.log('bundling ' + file.path);
       file.contents = browserify(file.path, { debug: true })
@@ -33,11 +33,11 @@ gulp.task('js', function () {
     }))
     .pipe(plumber())
     .pipe(buffer())
-    .pipe(gulp.dest('public'));
+    .pipe(gulp.dest('OUTPUT'));
 })
 
 gulp.task('min-js', function () {
-  return gulp.src('src/**/*.js', { read: false })
+  return gulp.src('INPUT/**/*.js', { read: false })
     .pipe(tap(function (file) {
       gutil.log('bundling ' + file.path);
       file.contents = browserify(file.path, { debug: false })
@@ -53,31 +53,31 @@ gulp.task('min-js', function () {
     .pipe(plumber())
     .pipe(buffer())
     .pipe(uglify())
-    .pipe(gulp.dest('public'));
+    .pipe(gulp.dest('OUTPUT'));
 })
 
 gulp.task('html', function () {
-  return gulp.src('src/**/*.html').pipe(gulp.dest('public'));
+  return gulp.src('INPUT/**/*.html').pipe(gulp.dest('OUTPUT'));
 });
 
 gulp.task('minify-html', () => {
-  return gulp.src(`./src/**/*.html`)
+  return gulp.src(`./INPUT/**/*.html`)
     .pipe(htmlmin({ collapseWhitespace: true }))
-    .pipe(gulp.dest(`public`))
+    .pipe(gulp.dest(`OUTPUT`))
 })
 
 gulp.task('css', function () {
-  return gulp.src('src/**/*.css').pipe(gulp.dest('public'));
+  return gulp.src('INPUT/**/*.css').pipe(gulp.dest('OUTPUT'));
 });
 
 gulp.task('minify-css', () => {
-  return gulp.src(`./src/**/*css`)
+  return gulp.src(`./INPUT/**/*css`)
     .pipe(cleanCSS({ compatibility: 'ie8' }))
-    .pipe(gulp.dest(`public`));
+    .pipe(gulp.dest(`OUTPUT`));
 })
 
 gulp.task('clean', function () {
-  return del(['public']);
+  return del(['OUTPUT']);
 });
 
 gulp.task('watch', () => {

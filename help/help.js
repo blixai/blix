@@ -13,6 +13,8 @@ database
 
 webpack
 
+gulp
+
 command
 
 help <command>
@@ -60,8 +62,11 @@ let help = () => {
       log(chalk.cyanBright('Asks a series of questions to either add preconfigured enzo commands to a project or build your own'))
       break
     case 'webpack':
-      log(chalk.cyanBright('Add webpack to project. Asks for the entry directory and output folder. Is configured for React, Sass, JS, CSS.'))
+      log(chalk.cyanBright('Add webpack to project. Asks for the entry directory and output folder. Configured for React, Sass, JS, CSS.'))
       break
+    case 'gulp':
+      log(chalk.cyanBright('Add gulp to project. Asks for the entry directory and output folder. Configured for Sass, JS, CSS and Html.'))
+      break 
     case 'version':
       log(chalk.cyanBright('Displays the current version of enzo'))
       break

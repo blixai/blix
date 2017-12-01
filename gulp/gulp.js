@@ -34,17 +34,22 @@ let installDevDependencies = (packages) => {
 
 let addGulp = () => {
   checkPackageJSON()
-
-  installDevDependencies('babel-core babel-preset-env babelify gulp gulp-uglify gulp-rename browserify gulp-htmlmin gulp-clean-css gulp-tap gulp-buffer del run-sequence envify bundle-collapser gulp-plumber')
-  let gulp = fs.readFileSync(path.resolve(__dirname, './files/gulpFile.js'), 'utf8')
-  fs.writeFile('./gulpfile.js', gulp, (err) => {
-    if (err) throw err 
-    log('gulpfile.js created.')
-    
+  rl.question('? What directory contains the source files: ', (input) => {
+    rl.question('? What directory should contain the public or dist files: ', (output) => {
+      let gulp = fs.readFileSync(path.resolve(__dirname, './files/gulpFile.js'), 'utf8')
+      gulp = gulp.replace(/INPUT/g, input)
+      gulp = gulp.replace(/OUTPUT/g, output)
+      installDevDependencies('babel-core babel-preset-env babelify gulp gulp-uglify gulp-rename browserify gulp-htmlmin gulp-clean-css gulp-tap gulp-buffer del run-sequence envify bundle-collapser gulp-plumber')
+      fs.writeFile('./gulpfile.js', gulp, (err) => {
+        if (err) throw err 
+        log('gulpfile.js created.')
+        
+      })
+      addScript('gulp', 'gulp')
+      addScript('gulp-prod', 'gulp production') 
+      rl.close()
+    })
   })
-  addScript('gulp', 'gulp')
-  addScript('gulp-prod', 'gulp production') 
-  rl.close()
 }
 
 let addScript = (command, script) => {
