@@ -88,6 +88,7 @@ let addDatabase = () => {
       }
     } else {
       console.log(`Looks like you didn't enter P or M. Please try again. `)
+      addDatabase()
     }
   })
 }
