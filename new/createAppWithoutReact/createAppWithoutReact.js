@@ -9,7 +9,8 @@ let name = process.argv[3]
 let gitignore = fs.readFileSync(path.resolve(__dirname, '../filesToCopy/commonFiles/gitIgnore.js'), 'utf8')
 let readme = fs.readFileSync(path.resolve(__dirname, '../filesToCopy/commonFiles/readme.md'), 'utf8')
 let routes = fs.readFileSync(path.resolve(__dirname, '../filesToCopy/commonFiles/routes.js'), 'utf8')
-let spaNoSQLPck = `{\n\t"name": "${name}",\n\t"version": "1.0.0",\n\t"scripts": {\n\t\t"start": "gulp | nodemon --watch public server/server.js",\n\t\t"page":"node enzo/page.js",\n\t\t"api": "node enzo/api.js",\n\t\t"gulp": "gulp",\n\t\t"prod": "gulp production"\n\t}\n}`
+let spaNoSQLPck = `{\n\t"name": "${name}",\n\t"version": "1.0.0",\n\t"scripts": {\n\t\t"start": "nodemon --watch public server/server.js",\n\t\t"page":"node enzo/page.js",\n\t\t"api": "node enzo/api.js",\n\t\t"build": "webpack --watch",\n\t\t"prod": "webpack --config webpack.prod.js"\n\t}\n}`
+let railsPackage = `{\n\t"name": "${name}",\n\t"version": "1.0.0",\n\t"scripts": {\n\t\t"start": "build | nodemon --watch public server/server.js",\n\t\t"page":"node enzo/page.js",\n\t\t"api": "node enzo/api.js",\n\t\t"build": "gulp",\n\t\t"prod": "gulp production"\n\t}\n}`
 
 let railsServer = fs.readFileSync(path.resolve(__dirname, './files/railsServer.js'), 'utf8')
 let railsHtmlFile = fs.readFileSync(path.resolve(__dirname, './files/railsHtmlFile.html'), 'utf8')
@@ -33,6 +34,11 @@ let enzoPugEndpoint = fs.readFileSync(path.resolve(__dirname, './templates/pugEn
 let pugServer = fs.readFileSync(path.resolve(__dirname, './files/pugServer.js'), 'utf8')
 let pugRoutes = fs.readFileSync(path.resolve(__dirname, './files/pugRoutes.js'), 'utf8')
 let pugHomepage = fs.readFileSync(path.resolve(__dirname, './templates/pugHomepage.pug'), 'utf8')
+
+//webpack
+let webpackConfig = fs.readFileSync(path.resolve(__dirname, './files/webpack.config.js'), 'utf8')
+let webpackProd = fs.readFileSync(path.resolve(__dirname, './files/webpack.prod.js'), 'utf8')
+let babel = fs.readFileSync(path.resolve(__dirname, './files/.babelrc'), 'utf8')
 
 let railsApp = () => {
   fs.mkdirSync(`./${name}/src`)
@@ -75,7 +81,7 @@ let railsApp = () => {
   fs.writeFile(`./${name}/.env`, '', (err) => {
     if (err) throw err
   })
-  fs.writeFileSync(`./${name}/package.json`, spaNoSQLPck)
+  fs.writeFileSync(`./${name}/package.json`, railsPackage)
   fs.writeFile(`./${name}/gulpfile.js`, gulpFile, (err) => {
     if (err) throw err 
   })
@@ -148,10 +154,16 @@ let pugApp = () => {
     if (err) throw err
   })
   fs.writeFileSync(`./${name}/package.json`, spaNoSQLPck)
-  fs.writeFile(`./${name}/gulpfile.js`, gulpFile, (err) => {
-    if (err) throw err 
+  // webpack
+  fs.writeFile(`./${name}/webpack.config.js`, webpackConfig, (err) => {
+    if (err) console.error(err)
   })
-
+  fs.writeFile(`./${name}/webpack.prod.js`, webpackProd, (err) => {
+    if (err) console.error(err)
+  })
+  fs.writeFile(`./${name}/.babelrc`, babel, (err) => {
+    if (err) console.error(err)
+  })
   //enzo files
   fs.mkdirSync(`./${name}/enzo`)
   fs.mkdirSync(`./${name}/enzo/templates`)
