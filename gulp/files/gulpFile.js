@@ -12,7 +12,7 @@ var buffer = require('gulp-buffer');
 
 var del = require('del');
 var runSequence = require('run-sequence');
-
+var sass = require('gulp-sass')
 
 var collapse = require('bundle-collapser/plugin')
 let envify = require('envify/custom')
@@ -76,6 +76,12 @@ gulp.task('minify-css', () => {
     .pipe(gulp.dest(`OUTPUT`));
 })
 
+gulp.task('sass', () => {
+  return gulp.src('INPUT/**/*.scss')
+    .pipe(sass().on('error', sass.logError))
+    .pipe(gulp.dest('INPUT'))
+})
+
 gulp.task('clean', function () {
   return del(['OUTPUT']);
 });
@@ -83,12 +89,12 @@ gulp.task('clean', function () {
 gulp.task('watch', () => {
   runSequence(
     'clean',
-    ['js', 'html', 'css']
+    ['js', 'html', 'css', 'sass']
   )
   gulp.watch('src/**/*', () => {
     runSequence(
       'clean',
-      ['js', 'html', 'css']
+      ['js', 'html', 'css', 'sass']
     )
   })
 })
