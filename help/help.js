@@ -17,6 +17,8 @@ gulp
 
 command
 
+remove <gulp or redux>
+
 help <command>
 
 update
@@ -26,6 +28,7 @@ version
 `
 
 let noCommand = () => {
+  process.stdout.write('\033c')
   log(chalk.cyanBright('\n\nList of enzo commands:'))
   log()
   log(boxen(str, { padding: 1, borderColor: 'yellow'}));
@@ -37,7 +40,6 @@ let noCommand = () => {
 }
 
 let help = () => {
-  process.stdout.write('\033c')
   switch (command) {
     case 'backend':
       log(chalk.cyanBright('Adds an Express.js server along with a MongoDB or Postgres database to your project after asking a series of questions'))
@@ -63,6 +65,9 @@ let help = () => {
       break
     case 'webpack':
       log(chalk.cyanBright('Add webpack to project. Asks for the entry directory and output folder. Configured for React, Sass, JS, CSS.'))
+      break
+    case 'remove': 
+      log(chalk.cyanBright('Remove gulp or webpack from a project. Removes common dependencies, npm scripts, and files.'))
       break
     case 'gulp':
       log(chalk.cyanBright('Add gulp to project. Asks for the entry directory and output folder. Configured for Sass, JS, CSS and Html.'))
