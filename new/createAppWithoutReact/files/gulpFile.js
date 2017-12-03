@@ -5,6 +5,7 @@ var browserify = require('browserify');
 
 var htmlmin = require('gulp-htmlmin');
 let cleanCSS = require('gulp-clean-css');
+var sass = require('gulp-sass');
 
 var gutil = require('gulp-util');
 var tap = require('gulp-tap');
@@ -76,6 +77,12 @@ gulp.task('minify-css', () => {
     .pipe(gulp.dest(`public`));
 })
 
+gulp.task('scss', () => {
+  return gulp.src('src/**/*.scss')
+    .pipe(sass().on('error', sass.logError))
+    .pipe(gulp.dest('public'));
+})
+
 gulp.task('clean', function () {
   return del(['public']);
 });
@@ -83,12 +90,12 @@ gulp.task('clean', function () {
 gulp.task('watch', () => {
   runSequence(
     'clean',
-    ['js', 'html', 'css']
+    ['js', 'html', 'css', 'scss']
   )
   gulp.watch('src/**/*', () => {
     runSequence(
       'clean',
-      ['js', 'html', 'css']
+      ['js', 'html', 'css', 'scss']
     )
   })
 })

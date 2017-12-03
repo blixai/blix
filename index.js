@@ -51,6 +51,7 @@ let checkCommand = (command) => {
       process.exit()
     default:
       console.log(`? Try: enzo help to see a list of commands`)
+      process.exit()
       break;
   }
 }
