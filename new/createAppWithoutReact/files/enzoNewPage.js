@@ -14,7 +14,7 @@ let pages = process.argv.splice(3, process.argv.length)
 let html = fs.readFileSync(path.resolve(__dirname, './templates/htmlPageTemplate.html'), 'utf8')
 html = html.replace(/Name/g, `${name}`)
 let css = `body {\n\tcolor: blue;\n}`
-let js = `import './main.css'\nconsole.log('hello world')`
+let js = `console.log('hello world')`
 let route = `\nr.get('/${name}', (req, res) => res.sendFile(path.join(__dirname, '../public/${name}/index.html')))`
 
 
