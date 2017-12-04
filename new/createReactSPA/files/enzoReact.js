@@ -33,8 +33,7 @@ let createStateless = (name) => {
   })
 }
 
-if (name) {
-  process.stdout.write('\033c')
+let askState = () => {
   rl.question('Stateful Component? (Y/N) ', (answer) => {
     answer = answer.toLowerCase()
     if (answer === 'y') {
@@ -44,8 +43,16 @@ if (name) {
       rl.close()
       createStateless(name)
     } else {
-      return
+      console.log(`? you didn't enter a y or n. Please try again`)
+      askState()
     }
   })
+}
+
+if (name) {
+  askState()
+} else {
+  console.log('No component name provided. Please try again.')
+  process.exit()
 }
 
