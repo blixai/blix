@@ -18,7 +18,7 @@ const routes = require('./routes')
 
 app.use('/', routes)
 app.use(express.static('public'))
-app.use(express.static('assets'))
+app.use('/assets', express.static('assets'))
 
 
 app.listen(port, () => {

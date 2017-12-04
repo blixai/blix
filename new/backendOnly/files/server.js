@@ -8,6 +8,7 @@ let helmet = require('helmet')
 app.use(helmet())
 app.use(bodyParser.json())
 app.use('/api/v1', routes)
+app.use('/assets', express.static('assets'))
 
 app.listen(port, () => {
   process.stdout.write('\033c')

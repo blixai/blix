@@ -13,8 +13,9 @@ app.use(compression())
 app.use(bodyParser.json()) 
 
 
+app.use('/assets', express.static('assets'))
 app.use('/api/v1', routes) 
-app.use("/build", express.static(path.join(__dirname, "../build"))) 
+app.use('/build', express.static('build')) 
 
 
 app.get('/*', (req, res) => res.sendFile(path.join(__dirname, '../public/index.html'))) 
