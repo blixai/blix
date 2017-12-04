@@ -36,6 +36,10 @@ let actionTemplate = fs.readFileSync(path.resolve(__dirname, './templates/action
 let reducerTemplate = fs.readFileSync(path.resolve(__dirname, './templates/reducerTemplate.js'), 'utf8')
 
 
+// 404 page
+let pageNotFound = fs.readFileSync(path.resolve(__dirname, './files/pageNotFound.js'), 'utf8')
+
+
 let ReactReduxWithBackend = () => {
 
   //frontend
@@ -72,6 +76,10 @@ let ReactReduxWithBackend = () => {
   })
   fs.writeFile(`./${name}/src/containers/Home/Home.css`, '', (err) => {
     if (err) throw err
+  })
+  fs.mkdirSync(`./${name}/src/containers/PageNotFound`)
+  fs.writeFile(`./${name}/src/containers/PageNotFound/PageNotFound.js`, pageNotFound, (err) => {
+    if (err) throw err 
   })
   fs.writeFile(`./${name}/src/configStore.js`, configStore, (err) => {
     if (err) throw err

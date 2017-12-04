@@ -21,6 +21,10 @@ app.use(express.static('public'))
 app.use('/assets', express.static('assets'))
 
 
+app.use((req, res) => {
+  res.status(404).render('404', { url: req.originalUrl });
+});
+
 app.listen(port, () => {
   process.stdout.write('\033c')
   console.log(`Listening at port ${port}`)

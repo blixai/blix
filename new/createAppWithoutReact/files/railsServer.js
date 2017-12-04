@@ -21,6 +21,9 @@ app.use('/', pages)
 app.use(express.static('public'))
 app.use('/assets', express.static('assets'))
 
+app.use((req, res) => {
+  res.status(404).sendFile(path.join(__dirname, '../public/404/index.html'))
+});
 
 app.listen(port, () => {
   process.stdout.write('\033c')
