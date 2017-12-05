@@ -18,10 +18,13 @@ const routes = require('./routes')
 
 app.use('/', routes)
 app.use(express.static('public'))
-app.use(express.static('assets'))
+app.use('/assets', express.static('assets'))
 
+
+app.use((req, res) => {
+  res.status(404).render('404', { url: req.originalUrl });
+});
 
 app.listen(port, () => {
-  process.stdout.write('\033c')
-  console.log(`Listening at port ${port}`)
+  console.log(`Worker ${process.pid} listening at port ${port}`)
 })

@@ -19,10 +19,12 @@ const pages = require('./pages')
 app.use('/api/v1', routes)
 app.use('/', pages)
 app.use(express.static('public'))
-app.use(express.static('assets'))
+app.use('/assets', express.static('assets'))
 
+app.use((req, res) => {
+  res.status(404).sendFile(path.join(__dirname, '../public/404/index.html'))
+});
 
 app.listen(port, () => {
-  process.stdout.write('\033c')
-  console.log(`Listening at port ${port}`)
+  console.log(`Worker ${process.pid} listening at port ${port}`)
 })

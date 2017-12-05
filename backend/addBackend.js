@@ -74,7 +74,7 @@ let addBackend = () => {
             BE.backendOnly()
             rl.close();
             console.log('Downloading dependencies and creating files, this may take a moment')
-            install('express nodemon pg knex body-parser helmet bookshelf')
+            install('express nodemon pg knex body-parser helmet bookshelf compression dotenv')
             installKnexGlobal()
             modifyKnex()
             try {
@@ -82,7 +82,7 @@ let addBackend = () => {
             } catch (e) {
               // need some variable to indicate this failed and the user needs to make a new database
             }
-            addScript('server', 'nodemon server/server.js')
+            addScript('server', 'nodemon server/cluster.js')
             addScript('api', 'node enzo/api.js')
             process.stdout.write('\033c')
             console.log('The backend was created!')
@@ -92,8 +92,8 @@ let addBackend = () => {
             BE.backendOnly()
             rl.close();
             console.log('Downloading dependencies and creating files, this may take a moment')
-            install('express nodemon mongo body-parser helmet mongoose')
-            addScript('server', 'nodemon server/server.js')
+            install('express nodemon mongo body-parser helmet mongoose compression dotenv')
+            addScript('server', 'nodemon server/cluster.js')
             addScript('api', 'node enzo/api.js')
             process.stdout.write('\033c')
             console.log('The backend was created!')
@@ -105,8 +105,8 @@ let addBackend = () => {
         BE.backendOnly()
         rl.close();
         console.log('Downloading dependencies and creating files, this may take a moment')
-        install('express nodemon body-parser helmet')
-        addScript('server', 'nodemon server/server.js')
+        install('express nodemon body-parser helmet compression dotenv')
+        addScript('server', 'nodemon server/cluster.js')
         addScript('api', 'node enzo/api.js')
         process.stdout.write('\033c')
         console.log('The backend was created!')

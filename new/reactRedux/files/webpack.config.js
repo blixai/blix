@@ -6,7 +6,7 @@ const extractSass = new ExtractTextPlugin('main.css')
 module.exports = {
   entry: `./src/index.js`,
   output: {
-    filename: 'index.js',
+    filename: 'bundle.js',
     path: path.resolve(__dirname, 'build')
   },
   module: {
@@ -42,7 +42,7 @@ module.exports = {
     ]
   },
   plugins: [
-    new CleanWebpackPlugin("public"),
+    new CleanWebpackPlugin('build'),
     new ExtractTextPlugin('main.css'),
     extractSass
   ],

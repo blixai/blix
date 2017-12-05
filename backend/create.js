@@ -4,6 +4,7 @@ let path = require('path')
 
 let server = fs.readFileSync(path.resolve(__dirname, './files/server.js'), 'utf8')
 let enzoCreateEndpoints = fs.readFileSync(path.resolve(__dirname, './files/enzoCreateAPI.js'), 'utf8')
+let cluster = fs.readFileSync(path.resolve(__dirname, './files/cluster.js'), 'utf8')
 
 let routes = `const express = require('express')\nconst r = express.Router()\nmodule.exports = r`
 let enzoEndpointTemplate = fs.readFileSync(path.resolve(__dirname, './templates/enzoEndpointTemplate.js'), 'utf8')
@@ -17,6 +18,9 @@ let backendOnly = () => {
     fs.writeFile(`./server/server.js`, server, (err) => {
       if (err) throw err
     })  
+    fs.writeFile(`./server/cluster.js`, cluster, (err) => {
+      if (err) throw err 
+    })
     fs.writeFile(`./server/routes.js`, routes, (err) => {
       if (err) throw err
     })

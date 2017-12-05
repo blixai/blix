@@ -15,7 +15,8 @@ let enzoEndpointTemplate = fs.readFileSync(path.resolve(__dirname, './templates/
 let enzoControllerTemplate = fs.readFileSync(path.resolve(__dirname, './templates/enzoControllerTemplate.js'), 'utf8')
 
 
-let spaNoSQLPck = `{\n\t"name": "${name}",\n\t"version": "1.0.0",\n\t"scripts": {\n\t\t"start": "nodemon server/server.js",\n\t\t\t"api": "node enzo/api.js"\n\t}\n}`
+let spaNoSQLPck = `{\n\t"name": "${name}",\n\t"version": "1.0.0",\n\t"scripts": {\n\t\t"start": "nodemon server/cluster.js",\n\t\t\t"api": "node enzo/api.js"\n\t}\n}`
+let cluster = fs.readFileSync(path.resolve(__dirname, '../filesToCopy/cluster.js'), 'utf8')
 
 let backendOnly = () => {
   fs.mkdirSync(`./${name}/server`)
@@ -23,6 +24,9 @@ let backendOnly = () => {
   fs.mkdirSync(`./${name}/server/controllers`)
   fs.mkdirSync(`./${name}/assets`)
   fs.writeFile(`./${name}/server/server.js`, server, (err) => {
+    if (err) throw err
+  })
+  fs.writeFile(`./${name}/server/cluster.js`, cluster, (err) => {
     if (err) throw err
   })
 

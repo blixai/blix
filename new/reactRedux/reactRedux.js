@@ -2,7 +2,7 @@ let fs = require('fs')
 let path = require('path')
 let name = process.argv[3]
 
-let spaNoSQLPck = `{\n\t"name": "${name}",\n\t"version": "1.0.0",\n\t"scripts": {\n\t\t"start": "nodemon server/server.js",\n\t\t"build": "webpack --watch",\n\t\t"redux": "node enzo/createComponentAndContainer.js",\n\t\t"api": "node enzo/enzoCreateAPI.js",\n\t\t"prod": "webpack --config webpack.prod.js",\n\t\t"action": "node enzo/action.js"\n\t}\n}`
+let spaNoSQLPck = `{\n\t"name": "${name}",\n\t"version": "1.0.0",\n\t"scripts": {\n\t\t"start": "nodemon server/cluster.js",\n\t\t"build": "webpack --watch",\n\t\t"redux": "node enzo/createComponentAndContainer.js",\n\t\t"api": "node enzo/enzoCreateAPI.js",\n\t\t"prod": "webpack --config webpack.prod.js",\n\t\t"action": "node enzo/action.js"\n\t}\n}`
 let spaWebpack = fs.readFileSync(path.resolve(__dirname, './files/webpack.config.js'), 'utf8')
 let spaHtmlFile = `<!DOCTYPE html>\n<html>\n\t<head>\n\t\t<meta charset="utf-8">\n\t\t<meta name="viewport" content="width=device-width, initial-scale=1">\n\t\t<title>Home</title>\n\t</head>\n\t<body>\n\t\t<div id="root"></div>\n\t\t<script src="build/bundle.js"></script>\n\t</body>\n</htlm>`
 
@@ -10,6 +10,7 @@ let gitignore = fs.readFileSync(path.resolve(__dirname, '../filesToCopy/commonFi
 let readme = fs.readFileSync(path.resolve(__dirname, '../filesToCopy/commonFiles/readme.md'), 'utf8')
 let routes = fs.readFileSync(path.resolve(__dirname, '../filesToCopy/commonFiles/routes.js'), 'utf8')
 let babel = fs.readFileSync(path.resolve(__dirname, '../filesToCopy/commonFiles/.babelrc'), 'utf8')
+let cluster = fs.readFileSync(path.resolve(__dirname, '../filesToCopy/cluster.js'), 'utf8')
 
 let reactReduxServer = fs.readFileSync(path.resolve(__dirname, './files/reactReduxServer.js'), 'utf8')
 let rootReducer = fs.readFileSync(path.resolve(__dirname, './files/rootReducer.js'), 'utf8')
@@ -34,6 +35,10 @@ let prodWebpack = fs.readFileSync(path.resolve(__dirname, './files/webpack.prod.
 let action = fs.readFileSync(path.resolve(__dirname, './files/enzoCreateAction.js'), 'utf8')
 let actionTemplate = fs.readFileSync(path.resolve(__dirname, './templates/actionTemplate.js'), 'utf8')
 let reducerTemplate = fs.readFileSync(path.resolve(__dirname, './templates/reducerTemplate.js'), 'utf8')
+
+
+// 404 page
+let pageNotFound = fs.readFileSync(path.resolve(__dirname, './files/pageNotFound.js'), 'utf8')
 
 
 let ReactReduxWithBackend = () => {
@@ -73,6 +78,10 @@ let ReactReduxWithBackend = () => {
   fs.writeFile(`./${name}/src/containers/Home/Home.css`, '', (err) => {
     if (err) throw err
   })
+  fs.mkdirSync(`./${name}/src/containers/PageNotFound`)
+  fs.writeFile(`./${name}/src/containers/PageNotFound/PageNotFound.js`, pageNotFound, (err) => {
+    if (err) throw err 
+  })
   fs.writeFile(`./${name}/src/configStore.js`, configStore, (err) => {
     if (err) throw err
   })
@@ -111,7 +120,7 @@ let ReactReduxWithBackend = () => {
   })
 
   // enzo create action
-
+ 
   fs.writeFile(`./${name}/enzo/action.js`, action, (err) => {
     if (err) console.error(err)
   })
@@ -141,7 +150,9 @@ let ReactReduxWithBackend = () => {
   fs.writeFile(`./${name}/server/server.js`, reactReduxServer, (err) => {
     if (err) throw err
   })
-
+  fs.writeFile(`./${name}/server/cluster.js`, cluster, (err) => {
+    if (err) throw err 
+  })
   fs.writeFile(`./${name}/server/routes.js`, routes, (err) => {
     if (err) throw err
   })
