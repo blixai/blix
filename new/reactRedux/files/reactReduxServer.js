@@ -21,6 +21,5 @@ app.use('/build', express.static('build'))
 app.get('/*', (req, res) => res.sendFile(path.join(__dirname, '../public/index.html'))) 
 
 app.listen(port, () => { 
-  process.stdout.write('\033c')
-  console.log(`Listening at port ${port}`)
+  console.log(`Worker ${process.pid} listening at port: ${port}`)
 }) 

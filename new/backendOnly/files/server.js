@@ -11,6 +11,5 @@ app.use('/api/v1', routes)
 app.use('/assets', express.static('assets'))
 
 app.listen(port, () => {
-  process.stdout.write('\033c')
-  console.log(`Listening at port ${port}`)
+  console.log(`Worker ${process.pid} listening at port: ${port}`)
 })

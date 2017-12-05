@@ -9,8 +9,9 @@ let name = process.argv[3]
 let gitignore = fs.readFileSync(path.resolve(__dirname, '../filesToCopy/commonFiles/gitIgnore.js'), 'utf8')
 let readme = fs.readFileSync(path.resolve(__dirname, '../filesToCopy/commonFiles/readme.md'), 'utf8')
 let routes = fs.readFileSync(path.resolve(__dirname, '../filesToCopy/commonFiles/routes.js'), 'utf8')
-let spaNoSQLPck = `{\n\t"name": "${name}",\n\t"version": "1.0.0",\n\t"scripts": {\n\t\t"start": "nodemon --watch public server/server.js",\n\t\t"page":"node enzo/page.js",\n\t\t"api": "node enzo/api.js",\n\t\t"build": "webpack --watch",\n\t\t"prod": "webpack --config webpack.prod.js"\n\t}\n}`
-let railsPackage = `{\n\t"name": "${name}",\n\t"version": "1.0.0",\n\t"scripts": {\n\t\t"start": "gulp | nodemon --watch public server/server.js",\n\t\t"page":"node enzo/page.js",\n\t\t"api": "node enzo/api.js",\n\t\t"build": "gulp",\n\t\t"prod": "gulp production"\n\t}\n}`
+let spaNoSQLPck = `{\n\t"name": "${name}",\n\t"version": "1.0.0",\n\t"scripts": {\n\t\t"start": "nodemon --watch public server/cluster.js",\n\t\t"page":"node enzo/page.js",\n\t\t"api": "node enzo/api.js",\n\t\t"build": "webpack --watch",\n\t\t"prod": "webpack --config webpack.prod.js"\n\t}\n}`
+let railsPackage = `{\n\t"name": "${name}",\n\t"version": "1.0.0",\n\t"scripts": {\n\t\t"start": "gulp | nodemon --watch public server/cluster.js",\n\t\t"page":"node enzo/page.js",\n\t\t"api": "node enzo/api.js",\n\t\t"build": "gulp",\n\t\t"prod": "gulp production"\n\t}\n}`
+let cluster = fs.readFileSync(path.resolve(__dirname, '../filesToCopy/cluster.js'), 'utf8')
 
 let railsServer = fs.readFileSync(path.resolve(__dirname, './files/railsServer.js'), 'utf8')
 let railsHtmlFile = fs.readFileSync(path.resolve(__dirname, './files/railsHtmlFile.html'), 'utf8')
@@ -68,7 +69,9 @@ let railsApp = () => {
   fs.writeFile(`./${name}/server/server.js`, railsServer, (err) => {
     if (err) throw err
   })
-
+  fs.writeFile(`./${name}/server/cluster.js`, cluster, (err) => {
+    if (err) throw err 
+  })
   fs.writeFile(`./${name}/server/routes.js`, routes, (err) => {
     if (err) throw err
   })
@@ -140,7 +143,9 @@ let pugApp = () => {
   fs.writeFile(`./${name}/server/server.js`, pugServer, (err) => {
     if (err) throw err
   })
-  
+  fs.writeFile(`./${name}/server/cluster.js`, cluster, (err) => {
+    if (err) throw err 
+  })
   
   let homeController = `exports.index = (req, res) => {\n\tres.render('home/index', {})\n}`
   fs.writeFile(`./${name}/server/controllers/home.js`, homeController, (err) => {
