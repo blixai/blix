@@ -6,10 +6,13 @@ const routes = require('./routes')
 let port = (process.env.PORT || 3000) 
 let compression = require('compression') 
 let helmet = require('helmet')
+let logger = require('morgan')
+
 
 app.use(helmet())
 app.use(compression()) 
 app.use(bodyParser.json()) 
+if (!process.env.NODE_ENV) app.use(logger('dev'))
 
 app.use('/api/v1', routes) 
 app.use('/assets', express.static('assets'))

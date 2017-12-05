@@ -5,17 +5,20 @@ let path = require('path')
 let bodyParser = require('body-parser')
 let compression = require('compression')
 let helmet = require('helmet')
+let logger = require('morgan')
 
 
 app.use(bodyParser.json())
 app.use(compression())
 app.use(helmet())
+if (!process.env.NODE_ENV) app.use(logger('dev'))
+
+
 app.set('views', './server/views')
 app.set('view engine', 'pug')
 
+
 const routes = require('./routes')
-
-
 app.use('/', routes)
 app.use(express.static('public'))
 app.use('/assets', express.static('assets'))
@@ -24,6 +27,7 @@ app.use('/assets', express.static('assets'))
 app.use((req, res) => {
   res.status(404).render('404', { url: req.originalUrl });
 });
+
 
 app.listen(port, () => {
   console.log(`Worker ${process.pid} listening at port ${port}`)

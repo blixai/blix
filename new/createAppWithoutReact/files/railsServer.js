@@ -5,11 +5,12 @@ let path = require('path')
 let bodyParser = require('body-parser')
 let compression = require('compression')
 let helmet = require('helmet')
-
+let logger = require('morgan')
 
 app.use(bodyParser.json())
 app.use(compression())
 app.use(helmet())
+if (!process.env.NODE_ENV) app.use(logger('dev'))
 
 
 const routes = require('./routes')
