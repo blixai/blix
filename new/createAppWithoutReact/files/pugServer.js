@@ -6,8 +6,9 @@ let bodyParser = require('body-parser')
 let compression = require('compression')
 let helmet = require('helmet')
 let logger = require('morgan')
+let cookieParser = require('cookie-parser')
 
-
+app.use(cookieParser())
 app.use(bodyParser.json())
 app.use(compression())
 app.use(helmet())
