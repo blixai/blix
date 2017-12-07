@@ -21,7 +21,6 @@ let gulpFile = fs.readFileSync(path.resolve(__dirname, './files/gulpFile.js'), '
 
 let indexHtml = `<!DOCTYPE html>\n<html>\n\t<head>\n\t\t<meta charset="utf-8">\n\t\t<meta name="viewport" content="width=device-width, initial-scale=1">\n\t\t<title>Home</title>\n\t\t<link rel='stylesheet' type='text/css' href='main.css'/>\n\t</head>\n\t<body>\n\t\t<h1>Hello World</h1>\n\t\t<script src="index.js"></script>\n\t</body>\n</htlm>`
 let mainCss = `h1 {\n\tcolor: blue\n}`
-let html404 = fs.readFileSync(path.resolve(__dirname, './files/404.html'), 'utf8')
 
 let enzoNewPage = fs.readFileSync(path.resolve(__dirname, './files/enzoNewPage.js'), 'utf8')
 let htmlPageTemplate = fs.readFileSync(path.resolve(__dirname, './templates/htmlPageTemplate.html'), 'utf8')
@@ -36,7 +35,7 @@ let enzoPugEndpoint = fs.readFileSync(path.resolve(__dirname, './templates/pugEn
 let pugServer = fs.readFileSync(path.resolve(__dirname, './files/pugServer.js'), 'utf8')
 let pugRoutes = fs.readFileSync(path.resolve(__dirname, './files/pugRoutes.js'), 'utf8')
 let pugHomepage = fs.readFileSync(path.resolve(__dirname, './templates/pugHomepage.pug'), 'utf8')
-let pug404 = fs.readFileSync(path.resolve(__dirname, './files/404.pug'), 'utf8')
+let error = fs.readFileSync(path.resolve(__dirname, './files/error.pug'), 'utf8')
 
 //webpack
 let webpackConfig = fs.readFileSync(path.resolve(__dirname, './files/webpack.config.js'), 'utf8')
@@ -54,12 +53,7 @@ let railsApp = () => {
   })
   fs.writeFile(`./${name}/src/home/main.css`, `body {\ncolor: blue;\n}`, (err) => {
     if (err) throw err
-  })
-  fs.mkdirSync(`./${name}/src/404`)
-  fs.writeFile(`./${name}/src/404/index.html`, html404, (err) => {
-    if (err) throw err 
-  })
-  
+  })  
   //backend
   fs.mkdirSync(`./${name}/server`)
   fs.mkdirSync(`./${name}/server/models`)
@@ -137,7 +131,7 @@ let pugApp = () => {
   fs.writeFile(`./${name}/server/views/home/index.pug`, pugHomepage, (err) => {
     if (err) throw err 
   })
-  fs.writeFile(`./${name}/server/views/404.pug`, pug404, (err) => {
+  fs.writeFile(`./${name}/server/views/error.pug`, error, (err) => {
     if (err) throw err 
   })
   fs.writeFile(`./${name}/server/server.js`, pugServer, (err) => {
