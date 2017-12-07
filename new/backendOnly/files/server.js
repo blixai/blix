@@ -12,6 +12,18 @@ app.use(bodyParser.json())
 app.use('/api/v1', routes)
 app.use('/assets', express.static('assets'))
 
+
+app.use(function (req, res, next) {
+  var err = new Error('File Not Found')
+  err.status = 404
+  next(err)
+})
+
+app.use(function (err, req, res, next) {
+  res.status(err.status || 500)
+  res.send({ error: err.message, status: err.status })
+})
+
 app.listen(port, () => {
   console.log(`Worker ${process.pid} listening at port: ${port}`)
 })

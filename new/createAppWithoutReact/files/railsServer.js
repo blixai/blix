@@ -22,8 +22,16 @@ app.use('/', pages)
 app.use(express.static('public'))
 app.use('/assets', express.static('assets'))
 
-app.use((req, res) => {
-  res.status(404).sendFile(path.join(__dirname, '../public/404/index.html'))
+
+app.use(function (req, res, next) {
+  var err = new Error('File Not Found');
+  err.status = 404;
+  next(err);
+});
+
+app.use(function (err, req, res, next) {
+  res.status(err.status || 500);
+  res.send({ error: err.message, status: err.status })
 });
 
 app.listen(port, () => {
