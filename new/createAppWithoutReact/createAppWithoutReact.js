@@ -36,6 +36,7 @@ let pugServer = fs.readFileSync(path.resolve(__dirname, './files/pugServer.js'),
 let pugRoutes = fs.readFileSync(path.resolve(__dirname, './files/pugRoutes.js'), 'utf8')
 let pugHomepage = fs.readFileSync(path.resolve(__dirname, './templates/pugHomepage.pug'), 'utf8')
 let error = fs.readFileSync(path.resolve(__dirname, './files/error.pug'), 'utf8')
+let layout = fs.readFileSync(path.resolve(__dirname, './files/layout.pug'), 'utf8')
 
 //webpack
 let webpackConfig = fs.readFileSync(path.resolve(__dirname, './files/webpack.config.js'), 'utf8')
@@ -132,6 +133,9 @@ let pugApp = () => {
     if (err) throw err 
   })
   fs.writeFile(`./${name}/server/views/error.pug`, error, (err) => {
+    if (err) throw err 
+  })
+  fs.writeFile(`./${name}/server/views/layout.pug`, layout, (err) => {
     if (err) throw err 
   })
   fs.writeFile(`./${name}/server/server.js`, pugServer, (err) => {
