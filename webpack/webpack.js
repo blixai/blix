@@ -78,12 +78,12 @@ let createConfig = (input, output, react) => {
   if (react === 'y') {
     babel = fs.readFileSync(path.resolve(__dirname, './files/react-babel.js'), 'utf8') 
     install('react react-dom')   
-    installDevDependencies('webpack babel-loader css-loader babel-core babel-preset-env babel-preset-react style-loader webpack-merge uglifyjs-webpack-plugin sass-loader node-sass extract-text-webpack-plugin clean-webpack-plugin')
+    installDevDependencies('webpack babel-loader css-loader babel-core babel-preset-env babel-preset-react style-loader webpack-merge uglifyjs-webpack-plugin sass-loader node-sass extract-text-webpack-plugin clean-webpack-plugin cssnano postcss postcss-cssnext postcss-import postcss-loader')
     webpack = fs.readFileSync(path.resolve(__dirname, './files/webpack.config.js'), 'utf8')
   } else if (react === 'n') {
     babel = fs.readFileSync(path.resolve(__dirname, './files/.babelrc'), 'utf8')
     webpack = fs.readFileSync(path.resolve(__dirname, './files/webpack.config.js'), 'utf8')
-    installDevDependencies('webpack babel-loader css-loader babel-core babel-preset-env style-loader webpack-merge uglifyjs-webpack-plugin sass-loader node-sass extract-text-webpack-plugin clean-webpack-plugin')
+    installDevDependencies('webpack babel-loader css-loader babel-core babel-preset-env style-loader webpack-merge uglifyjs-webpack-plugin sass-loader node-sass extract-text-webpack-plugin clean-webpack-plugin cssnano postcss postcss-cssnext postcss-import postcss-loader')
   } else {
     // ask the react question again. It needs an answer 
     return reactQuestion(input, output)
@@ -102,10 +102,14 @@ let createConfig = (input, output, react) => {
   })
 
   let webpackProd = fs.readFileSync(path.resolve(__dirname, './files/webpack.prod.js'), 'utf8')
-
+  let postcss = fs.readFileSync(path.resolve(__dirname, './files/postcss.config.js'), 'utf8')
   fs.writeFile('./webpack.prod.js', webpackProd, (err) => {
     if (err) throw err
     log('Created webpack.prod.js file')
+  })
+  fs.writeFile('./postcss.config.js', postcss, (err) => {
+    if (err) throw err 
+    log('Created postcss.config.js')
   })
   try {
     addScript('webpack', 'webpack --watch')
