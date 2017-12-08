@@ -3,10 +3,11 @@ let path = require('path')
 let log = console.log
 
 let name = process.argv[2]
-if (name !== undefined) {
+if (name) {
   name = name.toLowerCase()
 } else {
-  log('No page name supplied. Try npm run page <name>')
+  console.log('No name provided. Try: npm run page <pageName> <subpage>')
+  process.exit()
 }
 let pages = process.argv.splice(3, process.argv.length)
 // probably should loop through and remove invalid page names
@@ -68,16 +69,26 @@ let newPage = () => {
       log(`Created index.pug file in server/views/${name}/index.pug`)
     })
     let index = `exports.index = (req, res) => {\n\tres.render('${name}/index', {})\n}`
-    fs.writeFile(`./server/controllers/${name}.js`, index, (err) => {
-      if (err) throw err
-      log(`Created controller ${name} in server/controllers/${name}`)
-    })
-    let pageRoute = `\n\nconst ${name} = require('./controllers/${name}')\nr.get('/${name}', ${name}.index)`
+    let pageRoute;
+
+    if (fs.existsSync(`./server/controllers/${name}.js`)) {
+      index = '\n\n' + index
+      fs.appendFile(`./server/controllers/${name}.js`, index, (err) => {
+        if (err) throw err 
+      })
+      pageRoute = `\n\nr.get('/${name}', ${name}.index)`
+    } else {
+      fs.writeFile(`./server/controllers/${name}.js`, index, (err) => {
+        if (err) throw err
+        log(`Created controller ${name} in server/controllers/${name}`)
+      })
+      pageRoute = `\n\nconst ${name} = require('./controllers/${name}')\nr.get('/${name}', ${name}.index)`
+    }
+
     fs.appendFile('./server/routes.js', pageRoute, (err) => {
       if (err) throw err
       log(`Added ${name} route to server/routes.js`)
     })
-    createPages()
     fs.writeFile(`./src/${name}/main.css`, css, (err) => {
       if (err) throw err
       log(`Created ${name} main.css file`)
@@ -86,11 +97,14 @@ let newPage = () => {
       if (err) throw err
       log(`Created ${name} index.js file`)
     })
+    createPages()
   }
 }
 
+
 let addEntry = (name, path) => {
   let body = fs.readFileSync('./webpack.config.js', 'utf8')
+  if (body.includes(`./src/${path}`)) return 
   let search = `entry: {`
   let index = body.indexOf(search)
   let newEntry = `\n\t\t${name}: './src/${path}',`
@@ -103,6 +117,5 @@ let addEntry = (name, path) => {
   }
 }
 
-if (name) {
-  newPage()
-}
+
+newPage()
