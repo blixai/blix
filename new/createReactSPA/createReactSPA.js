@@ -18,6 +18,7 @@ let spaNoSQLPck = `{\n\t"name": "${name}",\n\t"version": "1.0.0",\n\t"scripts": 
 let spaHtmlFile = fs.readFileSync(path.resolve(__dirname, './files/spaHtmlFile.html'), 'utf8')
 let spaNoBE = `{\n\t"name": "${name}",\n\t"version": "1.0.0",\n\t"scripts": {\n\t\t"start": "webpack-dev-server --output-public-path=/build/ --inline --hot --open",\n\t\t"react": "node enzo/react.js",\n\t\t"prod": "webpack --config webpack.prod.js"\n\t}\n}`
 let cluster = fs.readFileSync(path.resolve(__dirname, '../filesToCopy/cluster.js'), 'utf8')
+let postcss = fs.readFileSync(path.resolve(__dirname, './files/postcss.config.js'), 'utf8')
 
 //enzo
 let stateless = fs.readFileSync(path.resolve(__dirname, './files/statelessComponent.js'), 'utf8')
@@ -39,6 +40,9 @@ let reactSPAWithoutBackend = () => {
   })
   fs.writeFile(`./${name}/webpack.prod.js`, prodWebpack, (err) => {
     if (err) throw err
+  })
+  fs.writeFile(`./${name}/postcss.config.js`, postcss, (err) => {
+    if (err) throw err 
   })
   fs.writeFile(`./${name}/src/index.js`, spaIndex, (err) => {
     if (err) throw err
@@ -92,6 +96,9 @@ let writeFilesWithSPAReact = () => {
     if (err) throw err
   })
   fs.writeFile(`./${name}/webpack.prod.js`, prodWebpack, (err) => {
+    if (err) throw err
+  })
+  fs.writeFile(`./${name}/postcss.config.js`, postcss, (err) => {
     if (err) throw err
   })
   fs.writeFile(`./${name}/src/index.js`, spaIndex, (err) => {
