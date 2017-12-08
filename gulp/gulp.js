@@ -25,9 +25,9 @@ let shouldUseYarn = () => {
 let installDevDependencies = (packages) => {
   let yarn = shouldUseYarn()
   if (yarn) {
-    shell.exec(`yarn add ${packages} --dev`)
+    shell.exec(`yarn add ${packages} --dev`, {silent:true})
   } else {
-    shell.exec(`npm install --save-dev ${packages}`)
+    shell.exec(`npm install --save-dev ${packages}`, {silent:true})
   }
 }
 

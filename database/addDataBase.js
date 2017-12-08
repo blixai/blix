@@ -22,19 +22,19 @@ let shouldUseYarn = () => {
 let install = (packages) => {
   let yarn = shouldUseYarn()
   if (yarn) {
-    shell.exec(`yarn add ${packages}`)
+    shell.exec(`yarn add ${packages}`, {silent:true})
   } else {
-    shell.exec(`npm install --save ${packages}`)
+    shell.exec(`npm install --save ${packages}`, {silent:true})
   }
 }
 
 let installKnexGlobal = () => {
   if (shouldUseYarn()) {
-    shell.exec('yarn global add knex')
-    shell.exec('knex init')
+    shell.exec('yarn global add knex', {silent:true})
+    shell.exec('knex init', {silent:true})
   } else {
-    shell.exec('npm install -g knex')
-    shell.exec('knex init')
+    shell.exec('npm install -g knex', {silent:true})
+    shell.exec('knex init', {silent:true})
   }
 }
 
