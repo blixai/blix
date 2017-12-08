@@ -4,7 +4,7 @@ let name = process.argv[3]
 
 let spaNoSQLPck = `{\n\t"name": "${name}",\n\t"version": "1.0.0",\n\t"scripts": {\n\t\t"start": "nodemon server/cluster.js",\n\t\t"build": "webpack --watch",\n\t\t"redux": "node enzo/createComponentAndContainer.js",\n\t\t"api": "node enzo/enzoCreateAPI.js",\n\t\t"prod": "webpack --config webpack.prod.js",\n\t\t"action": "node enzo/action.js"\n\t}\n}`
 let spaWebpack = fs.readFileSync(path.resolve(__dirname, './files/webpack.config.js'), 'utf8')
-let spaHtmlFile = `<!DOCTYPE html>\n<html>\n\t<head>\n\t\t<meta charset="utf-8">\n\t\t<meta name="viewport" content="width=device-width, initial-scale=1">\n\t\t<title>Home</title>\n\t</head>\n\t<body>\n\t\t<div id="root"></div>\n\t\t<script src="build/bundle.js"></script>\n\t</body>\n</htlm>`
+let spaHtmlFile = `<!DOCTYPE html>\n<html>\n\t<head>\n\t\t<meta charset="utf-8">\n\t\t<meta name="viewport" content="width=device-width, initial-scale=1">\n\t\t<link href="build/main.css" rel="stylesheet">\n\t\t<title>Home</title>\n\t</head>\n\t<body>\n\t\t<div id="root"></div>\n\t\t<script src="build/bundle.js"></script>\n\t</body>\n</htlm>`
 
 let gitignore = fs.readFileSync(path.resolve(__dirname, '../filesToCopy/commonFiles/gitIgnore.js'), 'utf8')
 let readme = fs.readFileSync(path.resolve(__dirname, '../filesToCopy/commonFiles/readme.md'), 'utf8')
@@ -35,6 +35,7 @@ let prodWebpack = fs.readFileSync(path.resolve(__dirname, './files/webpack.prod.
 let action = fs.readFileSync(path.resolve(__dirname, './files/enzoCreateAction.js'), 'utf8')
 let actionTemplate = fs.readFileSync(path.resolve(__dirname, './templates/actionTemplate.js'), 'utf8')
 let reducerTemplate = fs.readFileSync(path.resolve(__dirname, './templates/reducerTemplate.js'), 'utf8')
+let postcss = fs.readFileSync(path.resolve(__dirname, './files/postcss.config.js'), 'utf8')
 
 
 // 404 page
@@ -55,6 +56,9 @@ let ReactReduxWithBackend = () => {
   })
   fs.writeFile(`./${name}/webpack.prod.js`, prodWebpack, (err) => {
     if (err) throw err
+  })
+  fs.writeFile(`./${name}/postcss.config.js`, postcss, (err) => {
+    if (err) throw err 
   })
   fs.writeFile(`./${name}/src/index.js`, reactReduxIndex, (err) => {
     if (err) throw err
@@ -183,6 +187,9 @@ let reactReduxWithoutBackend = () => {
     if (err) throw err
   })
   fs.writeFile(`./${name}/webpack.prod.js`, prodWebpack, (err) => {
+    if (err) throw err
+  })
+  fs.writeFile(`./${name}/postcss.config.js`, postcss, (err) => {
     if (err) throw err
   })
   fs.writeFile(`./${name}/src/index.js`, reactReduxIndex, (err) => {
