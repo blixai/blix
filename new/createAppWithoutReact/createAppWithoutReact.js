@@ -42,6 +42,7 @@ let layout = fs.readFileSync(path.resolve(__dirname, './files/layout.pug'), 'utf
 let webpackConfig = fs.readFileSync(path.resolve(__dirname, './files/webpack.config.js'), 'utf8')
 let webpackProd = fs.readFileSync(path.resolve(__dirname, './files/webpack.prod.js'), 'utf8')
 let babel = fs.readFileSync(path.resolve(__dirname, './files/.babelrc'), 'utf8')
+let postcss = fs.readFileSync(path.resolve(__dirname, './files/postcss.config.js'), 'utf8')
 
 let railsApp = () => {
   fs.mkdirSync(`./${name}/src`)
@@ -171,6 +172,9 @@ let pugApp = () => {
     if (err) console.error(err)
   })
   fs.writeFile(`./${name}/webpack.prod.js`, webpackProd, (err) => {
+    if (err) console.error(err)
+  })
+  fs.writeFile(`./${name}/postcss.config.js`, postcss, (err) => {
     if (err) console.error(err)
   })
   fs.writeFile(`./${name}/.babelrc`, babel, (err) => {
