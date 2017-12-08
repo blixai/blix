@@ -19,18 +19,21 @@ var collapse = require('bundle-collapser/plugin')
 let envify = require('envify/custom')
 let plumber = require('gulp-plumber')
 
+let postcss = require('gulp-postcss')
+let cssnext = require('postcss-cssnext')
+
 gulp.task('js', function () {
   return gulp.src('src/**/*.js', { read: false })
     .pipe(tap(function (file) {
       gutil.log('bundling ' + file.path);
       file.contents = browserify(file.path, { debug: true })
-      .transform("babelify", { presets: ["env"] })
-      .plugin(collapse)
-      .bundle()
-      .on('error', function (error) {
-        console.log('error');
-        this.emit('end');
-      })
+        .transform("babelify", { presets: ["env"] })
+        .plugin(collapse)
+        .bundle()
+        .on('error', function (error) {
+          console.log('error');
+          this.emit('end');
+        })
     }))
     .pipe(plumber())
     .pipe(buffer())
@@ -42,14 +45,14 @@ gulp.task('min-js', function () {
     .pipe(tap(function (file) {
       gutil.log('bundling ' + file.path);
       file.contents = browserify(file.path, { debug: false })
-      .transform("babelify", { presets: ["env"] })
-      .transform({ global: true }, envify({ NODE_ENV: 'production' }))
-      .plugin(collapse)
-      .bundle()
-      .on('error', function (error) {
-        console.log('error');
-        this.emit('end');
-      })
+        .transform("babelify", { presets: ["env"] })
+        .transform({ global: true }, envify({ NODE_ENV: 'production' }))
+        .plugin(collapse)
+        .bundle()
+        .on('error', function (error) {
+          console.log('error');
+          this.emit('end');
+        })
     }))
     .pipe(plumber())
     .pipe(buffer())
@@ -68,11 +71,16 @@ gulp.task('minify-html', () => {
 })
 
 gulp.task('css', function () {
-  return gulp.src('src/**/*.css').pipe(gulp.dest('public'));
+  let plugins = [cssnext]
+  return gulp.src('src/**/*.css')
+    .pipe(postcss(plugins))
+    .pipe(gulp.dest('public'));
 });
 
 gulp.task('minify-css', () => {
+  let plugins = [cssnext]
   return gulp.src(`./src/**/*css`)
+    .pipe(postcss(plugins))
     .pipe(cleanCSS({ compatibility: 'ie8' }))
     .pipe(gulp.dest(`public`));
 })
