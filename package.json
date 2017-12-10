@@ -22,6 +22,7 @@
   "dependencies": {
     "boxen": "^1.2.2",
     "chalk": "^2.3.0",
+    "inquirer": "^4.0.1",
     "shelljs": "^0.7.8"
   }
 }
