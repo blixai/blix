@@ -23,25 +23,25 @@ let postcss = require('gulp-postcss')
 let cssnext = require('postcss-cssnext')
 
 gulp.task('js', function () {
-  return gulp.src('src/**/*.js', { read: false })
+  return gulp.src('INPUT/**/*.js', { read: false })
     .pipe(tap(function (file) {
-      gutil.log('bundling ' + file.path);
-      file.contents = browserify(file.path, { debug: true })
-        .transform("babelify", { presets: ["env"] })
-        .plugin(collapse)
-        .bundle()
-        .on('error', function (error) {
-          console.log('error');
-          this.emit('end');
-        })
+    gutil.log('bundling ' + file.path);
+    file.contents = browserify(file.path, { debug: true })
+      .transform("babelify", { presets: ["env"] })
+      .plugin(collapse)
+      .bundle()
+      .on('error', function (error) {
+        console.log('error');
+        this.emit('end');
+      })
     }))
     .pipe(plumber())
     .pipe(buffer())
-    .pipe(gulp.dest('public'));
+    .pipe(gulp.dest('OUTPUT'));
 })
 
 gulp.task('min-js', function () {
-  return gulp.src('src/**/*.js', { read: false })
+  return gulp.src('INPUT/**/*.js', { read: false })
     .pipe(tap(function (file) {
       gutil.log('bundling ' + file.path);
       file.contents = browserify(file.path, { debug: false })
@@ -57,42 +57,42 @@ gulp.task('min-js', function () {
     .pipe(plumber())
     .pipe(buffer())
     .pipe(uglify())
-    .pipe(gulp.dest('public'));
+    .pipe(gulp.dest('OUTPUT'));
 })
 
 gulp.task('html', function () {
-  return gulp.src('src/**/*.html').pipe(gulp.dest('public'));
+  return gulp.src('INPUT/**/*.html').pipe(gulp.dest('OUTPUT'));
 });
 
 gulp.task('minify-html', () => {
-  return gulp.src(`./src/**/*.html`)
+  return gulp.src(`INPUT/**/*.html`)
     .pipe(htmlmin({ collapseWhitespace: true }))
-    .pipe(gulp.dest(`public`))
+    .pipe(gulp.dest(`OUTPUT`))
 })
 
 gulp.task('css', function () {
   let plugins = [cssnext]
-  return gulp.src('src/**/*.css')
+  return gulp.src('INPUT/**/*.css')
     .pipe(postcss(plugins))
-    .pipe(gulp.dest('public'));
+    .pipe(gulp.dest('OUTPUT'));
 });
 
 gulp.task('minify-css', () => {
   let plugins = [cssnext]
-  return gulp.src(`./src/**/*css`)
+  return gulp.src(`INPUT/**/*css`)
     .pipe(postcss(plugins))
     .pipe(cleanCSS({ compatibility: 'ie8' }))
-    .pipe(gulp.dest(`public`));
+    .pipe(gulp.dest(`OUTPUT`));
 })
 
 gulp.task('scss', () => {
-  return gulp.src('src/**/*.scss')
+  return gulp.src('INPUT/**/*.scss')
     .pipe(sass().on('error', sass.logError))
-    .pipe(gulp.dest('public'));
+    .pipe(gulp.dest('OUTPUT'));
 })
 
 gulp.task('clean', function () {
-  return del(['public']);
+  return del(['OUTPUT']);
 });
 
 gulp.task('watch', () => {
@@ -100,7 +100,7 @@ gulp.task('watch', () => {
     'clean',
     ['js', 'html', 'css', 'scss']
   )
-  gulp.watch('src/**/*', () => {
+  gulp.watch('INPUT/**/*', () => {
     runSequence(
       'clean',
       ['js', 'html', 'css', 'scss']
