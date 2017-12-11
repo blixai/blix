@@ -1,30 +1,25 @@
-const readline = require('readline');
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout,
-  terminal: false
-});
-
 let fs = require('fs')
 let path = require('path')
 const execSync = require('child_process').execSync;
 const chalk = require('chalk');
 const log = console.log;
 const boxen = require('boxen')
-let command = process.argv[3]
 let shell = require('shelljs')
 
-let str = `webpack
-gulp
-`
 
-let noCommand = () => {
-  log(chalk.cyanBright('\n\nRemove common files and dependencies'))
-  log(chalk.cyanBright('\n\nTo remove run: "enzo remove <name>"'))
-  log()
-  log(boxen(str, { padding: 1, borderColor: 'yellow' }));
-  log()
-  log()
+
+let inquirer = require('inquirer')
+let prompt = inquirer.prompt
+
+
+let choices = {
+  type: 'list', 
+  message: `Select what you want to remove:`, 
+  name: 'remove', 
+  choices: [
+    { name: 'webpack' },
+    { name: 'gulp' }
+  ]
 }
 
 
@@ -73,18 +68,19 @@ let removeWebpack = () => {
 
 let remove = () => {
   process.stdout.write('\033c')
-  switch (command) {
-    case 'webpack':
-      removeWebpack()
-      break;
-    case 'gulp':
-      removeGulp()
-      break
-    default:
-      noCommand()
-      break;
-  }
-  process.exit()
+  prompt([choices]).then(ans => {
+    command = ans.remove 
+    switch (command) {
+      case 'webpack':
+        removeWebpack()
+        break;
+      case 'gulp':
+        removeGulp()
+        break
+      default:
+        break;
+    }
+  })
 }
 
 let removeScript = (command) => {
