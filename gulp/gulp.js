@@ -39,7 +39,7 @@ let addGulp = () => {
       let gulp = fs.readFileSync(path.resolve(__dirname, './files/gulpFile.js'), 'utf8')
       gulp = gulp.replace(/INPUT/g, input)
       gulp = gulp.replace(/OUTPUT/g, output)
-      installDevDependencies('babel-core babel-preset-env babelify gulp gulp-uglify gulp-rename browserify gulp-htmlmin gulp-clean-css gulp-tap gulp-buffer del run-sequence envify bundle-collapser gulp-plumber gulp-sass')
+      installDevDependencies('babel-core babel-preset-env babelify gulp gulp-uglify gulp-rename browserify gulp-htmlmin gulp-clean-css gulp-tap gulp-buffer del run-sequence envify bundle-collapser gulp-plumber gulp-sass gulp-postcss postcss-cssnext')
       fs.writeFile('./gulpfile.js', gulp, (err) => {
         if (err) throw err 
         log('gulpfile.js created.')
