@@ -1,3 +1,10 @@
+let webpack = require('./webpack/webpack.js')
+let addGulp = require('./gulp/gulp.js')
+let addBackend = require('./backend/addBackend')
+let addDatabase = require('./database/addDataBase')
+let addRedux = require('./redux/addRedux')
+
+
 let log = console.log
 let inquirer = require('inquirer')
 let prompt = inquirer.prompt
@@ -23,14 +30,19 @@ let add = () => {
     command = ans.command
     switch (command) {
       case "webpack":  
+        webpack()
         break;
       case "redux":
+        addRedux()
         break
       case "database":
+        addDatabase()
         break
       case "backend":
+        addBackend()
         break
       case "gulp":
+        addGulp()
         break
       default:
         break;

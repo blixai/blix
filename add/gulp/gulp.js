@@ -1,16 +1,24 @@
-const readline = require('readline');
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout,
-  terminal: false
-});
-
 let fs = require('fs')
 let path = require('path')
 let shell = require('shelljs')
 const execSync = require('child_process').execSync;
 const chalk = require('chalk');
 const log = console.log;
+
+let inquirer = require('inquirer')
+let prompt = inquirer.prompt
+
+let output = {
+  type: 'input',
+  message: 'What directory should contain the output files:',
+  name: 'output'
+}
+
+let input = {
+  type: 'input',
+  message: 'What directory contains the source files:',
+  name: 'input'
+}
 
 
 let shouldUseYarn = () => {
@@ -34,8 +42,10 @@ let installDevDependencies = (packages) => {
 
 let addGulp = () => {
   checkPackageJSON()
-  rl.question('? What directory contains the source files: ', (input) => {
-    rl.question('? What directory should contain the public or dist files: ', (output) => {
+  prompt([input]).then(input => {
+    input = input.input 
+    prompt([output]).then(output => {
+      output = output.output
       let gulp = fs.readFileSync(path.resolve(__dirname, './files/gulpFile.js'), 'utf8')
       gulp = gulp.replace(/INPUT/g, input)
       gulp = gulp.replace(/OUTPUT/g, output)
@@ -47,7 +57,6 @@ let addGulp = () => {
       })
       addScript('gulp', 'gulp')
       addScript('gulp-prod', 'gulp production') 
-      rl.close()
     })
   })
 }
@@ -63,7 +72,6 @@ let addScript = (command, script) => {
 let checkPackageJSON = () => {
   if (!fs.existsSync('./package.json')) {
     log(`Can't find the package.json to install gulp dependencies. Make sure you're in the right directory.`)
-    rl.close()
     return
   } 
 }

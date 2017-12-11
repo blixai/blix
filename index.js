@@ -1,14 +1,9 @@
 #!/usr/bin/env node
 
 let createProject = require('./new/createProject')
-let addBackend = require('./backend/addBackend')
-let addDatabase = require('./database/addDataBase')
-let addRedux = require('./redux/addRedux')
 let update = require('./update/update')
 let help = require('./help/help.js')
 let createCommand = require('./command/command.js')
-let webpack = require('./webpack/webpack.js')
-let addGulp = require('./gulp/gulp.js')
 let remove = require('./remove/remove.js')
 let add = require('./add/add')
 let command = process.argv[2]
@@ -19,15 +14,6 @@ let checkCommand = (command) => {
     case "new":
       createProject();
       break;
-    case "backend":
-      addBackend();
-      break
-    case "database":
-      addDatabase();
-      break;
-    case "redux":
-      addRedux()
-      break
     case "update":
       update()
       break
@@ -37,12 +23,6 @@ let checkCommand = (command) => {
     case "command":
       createCommand()
       break
-    case "webpack":
-      webpack()
-      break
-    case "gulp":
-      addGulp()
-      break;
     case "remove":
       remove()
       break;

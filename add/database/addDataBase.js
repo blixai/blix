@@ -1,14 +1,24 @@
-const readline = require('readline');
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout,
-  terminal: false
-});
-
 let fs = require('fs')
 let shell = require('shelljs')
 const execSync = require('child_process').execSync;
+let inquirer = require('inquirer')
+let prompt = inquirer.prompt
 
+let database = {
+  type: 'list',
+  message: 'Postgres or MongoDB:',
+  name: 'db',
+  choices: [
+    { name: 'Postgres', value: 'p' },
+    { name: 'MongoDB', value: 'm'}
+  ]
+}
+
+let databaseName = {
+  type: 'input',
+  message: 'What is the name of the database:',
+  name: 'name'
+}
 
 let shouldUseYarn = () => {
   try {
@@ -40,12 +50,11 @@ let installKnexGlobal = () => {
 
 let addDatabase = () => {
   process.stdout.write('\033c')
-  rl.question('Postgres or MongoDB (P/M)? ', (answer) => {
-    let type = answer.toLowerCase()
+  prompt([database]).then(answer => {
+    let type = answer.db 
     if (type === 'p') {
-      rl.question('What is the name of the database? ', (answer) => {
-        let name = answer
-        rl.close()
+      prompt([databaseName]).then(ans => {
+        let name = ans.name
         install('knex pg')
         installKnexGlobal()
         let newKnex = `module.exports = {\n\n\tdevelopment: {\n\t\tclient: 'pg',\n\t\tconnection: 'postgres://localhost/${name}',\n\t\tmigrations: {\n\t\t\tdirectory: './db/migrations'\n\t\t},\n\t\tseeds: {\n\t\t\tdirectory: './db/seeds/dev'\n\t\t},\n\t\tuseNullAsDefault: true\n\t},\n\n\tproduction: {\n\t\tclient: 'pg',\n\t\tconnection: process.env.DATABASE_URL + '?ssl=true',\n\t\tmigrations: {\n\t\t\tdirectory: 'db/migrations'\n\t\t},\n\t\tseeds: {\n\t\t\tdirectory: 'db/seeds/dev'\n\t\t},\n\t\tuseNullAsDefault: true\n\t}\n\n};`
@@ -62,12 +71,9 @@ let addDatabase = () => {
           execSync(`createdb ${name};`, { stdio: 'ignore' });
         } catch (err) {
           if (err) throw err
-          // need some variable to indicate this failed and the user needs to make a new database
         }
-
       })
-    } else if (type === 'm') {
-      rl.close()
+    } else {
       install('mongo')
       // could see if dotenv is installed, maybe also ask to modify the enzo api file
       if (fs.existsSync('./.env')) {
@@ -86,10 +92,7 @@ let addDatabase = () => {
           }
         })
       }
-    } else {
-      console.log(`Looks like you didn't enter P or M. Please try again. `)
-      addDatabase()
-    }
+    } 
   })
 }
 
