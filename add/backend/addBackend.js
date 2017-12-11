@@ -1,16 +1,29 @@
-const readline = require('readline');
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout,
-  terminal: false
-});
-
 let fs = require('fs')
 let path = require('path')
 let shell = require('shelljs')
 const execSync = require('child_process').execSync;
 
 let BE = require('./create')
+
+let inquirer = require('inquirer')
+let prompt = inquirer.prompt
+
+let database = {
+  type: 'list',
+  message: 'Database:',
+  name: 'db',
+  choices: [
+    { name: 'MongoDB' , value: 'm'  },
+    { name: 'Postgres', value: 'p'  },
+    { name: 'None'                  }
+  ]
+}
+
+let dbName = {
+  type: 'input',
+  message: 'What is the database name:',
+  name: 'name'
+}
 
 let shouldUseYarn = () => {
   try {
@@ -58,63 +71,67 @@ let addScript = (command, script) => {
 }
 
 
-// also need to ask if they'll be serving html
-// also need if they want an html server see if they already have a source directory for pages
 let addBackend = () => {
   process.stdout.write('\033c')
-  rl.question('? Do you need a Postgres or MongoDB database: (Y/N) ', (database) => {
-    database = database.toLowerCase()
-    if (database === 'y') {
-      rl.question('? Postgres or Mongo: (P/M) ', (answer) => {
-        answer = answer.toLowerCase()
-        if (answer === 'p') {
-          // postgres database
-          rl.question('? What is the database name: ', (name) => {
-            BE.backendOnly()
-            rl.close();
-            console.log('Downloading dependencies and creating files, this may take a moment')
-            install('express nodemon pg knex body-parser helmet bookshelf compression dotenv')
-            installKnexGlobal()
-            modifyKnex(name)
-            try {
-              execSync(`createdb ${name};`, { stdio: 'ignore' });
-            } catch (e) {
-              // need some variable to indicate this failed and the user needs to make a new database
-            }
-            addBookshelfToEnzo()
-            addScript('server', 'nodemon server/cluster.js')
-            addScript('api', 'node enzo/api.js')
-            process.stdout.write('\033c')
-            console.log('The backend was created!')
-            console.log(`to start server enter npm run server`)
-          })
-        } else {
-          // express with mongodb
-          BE.backendOnly()
-          rl.close();
-          console.log('Downloading dependencies and creating files, this may take a moment')
-          install('express nodemon mongo body-parser helmet mongoose compression dotenv')
-          addScript('server', 'nodemon server/cluster.js')
-          addScript('api', 'node enzo/api.js')
-          addMongooseToEnzo()
-          process.stdout.write('\033c')
-          console.log('The backend was created!')
-          console.log(`to start server enter npm run server`)
-        }
-      })
+  prompt([database]).then(database => {
+    let answer = database.db 
+    if (answer === 'p') {
+      // postgres database
+      postgres()
+    } else if (answer === 'm') {
+      // express with mongodb
+      mongo()
     } else {
       // backend without db
-      BE.backendOnly()
-      rl.close();
-      console.log('Downloading dependencies and creating files, this may take a moment')
-      install('express nodemon body-parser helmet compression dotenv')
-      addScript('server', 'nodemon server/cluster.js')
-      addScript('api', 'node enzo/api.js')
-      process.stdout.write('\033c')
-      console.log('The backend was created!')
-      console.log(`to start server enter npm run server`)
+      backendOnly()
     }
   })
+}
+
+let postgres = () => {
+  prompt([dbName]).then(name => {
+    name = name.name
+    BE.backendOnly()
+    console.log('Downloading dependencies and creating files, this may take a moment')
+    install('express nodemon pg knex body-parser helmet bookshelf compression dotenv')
+    installKnexGlobal()
+    modifyKnex(name)
+    try {
+      execSync(`createdb ${name};`, { stdio: 'ignore' });
+    } catch (e) {
+      // need some variable to indicate this failed and the user needs to make a new database
+    }
+    addBookshelfToEnzo()
+    addScript('server', 'nodemon server/cluster.js')
+    addScript('api', 'node enzo/api.js')
+    process.stdout.write('\033c')
+    console.log('The backend was added!')
+    console.log(`to start server enter npm run server`)
+  })
+}
+
+let mongo = () => {
+  BE.backendOnly()
+  console.log('Downloading dependencies and creating files, this may take a moment')
+  install('express nodemon mongo body-parser helmet mongoose compression dotenv')
+  addScript('server', 'nodemon server/cluster.js')
+  addScript('api', 'node enzo/api.js')
+  addMongooseToEnzo()
+  process.stdout.write('\033c')
+  console.log('The backend was added!')
+  console.log(`to start server enter npm run server`)
+}
+
+
+let backendOnly = () => {
+  BE.backendOnly()
+  console.log('Downloading dependencies and creating files, this may take a moment')
+  install('express nodemon body-parser helmet compression dotenv')
+  addScript('server', 'nodemon server/cluster.js')
+  addScript('api', 'node enzo/api.js')
+  process.stdout.write('\033c')
+  console.log('The backend was added!')
+  console.log(`to start server enter npm run server`)
 }
 
 

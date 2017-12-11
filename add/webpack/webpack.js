@@ -1,10 +1,3 @@
-const readline = require('readline');
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout,
-  terminal: false
-});
-
 let fs = require('fs')
 let path = require('path')
 let shell = require('shelljs')
@@ -12,6 +5,9 @@ const execSync = require('child_process').execSync;
 const chalk = require('chalk');
 const log = console.log;
 const boxen = require('boxen')
+
+let inquirer = require('inquirer')
+let prompt = inquirer.prompt
 
 let shouldUseYarn = () => {
   try {
@@ -45,17 +41,34 @@ let webpack = () => {
   installWebpack()
 }
 
+let webpackEntry = {
+  type: 'input',
+  name: 'src',
+  message: 'What directory holds the index.js file:'
+}
+
+let webpackOutput = {
+  type: 'input',
+  name: 'output',
+  message: 'What directory should contain the output bundle:'
+}
+
+let addReact = {
+  type: 'confirm',
+  name: 'react',
+  message: 'Do you want webpack configured for React: '
+}
+
 let installWebpack = () => {
   // need to ask questions like where is the index.js file
   // probably also need to add babelrc file 
-  log('')
-  rl.question(chalk.cyanBright('? What directory holds the index.js file: '), (ans) => {
+  prompt([webpackEntry]).then(ans => {
+    ans = ans.src 
     if (fs.existsSync(`./${ans}`)) {
       log('')
-      rl.question(chalk.cyanBright('? What directory should contain the output bundle: '), (output) => {
-        log('')
+      prompt([webpackOutput]).then(output => {
+        output = output.output
         reactQuestion(ans, output)
-
       })
     } else {
       log(`Couldn't find directory ${ans}. Please try again`)
@@ -65,9 +78,8 @@ let installWebpack = () => {
 }
 
 let reactQuestion = (ans, output) => {
-  rl.question(chalk.cyanBright('? Do you want it configured for React: (Y/N) '), (react) => {
-    log(react)
-    react = react.toLowerCase()
+  prompt([addReact]).then(react => {
+    react = react.react
     createConfig(ans, output, react)
   })
 }
@@ -75,18 +87,15 @@ let reactQuestion = (ans, output) => {
 let createConfig = (input, output, react) => {
   let webpack;
   let babel
-  if (react === 'y') {
+  if (react) {
     babel = fs.readFileSync(path.resolve(__dirname, './files/react-babel.js'), 'utf8') 
     install('react react-dom')   
     installDevDependencies('webpack babel-loader css-loader babel-core babel-preset-env babel-preset-react style-loader webpack-merge uglifyjs-webpack-plugin sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-cssnext postcss-import postcss-loader')
     webpack = fs.readFileSync(path.resolve(__dirname, './files/webpack.config.js'), 'utf8')
-  } else if (react === 'n') {
+  } else {
     babel = fs.readFileSync(path.resolve(__dirname, './files/.babelrc'), 'utf8')
     webpack = fs.readFileSync(path.resolve(__dirname, './files/webpack.config.js'), 'utf8')
     installDevDependencies('webpack babel-loader css-loader babel-core babel-preset-env style-loader webpack-merge uglifyjs-webpack-plugin sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-cssnext postcss-import postcss-loader')
-  } else {
-    // ask the react question again. It needs an answer 
-    return reactQuestion(input, output)
   }
   webpack = webpack.replace(/INPUT/g, input)
   webpack = webpack.replace(/OUTPUT/g, output)
@@ -117,7 +126,6 @@ let createConfig = (input, output, react) => {
   } catch (e) {
     log(`Couldn't add the webpack and webpack-prod scripts to package json. `)
   }
-  rl.close()
 }
 
 let addScript = (command, script) => {

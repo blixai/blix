@@ -1,15 +1,9 @@
-const readline = require('readline');
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout,
-  terminal: false
-});
-
 let fs = require('fs')
 let path = require('path')
 let shell = require('shelljs')
 const execSync = require('child_process').execSync;
-
+let inquirer = require('inquirer')
+let prompt = inquirer.prompt
 
 let shouldUseYarn = () => {
   try {
@@ -284,24 +278,23 @@ let createFilesWithoutRouter = () => {
   // need to install without react router
 }
 
+let reactRouter = {
+  type: 'confirm',
+  message: 'Do you need React Router:',
+  name: 'router'
+}
 
 let addRedux = () => {
   process.stdout.write('\033c')
   console.log('Mutating a project can cause loss of files. Make sure you have everything committed.')
-  rl.question('Do you need React Router? (Y/N) ', (answer) => {
-    if (answer.toLowerCase() === 'y') {
+  prompt([reactRouter]).then(answer => {
+    answer = answer.router
+    if (answer) {
       createFilesWithRouter()
-      rl.close()
-    } else if (answer.toLowerCase() === 'n') {
-      createFilesWithoutRouter()
-      rl.close()
     } else {
-      console.log('Invalid input. Please enter Y or N next time.')
-      rl.close()
-
+      createFilesWithoutRouter()
     }
   })
-  
 }
 
 module.exports = addRedux
