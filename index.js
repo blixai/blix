@@ -10,6 +10,7 @@ let createCommand = require('./command/command.js')
 let webpack = require('./webpack/webpack.js')
 let addGulp = require('./gulp/gulp.js')
 let remove = require('./remove/remove.js')
+let add = require('./add/add')
 let command = process.argv[2]
 
 
@@ -44,6 +45,9 @@ let checkCommand = (command) => {
       break;
     case "remove":
       remove()
+      break;
+    case "add":
+      add()
       break;
     case "version":
       var pjson = require('./package.json');
