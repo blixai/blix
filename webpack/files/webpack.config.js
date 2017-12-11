@@ -1,5 +1,4 @@
 const path = require('path')
-const CleanWebpackPlugin = require('clean-webpack-plugin');
 let ExtractTextPlugin = require('extract-text-webpack-plugin')
 const extractSass = new ExtractTextPlugin('main.css')
 
@@ -38,7 +37,6 @@ module.exports = {
     ]
   },
   plugins: [
-    new CleanWebpackPlugin("OUTPUT"),
     new ExtractTextPlugin('main.css'),
     extractSass
   ],

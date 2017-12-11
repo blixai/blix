@@ -78,12 +78,12 @@ let createConfig = (input, output, react) => {
   if (react === 'y') {
     babel = fs.readFileSync(path.resolve(__dirname, './files/react-babel.js'), 'utf8') 
     install('react react-dom')   
-    installDevDependencies('webpack babel-loader css-loader babel-core babel-preset-env babel-preset-react style-loader webpack-merge uglifyjs-webpack-plugin sass-loader node-sass extract-text-webpack-plugin clean-webpack-plugin cssnano postcss postcss-cssnext postcss-import postcss-loader')
+    installDevDependencies('webpack babel-loader css-loader babel-core babel-preset-env babel-preset-react style-loader webpack-merge uglifyjs-webpack-plugin sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-cssnext postcss-import postcss-loader')
     webpack = fs.readFileSync(path.resolve(__dirname, './files/webpack.config.js'), 'utf8')
   } else if (react === 'n') {
     babel = fs.readFileSync(path.resolve(__dirname, './files/.babelrc'), 'utf8')
     webpack = fs.readFileSync(path.resolve(__dirname, './files/webpack.config.js'), 'utf8')
-    installDevDependencies('webpack babel-loader css-loader babel-core babel-preset-env style-loader webpack-merge uglifyjs-webpack-plugin sass-loader node-sass extract-text-webpack-plugin clean-webpack-plugin cssnano postcss postcss-cssnext postcss-import postcss-loader')
+    installDevDependencies('webpack babel-loader css-loader babel-core babel-preset-env style-loader webpack-merge uglifyjs-webpack-plugin sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-cssnext postcss-import postcss-loader')
   } else {
     // ask the react question again. It needs an answer 
     return reactQuestion(input, output)

@@ -33,11 +33,24 @@ let shouldUseYarn = () => {
 }
 
 let removeDependencies = (packages) => {
+  let arr = packages.split(' ')
   let yarn = shouldUseYarn()
   if (yarn) {
-    shell.exec(`yarn remove ${packages}`)
+    arr.forEach(package => {
+      try {
+        shell.exec(`yarn remove ${package}`)
+      } catch (e) {
+  
+      }
+    })
   } else {
-    shell.exec(`npm uninstall ${packages}`)
+    arr.forEach(package => {
+      try {
+        shell.exec(`npm uninstall ${package}`)
+      } catch (e) {
+        
+      }
+    })
   }
 }
 
@@ -52,17 +65,15 @@ let removeGulp = () => {
 }
 
 let removeWebpack = () => {
-  removeDependencies('webpack babel-loader css-loader babel-core babel-preset-env babel-preset-react style-loader webpack-merge uglifyjs-webpack-plugin sass-loader node-sass extract-text-webpack-plugin clean-webpack-plugin')
+  removeDependencies('webpack babel-loader css-loader babel-core babel-preset-env babel-preset-react style-loader webpack-merge uglifyjs-webpack-plugin sass-loader node-sass extract-text-webpack-plugin postcss-loader postcss-import postcss-cssnext postcss cssnano')
   removeScript('webpack')
   removeScript('webpack-prod')
-  fs.unlink('./webpack.config.js', (err) => {
-    if (err) throw err;
-    log('successfully deleted webpack config');
-  });
-  fs.unlink('./webpack.prod.js', (err) => {
-    if (err) throw err;
-    log('successfully deleted webpack production config');
-  });
+  try {
+    fs.unlinkSync('./webpack.config.js')
+    fs.unlinkSync('./webpack.prod.js')
+  } catch (err) {
+    
+  }
 }
 
 
