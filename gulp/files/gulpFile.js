@@ -5,6 +5,7 @@ var browserify = require('browserify');
 
 var htmlmin = require('gulp-htmlmin');
 let cleanCSS = require('gulp-clean-css');
+var sass = require('gulp-sass');
 
 var gutil = require('gulp-util');
 var tap = require('gulp-tap');
@@ -12,89 +13,97 @@ var buffer = require('gulp-buffer');
 
 var del = require('del');
 var runSequence = require('run-sequence');
-var sass = require('gulp-sass')
+
 
 var collapse = require('bundle-collapser/plugin')
 let envify = require('envify/custom')
 let plumber = require('gulp-plumber')
 
+let postcss = require('gulp-postcss')
+let cssnext = require('postcss-cssnext')
+
 gulp.task('js', function () {
-  return gulp.src('INPUT/**/*.js', { read: false })
+  return gulp.src('src/**/*.js', { read: false })
     .pipe(tap(function (file) {
       gutil.log('bundling ' + file.path);
       file.contents = browserify(file.path, { debug: true })
-      .transform("babelify", { presets: ["env"] })
-      .plugin(collapse)
-      .bundle()
-      .on('error', function (error) {
-        console.log('error');
-        this.emit('end');
-      })
+        .transform("babelify", { presets: ["env"] })
+        .plugin(collapse)
+        .bundle()
+        .on('error', function (error) {
+          console.log('error');
+          this.emit('end');
+        })
     }))
     .pipe(plumber())
     .pipe(buffer())
-    .pipe(gulp.dest('OUTPUT'));
+    .pipe(gulp.dest('public'));
 })
 
 gulp.task('min-js', function () {
-  return gulp.src('INPUT/**/*.js', { read: false })
+  return gulp.src('src/**/*.js', { read: false })
     .pipe(tap(function (file) {
       gutil.log('bundling ' + file.path);
       file.contents = browserify(file.path, { debug: false })
-      .transform("babelify", { presets: ["env"] })
-      .transform({ global: true }, envify({ NODE_ENV: 'production' }))
-      .plugin(collapse)
-      .bundle()
-      .on('error', function (error) {
-        console.log('error');
-        this.emit('end');
-      })
+        .transform("babelify", { presets: ["env"] })
+        .transform({ global: true }, envify({ NODE_ENV: 'production' }))
+        .plugin(collapse)
+        .bundle()
+        .on('error', function (error) {
+          console.log('error');
+          this.emit('end');
+        })
     }))
     .pipe(plumber())
     .pipe(buffer())
     .pipe(uglify())
-    .pipe(gulp.dest('OUTPUT'));
+    .pipe(gulp.dest('public'));
 })
 
 gulp.task('html', function () {
-  return gulp.src('INPUT/**/*.html').pipe(gulp.dest('OUTPUT'));
+  return gulp.src('src/**/*.html').pipe(gulp.dest('public'));
 });
 
 gulp.task('minify-html', () => {
-  return gulp.src(`./INPUT/**/*.html`)
+  return gulp.src(`./src/**/*.html`)
     .pipe(htmlmin({ collapseWhitespace: true }))
-    .pipe(gulp.dest(`OUTPUT`))
+    .pipe(gulp.dest(`public`))
 })
 
 gulp.task('css', function () {
-  return gulp.src('INPUT/**/*.css').pipe(gulp.dest('OUTPUT'));
+  let plugins = [cssnext]
+  return gulp.src('src/**/*.css')
+    .pipe(postcss(plugins))
+    .pipe(gulp.dest('public'));
 });
 
 gulp.task('minify-css', () => {
-  return gulp.src(`./INPUT/**/*css`)
+  let plugins = [cssnext]
+  return gulp.src(`./src/**/*css`)
+    .pipe(postcss(plugins))
     .pipe(cleanCSS({ compatibility: 'ie8' }))
-    .pipe(gulp.dest(`OUTPUT`));
+    .pipe(gulp.dest(`public`));
 })
 
-gulp.task('sass', () => {
-  return gulp.src('INPUT/**/*.scss')
+gulp.task('scss', () => {
+  return gulp.src('src/**/*.scss')
     .pipe(sass().on('error', sass.logError))
-    .pipe(gulp.dest('INPUT'))
+    .pipe(gulp.dest('public'));
 })
 
 gulp.task('clean', function () {
-  return del(['OUTPUT']);
+  return del(['public']);
 });
 
 gulp.task('watch', () => {
   runSequence(
     'clean',
-    ['js', 'html', 'css', 'sass']
+    ['js', 'html', 'css', 'scss']
   )
   gulp.watch('src/**/*', () => {
     runSequence(
       'clean',
-      ['js', 'html', 'css', 'sass']
+      ['js', 'html', 'css', 'scss']
     )
   })
 })
