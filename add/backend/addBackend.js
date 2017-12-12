@@ -93,7 +93,7 @@ let postgres = () => {
     name = name.name
     BE.backendOnly()
     console.log('Downloading dependencies and creating files, this may take a moment')
-    install('express nodemon pg knex body-parser helmet bookshelf compression dotenv')
+    install('express nodemon pg knex body-parser helmet bookshelf compression dotenv morgan')
     installKnexGlobal()
     modifyKnex(name)
     try {
@@ -113,7 +113,7 @@ let postgres = () => {
 let mongo = () => {
   BE.backendOnly()
   console.log('Downloading dependencies and creating files, this may take a moment')
-  install('express nodemon mongo body-parser helmet mongoose compression dotenv')
+  install('express nodemon mongo body-parser helmet mongoose compression dotenv morgan')
   addScript('server', 'nodemon server/cluster.js')
   addScript('api', 'node enzo/api.js')
   addMongooseToEnzo()
@@ -126,7 +126,7 @@ let mongo = () => {
 let backendOnly = () => {
   BE.backendOnly()
   console.log('Downloading dependencies and creating files, this may take a moment')
-  install('express nodemon body-parser helmet compression dotenv')
+  install('express nodemon body-parser helmet compression dotenv morgan')
   addScript('server', 'nodemon server/cluster.js')
   addScript('api', 'node enzo/api.js')
   process.stdout.write('\033c')
