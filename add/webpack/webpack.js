@@ -71,9 +71,7 @@ let style = {
 }
 
 let installWebpack = () => {
-  // need to ask questions like where is the index.js file
-  // probably also need to add babelrc file 
-  let files = glob.sync('!(node_modules|package.json|yarn.lock|.gitignore|.env|postcss.config.js)')
+let files = glob.sync('{,!(node_modules)/**/}*.js')
   webpackEntry.choices = files 
 
   prompt([webpackEntry]).then(ans => {
@@ -111,7 +109,7 @@ let createConfig = (input, output, react, styles) => {
     installDevDependencies('webpack babel-loader css-loader babel-core babel-preset-env babel-preset-react style-loader webpack-merge uglifyjs-webpack-plugin extract-text-webpack-plugin ')
   } else {
     babel = fs.readFileSync(path.resolve(__dirname, './files/.babelrc'), 'utf8')
-    installDevDependencies('webpack babel-loader css-loader babel-core babel-preset-env style-loader webpack-merge uglifyjs-webpack-plugin extract-text-webpack-plugin cssnano postcss postcss-cssnext postcss-import postcss-loader')
+    installDevDependencies('webpack babel-loader css-loader babel-core babel-preset-env style-loader webpack-merge uglifyjs-webpack-plugin extract-text-webpack-plugin')
   }
 
   webpack = webpack.replace(/INPUT/g, input)
