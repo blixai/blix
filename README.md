@@ -10,12 +10,9 @@ Listed are a series of commmands to get started with enzo
 Commands: 
 ```
   enzo new <projectName>
-  enzo backend <databaseName>
-  enzo database <databaseName>
-  enzo help <optionalCommand>
-  enzo redux 
-  enzo webpack
-  enzo gulp
+  enzo add 
+  enzo remove
+  enzo help
   enzo update 
   enzo version
 ```  
