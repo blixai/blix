@@ -44,7 +44,7 @@ let webpack = () => {
 let webpackEntry = {
   type: 'list',
   name: 'src',
-  message: 'What directory holds the index.js file:',
+  message: 'Select the source file:',
   choices: []
 }
 
