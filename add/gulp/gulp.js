@@ -149,12 +149,6 @@ let addPostCSS = (gulp) => {
   gulp = addTaskToTaskArray(gulp, `, 'css'`)
   gulp = addTaskToProductionArray(gulp, `, 'minify-css'`)
   installDevDependencies('gulp-postcss postcss-cssnext gulp-clean-css')
-  let postcssConfig = fs.readFileSync(path.resolve(__dirname, './files/postcss.config.js'), 'utf8')
-  fs.writeFile('./postcss.config.js', postcssConfig, (err) => {
-    if (err) throw err 
-    log('Created postcss.config.js file')
-  })
-  // need to add css to the tasks 
   return gulp 
 }
 
