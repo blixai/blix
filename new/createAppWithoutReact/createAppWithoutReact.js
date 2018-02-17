@@ -50,7 +50,7 @@ let railsApp = () => {
   fs.writeFile(`./${name}/src/home/index.html`, railsHtmlFile, (err) => {
     if (err) throw err
   })
-  fs.writeFile(`./${name}/src/home/index.js`, `import './main.css'\nconsole.log('hello world!')`, (err) => {
+  fs.writeFile(`./${name}/src/home/index.js`, `console.log('hello world!')`, (err) => {
     if (err) throw err
   })
   fs.writeFile(`./${name}/src/home/main.css`, `body {\ncolor: blue;\n}`, (err) => {
