@@ -14,7 +14,7 @@ let commands = {
     { name: 'custom: create your own' , value: 'custom'},
     { name: 'react: create a new react statefull or stateless component', value: 'react' },
     { name: 'redux: create a new react component, a redux container, and a new route in your routing component', value: 'redux' },
-    { name: 'api: create new api endpoints and model', value: 'api' },
+    { name: 'api: create new api endpoints and controller', value: 'api' },
     { name: 'page: create a new folder, html, css, and js files along with adding the route in pages.js', value: 'page' },
     { name: 'model: create a new Bookshelf model and migration or a Mongoose model', value: 'model' },
     { name: 'action: create or add redux action to new or existing reducer', value: 'action' }

@@ -43,6 +43,9 @@ let runHelp = () => {
       case 'update':
         log(chalk.cyanBright('updates enzo from npm'))
         break
+      case 'add':
+        log(chalk.cyanBright('Choose from a list to add things like servers, databases, webpack, gulp, and redux to a project'))
+        break
       case 'command':
         log(chalk.cyanBright('Asks a series of questions to either add preconfigured enzo commands to a project or build your own'))
         break
