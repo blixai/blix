@@ -71,12 +71,18 @@ exports.addScriptToNewPackageJSON = (command, script, name) => {
 
 
 exports.writeFile = (filePath, file, message) => {
+
   fs.writeFile(filePath, file, (err) => {
     if (err) throw err 
-    log(message)
+    message ? log(message) : ''
   })
 }
 
+exports.rename = (oldName, newName) => {
+  fs.rename(oldName, newName, (err) => {
+    if (err) throw err 
+  })
+}
 
 // exports.loadFile = filePath => {
 //   return fs.readFileSync(path.resolve(__dirname, filePath), 'utf8')
