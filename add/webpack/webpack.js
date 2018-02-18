@@ -1,44 +1,23 @@
-let fs = require('fs')
-let path = require('path')
-let shell = require('shelljs')
-const execSync = require('child_process').execSync;
-const chalk = require('chalk');
-const log = console.log;
-const boxen = require('boxen')
-let glob = require('glob')
-let inquirer = require('inquirer')
-let prompt = inquirer.prompt
-
-let shouldUseYarn = () => {
-  try {
-    execSync('yarnpkg --version', { stdio: 'ignore' });
-    return true;
-  } catch (e) {
-    return false;
-  }
-}
-
-let installDevDependencies = (packages) => {
-  let yarn = shouldUseYarn()
-  if (yarn) {
-    shell.exec(`yarn add ${packages} --dev`, {silent:false})
-  } else {
-    shell.exec(`npm install --save-dev ${packages}`, {silent:false})
-  }
-}
-
-let install = (packages) => {
-  let yarn = shouldUseYarn()
-  if (yarn) {
-    shell.exec(`yarn add ${packages}`, {silent:false})
-  } else {
-    shell.exec(`npm install ${packages}`, {silent:false})
-  }
-}
+let fs         = require('fs')
+let path       = require('path')
+let shell      = require('shelljs')
+let execSync   = require('child_process').execSync;
+let chalk      = require('chalk');
+let log        = console.log;
+let boxen      = require('boxen')
+let glob       = require('glob')
+let inquirer   = require('inquirer')
+let prompt     = inquirer.prompt
+let helpers    = require('../../helpers')
 
 
 let webpack = () => {
   installWebpack()
+}
+
+// helper function to load files 
+let loadFile = filePath => {
+  return fs.readFileSync(path.resolve(__dirname, filePath), 'utf8')
 }
 
 let webpackEntry = {
@@ -101,15 +80,15 @@ let styleQuestion = (entry, output, react) => {
 
 let createConfig = (input, output, react, styles) => {
   log('Downloading dependencies, this may take a moment.')
-  let webpack = fs.readFileSync(path.resolve(__dirname, './files/webpack.config.js'), 'utf8')
+  let webpack = loadFile('./files/webpack.config.js')
   let babel
   if (react) {
-    babel = fs.readFileSync(path.resolve(__dirname, './files/react-babel.js'), 'utf8') 
-    install('react react-dom')   
-    installDevDependencies('webpack babel-loader css-loader babel-core babel-preset-env babel-preset-react style-loader webpack-merge uglifyjs-webpack-plugin extract-text-webpack-plugin ')
+    babel = loadFile('./files/react-babel.js')
+    helpers.install('react react-dom')   
+    helpers.installDevDependencies('webpack babel-loader css-loader babel-core babel-preset-env babel-preset-react style-loader webpack-merge uglifyjs-webpack-plugin extract-text-webpack-plugin ')
   } else {
-    babel = fs.readFileSync(path.resolve(__dirname, './files/.babelrc'), 'utf8')
-    installDevDependencies('webpack babel-loader css-loader babel-core babel-preset-env style-loader webpack-merge uglifyjs-webpack-plugin extract-text-webpack-plugin')
+    babel = loadFile('./files/.babelrc')
+    helpers.installDevDependencies('webpack babel-loader css-loader babel-core babel-preset-env style-loader webpack-merge uglifyjs-webpack-plugin extract-text-webpack-plugin')
   }
 
   webpack = webpack.replace(/INPUT/g, input)
@@ -117,25 +96,16 @@ let createConfig = (input, output, react, styles) => {
   webpack = addLoader(styles, webpack)
 
 
-  fs.writeFile('./webpack.config.js', webpack, (err) => {
-    if (err) throw err
-    log('Created webpack.config.js file')
-  })
+  helpers.writeFile('./webpack.config.js', webpack, 'Created webpack.config.js file')
 
-  fs.writeFile('./.babelrc', babel, (err) => {
-    if (err) throw err 
-    log('Created babelrc file')
-  })
+  helpers.writeFile('./.babelrc', babel, 'Created .babelrc file')
 
-  let webpackProd = fs.readFileSync(path.resolve(__dirname, './files/webpack.prod.js'), 'utf8')
-  fs.writeFile('./webpack.prod.js', webpackProd, (err) => {
-    if (err) throw err
-    log('Created webpack.prod.js file')
-  })
+  let webpackProd = loadFile('./files/webpack.prod.js')
+  helpers.writeFile('./webpack.prod.js', webpackProd, 'Created webpack.prod.js file')
 
   try {
-    addScript('webpack', 'webpack --watch')
-    addScript('webpack-prod', 'webpack --config webpack.prod.js')
+    helpers.addScript('webpack', 'webpack --watch')
+    helpers.addScript('webpack-prod', 'webpack --config webpack.prod.js')
   } catch (e) {
     log(`Couldn't add the webpack and webpack-prod scripts to package json. `)
   }
@@ -169,7 +139,7 @@ let addSass = (webpack) => {
   let newBody = webpack
   let index = newBody.indexOf('plugins: [')
   webpack = [newBody.slice(0, index + 10), sassPlugin, newBody.slice(index + 10)].join('')
-  installDevDependencies('sass-loader node-sass')
+  helpers.installDevDependencies('sass-loader node-sass')
   // add plugin
   return webpack 
 }
@@ -187,22 +157,10 @@ let addPostCSS = (webpack) => {
     newBody = [newBody.slice(0, index + 11), '!postcss-loader', newBody.slice(index + 11)].join('')
   }
   webpack = newBody
-  let postcss = fs.readFileSync(path.resolve(__dirname, './files/postcss.config.js'), 'utf8')  
-  fs.writeFile('./postcss.config.js', postcss, (err) => {
-    if (err) throw err 
-    log('Created postcss.config.js')
-  })
-  installDevDependencies('cssnano postcss postcss-cssnext postcss-import postcss-loader')
+  let postcss = loadFile('./files/postcss.config.js')
+  helpers.writeFile('./postcss.config.js', postcss, 'Created postcss.config.js')
+  helpers.installDevDependencies('cssnano postcss postcss-cssnext postcss-import postcss-loader')
   return webpack
-}
-
-
-let addScript = (command, script) => {
-  let buffer = fs.readFileSync(`./package.json`)
-  let json = JSON.parse(buffer)
-  json.scripts[command] = script
-  let newPackage = JSON.stringify(json, null, 2)
-  fs.writeFileSync(`./package.json`, newPackage)
 }
 
 module.exports = webpack
