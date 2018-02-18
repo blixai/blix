@@ -11,7 +11,7 @@ let helpers    = require('../../helpers')
 let log        = console.log
 let clear      = process.stdout.write('\033c')
 
-
+//prompts
 let database = {
   type    : 'list',
   message : 'Database:',
@@ -41,7 +41,12 @@ let dbName = {
   name    : 'name'
 }
 
+//helper function
+let loadFile = filePath => {
+  return fs.readFileSync(path.resolve(__dirname, filePath), 'utf8')
+}
 
+//"main function"
 let addBackend = () => {
   backendType()
 }
@@ -50,20 +55,17 @@ let basicBackend = () => {
   prompt([database]).then(database => {
     let answer = database.db
     if (answer === 'p') {
-      // postgres database
       basicPostgres()
     } else if (answer === 'm') {
-      // express with mongodb
       basicMongo()
     } else {
-      // backend without db
       backendOnly()
     }
   })
 }
 
 let backendType = () => {
-  clear
+  clear()
   prompt([html]).then(html => {
     html.html ? askPug() : basicBackend()
   })
@@ -79,11 +81,11 @@ let pugBackend = () => {
   prompt([database]).then(database => {
     let answer = database.db 
     if (answer === 'p') {
-      // postgres with pug
+      pugPostgres()
     } else if (answer === 'm') {
-      // mongodb with pug 
+      pugMongo()
     } else {
-      // pug no db 
+      basicPug()
     }
   })
 }
@@ -92,12 +94,34 @@ let htmlBackend = () => {
   prompt([database]).then(database => {
     let answer = database.db 
     if (answer === 'p') {
-      // postgres with html
+      htmlPostgres()
     } else if (answer === 'm') {
-      // mongodb with html
+      htmlMongo()
     } else {
-      // html server no db 
+      htmlBasic()
     }
+  })
+}
+
+let pugPostgres = () => {
+  prompt([dbName]).then(name => {
+    name = name.name
+    BE.pugBackend()
+    log('Downloading dependencies and creating files, this may take a moment')
+    helpers.install('express nodemon pg knex body-parser helmet bookshelf compression dotenv morgan pug cookie-parser')
+    helpers.modifyKnex(name)
+    try {
+      execSync(`createdb ${name};`, { stdio: 'ignore' });
+    } catch (e) {
+      // need some variable to indicate this failed and the user needs to make a new database
+    }
+    addBookshelfToEnzo()
+    helpers.addScript('server', 'nodemon server/cluster.js' )
+    helpers.addScript('api'   , 'node enzo/api.js'          )
+    helpers.addScript('page'  , 'node enzo/page.js'         )
+    clear()
+    log('The backend was added!')
+    log(`to start server enter npm run server`)
   })
 }
 
@@ -117,22 +141,52 @@ let basicPostgres = () => {
     addBookshelfToEnzo()
     helpers.addScript('server', 'nodemon server/cluster.js')
     helpers.addScript('api', 'node enzo/api.js')
-    clear 
+    clear()
     log('The backend was added!')
     log(`to start server enter npm run server`)
   })
 }
 
+let pugMongo = () => {
+  prompt([dbName]).then(name => {
+    name = name.name
+    BE.pugBackend()
+    log('Downloading dependencies and creating files, this may take a moment')
+    helpers.install('express nodemon mongo body-parser helmet mongoose compression dotenv morgan pug cookie-parser')
+    helpers.addScript('server', 'nodemon server/cluster.js')
+    helpers.addScript('api', 'node enzo/api.js')
+    helpers.addScript('page', 'node enzo/page.js')
+    addMongooseToEnzo(name)
+    clear()
+    log('The backend was added!')
+    log(`to start server enter npm run server`) 
+  })
+}
+
 let basicMongo = () => {
-  BE.backendOnly()
+  prompt([dbName]).then(name => {
+    name = name.name
+    BE.backendOnly()
+    log('Downloading dependencies and creating files, this may take a moment')
+    helpers.install('express nodemon mongo body-parser helmet mongoose compression dotenv morgan')
+    helpers.addScript('server', 'nodemon server/cluster.js')
+    helpers.addScript('api', 'node enzo/api.js')
+    addMongooseToEnzo(name)
+    clear()
+    log('The backend was added!')
+    log(`to start server enter npm run server`)
+  })
+}
+
+let basicPug = () => {
+  BE.pugBackend()
   log('Downloading dependencies and creating files, this may take a moment')
-  helpers.install('express nodemon mongo body-parser helmet mongoose compression dotenv morgan')
+  helpers.install('express nodemon body-parser helmet compression dotenv morgan pug cookie-parser')
   helpers.addScript('server', 'nodemon server/cluster.js')
   helpers.addScript('api', 'node enzo/api.js')
-  helpers.addMongooseToEnzo()
-  clear
+  clear()
   log('The backend was added!')
-  log(`to start server enter npm run server`)
+  log(`to start server enter npm run server`) 
 }
 
 
@@ -142,44 +196,89 @@ let backendOnly = () => {
   helpers.install('express nodemon body-parser helmet compression dotenv morgan')
   helpers.addScript('server', 'nodemon server/cluster.js')
   helpers.addScript('api', 'node enzo/api.js')
-  clear
+  clear()
   log('The backend was added!')
   log(`to start server enter npm run server`)
 }
 
+let htmlPostgres = () => {
+  prompt([dbName]).then(name => {
+    name = name.name
+    BE.htmlBackend()
+    log('Downloading dependencies and creating files, this may take a moment')
+    helpers.install('express nodemon pg knex body-parser helmet bookshelf compression dotenv morgan cookie-parser')
+    helpers.modifyKnex(name)
+    try {
+      execSync(`createdb ${name};`, { stdio: 'ignore' });
+    } catch (e) {
+      // need some variable to indicate this failed and the user needs to make a new database
+    }
+    addBookshelfToEnzo()
+    helpers.addScript('server', 'nodemon server/cluster.js')
+    helpers.addScript('api', 'node enzo/api.js')
+    helpers.addScript('page', 'node enzo/page.js')
+    clear()
+    log('The backend was added!')
+    log(`to start server enter npm run server`)
+  })
+}
+
+let htmlMongo = () => {
+  prompt([dbName]).then(name => {
+    name = name.name 
+    BE.htmlBackend()
+    log('Downloading dependencies and creating files, this may take a moment')
+    helpers.install('express nodemon mongo body-parser helmet mongoose compression dotenv morgan cookie-parser')
+    helpers.addScript('server', 'nodemon server/cluster.js')
+    helpers.addScript('api', 'node enzo/api.js')
+    helpers.addScript('page', 'node enzo/page.js')
+    addMongooseToEnzo(name)
+    clear()
+    log('The backend was added!')
+    log(`to start server enter npm run server`)
+  })
+}
+
+let htmlBasic = () => {
+  BE.htmlBackend()
+  log('Downloading dependencies and creating files, this may take a moment')
+  helpers.install('express nodemon body-parser helmet compression dotenv morgan pug cookie-parser')
+  helpers.addScript('server', 'nodemon server/cluster.js')
+  helpers.addScript('api', 'node enzo/api.js')
+  clear()
+  log('The backend was added!')
+  log(`to start server enter npm run server`) 
+}
+
 
 let addBookshelfToEnzo = () => {
-  let bookshelf = fs.readFileSync(path.resolve(__dirname, './templates/bookshelf.js'), 'utf8')
-  let enzoCreateBookshelfModel = fs.readFileSync(path.resolve(__dirname, './templates/enzoCreateBookshelfModel.js'),'utf8')
-  let migrationTemplate = fs.readFileSync(path.resolve(__dirname, './templates/migrationTemplate.js'),'utf8')
-  let enzoBookshelfModelTemplate = fs.readFileSync(path.resolve(__dirname, './templates/enzoBookshelfModelTemplate.js'),'utf8')
-  fs.writeFile(`./server/models/bookshelf.js`, bookshelf, (err) => {
-    if (err) console.error(err)
-  })
-  fs.writeFile(`./enzo/enzoCreateBookshelfModel.js`, enzoCreateBookshelfModel, (err) => {
-    if (err) console.error(err)
-  })
-  fs.writeFile(`./enzo/templates/migrationTemplate.js`, migrationTemplate, (err) => {
-    if (err) console.error(err)
-  })
-  fs.writeFile(`./enzo/templates/enzoBookshelfModelTemplate.js`, enzoBookshelfModelTemplate, (err) => {
-    if (err) console.error(err)
-  })
-  // need to add script for this to package.json
+  let bookshelf                  = loadFile('./templates/bookshelf.js')
+  let enzoCreateBookshelfModel   = loadFile('./templates/enzoCreateBookshelfModel.js')
+  let migrationTemplate          = loadFile('./templates/migrationTemplate.js')
+  let enzoBookshelfModelTemplate = loadFile('./templates/enzoBookshelfModelTemplate.js')
+
+  helpers.writeFile(`./server/models/bookshelf.js`,                   bookshelf                 )
+  helpers.writeFile(`./enzo/enzoCreateBookshelfModel.js`,             enzoCreateBookshelfModel  )
+  helpers.writeFile(`./enzo/templates/migrationTemplate.js`,          migrationTemplate         )
+  helpers.writeFile(`./enzo/templates/enzoBookshelfModelTemplate.js`, enzoBookshelfModelTemplate)
+
   helpers.addScript('model', 'node enzo/enzoCreateBookshelfModel.js')
 }
 
 
-let addMongooseToEnzo = () => {
-  // first need to import mongoose and mongoose connect to the server/server.js file. 
-  let model = fs.readFileSync(path.resolve(__dirname, './templates/enzoCreateMongooseModel.js'), 'utf8')
-  let schemaTemplate = fs.readFileSync(path.resolve(__dirname, './templates/schemaTemplate.js'), 'utf8')
-  fs.writeFile(`./enzo/model.js`, model, (err) => {
-    if (err) throw err 
-  })
-  fs.writeFile(`./enzo/templates/schemaTemplate.js`,  schemaTemplate, (err) => {
-    if (err) throw err 
-  })
+let addMongooseToEnzo  = (name) => {
+  let model            = loadFile('./templates/enzoCreateMongooseModel.js')
+  let schemaTemplate   = loadFile('./templates/schemaTemplate.js')
+
+  let server           = fs.readFileSync('./server/server.js', 'utf8').toString().split('\n')
+  server.splice(0, 0, `\nlet mongoose = require('mongoose')\nmongoose.connect(process.env.MONGO)\n`)
+  let mongoAddedServer = server.join('\n')
+
+  helpers.writeFile(`./server/server.js`, mongoAddedServer               )
+  helpers.writeFile(`./enzo/model.js`,                     model         )
+  helpers.writeFile(`./enzo/templates/schemaTemplate.js`,  schemaTemplate)
+  helpers.writeFile(`./.env`, `MONGO="${`mongodb://localhost/${name}`}"` )
+
   helpers.addScript('model', 'node enzo/model.js')
 }
 

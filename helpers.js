@@ -61,3 +61,15 @@ exports.modifyKnex = (name) => {
   }
 }
 
+
+exports.writeFile = (filePath, file) => {
+  fs.writeFile(filePath, file, (err) => {
+    if (err) throw err 
+  })
+}
+
+
+// exports.loadFile = filePath => {
+//   return fs.readFileSync(path.resolve(__dirname, filePath), 'utf8')
+// }
+
