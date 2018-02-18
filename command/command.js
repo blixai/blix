@@ -1,42 +1,58 @@
-let fs = require('fs')
-let path = require('path')
-let log = console.log 
-
+let fs       = require('fs')
+let path     = require('path')
+let log      = console.log 
 let inquirer = require('inquirer')
-let prompt = inquirer.prompt
+let prompt   = inquirer.prompt
+let helpers  = require('../helpers')
+
 
 let commands = {
-  type: 'list',
-  message: 'Add a enzo command to a project:',
+  type    : 'list',
+  message : 'Add a enzo command to a project:',
   pageSize: 10,
-  name: 'commands',
-  choices: [
-    { name: 'custom: create your own' , value: 'custom'},
-    { name: 'react: create a new react statefull or stateless component', value: 'react' },
-    { name: 'redux: create a new react component, a redux container, and a new route in your routing component', value: 'redux' },
-    { name: 'api: create new api endpoints and controller', value: 'api' },
-    { name: 'page: create a new folder, html, css, and js files along with adding the route in pages.js', value: 'page' },
-    { name: 'model: create a new Bookshelf model and migration or a Mongoose model', value: 'model' },
-    { name: 'action: create or add redux action to new or existing reducer', value: 'action' }
+  name    : 'commands',
+  choices : [
+    { name: 'custom: create your own' ,                                                                          value: 'custom' },
+    { name: 'react: create a new react statefull or stateless component',                                        value: 'react'  },
+    { name: 'redux: create a new react component, a redux container, and a new route in your routing component', value: 'redux'  },
+    { name: 'api: create new api endpoints and controller',                                                      value: 'api'    },
+    { name: 'page: create a new folder, html, css, and js files along with adding the route in pages.js',        value: 'page'   },
+    { name: 'model: create a new Bookshelf model and migration or a Mongoose model',                             value: 'model'  },
+    { name: 'action: create or add redux action to new or existing reducer',                                     value: 'action' }
   ]
 }
 
 let custom = {
-  type: 'input',
-  message: 'What do you want to name this command:',
-  name: 'custom'
+  type    : 'input',
+  message : 'What do you want to name this command:',
+  name    : 'custom'
 }
 
-let addScript = (command, script) => {
-  if (fs.existsSync('./package.json')) {
-    let buffer = fs.readFileSync('package.json')
-    let json = JSON.parse(buffer)
-    json.scripts[command] = script
-    let newPackage = JSON.stringify(json, null, 2)
-    fs.writeFileSync('package.json', newPackage)
-  } else {
-    process.exit()
-  }
+let model = {
+  type    : 'list',
+  message : 'Pick a model type:',
+  name    : 'model',
+  choices : [
+    { name: 'Mongoose',  value: 'm' },
+    { name: 'Bookshelf', value: 'b' }
+  ]
+}
+
+let template = {
+  type    : 'confirm',
+  message : 'Do you need a template file',
+  name    : 'template'
+}
+
+let templateName = {
+  type    : 'input',
+  message : 'What do you want to name the template file:',
+  name    : 'templateName'
+}
+
+// helper function to load files 
+let loadFile = filePath => {
+  return fs.readFileSync(path.resolve(__dirname, filePath), 'utf8')
 }
 
 
@@ -77,67 +93,42 @@ let command = () => {
 
 
 let addAction = () => {
-  addScript('action', 'node enzo/action.js')
+  helpers.addScript('action', 'node enzo/action.js')
   checkEnzoExists()
-  let action = fs.readFileSync(path.resolve(__dirname, './files/enzoCreateAction.js'), 'utf8')
-  let actionTemplate = fs.readFileSync(path.resolve(__dirname, './templates/actionTemplate.js'), 'utf8')
-  let reducerTemplate = fs.readFileSync(path.resolve(__dirname, './templates/reducerTemplate.js'), 'utf8')
-  fs.writeFile('./enzo/action.js', action, (err) => {
-    if (err) throw err 
-  })
-  fs.writeFile('./enzo/templates/actionTemplate.js', actionTemplate, (err) => {
-    if (err) throw err 
-  })
-  fs.writeFile('./enzo/templates/reducerTemplate.js', reducerTemplate, (err) => {
-    if (err) throw err 
-  })
-}
 
-let model = {
-  type: 'list',
-  message: 'Pick a model type:',
-  name: 'model',
-  choices: [
-    { name: 'Mongoose', value: 'm' },
-    { name: 'Bookshelf', value: 'b' }
-  ]
-}
+  let action          = loadFile('./files/enzoCreateAction.js')
+  let actionTemplate  = loadFile('./templates/actionTemplate.js')
+  let reducerTemplate = loadFile('./templates/reducerTemplate.js')
 
+  helpers.writeFile('./enzo/action.js', action)
+  helpers.writeFile('./enzo/templates/actionTemplate.js', actionTemplate)
+  helpers.writeFile('./enzo/templates/reducerTemplate.js', reducerTemplate)
+}
 
 let addModel = () => {
-  addScript('model', 'node enzo/model.js')
+  helpers.addScript('model', 'node enzo/model.js')
   prompt([model]).then(ans => {
     if (ans.model === 'm') {
-      checkEnzoExists()
-      let model = fs.readFileSync(path.resolve(__dirname, './templates/enzoCreateMongooseModel.js'), 'utf8')
-      let schemaTemplate = fs.readFileSync(path.resolve(__dirname, './templates/schemaTemplate.js'), 'utf8')
-      fs.writeFile('./enzo/model.js', model, (err) => {
-        if (err) throw err 
-        log('Created model file in enzo')
-      })
-      fs.writeFile('./enzo/templates/schemaTemplate.js', schemaTemplate, (err) => {
-        if (err) throw err 
-        log('Created Mongoose schema template in enzo/templates')
-      })
       // add moongoose
-    } else {
       checkEnzoExists()
-      let model = fs.readFileSync(path.resolve(__dirname, './templates/enzoCreateBookshelfModel.js'), 'utf8')
-      let migrationTemplate = fs.readFileSync(path.resolve(__dirname, './templates/migrationTemplate.js'), 'utf8')
-      let bookshelf = fs.readFileSync(path.resolve(__dirname, './templates/bookshelf.js'), 'utf8')
-      let enzoBookshelfModelTemplate = fs.readFileSync(path.resolve(__dirname, './templates/enzoBookshelfModelTemplate.js'), 'utf8')
-      fs.writeFile('./enzo/model.js', model, (err) => {
-        if (err) throw err 
-        log('Created model file in enzo')
-      })
-      fs.writeFile('./enzo/templates/migrationTemplate.js', migrationTemplate, (err) => {
-        if (err) throw err 
-        log('Created knex migration template in enzo/templates')
-      })
-      fs.writeFile('./enzo/templates/enzoBookshelfModelTemplate.js', enzoBookshelfModelTemplate, (err) => {
-        if (err) throw err 
-        log('Created Bookshelf template file in enzo/templates')
-      })
+      let model          = loadFile('./templates/enzoCreateMongooseModel.js')
+      let schemaTemplate = loadFile('./templates/schemaTemplate.js')
+
+      helpers.writeFile('./enzo/model.js', model, 'Created model file in enzo')
+      helpers.writeFile('./enzo/templates/schemaTemplate.js', schemaTemplate, 'Created Mongoose schema template in enzo/templates')
+
+    } else {
+      // add bookshelf 
+      checkEnzoExists()
+      let model                      = loadFile('./templates/enzoCreateBookshelfModel.js')
+      let migrationTemplate          = loadFile('./templates/migrationTemplate.js')
+      let bookshelf                  = loadFile('./templates/bookshelf.js')
+      let enzoBookshelfModelTemplate = loadFile('./templates/enzoBookshelfModelTemplate.js')
+
+      helpers.writeFile('./enzo/model.js', model, 'Created model file in enzo')
+      helpers.writeFile('./enzo/templates/migrationTemplate.js', migrationTemplate, 'Created knex migration template in enzo/templates')
+      helpers.writeFile('./enzo/templates/enzoBookshelfModelTemplate.js', enzoBookshelfModelTemplate, 'Created Bookshelf template file in enzo/templates')
+
       try {
         fs.writeFileSync('./server/models/bookshelf.js', bookshelf)
         log('Created Bookshelf file in server/models/bookshelf.js')
@@ -150,95 +141,64 @@ let addModel = () => {
 
 let addReact = () => {
   // always add script first because if there is no package.json it'll process.exit()
-  addScript('react', 'node enzo/react.js')
-  let react = fs.readFileSync(path.resolve(__dirname, './files/enzoReact.js'), 'utf8')
-  let stateful = fs.readFileSync(path.resolve(__dirname, './templates/statefulComponent.js'), 'utf8')
-  let stateless = fs.readFileSync(path.resolve(__dirname, './templates/statelessComponent.js'), 'utf8')
+  helpers.addScript('react', 'node enzo/react.js')
+  let react     = loadFile('./files/enzoReact.js')
+  let stateful  = loadFile('./templates/statefulComponent.js')
+  let stateless = loadFile('./templates/statelessComponent.js')
   checkEnzoExists()
-  fs.writeFile('./enzo/react.js', react, (err) => {
-    if (err) console.error(err)
-  })
-  fs.writeFile('./enzo/templates/statefulComponent.js', stateful, (err) => {
-    if (err) console.error(err)
-  })
-  fs.writeFile('./enzo/templates/statelessComponent.js', stateless, (err) => {
-    if (err) console.error(err)
-  })
+  helpers.writeFile('./enzo/react.js', react)
+  helpers.writeFile('./enzo/templates/statefulComponent.js', stateful)
+  helpers.writeFile('./enzo/templates/statelessComponent.js', stateless)
 }
 
 let addRedux = () => {
-  addScript('redux', 'node enzo/redux.js')
-  let redux = fs.readFileSync(path.resolve(__dirname, './files/enzoCreateContainer.js'), 'utf8')
-  let enzoDumbComponentTemplate = fs.readFileSync(path.resolve(__dirname, './templates/enzoDumbComponentTemplate.js'), 'utf8')
-  let dumbReduxContainerTemplate = fs.readFileSync(path.resolve(__dirname, './templates/dumbReduxContainerTemplate.js'), 'utf8') 
-  let smartComponentTemplate = fs.readFileSync(path.resolve(__dirname, './templates/smartComponentTemplate.js'), 'utf8')
-  let reduxContainerTemplate = fs.readFileSync(path.resolve(__dirname, './templates/reduxContainerTemplate.js'), 'utf8')
+  helpers.addScript('redux', 'node enzo/redux.js')
+
+  let redux                      = loadFile('./files/enzoCreateContainer.js')
+  let enzoDumbComponentTemplate  = loadFile('./templates/enzoDumbComponentTemplate.js')
+  let dumbReduxContainerTemplate = loadFile('./templates/dumbReduxContainerTemplate.js')
+  let smartComponentTemplate     = loadFile('./templates/smartComponentTemplate.js')
+  let reduxContainerTemplate     = loadFile('./templates/reduxContainerTemplate.js')
+
   checkEnzoExists()
-  fs.writeFile('./enzo/redux.js', redux, (err) => {
-    if (err) console.error(err)
-  })
-  fs.writeFile('./enzo/templates/enzoDumbComponentTemplate.js', enzoDumbComponentTemplate, (err) => {
-    if (err) console.error(err)
-  })
-  fs.writeFile('./enzo/templates/dumbReduxContainerTemplate.js', dumbReduxContainerTemplate, (err) => {
-    if (err) console.error(err)
-  })
-  fs.writeFile('./enzo/templates/smartComponentTemplate.js', smartComponentTemplate, (err) => {
-    if (err) console.error(err)
-  })
-  fs.writeFile('./enzo/templates/reduxContainerTemplate.js', reduxContainerTemplate, (err) => {
-    if (err) console.error(err)
-  })
+
+  helpers.writeFile('./enzo/redux.js', redux)
+  helpers.writeFile('./enzo/templates/enzoDumbComponentTemplate.js',  enzoDumbComponentTemplate)
+  helpers.writeFile('./enzo/templates/dumbReduxContainerTemplate.js', dumbReduxContainerTemplate)
+  helpers.writeFile('./enzo/templates/smartComponentTemplate.js',     smartComponentTemplate)
+  helpers.writeFile('./enzo/templates/reduxContainerTemplate.js',     reduxContainerTemplate)
 }
 
 let addAPI = () => {
-  addScript('api', 'node enzo/api.js')
-  let api = fs.readFileSync(path.resolve(__dirname, './files/enzoCreateAPI.js'), 'utf8')
-  let enzoControllerTemplate = fs.readFileSync(path.resolve(__dirname, './templates/enzoControllerTemplate.js'), 'utf8')
-  let enzoEndpointTemplate = fs.readFileSync(path.resolve(__dirname, './templates/enzoEndpointTemplate.js'), 'utf8')
+  helpers.addScript('api', 'node enzo/api.js')
+
+  let api                    = loadFile('./files/enzoCreateAPI.js')
+  let enzoControllerTemplate = loadFile('./templates/enzoControllerTemplate.js')
+  let enzoEndpointTemplate   = loadFile('./templates/enzoEndpointTemplate.js')
+
   checkEnzoExists()
-  fs.writeFile('./enzo/api.js', api, (err) => {
-    if (err) console.error(err)
-  })
-  fs.writeFile('./enzo/templates/enzoControllerTemplate.js', enzoControllerTemplate, (err) => {
-    if (err) console.error(err)
-  })
-  fs.writeFile('./enzo/templates/enzoEndpointTemplate.js', enzoEndpointTemplate, (err) => {
-    if (err) console.error(err)
-  })
+
+  helpers.writeFile('./enzo/api.js', api)
+  helpers.writeFile('./enzo/templates/enzoControllerTemplate.js', enzoControllerTemplate)
+  helpers.writeFile('./enzo/templates/enzoEndpointTemplate.js'  , enzoEndpointTemplate)
 }
 
 let addPage = () => {
-  addScript('page', 'node enzo/page.js')
-  let page = fs.readFileSync(path.resolve(__dirname, './files/enzoNewPage.js'), 'utf8')
-  let html = fs.readFileSync(path.resolve(__dirname, './templates/htmlPageTemplate.html'), 'utf8')
+  helpers.addScript('page', 'node enzo/page.js')
+
+  let page = loadFile('./files/enzoNewPage.js')
+  let html = loadFile('./templates/htmlPageTemplate.html')
+
   checkEnzoExists()
-  fs.writeFile('./enzo/page.js', page, (err) => {
-    if (err) console.error(err)
-  })
-  fs.writeFile('./enzo/templates/htmlPageTemplate.html', html, (err) => {
-    if (err) console.error(err)
-  })
-}
 
-let template = {
-  type: 'confirm',
-  message: 'Do you need a template file',
-  name: 'template'
-}
-
-let templateName = {
-  type: 'input',
-  message: 'What do you want to name the template file:',
-  name: 'templateName'
+  helpers.writeFile('./enzo/page.js', page)
+  helpers.writeFile('./enzo/templates/htmlPageTemplate.html', html)
 }
 
 let createNew = (name) => {
-    addScript(name, `node enzo/${name}.js`)
+    helpers.addScript(name, `node enzo/${name}.js`)
     checkEnzoExists()
-    fs.writeFile(`./enzo/${name}.js`, '', (err) => {
-      if (err) console.error(err)
-    })
+    helpers.writeFile(`./enzo/${name}.js`, '')
     prompt([template]).then(a => {
       a = a.template
       if (a) {
