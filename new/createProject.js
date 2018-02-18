@@ -58,7 +58,7 @@ let prompt = inquirer.prompt
 
 let project = {
   type: 'list', message: 'What type of Project are you looking to build:', name: 'project', choices: [
-    { name: 'SPA' },
+    { name: 'React SPA' },
     { name: 'React, Redux, React/Router', value: 'redux' },
     { name: 'MVC' },
     { name: 'Backend Only' }
@@ -93,7 +93,7 @@ let promptProject = () => {
     .then(answers => {
       let project = answers.project
       switch (project) {
-        case 'SPA':
+        case 'React SPA':
           spa()
           break;
         case 'redux':

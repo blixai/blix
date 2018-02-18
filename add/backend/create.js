@@ -1,64 +1,79 @@
 let fs = require('fs')
 let path = require('path')
+let helpers = require('../../helpers')
 
+let loadFile = filePath => {
+  return fs.readFileSync(path.resolve(__dirname, filePath), 'utf8')
+}
 
-let server = fs.readFileSync(path.resolve(__dirname, './files/server.js'), 'utf8')
-let enzoCreateEndpoints = fs.readFileSync(path.resolve(__dirname, './files/enzoCreateAPI.js'), 'utf8')
-let cluster = fs.readFileSync(path.resolve(__dirname, './files/cluster.js'), 'utf8')
+let apiServer           = loadFile('./files/server.js')
+let enzoCreateEndpoints = loadFile('./files/enzoCreateAPI.js')
+let cluster             = loadFile('./files/cluster.js')
 
 let routes = `const express = require('express')\nconst r = express.Router()\nmodule.exports = r`
-let enzoEndpointTemplate = fs.readFileSync(path.resolve(__dirname, './templates/enzoEndpointTemplate.js'), 'utf8')
-let enzoControllerTemplate = fs.readFileSync(path.resolve(__dirname, './templates/enzoControllerTemplate.js'), 'utf8')
+let enzoEndpointTemplate   = loadFile('./templates/enzoEndpointTemplate.js')
+let enzoControllerTemplate = loadFile('./templates/enzoControllerTemplate.js')
+
+//pug
+let pugServer = loadFile('./files/pugServer.js')
+let pugLayout = loadFile('./files/pugLayout.pug')
+let pugError  = loadFile('./files/error.pug')
+let pugPage   = loadFile('./files/enzoPugPage.js')
+let pugTemp   = loadFile('./templates/pugTemplate.pug')
+
+//htmlBackend 
+let htmlServer = loadFile('./files/htmlServer.js')
 
 let backendOnly = () => {
-  if (fs.existsSync('./package.json')) {
-    fs.mkdirSync(`./server`)
-    fs.mkdirSync(`./server/models`)
-    fs.mkdirSync(`./server/controllers`)
-    fs.writeFile(`./server/server.js`, server, (err) => {
-      if (err) throw err
-    })  
-    fs.writeFile(`./server/cluster.js`, cluster, (err) => {
-      if (err) throw err 
-    })
-    fs.writeFile(`./server/routes.js`, routes, (err) => {
-      if (err) throw err
-    })
-    // need to see if enzo exists, if not make folder sync then create this file
-    if (fs.existsSync('./enzo')) {
-      if (fs.existsSync('./enzo/api.js')) {
-        
-      } else {
-        fs.writeFile(`./enzo/api.js`, enzoCreateEndpoints, (err) => {
-          if (err) console.error(err)
-        })
-        fs.writeFile(`./enzo/templates/enzoEndpointTemplate.js`, enzoEndpointTemplate, (err) => {
-          if (err) console.error(err)
-        })
-        fs.writeFile(`./enzo/templates/enzoControllerTemplate.js`, enzoControllerTemplate, (err) => {
-          if (err) console.error(err)
-        })
-      }
-    } else {
-      fs.mkdirSync('./enzo')
-      fs.writeFile(`./enzo/api.js`, enzoCreateEndpoints, (err) => {
-        if (err) throw err
-      })
-      fs.mkdirSync('./enzo/templates')
-      fs.writeFile(`./enzo/templates/enzoEndpointTemplate.js`, enzoEndpointTemplate, (err) => {
-        if (err) console.error(err)
-      })
-      fs.writeFile(`./enzo/templates/enzoControllerTemplate.js`, enzoControllerTemplate, (err) => {
-        if (err) console.error(err)
-      })
-    }
+  commonFiles()
+  fs.writeFileSync(`./server/server.js`, apiServer)
+}
 
+let pugBackend = () => {
+  commonFiles()
+  fs.mkdirSync(`./server/views`)
+  fs.writeFileSync(`./server/server.js`, pugServer)
+  helpers.writeFile(`./server/views/layout.pug`, pugLayout)
+  helpers.writeFile(`./server/views/error.pug`, pugError)
+  helpers.writeFile(`./enzo/page.js`, pugPage)
+  helpers.writeFile(`./enzo/templates/pugTemplate.pug`, pugTemp)
+}
+
+let htmlBackend = () => {
+  commonFiles()
+  fs.writeFileSync(`./server/server.js`, htmlServer)
+}
+
+
+let commonFiles = () => {
+  checkForPackageJSON()
+  fs.mkdirSync(`./server`)
+  fs.mkdirSync(`./server/models`)
+  fs.mkdirSync(`./server/controllers`)
+  helpers.writeFile(`./server/cluster.js`, cluster)
+  helpers.writeFile(`./server/routes.js`, routes)
+  helpers.writeFile(`./.env`, '')
+  // need to see if enzo exists, if not make folder sync then create this file
+  if (fs.existsSync('./enzo')) {
+    if (!fs.existsSync('./enzo/api.js')) {
+      helpers.writeFile(`./enzo/api.js`, enzoCreateEndpoints)
+      helpers.writeFile(`./enzo/templates/enzoEndpointTemplate.js`, enzoEndpointTemplate)
+      helpers.writeFile(`./enzo/templates/enzoControllerTemplate.js`, enzoControllerTemplate)
+    }
   } else {
+    fs.mkdirSync('./enzo')
+    helpers.writeFile(`./enzo/api.js`, enzoCreateEndpoints)
+    fs.mkdirSync('./enzo/templates')
+    helpers.writeFile(`./enzo/templates/enzoEndpointTemplate.js`, enzoEndpointTemplate)
+    helpers.writeFile(`./enzo/templates/enzoControllerTemplate.js`, enzoControllerTemplate)
+  }
+}
+
+let checkForPackageJSON = () => {
+  if (!fs.existsSync('./package.json')) {
     console.log(`You don't appear to be within a project, please cd into a project and try again.`)
     process.exit(1);
   }
-  // need to write enzo command for creating api or pages
-  // need to add enzo files
 }
 
-module.exports = { backendOnly }
+module.exports = { backendOnly, pugBackend, htmlBackend }
