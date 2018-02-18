@@ -1,8 +1,8 @@
-let fs = require('fs')
-let path = require('path')
-let shell = require('shelljs')
+let fs       = require('fs')
+let path     = require('path')
+let shell    = require('shelljs')
 let execSync = require('child_process').execSync;
-
+let log      = console.log 
 
 let shouldUseYarn = () => {
   try {
@@ -16,18 +16,18 @@ let shouldUseYarn = () => {
 exports.install = (packages) => {
   let yarn = shouldUseYarn()
   if (yarn) {
-    shell.exec(`yarn add ${packages}`, { silent: true })
+    shell.exec(`yarn add ${packages}`, { silent: false })
   } else {
-    shell.exec(`npm install --save ${packages}`, { silent: true })
+    shell.exec(`npm install --save ${packages}`, { silent: false })
   }
 }
 
 exports.installDevDependencies = (packages) => {
   let yarn = shouldUseYarn()
   if (yarn) {
-    shell.exec(`yarn add ${packages} --dev`, { silent: true })
+    shell.exec(`yarn add ${packages} --dev`, { silent: false })
   } else {
-    shell.exec(`npm install --save-dev ${packages}`, { silent: true })
+    shell.exec(`npm install --save-dev ${packages}`, { silent: false })
   }
 }
 
@@ -70,12 +70,19 @@ exports.addScriptToNewPackageJSON = (command, script, name) => {
 }
 
 
-exports.writeFile = (filePath, file) => {
+exports.writeFile = (filePath, file, message) => {
+
   fs.writeFile(filePath, file, (err) => {
     if (err) throw err 
+    message ? log(message) : ''
   })
 }
 
+exports.rename = (oldName, newName) => {
+  fs.rename(oldName, newName, (err) => {
+    if (err) throw err 
+  })
+}
 
 // exports.loadFile = filePath => {
 //   return fs.readFileSync(path.resolve(__dirname, filePath), 'utf8')
