@@ -18,7 +18,7 @@ let cluster                = loadFile('../filesToCopy/cluster.js')
 
 let railsServer            = loadFile('./files/railsServer.js')
 let railsHtmlFile          = loadFile('./files/railsHtmlFile.html')
-let pagesRoutes            = loadFile('./files/pagesRoutes.js')
+let railsRoutes            = loadFile('./files/railsRoutes.js')
 
 let gulpFile               = loadFile('./files/gulpFile.js')
 
@@ -34,7 +34,6 @@ let enzoControllerTemplate = loadFile('./templates/enzoControllerTemplate.js')
 // pug
 let enzoPugPage            = loadFile('./files/enzoPugPage.js')
 let pugTemplate            = loadFile('./templates/pugTemplate.pug')
-let enzoPugEndpoint        = loadFile('./templates/pugEndpointTemplate.js')
 let pugServer              = loadFile('./files/pugServer.js')
 let pugRoutes              = loadFile('./files/pugRoutes.js')
 let pugHomepage            = loadFile('./templates/pugHomepage.pug')
@@ -60,10 +59,9 @@ let railsApp = () => {
   fs.mkdirSync(`./${name}/server/controllers`)
   fs.mkdirSync(`./${name}/assets`)
   fs.mkdirSync(`./${name}/public`)
-  helpers.writeFile(`./${name}/server/server.js`, railsServer)
+  helpers.writeFile(`./${name}/server/server.js`,  railsServer)
   helpers.writeFile(`./${name}/server/cluster.js`, cluster)
-  helpers.writeFile(`./${name}/server/routes.js`, routes)
-  helpers.writeFile(`./${name}/server/pages.js`, pagesRoutes)
+  helpers.writeFile(`./${name}/server/routes.js`,  railsRoutes)
 
   //other files
   helpers.writeFile(`./${name}/.gitignore`, gitignore)
@@ -128,7 +126,7 @@ let pugApp = () => {
   helpers.writeFile(`./${name}/enzo/page.js`, enzoPugPage)
   helpers.writeFile(`./${name}/enzo/templates/pugTemplate.pug`, pugTemplate)
   helpers.writeFile(`./${name}/enzo/api.js`, enzoAPI)
-  helpers.writeFile(`./${name}/enzo/templates/enzoEndpointTemplate.js`, enzoPugEndpoint)
+  helpers.writeFile(`./${name}/enzo/templates/enzoEndpointTemplate.js`,   enzoEndpointTemplate)
   helpers.writeFile(`./${name}/enzo/templates/enzoControllerTemplate.js`, enzoControllerTemplate)
 }
 

@@ -17,11 +17,9 @@ if (!process.env.NODE_ENV) app.use(logger('dev'))
 
 
 const routes = require('./routes')
-const pages = require('./pages')
 
 
-app.use('/api/v1', routes)
-app.use('/', pages)
+app.use('/', routes)
 app.use(express.static('public'))
 app.use('/assets', express.static('assets'))
 

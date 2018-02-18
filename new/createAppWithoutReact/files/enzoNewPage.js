@@ -1,7 +1,8 @@
-let fs = require('fs')
+let fs   = require('fs')
 let path = require('path')
-let log = console.log
+let log  = console.log
 let name = process.argv[2]
+
 if (name !== undefined) {
   name = name.toLowerCase()
 } else {
@@ -33,9 +34,9 @@ let createPages = () => {
         if (err) throw err
         log(`Created page ${page} src/${name}/${page}`)
       })
-      fs.appendFile('./server/pages.js', pageRoute, (err) => {
+      fs.appendFile('./server/routes.js', pageRoute, (err) => {
         if (err) throw err
-        log(`Added ${page} route to pages.js`)
+        log(`Added ${page} route to routes.js`)
       })
       fs.writeFile(`./src/${name}/${page}/index.js`, js, (err) => {
         if (err) throw err
@@ -64,7 +65,7 @@ let newPage = () => {
     fs.writeFile(`./src/${name}/index.js`, js, (err) => {
       if (err) throw err
     })
-    fs.appendFile(`./server/pages.js`, route, (err) => {
+    fs.appendFile(`./server/routes.js`, route, (err) => {
       if (err) throw err
     })
     createPages()
