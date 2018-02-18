@@ -1,8 +1,9 @@
-let fs = require('fs')
-let shell = require('shelljs')
-const execSync = require('child_process').execSync;
+let fs       = require('fs')
+let shell    = require('shelljs')
+let execSync = require('child_process').execSync;
 let inquirer = require('inquirer')
-let prompt = inquirer.prompt
+let prompt   = inquirer.prompt
+let helpers  = require('../../helpers')
 
 let database = {
   type: 'list',
@@ -20,34 +21,6 @@ let databaseName = {
   name: 'name'
 }
 
-let shouldUseYarn = () => {
-  try {
-    execSync('yarnpkg --version', { stdio: 'ignore' });
-    return true;
-  } catch (e) {
-    return false;
-  }
-}
-
-let install = (packages) => {
-  let yarn = shouldUseYarn()
-  if (yarn) {
-    shell.exec(`yarn add ${packages}`, {silent:true})
-  } else {
-    shell.exec(`npm install --save ${packages}`, {silent:true})
-  }
-}
-
-let installKnexGlobal = () => {
-  if (shouldUseYarn()) {
-    shell.exec('yarn global add knex', {silent:true})
-    shell.exec('knex init', {silent:true})
-  } else {
-    shell.exec('npm install -g knex', {silent:true})
-    shell.exec('knex init', {silent:true})
-  }
-}
-
 let addDatabase = () => {
   process.stdout.write('\033c')
   prompt([database]).then(answer => {
@@ -55,40 +28,31 @@ let addDatabase = () => {
     if (type === 'p') {
       prompt([databaseName]).then(ans => {
         let name = ans.name
-        install('knex pg')
-        installKnexGlobal()
-        let newKnex = `module.exports = {\n\n\tdevelopment: {\n\t\tclient: 'pg',\n\t\tconnection: 'postgres://localhost/${name}',\n\t\tmigrations: {\n\t\t\tdirectory: './db/migrations'\n\t\t},\n\t\tseeds: {\n\t\t\tdirectory: './db/seeds/dev'\n\t\t},\n\t\tuseNullAsDefault: true\n\t},\n\n\tproduction: {\n\t\tclient: 'pg',\n\t\tconnection: process.env.DATABASE_URL + '?ssl=true',\n\t\tmigrations: {\n\t\t\tdirectory: 'db/migrations'\n\t\t},\n\t\tseeds: {\n\t\t\tdirectory: 'db/seeds/dev'\n\t\t},\n\t\tuseNullAsDefault: true\n\t}\n\n};`
-        let modifyKnex = () => {
-          if (fs.existsSync('./knexfile.js')) {
-            fs.truncateSync('./knexfile.js', 0, function () { console.log('done') })
-            fs.appendFile('./knexfile.js', newKnex, (err) => {
-              if (err) throw err
-            })
-          }
-        }
-        modifyKnex()
+        helpers.install('knex pg')
+        helpers.installKnexGlobal()
+        helpers.modifyKnex(name)
         try {
           execSync(`createdb ${name};`, { stdio: 'ignore' });
         } catch (err) {
-          if (err) throw err
+          if (err) process.exit()
         }
       })
     } else {
-      install('mongo')
+      helpers.install('mongo')
       // could see if dotenv is installed, maybe also ask to modify the enzo api file
       if (fs.existsSync('./.env')) {
-        fs.appendFile('./.env', `MONGODB_URI=''`, (err) => {
+        fs.appendFile('./.env', `MONGODB=''`, (err) => {
           if (err) throw err 
         }) 
       } else {
-        fs.writeFileSync('./.env', `MONGODB_URI=''`)
+        fs.writeFileSync('./.env', `MONGODB=''`)
         fs.readFile('./package.json', (err, data) => {
           if (err) throw err 
           let json = JSON.parse(data)
           if ("dotenv" in json.dependencies) {
             console.log('it has dotenv!')
           } else {
-            install('dotenv')
+            helpers.install('dotenv')
           }
         })
       }

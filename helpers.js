@@ -42,7 +42,7 @@ exports.installKnexGlobal = () => {
 }
 
 exports.addScript = (command, script) => {
-  let buffer = fs.readFileSync('./package.json')
+  let buffer = fs.readFileSync('package.json')
   let json = JSON.parse(buffer)
   json.scripts[command] = script
   let newPackage = JSON.stringify(json, null, 2)
