@@ -1,91 +1,62 @@
-let fs = require('fs')
-let path = require('path')
-let shell = require('shelljs')
-const execSync = require('child_process').execSync;
-const chalk = require('chalk');
-const log = console.log;
-const boxen = require('boxen')
+let fs         = require('fs')
+let path       = require('path')
+let shell      = require('shelljs')
+let execSync   = require('child_process').execSync;
+let chalk      = require('chalk');
+let log        = console.log;
+let boxen      = require('boxen')
+let inquirer   = require('inquirer')
+let prompt     = inquirer.prompt
 
-let spaBuild = require('./createReactSPA/createReactSPA')
+// each project type and helpers
+let spaBuild   = require('./createReactSPA/createReactSPA')
 let reactRedux = require('./reactRedux/reactRedux')
 let noReactApp = require('./createAppWithoutReact/createAppWithoutReact')
-let BE = require('./backendOnly/backendOnly')
+let BE         = require('./backendOnly/backendOnly')
+let helpers    = require('../helpers')
 
-let name = process.argv[3]
-
+// variables
+let name       = process.argv[3]
 let frontend;
 
-let shouldUseYarn = () => {
-  try {
-    execSync('yarnpkg --version', { stdio: 'ignore' });
-    return true;
-  } catch (e) {
-    return false;
-  }
+// helper function to load files 
+let loadFile = filePath => {
+  return fs.readFileSync(path.resolve(__dirname, filePath), 'utf8')
 }
 
-let install = (packages) => {
-  let yarn = shouldUseYarn()
-  if (yarn) {
-    shell.exec(`yarn add ${packages}`, {silent:true})
-  } else {
-    shell.exec(`npm install --save ${packages}`, {silent:true})
-  }
-}
-
-let installDevDependencies = (packages) => {
-  let yarn = shouldUseYarn()
-  if (yarn) {
-    shell.exec(`yarn add ${packages} --dev`, {silent:true})
-  } else {
-    shell.exec(`npm install --save-dev ${packages}`, {silent:true})
-  }
-}
-
-let installKnexGlobal = () => {
-  if (shouldUseYarn()) {
-    shell.exec('yarn global add knex', {silent:true})
-    shell.exec('knex init', {silent:true})
-  } else {
-    shell.exec('npm install -g knex', {silent:true})
-    shell.exec('knex init', {silent:true})
-  }
-}
-
-let inquirer = require('inquirer')
-let prompt = inquirer.prompt
-
-
+//prompts
 let project = {
-  type: 'list', message: 'What type of Project are you looking to build:', name: 'project', choices: [
-    { name: 'React SPA' },
+  type    : 'list', message: 'What type of Project are you looking to build:',
+  name    : 'project', 
+  choices : [
+    { name: 'React SPA'                                  },
     { name: 'React, Redux, React/Router', value: 'redux' },
-    { name: 'MVC' },
-    { name: 'Backend Only' }
+    { name: 'MVC'                                        },
+    { name: 'Backend Only'                               }
   ]
 }
 
 let backend = {
-  type: 'confirm',
-  message: 'Do you need a backend:',
-  name: 'backend'
+  type    : 'confirm',
+  message : 'Do you need a backend:',
+  name    : 'backend'
 }
 
 let database = {
-  type: 'list',
-  message: 'Database:',
-  name: 'database',
-  choices: [
-    { name: 'MongoDB' },
+  type    : 'list',
+  message : 'Database:',
+  name    : 'database' ,
+  choices : [
+    { name: 'MongoDB'  },
     { name: 'Postgres' },
-    { name: 'None' }
+    { name: 'None'     }
   ]
 }
 
 let pug = {
-  type: 'confirm',
-  message: 'Do you want to use the templating engine pug',
-  name: 'pug'
+  type    : 'confirm',
+  message : 'Do you want to use the templating engine pug',
+  name    : 'pug'
 }
 
 let promptProject = () => {
@@ -193,10 +164,10 @@ let postgresSPA = () => {
   addBookshelfToEnzo()
   shell.cd(`${name}`)
   log('Downloading dependencies and setting up the project, this may take a moment')
-  install('express nodemon pg knex body-parser compression helmet react react-dom dotenv bookshelf morgan')
-  installDevDependencies('webpack babel-loader css-loader babel-core babel-preset-env babel-preset-react style-loader webpack-merge uglifyjs-webpack-plugin sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-cssnext postcss-import postcss-loader')
-  installKnexGlobal()
-  modifyKnex()
+  helpers.install('express nodemon pg knex body-parser compression helmet react react-dom dotenv bookshelf morgan')
+  helpers.installDevDependencies('webpack babel-loader css-loader babel-core babel-preset-env babel-preset-react style-loader webpack-merge uglifyjs-webpack-plugin sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-cssnext postcss-import postcss-loader')
+  helpers.installKnexGlobal()
+  helpers.modifyKnex(name)
   try {
     execSync(`createdb ${name}`, { stdio: 'ignore' });
   } catch (e) {
@@ -222,8 +193,8 @@ let mongooseSPA = () => {
   fs.writeFileSync(`./${name}/.env`)
   shell.cd(`${name}`)
   log('Downloading dependencies and setting up the project, this may take a moment')
-  install('express nodemon compression helmet mongo dotenv body-parser react react-dom dotenv mongoose morgan')
-  installDevDependencies('webpack babel-loader css-loader babel-core babel-preset-env babel-preset-react style-loader webpack-merge uglifyjs-webpack-plugin sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-cssnext postcss-import postcss-loader')
+  helpers.install('express nodemon compression helmet mongo dotenv body-parser react react-dom dotenv mongoose morgan')
+  helpers.installDevDependencies('webpack babel-loader css-loader babel-core babel-preset-env babel-preset-react style-loader webpack-merge uglifyjs-webpack-plugin sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-cssnext postcss-import postcss-loader')
   process.stdout.write('\033c')
   log('')
   log('The project was created!')
@@ -243,8 +214,8 @@ let noDBSPA = () => {
   spaBuild.writeFilesWithSPAReact()
   shell.cd(`${name}`)
   log('Downloading dependencies and setting up the project, this may take a moment')
-  install('express nodemon compression helmet body-parser react react-dom dotenv morgan')
-  installDevDependencies('webpack babel-loader css-loader babel-core babel-preset-env babel-preset-react style-loader webpack-merge uglifyjs-webpack-plugin sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-cssnext postcss-import postcss-loader')
+  helpers.install('express nodemon compression helmet body-parser react react-dom dotenv morgan')
+  helpers.installDevDependencies('webpack babel-loader css-loader babel-core babel-preset-env babel-preset-react style-loader webpack-merge uglifyjs-webpack-plugin sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-cssnext postcss-import postcss-loader')
   process.stdout.write('\033c')
   log('')
   log('The project was created!')
@@ -263,8 +234,8 @@ let spaNoBE = () => {
   spaBuild.reactSPAWithoutBackend()
   log('Installing dependencies and running setup, this may take a moment')
   shell.cd(`${name}`)
-  install('react react-dom')
-  installDevDependencies('webpack webpack-dev-server babel-loader css-loader babel-core babel-preset-env babel-preset-react style-loader webpack-merge uglifyjs-webpack-plugin sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-cssnext postcss-import postcss-loader')
+  helpers.install('react react-dom')
+  helpers.installDevDependencies('webpack webpack-dev-server babel-loader css-loader babel-core babel-preset-env babel-preset-react style-loader webpack-merge uglifyjs-webpack-plugin sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-cssnext postcss-import postcss-loader')
   process.stdout.write('\033c')
   log('The project was created!')
   log(`cd into ${name} and run npm start, then refresh the page after a second`)
@@ -278,10 +249,10 @@ let postgresRedux = () => {
   addBookshelfToEnzo()
   shell.cd(`${name}`)
   log('Downloading dependencies and setting up the project, this may take a moment')
-  install('redux react-router-dom react-redux express dotenv nodemon pg knex body-parser compression helmet react react-dom bookshelf morgan')
-  installDevDependencies('webpack babel-loader css-loader babel-core babel-preset-env babel-preset-react style-loader webpack-merge uglifyjs-webpack-plugin sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-cssnext postcss-import postcss-loader')
-  installKnexGlobal()
-  modifyKnex()
+  helpers.install('redux react-router-dom react-redux express dotenv nodemon pg knex body-parser compression helmet react react-dom bookshelf morgan')
+  helpers.installDevDependencies('webpack babel-loader css-loader babel-core babel-preset-env babel-preset-react style-loader webpack-merge uglifyjs-webpack-plugin sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-cssnext postcss-import postcss-loader')
+  helpers.installKnexGlobal()
+  modifyKnex(name)
   try {
     execSync(`createdb ${name};`, { stdio: 'ignore' });
   } catch (e) {
@@ -306,8 +277,8 @@ let mongooseRedux = () => {
   shell.cd(`${name}`)
   process.stdout.write('\033c')
   log('Downloading dependencies and setting up the project, this may take a moment')
-  install('redux react-router-dom react-redux express nodemon dotenv compression helmet mongo dotenv body-parser react react-dom mongoose morgan')
-  installDevDependencies(' webpack babel-loader css-loader babel-core babel-preset-env babel-preset-react style-loader webpack-merge uglifyjs-webpack-plugin sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-cssnext postcss-import postcss-loader')
+  helpers.install('redux react-router-dom react-redux express nodemon dotenv compression helmet mongo dotenv body-parser react react-dom mongoose morgan')
+  helpers.installDevDependencies(' webpack babel-loader css-loader babel-core babel-preset-env babel-preset-react style-loader webpack-merge uglifyjs-webpack-plugin sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-cssnext postcss-import postcss-loader')
   process.stdout.write('\033c')
   log('The project was created!')
   log(`cd into ${name}`)
@@ -326,8 +297,8 @@ let noDBRedux= () => {
   shell.cd(`${name}`)
   process.stdout.write('\033c')
   log(chalk.cyanBright('Downloading dependencies and setting up the project, this may take a moment'))
-  install('redux react-router-dom react-redux express nodemon dotenv body-parser compression helmet react react-dom morgan')
-  installDevDependencies('webpack babel-loader css-loader babel-core babel-preset-env babel-preset-react style-loader webpack-merge uglifyjs-webpack-plugin sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-cssnext postcss-import postcss-loader')
+  helpers.install('redux react-router-dom react-redux express nodemon dotenv body-parser compression helmet react react-dom morgan')
+  helpers.installDevDependencies('webpack babel-loader css-loader babel-core babel-preset-env babel-preset-react style-loader webpack-merge uglifyjs-webpack-plugin sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-cssnext postcss-import postcss-loader')
   process.stdout.write('\033c')
   log(chalk.cyanBright('The project was created!'))
   log(chalk.cyanBright(`cd into ${name}`))
@@ -346,8 +317,8 @@ let reduxNoBE = () => {
   shell.cd(`${name}`)
   process.stdout.write('\033c')
   log('Downloading dependencies and setting up the project, this may take a moment')
-  install('redux react-router-dom react-redux react react-dom')
-  installDevDependencies('webpack webpack-dev-server babel-loader css-loader babel-core babel-preset-env babel-preset-react style-loader webpack-merge uglifyjs-webpack-plugin sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-cssnext postcss-import postcss-loader')
+  helpers.install('redux react-router-dom react-redux react react-dom')
+  helpers.installDevDependencies('webpack webpack-dev-server babel-loader css-loader babel-core babel-preset-env babel-preset-react style-loader webpack-merge uglifyjs-webpack-plugin sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-cssnext postcss-import postcss-loader')
   process.stdout.write('\033c')
   log('The project was created!')
   log(`cd into ${name}`)
@@ -364,10 +335,10 @@ let postgresMvcPug = () => {
   addBookshelfToEnzo()
   shell.cd(`${name}`)
   log('Downloading dependencies and setting up the project, this may take a moment')
-  install('express nodemon pg knex body-parser compression helmet dotenv bookshelf pug morgan cookie-parser')
-  installDevDependencies('webpack babel-loader css-loader babel-core babel-preset-env style-loader webpack-merge uglifyjs-webpack-plugin sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-cssnext postcss-import postcss-loader')
-  installKnexGlobal()
-  modifyKnex()
+  helpers.install('express nodemon pg knex body-parser compression helmet dotenv bookshelf pug morgan cookie-parser')
+  helpers.installDevDependencies('webpack babel-loader css-loader babel-core babel-preset-env style-loader webpack-merge uglifyjs-webpack-plugin sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-cssnext postcss-import postcss-loader')
+  helpers.installKnexGlobal()
+  helpers.modifyKnex(name)
   try {
     execSync(`createdb ${name};`, { stdio: 'ignore' });
   } catch (e) {
@@ -389,10 +360,10 @@ let posgresMvcNoPug = () => {
   addBookshelfToEnzo()
   shell.cd(`${name}`)
   log('Downloading dependencies and setting up the project, this may take a moment')
-  install('express nodemon pg knex body-parser compression helmet dotenv bookshelf morgan cookie-parser')
-  installDevDependencies('babel-core babel-preset-env babelify gulp gulp-uglify gulp-rename browserify gulp-htmlmin gulp-clean-css gulp-tap gulp-buffer del run-sequence envify bundle-collapser gulp-plumber gulp-sass gulp-postcss postcss-cssnext')
-  installKnexGlobal()
-  modifyKnex()
+  helpers.install('express nodemon pg knex body-parser compression helmet dotenv bookshelf morgan cookie-parser')
+  helpers.installDevDependencies('babel-core babel-preset-env babelify gulp gulp-uglify gulp-rename browserify gulp-htmlmin gulp-clean-css gulp-tap gulp-buffer del run-sequence envify bundle-collapser gulp-plumber gulp-sass gulp-postcss postcss-cssnext')
+  helpers.installKnexGlobal()
+  helpers.modifyKnex()
   try {
     execSync(`createdb ${name};`, { stdio: 'ignore' });
   } catch (e) {
@@ -414,8 +385,8 @@ let mongooseMvcPug = () => {
   addMongooseToEnzo()
   shell.cd(`${name}`)
   log('Downloading dependencies and setting up the project, this may take a moment')
-  install('express nodemon mongo body-parser compression helmet dotenv mongoose pug morgan cookie-parser')
-  installDevDependencies('webpack babel-loader css-loader babel-core babel-preset-env style-loader webpack-merge uglifyjs-webpack-plugin sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-cssnext postcss-import postcss-loader')
+  helpers.install('express nodemon mongo body-parser compression helmet dotenv mongoose pug morgan cookie-parser')
+  helpers.installDevDependencies('webpack babel-loader css-loader babel-core babel-preset-env style-loader webpack-merge uglifyjs-webpack-plugin sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-cssnext postcss-import postcss-loader')
   process.stdout.write('\033c')
   log('The project was created!')
   log(`cd into ${name} and run npm start`)
@@ -432,8 +403,8 @@ let mongooseMvcNoPug = () => {
   addMongooseToEnzo()
   shell.cd(`${name}`)
   log('Downloading dependencies and setting up the project, this may take a moment')
-  install('express nodemon mongo body-parser compression helmet dotenv mongoose morgan cookie-parser')
-  installDevDependencies('babel-core babel-preset-env babelify gulp gulp-uglify gulp-rename browserify gulp-htmlmin gulp-clean-css gulp-tap gulp-buffer del run-sequence envify bundle-collapser gulp-plumber gulp-sass gulp-postcss postcss-cssnext')
+  helpers.install('express nodemon mongo body-parser compression helmet dotenv mongoose morgan cookie-parser')
+  helpers.installDevDependencies('babel-core babel-preset-env babelify gulp gulp-uglify gulp-rename browserify gulp-htmlmin gulp-clean-css gulp-tap gulp-buffer del run-sequence envify bundle-collapser gulp-plumber gulp-sass gulp-postcss postcss-cssnext')
   process.stdout.write('\033c')
   log('The project was created!')
   log(`cd into ${name} and run npm start`)
@@ -450,8 +421,8 @@ let noDbMvcPug = () => {
   process.stdout.write('\033c')
   shell.cd(`${name}`)
   log('Downloading dependencies and setting up the project, this may take a moment')
-  install('express nodemon body-parser compression helmet dotenv pug morgan cookie-parser')
-  installDevDependencies('webpack babel-loader css-loader babel-core babel-preset-env style-loader webpack-merge uglifyjs-webpack-plugin sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-cssnext postcss-import postcss-loader')
+  helpers.install('express nodemon body-parser compression helmet dotenv pug morgan cookie-parser')
+  helpers.installDevDependencies('webpack babel-loader css-loader babel-core babel-preset-env style-loader webpack-merge uglifyjs-webpack-plugin sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-cssnext postcss-import postcss-loader')
   process.stdout.write('\033c')
   log('The project was created!')
   log(`cd into ${name} and run npm start`)
@@ -469,8 +440,8 @@ let noDbMvcNoPug = () => {
   process.stdout.write('\033c')
   shell.cd(`${name}`)
   log('Downloading dependencies and setting up the project, this may take a moment')
-  install('express nodemon body-parser compression helmet dotenv morgan cookie-parser')
-  installDevDependencies('babel-core babel-preset-env babelify gulp gulp-uglify gulp-rename browserify gulp-htmlmin gulp-clean-css gulp-tap gulp-buffer del run-sequence envify bundle-collapser gulp-plumber gulp-sass gulp-postcss postcss-cssnext')
+  helpers.install('express nodemon body-parser compression helmet dotenv morgan cookie-parser')
+  helpers.installDevDependencies('babel-core babel-preset-env babelify gulp gulp-uglify gulp-rename browserify gulp-htmlmin gulp-clean-css gulp-tap gulp-buffer del run-sequence envify bundle-collapser gulp-plumber gulp-sass gulp-postcss postcss-cssnext')
   process.stdout.write('\033c')
   log('The project was created!')
   log(`cd into ${name} and run npm start`)
@@ -487,9 +458,9 @@ let postgresBE = () => {
   addBookshelfToEnzo()
   shell.cd(`${name}`)
   log('Downloading dependencies and setting up the project, this may take a moment')
-  install('express nodemon pg knex body-parser helmet dotenv bookshelf morgan')
-  installKnexGlobal()
-  modifyKnex()
+  helpers.install('express nodemon pg knex body-parser helmet dotenv bookshelf morgan')
+  helpers.installKnexGlobal()
+  helpers.modifyKnex(name)
   try {
     execSync(`createdb ${name};`, { stdio: 'ignore' });
   } catch (e) {
@@ -513,7 +484,7 @@ let mongooseBE = () => {
   addMongooseToEnzo()
   shell.cd(`${name}`)
   log('Downloading dependencies and setting up the project, this may take a moment')
-  install('express nodemon mongo body-parser helmet dotenv mongoose morgan')
+  helpers.install('express nodemon mongo body-parser helmet dotenv mongoose morgan')
   process.stdout.write('\033c')
   log('The project was created!')
   log(`cd into ${name} and run npm start`)
@@ -529,7 +500,7 @@ let noDbBE = () => {
   BE.backendOnly()
   shell.cd(`${name}`)
   log('Downloading dependencies and setting up the project, this may take a moment')
-  install('express nodemon body-parser helmet dotenv morgan')
+  helpers.install('express nodemon body-parser helmet dotenv morgan')
   process.stdout.write('\033c')
   log('The project was created!')
   log(chalk.cyanBright(`cd into ${name} and run npm start`))
@@ -542,61 +513,30 @@ let noDbBE = () => {
 }
 
 
-let addScript = (command, script) => {
-  let buffer = fs.readFileSync(`./${name}/package.json`)
-  let json = JSON.parse(buffer)
-  json.scripts[command] = script
-  let newPackage = JSON.stringify(json, null, 2)
-  fs.writeFileSync(`./${name}/package.json`, newPackage)
-}
-
-
 let addBookshelfToEnzo = () => {
-  let bookshelf = fs.readFileSync(path.resolve(__dirname, './templates/bookshelf.js'), 'utf8')
-  let enzoCreateBookshelfModel = fs.readFileSync(path.resolve(__dirname, './templates/enzoCreateBookshelfModel.js'),'utf8')
-  let migrationTemplate = fs.readFileSync(path.resolve(__dirname, './templates/migrationTemplate.js'),'utf8')
-  let enzoBookshelfModelTemplate = fs.readFileSync(path.resolve(__dirname, './templates/enzoBookshelfModelTemplate.js'),'utf8')
-  fs.writeFile(`./${name}/server/models/bookshelf.js`, bookshelf, (err) => {
-    if (err) console.error(err)
-  })
-  fs.writeFile(`./${name}/enzo/enzoCreateBookshelfModel.js`, enzoCreateBookshelfModel, (err) => {
-    if (err) console.error(err)
-  })
-  fs.writeFile(`./${name}/enzo/templates/migrationTemplate.js`, migrationTemplate, (err) => {
-    if (err) console.error(err)
-  })
-  fs.writeFile(`./${name}/enzo/templates/enzoBookshelfModelTemplate.js`, enzoBookshelfModelTemplate, (err) => {
-    if (err) console.error(err)
-  })
-  addScript('model', 'node enzo/enzoCreateBookshelfModel.js')
+  let bookshelf                  = loadFile('./templates/bookshelf.js')
+  let enzoCreateBookshelfModel   = loadFile('./templates/enzoCreateBookshelfModel.js')
+  let migrationTemplate          = loadFile('./templates/migrationTemplate.js')
+  let enzoBookshelfModelTemplate = loadFile('./templates/enzoBookshelfModelTemplate.js')
+
+  helpers.writeFile(`./${name}/server/models/bookshelf.js`,                   bookshelf                 )
+  helpers.writeFile(`./${name}/enzo/enzoCreateBookshelfModel.js`,             enzoCreateBookshelfModel  )
+  helpers.writeFile(`./${name}/enzo/templates/migrationTemplate.js`,          migrationTemplate         )
+  helpers.writeFile(`./${name}/enzo/templates/enzoBookshelfModelTemplate.js`, enzoBookshelfModelTemplate)
+
+  helpers.addScriptToNewPackageJSON('model', 'node enzo/enzoCreateBookshelfModel.js', name)
   // need to add script for this to package.json
 }
 
 let addMongooseToEnzo = () => {
-  // first need to import mongoose and mongoose connect to the server/server.js file. 
-  let model = fs.readFileSync(path.resolve(__dirname, './templates/enzoCreateMongooseModel.js'), 'utf8')
-  let schemaTemplate = fs.readFileSync(path.resolve(__dirname, './templates/schemaTemplate.js'), 'utf8')
-  fs.writeFile(`./${name}/enzo/model.js`, model, (err) => {
-    if (err) throw err 
-  })
-  fs.writeFile(`./${name}/enzo/templates/schemaTemplate.js`,  schemaTemplate, (err) => {
-    if (err) throw err 
-  })
-  addScript('model', 'node enzo/model.js')
+  let model           = loadFile('./templates/enzoCreateMongooseModel.js')
+  let schemaTemplate  = loadFile('./templates/schemaTemplate.js'         )
+
+  helpers.writeFile(`./${name}/enzo/model.js`,                     model         )
+  helpers.writeFile(`./${name}/enzo/templates/schemaTemplate.js`,  schemaTemplate)
+
+  helpers.addScriptToNewPackageJSON('model', 'node enzo/model.js', name)
 }
 
-
-let newKnex = `module.exports = {\n\n\tdevelopment: {\n\t\tclient: 'pg',\n\t\tconnection: 'postgres://localhost/${name}',\n\t\tmigrations: {\n\t\t\tdirectory: './db/migrations'\n\t\t},\n\t\tseeds: {\n\t\t\tdirectory: 'db/seeds/dev'\n\t\t},\n\t\tuseNullAsDefault: true\n\t},\n\n\tproduction: {\n\t\tclient: 'pg',\n\t\tconnection: process.env.DATABASE_URL + '?ssl=true',\n\t\tmigrations: {\n\t\t\tdirectory: 'db/migrations'\n\t\t},\n\t\tseeds: {\n\t\t\tdirectory: 'db/seeds/dev'\n\t\t},\n\t\tuseNullAsDefault: true\n\t}\n\n};`
-
-let modifyKnex = () => {
-  if (fs.existsSync('./knexfile.js')) {
-    fs.truncateSync('./knexfile.js', 0, function () { console.log('done') })
-    fs.appendFile('./knexfile.js', newKnex, (err) => {
-      if (err) throw err
-      fs.mkdirSync(`./db`)
-      fs.mkdirSync(`./db/migrations`)
-    })
-  }
-}
 
 module.exports = createProject
