@@ -1,12 +1,13 @@
-let fs = require('fs')
-let path = require('path')
-let shell = require('shelljs')
-const execSync = require('child_process').execSync;
-const chalk = require('chalk');
-const log = console.log;
-let glob = require('glob')
-let inquirer = require('inquirer')
-let prompt = inquirer.prompt
+let fs        = require('fs')
+let path      = require('path')
+let shell     = require('shelljs')
+let execSync  = require('child_process').execSync;
+let chalk     = require('chalk');
+let log       = console.log;
+let glob      = require('glob')
+let inquirer  = require('inquirer')
+let prompt    = inquirer.prompt
+let helpers   = require('../../helpers')
 
 let output = {
   type: 'input',
@@ -29,29 +30,14 @@ let tasks = {
     { name: 'Sass',    value: 'sass' },
     { name: 'PostCSS', value: 'post' },
     { name: 'CSS',     value: 'css'  },
-    { name: 'Html',     value: 'html' }
+    { name: 'Html',    value: 'html' }
   ]
 }
 
-
-let shouldUseYarn = () => {
-  try {
-    execSync('yarnpkg --version', { stdio: 'ignore' });
-    return true;
-  } catch (e) {
-    return false;
-  }
+// helper function
+let loadFile = filePath => {
+  return fs.readFileSync(path.resolve(__dirname, filePath), 'utf8')
 }
-
-let installDevDependencies = (packages) => {
-  let yarn = shouldUseYarn()
-  if (yarn) {
-    shell.exec(`yarn add ${packages} --dev`, {silent:false})
-  } else {
-    shell.exec(`npm install --save-dev ${packages}`, {silent:false})
-  }
-}
-
 
 let addGulp = () => {
   checkPackageJSON()
@@ -73,19 +59,15 @@ let addGulp = () => {
 }
 
 let createGulp = (input, output, tasks) => {
-  let gulp = fs.readFileSync(path.resolve(__dirname, './files/gulpFile.js'), 'utf8')
+  let gulp = loadFile('./files/gulpFile.js')
   gulp = detectTasks(gulp, tasks)
   gulp = gulp.replace(/INPUT/g, input)
   gulp = gulp.replace(/OUTPUT/g, output)
   log('Installing dependencies and setting up Gulp. This may take a moment.')
-  installDevDependencies('babel-core babel-preset-env babelify gulp gulp-uglify gulp-rename browserify gulp-tap gulp-buffer del run-sequence envify bundle-collapser gulp-plumber')
-  fs.writeFile('./gulpfile.js', gulp, (err) => {
-    if (err) throw err 
-    log('gulpfile.js created.')
-    
-  })
-  addScript('gulp', 'gulp')
-  addScript('gulp-prod', 'gulp production') 
+  helpers.installDevDependencies('babel-core babel-preset-env babelify gulp gulp-uglify gulp-rename browserify gulp-tap gulp-buffer del run-sequence envify bundle-collapser gulp-plumber')
+  helpers.writeFile('./gulpfile.js', gulp, 'gulpfile.js created.')
+  helpers.addScript('gulp', 'gulp')
+  helpers.addScript('gulp-prod', 'gulp production') 
 }
 
 let detectTasks = (gulp, tasks) => {
@@ -129,7 +111,7 @@ let addTaskToProductionArray = (gulp, task) => {
 
 let addCSS = (gulp) => {
   let requireCSS = `let cleanCSS = require('gulp-clean-css')`
-  let cssTask = fs.readFileSync(path.resolve(__dirname, './files/css.js'), 'utf8')
+  let cssTask    = loadFile('./files/css.js')
   gulp = addTask(12, requireCSS, gulp)
   gulp = addTask(15, cssTask, gulp)
   gulp = addTaskToTaskArray(gulp, `, 'css'`)
@@ -138,49 +120,41 @@ let addCSS = (gulp) => {
 }
 
 let addPostCSS = (gulp) => {
-  let requireCSS = `let cleanCSS = require('gulp-clean-css')`
-  let postcss = `let postcss = require('gulp-postcss')`
-  let cssNext = `let cssnext = require('postcss-cssnext')`
-  let postcssTask = fs.readFileSync(path.resolve(__dirname, './files/postcss.js'), 'utf8')
+  let requireCSS  = `let cleanCSS = require('gulp-clean-css')`
+  let postcss     = `let postcss = require('gulp-postcss')`
+  let cssNext     = `let cssnext = require('postcss-cssnext')`
+  let postcssTask = loadFile('./files/postcss.js')
   gulp = addTask(12, requireCSS, gulp)
   gulp = addTask(12, postcss, gulp)
   gulp = addTask(12, cssNext, gulp)
   gulp = addTask(16, postcssTask, gulp)
   gulp = addTaskToTaskArray(gulp, `, 'css'`)
   gulp = addTaskToProductionArray(gulp, `, 'minify-css'`)
-  installDevDependencies('gulp-postcss postcss-cssnext gulp-clean-css')
+  helpers.installDevDependencies('gulp-postcss postcss-cssnext gulp-clean-css')
   return gulp 
 }
 
 let addSass = (gulp) => {
-  let sass = `var sass = require('gulp-sass')`
-  let sassTask = fs.readFileSync(path.resolve(__dirname, './files/scss.js'), 'utf8')
+  let sass     = `var sass = require('gulp-sass')`
+  let sassTask = loadFile('./files/scss.js')
 
   gulp = addTask(15, sass, gulp)
   gulp = addTask(17, sassTask, gulp)
   gulp = addTaskToTaskArray(gulp, `, 'scss'`)
-  installDevDependencies('gulp-sass')
+  helpers.installDevDependencies('gulp-sass')
   return gulp 
 }
 
 let addHtml = (gulp) => {
-  let htmlmin = `var htmlmin = require('gulp-htmlmin')`
-  let htmlTask = fs.readFileSync(path.resolve(__dirname, './files/html.js'), 'utf8')
+  let htmlmin  = `var htmlmin = require('gulp-htmlmin')`
+  let htmlTask = loadFile('./files/html.js')
 
   gulp = addTask(12, htmlmin, gulp)
   gulp = addTask(14, htmlTask, gulp)
   gulp = addTaskToTaskArray(gulp, `, 'html'`)
   gulp = addTaskToProductionArray(gulp, `, 'minify-html'`)
-  installDevDependencies('gulp-htmlmin')
+  helpers.installDevDependencies('gulp-htmlmin')
   return gulp 
-}
-
-let addScript = (command, script) => {
-  let buffer = fs.readFileSync(`./package.json`)
-  let json = JSON.parse(buffer)
-  json.scripts[command] = script
-  let newPackage = JSON.stringify(json, null, 2)
-  fs.writeFileSync(`./package.json`, newPackage)
 }
 
 let checkPackageJSON = () => {
