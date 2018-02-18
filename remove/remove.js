@@ -1,24 +1,21 @@
-let fs = require('fs')
-let path = require('path')
-const execSync = require('child_process').execSync;
-const chalk = require('chalk');
-const log = console.log;
-const boxen = require('boxen')
-let shell = require('shelljs')
-
-
-
+let fs       = require('fs')
+let path     = require('path')
+let execSync = require('child_process').execSync;
+let chalk    = require('chalk');
+let log      = console.log;
+let boxen    = require('boxen')
+let shell    = require('shelljs')
 let inquirer = require('inquirer')
-let prompt = inquirer.prompt
+let prompt   = inquirer.prompt
 
 
 let choices = {
-  type: 'list', 
-  message: `Select what you want to remove:`, 
-  name: 'remove', 
-  choices: [
+  type    : 'list', 
+  message : `Select what you want to remove:`, 
+  name    : 'remove', 
+  choices : [
     { name: 'webpack' },
-    { name: 'gulp' }
+    { name: 'gulp'    }
   ]
 }
 
