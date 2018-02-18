@@ -1,21 +1,21 @@
-let command = process.argv[3]
-const chalk = require('chalk');
-const log = console.log;
-const boxen = require('boxen');
+let command  = process.argv[3]
+let chalk    = require('chalk');
+let log      = console.log;
+let boxen    = require('boxen');
 let inquirer = require('inquirer')
-let prompt = inquirer.prompt
+let prompt   = inquirer.prompt
 
 let commands = {
-  type: 'list',
-  message: 'Learn more about:',
-  name: 'help',
-  choices: [
-    { name: 'new' },
+  type    : 'list',
+  message : 'Learn more about:',
+  name    : 'help',
+  choices : [
+    { name: 'new'     },
     { name: 'command' },
-    { name: 'add' },
-    { name: 'remove' },
-    { name: 'help' },
-    { name: 'update' },
+    { name: 'add'     },
+    { name: 'remove'  },
+    { name: 'help'    },
+    { name: 'update'  },
     { name: 'version' }
   ]
 }
