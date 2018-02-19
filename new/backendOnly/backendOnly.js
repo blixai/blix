@@ -27,7 +27,7 @@ let backendOnly = () => {
   fs.mkdirSync(`./${name}/server/controllers`)
   fs.mkdirSync(`./${name}/assets`)
 
-  helpers.writeFile(`./${name}/server/server.js`, server)
+  fs.writeFileSync(`./${name}/server/server.js`, server)
   helpers.writeFile(`./${name}/server/cluster.js`, cluster)
   helpers.writeFile(`./${name}/server/routes.js`, routes)
 

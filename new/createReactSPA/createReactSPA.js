@@ -81,7 +81,7 @@ let writeFilesWithSPAReact = () => {
   fs.mkdirSync(`./${name}/server/controllers`)
   fs.mkdirSync(`./${name}/server/models`)
   fs.mkdirSync(`./${name}/assets`)
-  helpers.writeFile(`./${name}/server/server.js`, spaServer)
+  fs.writeFileSync(`./${name}/server/server.js`, spaServer)
   helpers.writeFile(`./${name}/server/cluster.js`, cluster)
   helpers.writeFile(`./${name}/server/routes.js`, routes)
 

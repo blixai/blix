@@ -108,7 +108,7 @@ let ReactReduxWithBackend = () => {
   fs.mkdirSync(`./${name}/server/models`)
   fs.mkdirSync(`./${name}/server/controllers`)
 
-  helpers.writeFile(`./${name}/server/server.js`, reactReduxServer)
+  fs.writeFileSync(`./${name}/server/server.js`, reactReduxServer)
   helpers.writeFile(`./${name}/server/cluster.js`, cluster)
   helpers.writeFile(`./${name}/server/routes.js`, routes)
 

@@ -536,6 +536,16 @@ let addMongooseToEnzo = () => {
   helpers.writeFile(`./${name}/enzo/templates/schemaTemplate.js`,  schemaTemplate)
 
   helpers.addScriptToNewPackageJSON('model', 'node enzo/model.js', name)
+  addMongoDBToProject()
+}
+
+let addMongoDBToProject = () => {
+  let server = fs.readFileSync(`./${name}/server/server.js`, 'utf8').toString().split('\n')
+  server.splice(0, 0, `\nlet mongoose = require('mongoose')\nmongoose.connect(process.env.MONGO)\n`)
+  let mongoAddedServer = server.join('\n')
+
+  helpers.writeFile(`./${name}/server/server.js`, mongoAddedServer)
+  helpers.writeFile(`./${name}/.env`, `MONGO="${`mongodb://localhost/${name}`}"`)
 }
 
 
