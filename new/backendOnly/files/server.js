@@ -9,7 +9,7 @@ let logger = require('morgan')
 if (!process.env.NODE_ENV) app.use(logger('dev'))
 app.use(helmet())
 app.use(bodyParser.json())
-app.use('/api/v1', routes)
+app.use('/', routes)
 app.use('/assets', express.static('assets'))
 
 

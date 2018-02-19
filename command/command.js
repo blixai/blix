@@ -16,7 +16,7 @@ let commands = {
     { name: 'react: create a new react statefull or stateless component',                                        value: 'react'  },
     { name: 'redux: create a new react component, a redux container, and a new route in your routing component', value: 'redux'  },
     { name: 'api: create new api endpoints and controller',                                                      value: 'api'    },
-    { name: 'page: create a new folder, html, css, and js files along with adding the route in pages.js',        value: 'page'   },
+    { name: 'page: create a new folder, html or pug, css, and js files along with adding the route in routes.js',value: 'page'   },
     { name: 'model: create a new Bookshelf model and migration or a Mongoose model',                             value: 'model'  },
     { name: 'action: create or add redux action to new or existing reducer',                                     value: 'action' }
   ]
@@ -48,6 +48,16 @@ let templateName = {
   type    : 'input',
   message : 'What do you want to name the template file:',
   name    : 'templateName'
+}
+
+let page = {
+  type    : 'list',
+  message : 'Use Pug or Html',
+  name    : 'page',
+  choices : [
+    { name: 'Pug'  },
+    { name: 'Html' }
+  ]
 }
 
 // helper function to load files 
@@ -183,14 +193,26 @@ let addAPI = () => {
   helpers.writeFile('./enzo/templates/enzoEndpointTemplate.js'  , enzoEndpointTemplate)
 }
 
-let addPage = () => {
-  helpers.addScript('page', 'node enzo/page.js')
 
+let addPage = () => {
+  prompt([page]).then(page => {
+    helpers.addScript('page', 'node enzo/page.js')
+    page.page === 'Pug' ? pugPage() : htmlPage()
+  })
+}
+
+let pugPage = () => {
+  let page     = loadFile('./files/enzoPugPage.js')
+  let template = loadFile('./templates/pugTemplate.pug')
+  checkEnzoExists()
+  helpers.writeFile('./enzo/page.js', page)
+  helpers.writeFile('./enzo/templates/pugTemplate.pug', template)
+}
+
+let htmlPage = () => {
   let page = loadFile('./files/enzoNewPage.js')
   let html = loadFile('./templates/htmlPageTemplate.html')
-
   checkEnzoExists()
-
   helpers.writeFile('./enzo/page.js', page)
   helpers.writeFile('./enzo/templates/htmlPageTemplate.html', html)
 }

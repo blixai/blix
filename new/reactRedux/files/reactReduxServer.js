@@ -16,7 +16,7 @@ if (!process.env.NODE_ENV) app.use(logger('dev'))
 
 
 app.use('/assets', express.static('assets'))
-app.use('/api/v1', routes) 
+app.use('/', routes) 
 app.use('/build', express.static('build')) 
 
 

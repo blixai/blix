@@ -14,7 +14,7 @@ app.use(compression())
 app.use(bodyParser.json()) 
 if (!process.env.NODE_ENV) app.use(logger('dev'))
 
-app.use('/api/v1', routes) 
+app.use('/', routes) 
 app.use('/assets', express.static('assets'))
 
 app.use('/build', express.static('build')) 
