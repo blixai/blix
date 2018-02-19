@@ -16,7 +16,7 @@ let html = fs.readFileSync(path.resolve(__dirname, './templates/htmlPageTemplate
 html = html.replace(/Name/g, `${name}`)
 let css = `body {\n\tcolor: blue;\n}`
 let js = `console.log('hello world')`
-let route = `\nr.get('/${name}', (req, res) => res.sendFile(path.join(__dirname, '../public/${name}/index.html')))`
+let route = `\nr.get('/${name}', (req, res) => res.sendFile(path.join(__dirname, '../dist/${name}/index.html')))`
 
 
 let createPages = () => {
@@ -25,7 +25,7 @@ let createPages = () => {
     if (fs.existsSync(`./src/${name}/${page}`)) {
       log(`The folder ${page} already exists`)
     } else {
-      let pageRoute = `\nr.get('/${name}/${page}', (req, res) => res.sendFile(path.join(__dirname, '../public/${name}/${page}/index.html')))`
+      let pageRoute = `\nr.get('/${name}/${page}', (req, res) => res.sendFile(path.join(__dirname, '../dist/${name}/${page}/index.html')))`
       let subPage = fs.readFileSync(path.resolve(__dirname, './templates/htmlPageTemplate.html'), 'utf8')
       subPage = subPage.replace(/Name/g, `../${page}`)
       fs.mkdirSync(`./src/${name}/${page}`)
