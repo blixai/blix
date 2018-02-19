@@ -10,7 +10,7 @@ let loadFile = filePath => {
 
 let spaNoSQLPck = `{\n\t"name": "${name}",\n\t"version": "1.0.0",\n\t"scripts": {\n\t\t"start": "nodemon server/cluster.js",\n\t\t"build": "webpack --watch",\n\t\t"redux": "node enzo/createComponentAndContainer.js",\n\t\t"api": "node enzo/enzoCreateAPI.js",\n\t\t"prod": "webpack --config webpack.prod.js",\n\t\t"action": "node enzo/action.js"\n\t}\n}`
 let spaWebpack  = loadFile('./files/webpack.config.js')
-let spaHtmlFile = `<!DOCTYPE html>\n<html>\n\t<head>\n\t\t<meta charset="utf-8">\n\t\t<meta name="viewport" content="width=device-width, initial-scale=1">\n\t\t<link href="build/main.css" rel="stylesheet">\n\t\t<title>Home</title>\n\t</head>\n\t<body>\n\t\t<div id="root"></div>\n\t\t<script src="build/bundle.js"></script>\n\t</body>\n</htlm>`
+let spaHtmlFile = `<!DOCTYPE html>\n<html>\n\t<head>\n\t\t<meta charset="utf-8">\n\t\t<meta name="viewport" content="width=device-width, initial-scale=1">\n\t\t<link href="dist/main.css" rel="stylesheet">\n\t\t<title>Home</title>\n\t</head>\n\t<body>\n\t\t<div id="root"></div>\n\t\t<script src="dist/bundle.js"></script>\n\t</body>\n</htlm>`
 
 let gitignore = loadFile('../filesToCopy/commonFiles/gitIgnore.js')
 let readme    = loadFile('../filesToCopy/commonFiles/readme.md')
@@ -28,7 +28,7 @@ let homeContainer      = loadFile('./files/homeContainer.js')
 let home               = loadFile('./files/home.js')
 let appRouterNoBackend = loadFile('./files/appRouterNoBackend.js')
 
-let packageJSONWithoutBackend   = `{\n\t"name": "${name}",\n\t"version": "1.0.0",\n\t"scripts": {\n\t\t"start": "webpack-dev-server --output-public-path=/build/ --inline --hot --open",\n\t\t"build": "webpack --watch",\n\t\t"prod": "webpack --config webpack.prod.js",\n\t\t"action": "node enzo/action.js",\n\t\t"redux": "node enzo/createComponentAndContainer.js"\n\t}\n}`
+let packageJSONWithoutBackend   = `{\n\t"name": "${name}",\n\t"version": "1.0.0",\n\t"scripts": {\n\t\t"start": "webpack-dev-server --output-public-path=/dist/ --inline --hot --open",\n\t\t"build": "webpack --watch",\n\t\t"prod": "webpack --config webpack.prod.js",\n\t\t"action": "node enzo/action.js",\n\t\t"redux": "node enzo/createComponentAndContainer.js"\n\t}\n}`
 let enzoCreateContainer         = loadFile('./files/enzoCreateContainer.js')
 let enzoCreateAPI               = loadFile('./files/enzoCreateAPI.js')
 let enzoEndpointTemplate        = loadFile('./templates/enzoEndpointTemplate.js')
@@ -52,9 +52,8 @@ let ReactReduxWithBackend = () => {
 
   //frontend
   fs.mkdirSync(`./${name}/src`)
-  fs.mkdirSync(`./${name}/build`)
-  fs.mkdirSync(`./${name}/public`)
-  helpers.writeFile(`./${name}/public/index.html`, spaHtmlFile)
+  fs.mkdirSync(`./${name}/dist`)
+  helpers.writeFile(`./${name}/dist/index.html`, spaHtmlFile)
   helpers.writeFile(`./${name}/webpack.config.js`, spaWebpack)
   helpers.writeFile(`./${name}/webpack.prod.js`, prodWebpack)
   helpers.writeFile(`./${name}/postcss.config.js`, postcss)
@@ -65,9 +64,7 @@ let ReactReduxWithBackend = () => {
   helpers.writeFile(`./${name}/src/containers/App/AppContainer.js`, appContainer)
   // need to write home folder, file and home container
   fs.mkdirSync(`./${name}/src/containers/Home`)
-  helpers.writeFile(`./${name}/src/containers/Home/Home.js`, home, (err) => {
-    if (err) throw err
-  })
+  helpers.writeFile(`./${name}/src/containers/Home/Home.js`, home)
   helpers.writeFile(`./${name}/src/containers/Home/HomeContainer.js`, homeContainer)
   helpers.writeFile(`./${name}/src/containers/Home/Home.css`, '')
   fs.mkdirSync(`./${name}/src/containers/PageNotFound`)
@@ -125,7 +122,7 @@ let ReactReduxWithBackend = () => {
 let reactReduxWithoutBackend = () => {
   //frontend
   fs.mkdirSync(`./${name}/src`)
-  fs.mkdirSync(`./${name}/build`)
+  fs.mkdirSync(`./${name}/dist`)
   helpers.writeFile(`./${name}/index.html`, spaHtmlFile)
   helpers.writeFile(`./${name}/webpack.config.js`, spaWebpack)
   helpers.writeFile(`./${name}/webpack.prod.js`, prodWebpack)

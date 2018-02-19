@@ -3,4 +3,4 @@ const express = require('express')
 const r = express.Router()
 module.exports = r
 
-r.get('/', (req, res) => res.sendFile(path.join(__dirname, '../public/home/index.html')))
+r.get('/', (req, res) => res.sendFile(path.join(__dirname, '../dist/home/index.html')))

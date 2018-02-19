@@ -12,8 +12,8 @@ let loadFile = filePath => {
 let gitignore              = loadFile('../filesToCopy/commonFiles/gitIgnore.js')
 let readme                 = loadFile('../filesToCopy/commonFiles/readme.md')
 let routes                 = loadFile('../filesToCopy/commonFiles/routes.js')
-let spaNoSQLPck            = `{\n\t"name": "${name}",\n\t"version": "1.0.0",\n\t"scripts": {\n\t\t"start": "nodemon --watch public server/cluster.js",\n\t\t"page":"node enzo/page.js",\n\t\t"api": "node enzo/api.js",\n\t\t"build": "webpack --watch",\n\t\t"prod": "webpack --config webpack.prod.js"\n\t}\n}`
-let railsPackage           = `{\n\t"name": "${name}",\n\t"version": "1.0.0",\n\t"scripts": {\n\t\t"start": "gulp | nodemon --watch public server/cluster.js",\n\t\t"page":"node enzo/page.js",\n\t\t"api": "node enzo/api.js",\n\t\t"build": "gulp",\n\t\t"prod": "gulp production"\n\t}\n}`
+let spaNoSQLPck            = `{\n\t"name": "${name}",\n\t"version": "1.0.0",\n\t"scripts": {\n\t\t"start": "nodemon --watch dist server/cluster.js",\n\t\t"page":"node enzo/page.js",\n\t\t"api": "node enzo/api.js",\n\t\t"build": "webpack --watch",\n\t\t"prod": "webpack --config webpack.prod.js"\n\t}\n}`
+let railsPackage           = `{\n\t"name": "${name}",\n\t"version": "1.0.0",\n\t"scripts": {\n\t\t"start": "gulp | nodemon --watch dist server/cluster.js",\n\t\t"page":"node enzo/page.js",\n\t\t"api": "node enzo/api.js",\n\t\t"build": "gulp",\n\t\t"prod": "gulp production"\n\t}\n}`
 let cluster                = loadFile('../filesToCopy/cluster.js')
 
 let railsServer            = loadFile('./files/railsServer.js')
@@ -58,7 +58,7 @@ let railsApp = () => {
   fs.mkdirSync(`./${name}/server/models`)
   fs.mkdirSync(`./${name}/server/controllers`)
   fs.mkdirSync(`./${name}/assets`)
-  fs.mkdirSync(`./${name}/public`)
+  fs.mkdirSync(`./${name}/dist`)
   fs.writeFileSync(`./${name}/server/server.js`,  railsServer)
   helpers.writeFile(`./${name}/server/cluster.js`, cluster)
   helpers.writeFile(`./${name}/server/routes.js`,  railsRoutes)
@@ -94,7 +94,7 @@ let pugApp = () => {
   fs.mkdirSync(`./${name}/server/models`)
   fs.mkdirSync(`./${name}/server/controllers`)
   fs.mkdirSync(`./${name}/assets`)
-  fs.mkdirSync(`./${name}/public`)
+  fs.mkdirSync(`./${name}/dist`)
   fs.mkdirSync(`./${name}/server/views`)
   fs.mkdirSync(`./${name}/server/views/home`)
 
