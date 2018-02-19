@@ -2,7 +2,7 @@ let express = require('express')
 let app = express()
 let path = require('path') 
 let bodyParser = require('body-parser') 
-const routes = require('./routes') 
+let routes = require('./routes') 
 let port = (process.env.PORT || 3000) 
 let compression = require('compression') 
 let helmet = require('helmet')
@@ -17,7 +17,7 @@ if (!process.env.NODE_ENV) app.use(logger('dev'))
 app.use('/', routes) 
 app.use('/assets', express.static('assets'))
 
-app.use('/build', express.static('build')) 
+app.use('/dist', express.static('dist')) 
 
 app.get('/*', (req, res) => res.sendFile(path.join(__dirname, '../public/index.html'))) 
 

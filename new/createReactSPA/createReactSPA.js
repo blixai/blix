@@ -21,7 +21,7 @@ let spaIndex               = loadFile('./files/spaIndex.js')
 let spaReact               = loadFile('./files/spaReact.js')
 let spaNoSQLPck            = `{\n\t"name": "${name}",\n\t"version": "1.0.0",\n\t"scripts": {\n\t\t"start": "nodemon server/cluster.js",\n\t\t"build": "webpack --watch",\n\t\t"prod": "webpack --config webpack.prod.js",\n\t\t"react":"node enzo/react.js",\n\t\t"api": "node enzo/api.js"\n\t}\n}`
 let spaHtmlFile            = loadFile('./files/spaHtmlFile.html')
-let spaNoBE                = `{\n\t"name": "${name}",\n\t"version": "1.0.0",\n\t"scripts": {\n\t\t"start": "webpack-dev-server --output-public-path=/build/ --inline --hot --open",\n\t\t"react": "node enzo/react.js",\n\t\t"prod": "webpack --config webpack.prod.js"\n\t}\n}`
+let spaNoBE                = `{\n\t"name": "${name}",\n\t"version": "1.0.0",\n\t"scripts": {\n\t\t"start": "webpack-dev-server --output-public-path=/dist/ --inline --hot --open",\n\t\t"react": "node enzo/react.js",\n\t\t"prod": "webpack --config webpack.prod.js"\n\t}\n}`
 let cluster                = loadFile('../filesToCopy/cluster.js')
 let postcss                = loadFile('./files/postcss.config.js')
 
@@ -36,7 +36,7 @@ let api                    = loadFile('./files/enzoAPI.js')
 // this needs to be modified as the readline doesnt exist within this context
 let reactSPAWithoutBackend = () => {
   fs.mkdirSync(`./${name}/src`)
-  fs.mkdirSync(`./${name}/build`)
+  fs.mkdirSync(`./${name}/dist`)
   helpers.writeFile(`./${name}/index.html`, spaHtmlFile)
   helpers.writeFile(`./${name}/webpack.config.js`, spaWebpack)
   helpers.writeFile(`./${name}/webpack.prod.js`, prodWebpack)
@@ -64,7 +64,7 @@ let reactSPAWithoutBackend = () => {
 let writeFilesWithSPAReact = () => {
   //frontend
   fs.mkdirSync(`./${name}/src`)
-  fs.mkdirSync(`./${name}/build`)
+  fs.mkdirSync(`./${name}/dist`)
   fs.mkdirSync(`./${name}/public`)
   helpers.writeFile(`./${name}/public/index.html`, spaHtmlFile)
   helpers.writeFile(`./${name}/webpack.config.js`, spaWebpack)
