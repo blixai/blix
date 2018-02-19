@@ -59,6 +59,16 @@ let pug = {
   name    : 'pug'
 }
 
+let BEtest = {
+  type    : 'list',
+  message : 'Testing Tools:',
+  name    : 'test',
+  choices : [
+    { name: 'Mocha & Chai', value: 'mocha' },
+    { name: 'Jest',         value: 'jest'  }
+  ]
+}
+
 let promptProject = () => {
   prompt([project])
     .then(answers => {
@@ -132,16 +142,16 @@ let mvc = () => {
   })
 }
 
-let beOnly = () => {
-  prompt([database]).then(db => {
-    if (db.database === 'Postgres') {
-      postgresBE()
-    } else if (db.database === 'MongoDB') {
-      mongooseBE()
-    } else {
-      noDbBE()
-    }
-  })
+let beOnly = async () => {
+  let test = await prompt([BEtest])
+  let db   = await prompt([database])
+  if (db.database === 'Postgres') {
+    postgresBE(test.test)
+  } else if (db.database === 'MongoDB') {
+    mongooseBE(test.test)
+  } else {
+    noDbBE(test.test)
+  }
 }
 
 
@@ -453,12 +463,13 @@ let noDbMvcNoPug = () => {
   log('')
 }
 
-let postgresBE = () => {
-  BE.backendOnly()
+let postgresBE = (test) => {
+  BE.backendOnly(test)
   addBookshelfToEnzo()
   shell.cd(`${name}`)
   log('Downloading dependencies and setting up the project, this may take a moment')
   helpers.install('express nodemon pg knex body-parser helmet dotenv bookshelf morgan')
+  beOnlyInstallTesting(test)
   helpers.installKnexGlobal()
   helpers.modifyKnex(name)
   try {
@@ -479,12 +490,13 @@ let postgresBE = () => {
 }
 
 
-let mongooseBE = () => {
-  BE.backendOnly()
+let mongooseBE = (test) => {
+  BE.backendOnly(test)
   addMongooseToEnzo()
   shell.cd(`${name}`)
   log('Downloading dependencies and setting up the project, this may take a moment')
   helpers.install('express nodemon mongo body-parser helmet dotenv mongoose morgan')
+  beOnlyInstallTesting(test)
   process.stdout.write('\033c')
   log('The project was created!')
   log(`cd into ${name} and run npm start`)
@@ -496,11 +508,12 @@ let mongooseBE = () => {
   log('')
 }
 
-let noDbBE = () => {
-  BE.backendOnly()
+let noDbBE = (test) => {
+  BE.backendOnly(test)
   shell.cd(`${name}`)
   log('Downloading dependencies and setting up the project, this may take a moment')
   helpers.install('express nodemon body-parser helmet dotenv morgan')
+  beOnlyInstallTesting(test)
   process.stdout.write('\033c')
   log('The project was created!')
   log(chalk.cyanBright(`cd into ${name} and run npm start`))
@@ -510,6 +523,11 @@ let noDbBE = () => {
   log('Unique package.json Commands')
   log(boxen(`api || example:` + chalk.bold.cyanBright(` npm run api <name>`) + ` || ` + chalk.yellowBright(`use: quickly create`) + chalk.bold.redBright(` api/v1 get/post/put/delete`) + chalk.yellowBright(` endpoints for a resource`), { padding: 1, borderColor: 'yellow' }))
   log('')
+}
+
+let beOnlyInstallTesting = (test) => {
+  if (test === 'mocha') helpers.installDevDependencies('mocha chai chai-http')
+  if (test === 'jest') helpers.installDevDependencies('jest supertest')
 }
 
 

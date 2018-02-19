@@ -21,7 +21,7 @@ let cluster                = loadFile('../filesToCopy/cluster.js')
 let spaNoSQLPck = `{\n\t"name": "${name}",\n\t"version": "1.0.0",\n\t"scripts": {\n\t\t"start": "nodemon server/cluster.js",\n\t\t\t"api": "node enzo/api.js"\n\t}\n}`
 
 
-let backendOnly = () => {
+let backendOnly = (test) => {
   fs.mkdirSync(`./${name}/server`)
   fs.mkdirSync(`./${name}/server/models`)
   fs.mkdirSync(`./${name}/server/controllers`)
@@ -44,6 +44,27 @@ let backendOnly = () => {
   helpers.writeFile(`./${name}/README.md`,   readme)
   helpers.writeFile(`./${name}/.env`, '')
   fs.writeFileSync(`./${name}/package.json`, spaNoSQLPck)
+  setupTesting(test)
+}
+
+let setupTesting = (test) => {
+  if (test === 'mocha') {
+    mochaChia()
+  } else if (test === 'jest') {
+    jest()
+  }
+}
+
+let mochaChia = () => {
+  helpers.addScriptToNewPackageJSON('test', 'mocha', name)
+  fs.mkdirSync(`./${name}/test`)
+  helpers.writeFile(`./${name}/test/test.js`, loadFile('./files/mochaAPITest.js'))
+}
+
+let jest = () => {
+  helpers.addScriptToNewPackageJSON('test', 'jest', name)
+  fs.mkdirSync(`./${name}/test`)
+  helpers.writeFile(`./${name}/test/test.test.js`, loadFile('./files/jestTest.js'))
 }
 
 module.exports = { backendOnly }
