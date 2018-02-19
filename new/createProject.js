@@ -59,7 +59,7 @@ let pug = {
   name    : 'pug'
 }
 
-let BEtest = {
+let testingWithoutReact = {
   type    : 'list',
   message : 'Testing Tools:',
   name    : 'test',
@@ -128,22 +128,21 @@ let redux = () => {
   })
 }
 
-let mvc = () => { 
-  prompt([database]).then(db => {
-    prompt([pug]).then(pug => {
-      if (db.database === 'Postgres') {
-        pug.pug ? postgresMvcPug() : posgresMvcNoPug()
-      } else if (db.database === 'MongoDB') {
-        pug.pug ? mongooseMvcPug() : mongooseMvcNoPug()
-      } else {
-        pug.pug ? noDbMvcPug() : noDbMvcNoPug()
-      }
-    })
-  })
+let mvc = async () => {
+  let db   = await prompt([database]) 
+  let p  = await prompt([pug])
+  let test = await prompt([testingWithoutReact])
+  if (db.database === 'Postgres') {
+    p.pug ? postgresMvcPug(test.test) : posgresMvcNoPug(test.test)
+  } else if (db.database === 'MongoDB') {
+    p.pug ? mongooseMvcPug(test.test) : mongooseMvcNoPug(test.test)
+  } else {
+    p.pug ? noDbMvcPug(test.test) : noDbMvcNoPug(test.test)
+  }
 }
 
 let beOnly = async () => {
-  let test = await prompt([BEtest])
+  let test = await prompt([testingWithoutReact])
   let db   = await prompt([database])
   if (db.database === 'Postgres') {
     postgresBE(test.test)
@@ -340,13 +339,14 @@ let reduxNoBE = () => {
   log('')
 }
 
-let postgresMvcPug = () => {
-  noReactApp.pugApp()
+let postgresMvcPug = (test) => {
+  noReactApp.pugApp(test)
   addBookshelfToEnzo()
   shell.cd(`${name}`)
   log('Downloading dependencies and setting up the project, this may take a moment')
   helpers.install('express nodemon pg knex body-parser compression helmet dotenv bookshelf pug morgan cookie-parser')
   helpers.installDevDependencies('webpack babel-loader css-loader babel-core babel-preset-env style-loader webpack-merge uglifyjs-webpack-plugin sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-cssnext postcss-import postcss-loader')
+  beOnlyInstallTesting(test)
   helpers.installKnexGlobal()
   helpers.modifyKnex(name)
   try {
@@ -365,13 +365,14 @@ let postgresMvcPug = () => {
   log('')
 }
 
-let posgresMvcNoPug = () => {
-  noReactApp.railsApp()
+let posgresMvcNoPug = (test) => {
+  noReactApp.railsApp(test)
   addBookshelfToEnzo()
   shell.cd(`${name}`)
   log('Downloading dependencies and setting up the project, this may take a moment')
   helpers.install('express nodemon pg knex body-parser compression helmet dotenv bookshelf morgan cookie-parser')
   helpers.installDevDependencies('babel-core babel-preset-env babelify gulp gulp-uglify gulp-rename browserify gulp-htmlmin gulp-clean-css gulp-tap gulp-buffer del run-sequence envify bundle-collapser gulp-plumber gulp-sass gulp-postcss postcss-cssnext')
+  beOnlyInstallTesting(test)
   helpers.installKnexGlobal()
   helpers.modifyKnex()
   try {
@@ -390,13 +391,14 @@ let posgresMvcNoPug = () => {
   log('')
 }
 
-let mongooseMvcPug = () => {
-  noReactApp.pugApp()
+let mongooseMvcPug = (test) => {
+  noReactApp.pugApp(test)
   addMongooseToEnzo()
   shell.cd(`${name}`)
   log('Downloading dependencies and setting up the project, this may take a moment')
   helpers.install('express nodemon mongo body-parser compression helmet dotenv mongoose pug morgan cookie-parser')
   helpers.installDevDependencies('webpack babel-loader css-loader babel-core babel-preset-env style-loader webpack-merge uglifyjs-webpack-plugin sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-cssnext postcss-import postcss-loader')
+  beOnlyInstallTesting(test)
   process.stdout.write('\033c')
   log('The project was created!')
   log(`cd into ${name} and run npm start`)
@@ -408,13 +410,14 @@ let mongooseMvcPug = () => {
   log('')
 }
 
-let mongooseMvcNoPug = () => {
-  noReactApp.railsApp()
+let mongooseMvcNoPug = (test) => {
+  noReactApp.railsApp(test)
   addMongooseToEnzo()
   shell.cd(`${name}`)
   log('Downloading dependencies and setting up the project, this may take a moment')
   helpers.install('express nodemon mongo body-parser compression helmet dotenv mongoose morgan cookie-parser')
   helpers.installDevDependencies('babel-core babel-preset-env babelify gulp gulp-uglify gulp-rename browserify gulp-htmlmin gulp-clean-css gulp-tap gulp-buffer del run-sequence envify bundle-collapser gulp-plumber gulp-sass gulp-postcss postcss-cssnext')
+  beOnlyInstallTesting(test)
   process.stdout.write('\033c')
   log('The project was created!')
   log(`cd into ${name} and run npm start`)
@@ -426,13 +429,14 @@ let mongooseMvcNoPug = () => {
   log('')
 }
 
-let noDbMvcPug = () => {
-  noReactApp.pugApp()
+let noDbMvcPug = (test) => {
+  noReactApp.pugApp(test)
   process.stdout.write('\033c')
   shell.cd(`${name}`)
   log('Downloading dependencies and setting up the project, this may take a moment')
   helpers.install('express nodemon body-parser compression helmet dotenv pug morgan cookie-parser')
   helpers.installDevDependencies('webpack babel-loader css-loader babel-core babel-preset-env style-loader webpack-merge uglifyjs-webpack-plugin sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-cssnext postcss-import postcss-loader')
+  beOnlyInstallTesting(test)
   process.stdout.write('\033c')
   log('The project was created!')
   log(`cd into ${name} and run npm start`)
@@ -445,13 +449,14 @@ let noDbMvcPug = () => {
 }
 
 
-let noDbMvcNoPug = () => {
-  noReactApp.railsApp()
+let noDbMvcNoPug = (test) => {
+  noReactApp.railsApp(test)
   process.stdout.write('\033c')
   shell.cd(`${name}`)
   log('Downloading dependencies and setting up the project, this may take a moment')
   helpers.install('express nodemon body-parser compression helmet dotenv morgan cookie-parser')
   helpers.installDevDependencies('babel-core babel-preset-env babelify gulp gulp-uglify gulp-rename browserify gulp-htmlmin gulp-clean-css gulp-tap gulp-buffer del run-sequence envify bundle-collapser gulp-plumber gulp-sass gulp-postcss postcss-cssnext')
+  beOnlyInstallTesting(test)
   process.stdout.write('\033c')
   log('The project was created!')
   log(`cd into ${name} and run npm start`)
