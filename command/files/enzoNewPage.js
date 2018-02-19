@@ -52,6 +52,8 @@ let createPages = () => {
 
 
 let newPage = () => {
+  fs.existsSync('./src') ? '' : fs.mkdirSync('./src')
+  fs.existsSync('./server/views') ? '' : fs.mkdirSync('./server/views')
   if (fs.existsSync(`./src/${name}`)) {
     createPages()
   } else {
