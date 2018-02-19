@@ -53,8 +53,7 @@ let ReactReduxWithBackend = () => {
   //frontend
   fs.mkdirSync(`./${name}/src`)
   fs.mkdirSync(`./${name}/dist`)
-  fs.mkdirSync(`./${name}/public`)
-  helpers.writeFile(`./${name}/public/index.html`, spaHtmlFile)
+  helpers.writeFile(`./${name}/dist/index.html`, spaHtmlFile)
   helpers.writeFile(`./${name}/webpack.config.js`, spaWebpack)
   helpers.writeFile(`./${name}/webpack.prod.js`, prodWebpack)
   helpers.writeFile(`./${name}/postcss.config.js`, postcss)
