@@ -17,7 +17,7 @@ if (!process.env.NODE_ENV) app.use(logger('dev'))
 
 app.use('/assets', express.static('assets'))
 app.use('/', routes) 
-app.use('/build', express.static('build')) 
+app.use('/dist', express.static('dist')) 
 
 
 app.get('/*', (req, res) => res.sendFile(path.join(__dirname, '../public/index.html'))) 

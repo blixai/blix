@@ -19,7 +19,7 @@ app.use('/assets', express.static('assets'))
 
 app.use('/dist', express.static('dist')) 
 
-app.get('/*', (req, res) => res.sendFile(path.join(__dirname, '../public/index.html'))) 
+app.get('/*', (req, res) => res.sendFile(path.join(__dirname, '../dist/index.html'))) 
 
 app.listen(port, () => { 
   console.log(`Worker ${process.pid} is listening at port: ${port}`) 
