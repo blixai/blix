@@ -37,7 +37,7 @@ gulp.task('js', function () {
     }))
     .pipe(plumber())
     .pipe(buffer())
-    .pipe(gulp.dest('public'));
+    .pipe(gulp.dest('dist'));
 })
 
 gulp.task('min-js', function () {
@@ -57,24 +57,24 @@ gulp.task('min-js', function () {
     .pipe(plumber())
     .pipe(buffer())
     .pipe(uglify())
-    .pipe(gulp.dest('public'));
+    .pipe(gulp.dest('dist'));
 })
 
 gulp.task('html', function () {
-  return gulp.src('src/**/*.html').pipe(gulp.dest('public'));
+  return gulp.src('src/**/*.html').pipe(gulp.dest('dist'));
 });
 
 gulp.task('minify-html', () => {
   return gulp.src(`./src/**/*.html`)
     .pipe(htmlmin({ collapseWhitespace: true }))
-    .pipe(gulp.dest(`public`))
+    .pipe(gulp.dest(`dist`))
 })
 
 gulp.task('css', function () {
   let plugins = [cssnext]
   return gulp.src('src/**/*.css')
     .pipe(postcss(plugins))
-    .pipe(gulp.dest('public'));
+    .pipe(gulp.dest('dist'));
 });
 
 gulp.task('minify-css', () => {
@@ -82,17 +82,17 @@ gulp.task('minify-css', () => {
   return gulp.src(`./src/**/*css`)
     .pipe(postcss(plugins))
     .pipe(cleanCSS({ compatibility: 'ie8' }))
-    .pipe(gulp.dest(`public`));
+    .pipe(gulp.dest(`dist`));
 })
 
 gulp.task('scss', () => {
   return gulp.src('src/**/*.scss')
     .pipe(sass().on('error', sass.logError))
-    .pipe(gulp.dest('public'));
+    .pipe(gulp.dest('dist'));
 })
 
 gulp.task('clean', function () {
-  return del(['public']);
+  return del(['dist']);
 });
 
 gulp.task('watch', () => {
