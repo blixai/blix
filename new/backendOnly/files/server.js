@@ -13,13 +13,13 @@ app.use('/', routes)
 app.use('/assets', express.static('assets'))
 
 
-app.use(function (req, res, next) {
-  var err = new Error('File Not Found')
+app.use((req, res, next) => {
+  let err = new Error('File Not Found')
   err.status = 404
   next(err)
 })
 
-app.use(function (err, req, res, next) {
+app.use((err, req, res, next) => {
   res.status(err.status || 500)
   res.send({ error: err.message, status: err.status })
 })
@@ -27,3 +27,5 @@ app.use(function (err, req, res, next) {
 app.listen(port, () => {
   console.log(`Worker ${process.pid} listening at port: ${port}`)
 })
+
+module.exports = app 
