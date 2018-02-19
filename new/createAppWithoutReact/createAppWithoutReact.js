@@ -59,7 +59,7 @@ let railsApp = () => {
   fs.mkdirSync(`./${name}/server/controllers`)
   fs.mkdirSync(`./${name}/assets`)
   fs.mkdirSync(`./${name}/public`)
-  helpers.writeFile(`./${name}/server/server.js`,  railsServer)
+  fs.writeFileSync(`./${name}/server/server.js`,  railsServer)
   helpers.writeFile(`./${name}/server/cluster.js`, cluster)
   helpers.writeFile(`./${name}/server/routes.js`,  railsRoutes)
 
@@ -101,7 +101,7 @@ let pugApp = () => {
   helpers.writeFile(`./${name}/server/views/home/index.pug`, pugHomepage)
   helpers.writeFile(`./${name}/server/views/error.pug`, error)
   helpers.writeFile(`./${name}/server/views/layout.pug`, layout)
-  helpers.writeFile(`./${name}/server/server.js`, pugServer)
+  fs.writeFileSync(`./${name}/server/server.js`, pugServer)
   helpers.writeFile(`./${name}/server/cluster.js`, cluster)
   
   let homeController = `exports.index = (req, res) => {\n\tres.render('home/index', {})\n}`
