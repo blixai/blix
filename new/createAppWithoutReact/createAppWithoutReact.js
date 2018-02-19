@@ -46,7 +46,7 @@ let webpackProd            = loadFile('./files/webpack.prod.js')
 let babel                  = loadFile('./files/.babelrc')
 let postcss                = loadFile('./files/postcss.config.js')
 
-let railsApp = () => {
+let railsApp = (test) => {
   // src folder
   fs.mkdirSync(`./${name}/src`)
   fs.mkdirSync(`./${name}/src/home`)
@@ -81,9 +81,10 @@ let railsApp = () => {
   helpers.writeFile(`./${name}/enzo/api.js`, enzoAPI)
   helpers.writeFile(`./${name}/enzo/templates/enzoEndpointTemplate.js`, enzoEndpointTemplate)
   helpers.writeFile(`./${name}/enzo/templates/enzoControllerTemplate.js`, enzoControllerTemplate)
+  testing(test)
 }
 
-let pugApp = () => {
+let pugApp = (test) => {
   fs.mkdirSync(`./${name}/src`)
   fs.mkdirSync(`./${name}/src/home`)
   helpers.writeFile(`./${name}/src/home/index.js`, `import './main.css'\nconsole.log('hello world!')`)
@@ -128,15 +129,36 @@ let pugApp = () => {
   helpers.writeFile(`./${name}/enzo/api.js`, enzoAPI)
   helpers.writeFile(`./${name}/enzo/templates/enzoEndpointTemplate.js`,   enzoEndpointTemplate)
   helpers.writeFile(`./${name}/enzo/templates/enzoControllerTemplate.js`, enzoControllerTemplate)
+  testing(test)
 }
 
-
+// not even sure this is being used anymore???
 let createBasicApp = () => {
   helpers.writeFile(`./${name}/README.md`, readme)
   helpers.writeFile(`./${name}/.gitignore`, gitignore)
   helpers.writeFile(`./${name}/index.js`, `console.log('hello world!')`)
   helpers.writeFile(`./${name}/index.html`, indexHtml)
   helpers.writeFile(`./${name}/main.css`, mainCss)
+}
+
+let testing = (test) => {
+  if (test === 'mocha') {
+    mocha()
+  } else if (test === 'jest') {
+    jest()
+  }
+}
+
+let mocha = () => {
+  helpers.addScriptToNewPackageJSON('test', 'mocha', name)
+  fs.mkdirSync(`./${name}/test`)
+  helpers.writeFile(`./${name}/test/test.js`, loadFile('./files/mocha.js'))
+}
+
+let jest = () => {
+  helpers.addScriptToNewPackageJSON('test', 'jest', name)
+  fs.mkdirSync(`./${name}/test`)
+  helpers.writeFile(`./${name}/test/test.test.js`, loadFile('./files/jest.js'))
 }
 
 module.exports = {
