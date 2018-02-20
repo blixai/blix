@@ -65,7 +65,30 @@ let testingWithoutReact = {
   name    : 'test',
   choices : [
     { name: 'Mocha & Chai', value: 'mocha' },
-    { name: 'Jest',         value: 'jest'  }
+    { name: 'Jest',         value: 'jest'  },
+    { name: 'None'                         }
+  ]
+}
+
+let e2e = {
+  type    : 'list',
+  message : 'e2e Testing:',
+  name    : 'e2e',
+  choices : [
+    { name: 'Test Cafe', value: 'cafe'    },
+    { name: 'Cypress' ,  value: 'cypress' },
+    { name: 'None'                        }
+  ]
+}
+
+let reactTesting = {
+  type    : 'list',
+  message : 'React Testing Tool:',
+  name    : 'reactTesting',
+  choices : [
+    { name: 'Enzyme',              value: 'enzyme' },
+    { name: 'React Testing Utils', value: 'utils'  },
+    { name: 'None'                                 }
   ]
 }
 
@@ -130,14 +153,15 @@ let redux = () => {
 
 let mvc = async () => {
   let db   = await prompt([database]) 
-  let p  = await prompt([pug])
+  let p    = await prompt([pug])
   let test = await prompt([testingWithoutReact])
+  let ui   = await prompt([e2e]) 
   if (db.database === 'Postgres') {
-    p.pug ? postgresMvcPug(test.test) : posgresMvcNoPug(test.test)
+    p.pug ? postgresMvcPug(test.test, ui.e2e) : posgresMvcNoPug(test.test, ui.e2e)
   } else if (db.database === 'MongoDB') {
-    p.pug ? mongooseMvcPug(test.test) : mongooseMvcNoPug(test.test)
+    p.pug ? mongooseMvcPug(test.test, ui.e2e) : mongooseMvcNoPug(test.test, ui.e2e)
   } else {
-    p.pug ? noDbMvcPug(test.test) : noDbMvcNoPug(test.test)
+    p.pug ? noDbMvcPug(test.test, ui.e2e)     : noDbMvcNoPug(test.test, ui.e2e)
   }
 }
 
@@ -339,7 +363,7 @@ let reduxNoBE = () => {
   log('')
 }
 
-let postgresMvcPug = (test) => {
+let postgresMvcPug = (test, e2e) => {
   noReactApp.pugApp(test)
   addBookshelfToEnzo()
   shell.cd(`${name}`)
@@ -347,6 +371,7 @@ let postgresMvcPug = (test) => {
   helpers.install('express nodemon pg knex body-parser compression helmet dotenv bookshelf pug morgan cookie-parser')
   helpers.installDevDependencies('webpack babel-loader css-loader babel-core babel-preset-env style-loader webpack-merge uglifyjs-webpack-plugin sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-cssnext postcss-import postcss-loader')
   beOnlyInstallTesting(test)
+  e2eSetup(e2e)
   helpers.installKnexGlobal()
   helpers.modifyKnex(name)
   try {
@@ -365,7 +390,7 @@ let postgresMvcPug = (test) => {
   log('')
 }
 
-let posgresMvcNoPug = (test) => {
+let posgresMvcNoPug = (test, e2e) => {
   noReactApp.railsApp(test)
   addBookshelfToEnzo()
   shell.cd(`${name}`)
@@ -373,6 +398,7 @@ let posgresMvcNoPug = (test) => {
   helpers.install('express nodemon pg knex body-parser compression helmet dotenv bookshelf morgan cookie-parser')
   helpers.installDevDependencies('babel-core babel-preset-env babelify gulp gulp-uglify gulp-rename browserify gulp-htmlmin gulp-clean-css gulp-tap gulp-buffer del run-sequence envify bundle-collapser gulp-plumber gulp-sass gulp-postcss postcss-cssnext')
   beOnlyInstallTesting(test)
+  e2eSetup(e2e)
   helpers.installKnexGlobal()
   helpers.modifyKnex()
   try {
@@ -391,7 +417,7 @@ let posgresMvcNoPug = (test) => {
   log('')
 }
 
-let mongooseMvcPug = (test) => {
+let mongooseMvcPug = (test, e2e) => {
   noReactApp.pugApp(test)
   addMongooseToEnzo()
   shell.cd(`${name}`)
@@ -399,6 +425,7 @@ let mongooseMvcPug = (test) => {
   helpers.install('express nodemon mongo body-parser compression helmet dotenv mongoose pug morgan cookie-parser')
   helpers.installDevDependencies('webpack babel-loader css-loader babel-core babel-preset-env style-loader webpack-merge uglifyjs-webpack-plugin sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-cssnext postcss-import postcss-loader')
   beOnlyInstallTesting(test)
+  e2eSetup(e2e)
   process.stdout.write('\033c')
   log('The project was created!')
   log(`cd into ${name} and run npm start`)
@@ -410,7 +437,7 @@ let mongooseMvcPug = (test) => {
   log('')
 }
 
-let mongooseMvcNoPug = (test) => {
+let mongooseMvcNoPug = (test, e2e) => {
   noReactApp.railsApp(test)
   addMongooseToEnzo()
   shell.cd(`${name}`)
@@ -418,6 +445,7 @@ let mongooseMvcNoPug = (test) => {
   helpers.install('express nodemon mongo body-parser compression helmet dotenv mongoose morgan cookie-parser')
   helpers.installDevDependencies('babel-core babel-preset-env babelify gulp gulp-uglify gulp-rename browserify gulp-htmlmin gulp-clean-css gulp-tap gulp-buffer del run-sequence envify bundle-collapser gulp-plumber gulp-sass gulp-postcss postcss-cssnext')
   beOnlyInstallTesting(test)
+  e2eSetup(e2e)
   process.stdout.write('\033c')
   log('The project was created!')
   log(`cd into ${name} and run npm start`)
@@ -429,7 +457,7 @@ let mongooseMvcNoPug = (test) => {
   log('')
 }
 
-let noDbMvcPug = (test) => {
+let noDbMvcPug = (test, e2e) => {
   noReactApp.pugApp(test)
   process.stdout.write('\033c')
   shell.cd(`${name}`)
@@ -437,6 +465,7 @@ let noDbMvcPug = (test) => {
   helpers.install('express nodemon body-parser compression helmet dotenv pug morgan cookie-parser')
   helpers.installDevDependencies('webpack babel-loader css-loader babel-core babel-preset-env style-loader webpack-merge uglifyjs-webpack-plugin sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-cssnext postcss-import postcss-loader')
   beOnlyInstallTesting(test)
+  e2eSetup(e2e)
   process.stdout.write('\033c')
   log('The project was created!')
   log(`cd into ${name} and run npm start`)
@@ -449,7 +478,7 @@ let noDbMvcPug = (test) => {
 }
 
 
-let noDbMvcNoPug = (test) => {
+let noDbMvcNoPug = (test, e2e) => {
   noReactApp.railsApp(test)
   process.stdout.write('\033c')
   shell.cd(`${name}`)
@@ -457,6 +486,7 @@ let noDbMvcNoPug = (test) => {
   helpers.install('express nodemon body-parser compression helmet dotenv morgan cookie-parser')
   helpers.installDevDependencies('babel-core babel-preset-env babelify gulp gulp-uglify gulp-rename browserify gulp-htmlmin gulp-clean-css gulp-tap gulp-buffer del run-sequence envify bundle-collapser gulp-plumber gulp-sass gulp-postcss postcss-cssnext')
   beOnlyInstallTesting(test)
+  e2eSetup(e2e)
   process.stdout.write('\033c')
   log('The project was created!')
   log(`cd into ${name} and run npm start`)
@@ -530,9 +560,30 @@ let noDbBE = (test) => {
   log('')
 }
 
-let beOnlyInstallTesting = (test) => {
+let beOnlyInstallTesting = test => {
   if (test === 'mocha') helpers.installDevDependencies('mocha chai chai-http')
   if (test === 'jest') helpers.installDevDependencies('jest supertest')
+}
+
+let e2eSetup = answer => {
+  answer === 'cafe' ? installTestCafe() : answer === 'cypress' ? installCypress() : ''
+}
+
+let installCypress = () => {
+  helpers.addScript('e2e', 'cypress open')
+  helpers.installDevDependencies('cypress')
+  fs.mkdirSync(`./cypress`)
+  fs.mkdirSync(`./cypress/integration`)
+  helpers.writeFile(`./cypress/integration/test.js`, loadFile('./filesToCopy/cypress.js'))
+}
+
+let installTestCafe = () => {
+  helpers.addScript('e2e', 'testcafe chrome test/e2e')
+  helpers.installDevDependencies('testcafe')
+  if (!fs.existsSync('./test')) fs.mkdirSync('./test')
+  fs.mkdirSync('./test/e2e')
+  helpers.writeFile('./test/e2e/test.js', loadFile('./filesToCopy/testcafe.js'))
+  helpers.addScript('jest', '{\n\tmodulePathIgnorePatterns: [\n\t\t"<rootDir>/test/e2e"\n\t]\n}')
 }
 
 
