@@ -128,9 +128,9 @@ let spa = async () => {
   if (be.backend) {
     let runner = await prompt([serverTesting])
     let db     = await prompt([database])
-    db.database === 'Postgres' ? postgresSPA() : db.database === 'MongoDB' ? mongooseSPA() : noDBSPA()
+    db.database === 'Postgres' ? postgresSPA(test.enzyme, ui.e2e, runner.server) : db.database === 'MongoDB' ? mongooseSPA(test.enzyme, ui.e2e, runner.server) : noDBSPA(test.enzyme, ui.e2e, runner.server)
   } else {
-    spaNoBE()
+    spaNoBE(test.enzyme, ui.e2e)
   }
 }
 
@@ -189,7 +189,7 @@ let createProject = () => {
 }
 
 
-let postgresSPA = () => {
+let postgresSPA = (reactTesting, e2e, serverTesting) => {
   spaBuild.writeFilesWithSPAReact()
   addBookshelfToEnzo()
   shell.cd(`${name}`)
@@ -198,6 +198,9 @@ let postgresSPA = () => {
   helpers.installDevDependencies('webpack babel-loader css-loader babel-core babel-preset-env babel-preset-react style-loader webpack-merge uglifyjs-webpack-plugin sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-cssnext postcss-import postcss-loader')
   helpers.installKnexGlobal()
   helpers.modifyKnex(name)
+  installReactTesting(reactTesting)
+  e2eSetup(e2e)
+  testBackend(serverTesting)
   try {
     execSync(`createdb ${name}`, { stdio: 'ignore' });
   } catch (e) {
@@ -217,7 +220,7 @@ let postgresSPA = () => {
   log('')
 }
 
-let mongooseSPA = () => {
+let mongooseSPA = (reactTesting, e2e, serverTesting) => {
   spaBuild.writeFilesWithSPAReact()
   addMongooseToEnzo()
   fs.writeFileSync(`./${name}/.env`)
@@ -225,6 +228,9 @@ let mongooseSPA = () => {
   log('Downloading dependencies and setting up the project, this may take a moment')
   helpers.install('express nodemon compression helmet mongo dotenv body-parser react react-dom dotenv mongoose morgan')
   helpers.installDevDependencies('webpack babel-loader css-loader babel-core babel-preset-env babel-preset-react style-loader webpack-merge uglifyjs-webpack-plugin sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-cssnext postcss-import postcss-loader')
+  installReactTesting(reactTesting)
+  e2eSetup(e2e)
+  testBackend(serverTesting)
   process.stdout.write('\033c')
   log('')
   log('The project was created!')
@@ -240,12 +246,15 @@ let mongooseSPA = () => {
 }
   
          
-let noDBSPA = () => {
+let noDBSPA = (reactTesting, e2e, serverTesting) => {
   spaBuild.writeFilesWithSPAReact()
   shell.cd(`${name}`)
   log('Downloading dependencies and setting up the project, this may take a moment')
   helpers.install('express nodemon compression helmet body-parser react react-dom dotenv morgan')
   helpers.installDevDependencies('webpack babel-loader css-loader babel-core babel-preset-env babel-preset-react style-loader webpack-merge uglifyjs-webpack-plugin sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-cssnext postcss-import postcss-loader')
+  installReactTesting(reactTesting)
+  e2eSetup(e2e)
+  testBackend(serverTesting)
   process.stdout.write('\033c')
   log('')
   log('The project was created!')
@@ -260,12 +269,14 @@ let noDBSPA = () => {
   log('')
 }
     
-let spaNoBE = () => {
+let spaNoBE = (reactTesting, e2e) => {
   spaBuild.reactSPAWithoutBackend()
   log('Installing dependencies and running setup, this may take a moment')
   shell.cd(`${name}`)
   helpers.install('react react-dom')
   helpers.installDevDependencies('webpack webpack-dev-server babel-loader css-loader babel-core babel-preset-env babel-preset-react style-loader webpack-merge uglifyjs-webpack-plugin sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-cssnext postcss-import postcss-loader')
+  installReactTesting(reactTesting)
+  e2eSetup(e2e)
   process.stdout.write('\033c')
   log('The project was created!')
   log(`cd into ${name} and run npm start, then refresh the page after a second`)
@@ -576,32 +587,45 @@ let beOnlyInstallTesting = test => {
 }
 
 let testBackend = test => {
-  if (test === 'mocha') {
-    helpers.installDevDependencies('mocha chai chai-http')
-    helpers.addScript('mocha', 'mocha test/server')
-    if (!fs.existsSync('./test')) fs.mkdirSync('./test');
-    if (!fs.existsSync('./test/server')) fs.mkdirSync('./test/server');
-    helpers.writeFile('./test/server/test.spec.js', loadFile('./filesToCopy/mocha.js'))
-    let json = JSON.parse(fs.readFileSync('./package.json', 'utf8'))
-    // let json = JSON.parse(data)
-    if (json.hasOwnProperty('jest')) {
-      json.jest["modulePathIgnorePatterns"] = ["<rootDir>/test/e2e/", "<rootDir>/cypress/", "<rootDir>/test/server/"]
-    } 
-    let newPackage = JSON.stringify(json, null, 2)
-    fs.writeFileSync('package.json', newPackage)
-  } else if (test === 'jest') {
-    helpers.installDevDependencies('jest supertest')
-    if (!fs.existsSync('./test')) fs.mkdirSync('./test');
-    if (!fs.existsSync('./test/server')) fs.mkdirSync('./test/server');
-    helpers.writeFile('./test/server/test.spec.js', loadFile('./filesToCopy/jest.js')) 
-    let json = JSON.parse(fs.readFile('package.json', 'utf8'))
-      // let json = JSON.parse(data);
-    json["jest"] = jest
-    let newPackage = JSON.stringify(json, null, 2)
-    fs.writeFileSync('package.json', newPackage)
-    // })
-    // test/server 
+  test === 'mocha' ? mochaTestBackend() : test === 'jest' ? testJestBackend() : ''
+}
+
+let mochaTestBackend = () => {
+  helpers.installDevDependencies('mocha chai chai-http')
+  helpers.addScript('mocha', 'mocha test/server')
+  checkOrCreateServerTestFolder()
+  helpers.writeFile('./test/server/test.spec.js', loadFile('./filesToCopy/mocha.js'))
+  let json = JSON.parse(fs.readFileSync('./package.json', 'utf8'))
+  if (json.hasOwnProperty('jest')) {
+    json.jest["modulePathIgnorePatterns"] = ["<rootDir>/test/e2e/", "<rootDir>/cypress/", "<rootDir>/test/server/"]
   }
+  let newPackage = JSON.stringify(json, null, 2)
+  fs.writeFileSync('package.json', newPackage)
+}
+
+let checkOrCreateServerTestFolder = () => {
+  if (!fs.existsSync('./test')) fs.mkdirSync('./test');
+  if (!fs.existsSync('./test/server')) fs.mkdirSync('./test/server');
+}
+
+let testJestBackend = () => {
+  helpers.installDevDependencies('jest supertest')
+  checkOrCreateServerTestFolder()
+  helpers.writeFile('./test/server/test.spec.js', loadFile('./filesToCopy/jest.js'))
+  let json = JSON.parse(fs.readFileSync('./package.json', 'utf8'))
+  if (!json.hasOwnProperty('jest')) {
+    let jest = {
+      "modulePathIgnorePatterns": ["<rootDir>/test/e2e/", "<rootDir>/cypress"],
+      "moduleNameMapper": {
+        "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/__mocks__/fileMock.js",
+        "\\.(css|less)$": "identity-obj-proxy"
+      }
+    }
+    json["jest"] = jest
+  }
+  let newPackage = JSON.stringify(json, null, 2)
+  fs.writeFileSync('package.json', newPackage)
+  helpers.addScript('jest', 'jest')
 }
 
 let installReactTestingForRedux = reactTests => {
@@ -622,8 +646,23 @@ let installReactTestingForRedux = reactTests => {
   helpers.addScript('test', 'jest')
 }
 
-let installReactTesting = () => {
-  
+let installReactTesting = reactTests => {
+  if (!reactTests) return;
+  helpers.installDevDependencies('jest enzyme enzyme-adapter-react-16 identity-obj-proxy')
+  if (!fs.existsSync('./test')) fs.mkdirSync('./test');
+  helpers.writeFile('./test/App.spec.js', loadFile('./filesToCopy/enzymeReact.js'))
+  let jest = {
+    "moduleNameMapper": {
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/__mocks__/fileMock.js",
+      "\\.(css|less)$": "identity-obj-proxy"
+    }
+  }
+  let json = JSON.parse(fs.readFileSync('package.json', 'utf8'))
+  json["jest"] = jest
+  let newPackage = JSON.stringify(json, null, 2)
+  fs.writeFileSync('package.json', newPackage)
+  helpers.addScript('test', 'jest')
+
 }
 
 let e2eSetup = answer => {
