@@ -87,9 +87,9 @@ let writeFilesWithSPAReact = () => {
   //enzo files 
   fs.mkdirSync(`./${name}/enzo`)
   fs.mkdirSync(`./${name}/enzo/templates`)
-  fs.writeFile(`./${name}/enzo/react.js`, enzoReact)
-  fs.writeFile(`./${name}/enzo/templates/statelessComponent.js`, stateless)
-  fs.writeFile(`./${name}/enzo/templates/statefulComponent.js`, stateful)
+  helpers.writeFile(`./${name}/enzo/react.js`, enzoReact)
+  helpers.writeFile(`./${name}/enzo/templates/statelessComponent.js`, stateless)
+  helpers.writeFile(`./${name}/enzo/templates/statefulComponent.js`, stateful)
   helpers.writeFile(`./${name}/enzo/api.js`, api)
   helpers.writeFile(`./${name}/enzo/templates/enzoControllerTemplate.js`, enzoControllerTemplate)
   helpers.writeFile(`./${name}/enzo/templates/enzoEndpointTemplate.js`, enzoEndpointTemplate)
@@ -102,4 +102,4 @@ let writeFilesWithSPAReact = () => {
   fs.writeFileSync(`./${name}/package.json`, spaNoSQLPck)
 }
 
-module.exports = {reactSPAWithoutBackend, writeFilesWithSPAReact}
+module.exports = { reactSPAWithoutBackend, writeFilesWithSPAReact }

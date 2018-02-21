@@ -121,32 +121,27 @@ let promptProject = () => {
 }
 
 
-let spa = () => {
-  prompt([backend]).then(be => {
-    if (be.backend) {
-      prompt([database]).then(db => {
-        if (db.database === 'Postgres') {
-          postgresSPA()
-        } else if (db.database === 'MongoDB') {
-          mongooseSPA()
-        } else {
-          noDBSPA()
-        }
-      })
-    } else {
-      spaNoBE()
-    }
-  })
+let spa = async () => {
+  let be   = await prompt([backend])
+  let test = await prompt([reactTesting])
+  let ui   = await prompt([e2e])
+  if (be.backend) {
+    let runner = await prompt([serverTesting])
+    let db     = await prompt([database])
+    db.database === 'Postgres' ? postgresSPA() : db.database === 'MongoDB' ? mongooseSPA() : noDBSPA()
+  } else {
+    spaNoBE()
+  }
 }
 
 
 let redux = async () => {
-  let be     = await prompt([backend])
-  let test   = await prompt([reactTesting])
-  let ui     = await prompt([e2e])
+  let be   = await prompt([backend])
+  let test = await prompt([reactTesting])
+  let ui   = await prompt([e2e])
   if (be.backend) {
     let runner = await prompt([serverTesting])
-    let db = await prompt([database])
+    let db     = await prompt([database])
     db.database === 'Postgres' ? postgresRedux(runner.server, test.enzyme, ui.e2e) : db.database === 'MongoDB' ? mongooseRedux(runner.server, test.enzyme, ui.e2e) : noDBRedux(runner.server, test.enzyme, ui.e2e)
   } else {
     reduxNoBE(test.enzyme, ui.e2e)
