@@ -28,7 +28,7 @@ let homeContainer      = loadFile('./files/homeContainer.js')
 let home               = loadFile('./files/home.js')
 let appRouterNoBackend = loadFile('./files/appRouterNoBackend.js')
 
-let packageJSONWithoutBackend   = `{\n\t"name": "${name}",\n\t"version": "1.0.0",\n\t"scripts": {\n\t\t"start": "webpack-dev-server --output-public-path=/dist/ --inline --hot --open",\n\t\t"build": "webpack --watch",\n\t\t"prod": "webpack --config webpack.prod.js",\n\t\t"action": "node enzo/action.js",\n\t\t"redux": "node enzo/createComponentAndContainer.js"\n\t}\n}`
+let packageJSONWithoutBackend   = `{\n\t"name": "${name}",\n\t"version": "1.0.0",\n\t"scripts": {\n\t\t"start": "webpack-dev-server --output-public-path=/dist/ --inline --hot --open --port 3000",\n\t\t"build": "webpack --watch",\n\t\t"prod": "webpack --config webpack.prod.js",\n\t\t"action": "node enzo/action.js",\n\t\t"redux": "node enzo/createComponentAndContainer.js"\n\t}\n}`
 let enzoCreateContainer         = loadFile('./files/enzoCreateContainer.js')
 let enzoCreateAPI               = loadFile('./files/enzoCreateAPI.js')
 let enzoEndpointTemplate        = loadFile('./templates/enzoEndpointTemplate.js')
