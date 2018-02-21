@@ -286,8 +286,8 @@ let postgresRedux = (runner, test, e2e) => {
   log('Downloading dependencies and setting up the project, this may take a moment')
   helpers.install('redux react-router-dom react-redux express dotenv nodemon pg knex body-parser compression helmet react react-dom bookshelf morgan')
   helpers.installDevDependencies('webpack babel-loader css-loader babel-core babel-preset-env babel-preset-react style-loader webpack-merge uglifyjs-webpack-plugin sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-cssnext postcss-import postcss-loader')
-  e2eSetup(e2e)
   installReactTestingForRedux(test)
+  e2eSetup(e2e)
   beOnlyInstallTesting(runner)
   helpers.installKnexGlobal()
   modifyKnex(name)
@@ -317,8 +317,8 @@ let mongooseRedux = (runner, test, e2e) => {
   log('Downloading dependencies and setting up the project, this may take a moment')
   helpers.install('redux react-router-dom react-redux express nodemon dotenv compression helmet mongo dotenv body-parser react react-dom mongoose morgan')
   helpers.installDevDependencies(' webpack babel-loader css-loader babel-core babel-preset-env babel-preset-react style-loader webpack-merge uglifyjs-webpack-plugin sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-cssnext postcss-import postcss-loader')
-  e2eSetup(e2e)
   installReactTestingForRedux(test)
+  e2eSetup(e2e)
   beOnlyInstallTesting(runner)
   process.stdout.write('\033c')
   log('The project was created!')
@@ -340,8 +340,9 @@ let noDBRedux = (runner, test, e2e) => {
   log(chalk.cyanBright('Downloading dependencies and setting up the project, this may take a moment'))
   helpers.install('redux react-router-dom react-redux express nodemon dotenv body-parser compression helmet react react-dom morgan')
   helpers.installDevDependencies('webpack babel-loader css-loader babel-core babel-preset-env babel-preset-react style-loader webpack-merge uglifyjs-webpack-plugin sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-cssnext postcss-import postcss-loader')
-  e2eSetup(e2e)
+
   installReactTestingForRedux(test)
+  e2eSetup(e2e)
   beOnlyInstallTesting(runner)
   process.stdout.write('\033c')
   log(chalk.cyanBright('The project was created!'))
@@ -363,8 +364,9 @@ let reduxNoBE = (test, e2e) => {
   log('Downloading dependencies and setting up the project, this may take a moment')
   helpers.install('redux react-router-dom react-redux react react-dom')
   helpers.installDevDependencies('webpack webpack-dev-server babel-loader css-loader babel-core babel-preset-env babel-preset-react style-loader webpack-merge uglifyjs-webpack-plugin sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-cssnext postcss-import postcss-loader')
-  e2eSetup(e2e)
+
   installReactTestingForRedux(test)
+  e2eSetup(e2e)
   process.stdout.write('\033c')
   log('The project was created!')
   log(`cd into ${name}`)
@@ -618,6 +620,28 @@ let installCypress = () => {
   fs.mkdirSync(`./cypress`)
   fs.mkdirSync(`./cypress/integration`)
   helpers.writeFile(`./cypress/integration/test.js`, loadFile('./filesToCopy/cypress.js'))
+  // let ignore = {
+  //   "modulePathIgnorePatterns": ["<rootDir>/test/e2e/", "<rootDir>/cypress"]
+  // }
+  let jest = {
+    "modulePathIgnorePatterns": ["<rootDir>/test/e2e/", "<rootDir>/cypress"],
+    "moduleNameMapper": {
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/__mocks__/fileMock.js",
+      "\\.(css|less)$": "identity-obj-proxy"
+    }
+  }
+  fs.readFile('./package.json', (err, data) => {
+    if (err) throw err
+    let json = JSON.parse(data);
+    if (!json.hasOwnProperty('jest')) {
+      json["jest"] = jest
+    } else {
+      json.jest["modulePathIgnorePatterns"] = ["<rootDir>/test/e2e/", "<rootDir>/cypress/"]
+    }
+    let newPackage = JSON.stringify(json, null, 2)
+    helpers.writeFile('package.json', newPackage)
+  })
+  // helpers.addJest()
 }
 
 let installTestCafe = () => {
@@ -626,6 +650,24 @@ let installTestCafe = () => {
   if (!fs.existsSync('./test')) fs.mkdirSync('./test')
   fs.mkdirSync('./test/e2e')
   helpers.writeFile('./test/e2e/test.js', loadFile('./filesToCopy/testcafe.js'))
+  let jest = {
+    "modulePathIgnorePatterns": ["<rootDir>/test/e2e/", "<rootDir>/cypress"],
+    "moduleNameMapper": {
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/__mocks__/fileMock.js",
+      "\\.(css|less)$": "identity-obj-proxy"
+    }
+  }
+  fs.readFile('./package.json', (err, data) => {
+    if (err) throw err
+    let json = JSON.parse(data);
+    if (!json.hasOwnProperty('jest')) {
+      json["jest"] = jest
+    } else {
+      json.jest["modulePathIgnorePatterns"] = ["<rootDir>/test/e2e/", "<rootDir>/cypress/"]
+    }
+    let newPackage = JSON.stringify(json, null, 2)
+    helpers.writeFile('package.json', newPackage)
+  })
   // helpers.addScript('jest', '{\n\tmodulePathIgnorePatterns: [\n\t\t"<rootDir>/test/e2e"\n\t]\n}')
 }
 

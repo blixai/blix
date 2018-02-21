@@ -84,6 +84,12 @@ exports.rename = (oldName, newName) => {
   })
 }
 
+// exports.addJest = () => {
+
+//   })
+// }
+
+
 // exports.loadFile = filePath => {
 //   return fs.readFileSync(path.resolve(__dirname, filePath), 'utf8')
 // }
