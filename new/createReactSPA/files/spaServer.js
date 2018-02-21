@@ -24,3 +24,5 @@ app.get('/*', (req, res) => res.sendFile(path.join(__dirname, '../dist/index.htm
 app.listen(port, () => { 
   console.log(`Worker ${process.pid} is listening at port: ${port}`) 
 })
+
+module.exports = app
