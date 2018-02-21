@@ -70,6 +70,18 @@ let testingWithoutReact = {
   ]
 }
 
+let serverTesting = {
+  type    : 'list',
+  message : 'Do you want to test server routes and models with:',
+  name    : 'server',
+  choices : [
+    { name: 'Mocha & Chai', value: 'mocha' },
+    { name: 'Jest',         value: 'jest'  },
+    { name: 'None'                         }
+  ]
+
+}
+
 let e2e = {
   type    : 'list',
   message : 'e2e Testing:',
@@ -82,14 +94,9 @@ let e2e = {
 }
 
 let reactTesting = {
-  type    : 'list',
-  message : 'React Testing Tool:',
-  name    : 'reactTesting',
-  choices : [
-    { name: 'Enzyme',              value: 'enzyme' },
-    { name: 'React Testing Utils', value: 'utils'  },
-    { name: 'None'                                 }
-  ]
+  type    : 'confirm',
+  message : 'Do you want to use Jest and Enzyme for React Testing',
+  name    : 'enzyme'
 }
 
 let promptProject = () => {
@@ -133,22 +140,17 @@ let spa = () => {
 }
 
 
-let redux = () => {
-  prompt([backend]).then(be => {
-    if (be.backend) {
-      prompt([database]).then(db => {
-        if (db.database === 'Postgres') {
-          postgresRedux()
-        } else if (db.database === 'MongoDB') {
-          mongooseRedux()
-        } else {
-          noDBRedux()
-        }
-      })
-    } else {
-      reduxNoBE()
-    }
-  })
+let redux = async () => {
+  let be     = await prompt([backend])
+  let test   = await prompt([reactTesting])
+  let ui     = await prompt([e2e])
+  if (be.backend) {
+    let runner = await prompt([serverTesting])
+    let db = await prompt([database])
+    db.database === 'Postgres' ? postgresRedux(runner.server, test.enzyme, ui.e2e) : db.database === 'MongoDB' ? mongooseRedux(runner.server, test.enzyme, ui.e2e) : noDBRedux(runner.server, test.enzyme, ui.e2e)
+  } else {
+    reduxNoBE(test.enzyme, ui.e2e)
+  }
 }
 
 let mvc = async () => {
@@ -277,13 +279,16 @@ let spaNoBE = () => {
   log('')
 }
 
-let postgresRedux = () => {
+let postgresRedux = (runner, test, e2e) => {
   reactRedux.ReactReduxWithBackend()
   addBookshelfToEnzo()
   shell.cd(`${name}`)
   log('Downloading dependencies and setting up the project, this may take a moment')
   helpers.install('redux react-router-dom react-redux express dotenv nodemon pg knex body-parser compression helmet react react-dom bookshelf morgan')
   helpers.installDevDependencies('webpack babel-loader css-loader babel-core babel-preset-env babel-preset-react style-loader webpack-merge uglifyjs-webpack-plugin sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-cssnext postcss-import postcss-loader')
+  e2eSetup(e2e)
+  installReactTestingForRedux(test)
+  beOnlyInstallTesting(runner)
   helpers.installKnexGlobal()
   modifyKnex(name)
   try {
@@ -304,7 +309,7 @@ let postgresRedux = () => {
   log('')
 }
 
-let mongooseRedux = () => {
+let mongooseRedux = (runner, test, e2e) => {
   reactRedux.ReactReduxWithBackend()
   addMongooseToEnzo()
   shell.cd(`${name}`)
@@ -312,6 +317,9 @@ let mongooseRedux = () => {
   log('Downloading dependencies and setting up the project, this may take a moment')
   helpers.install('redux react-router-dom react-redux express nodemon dotenv compression helmet mongo dotenv body-parser react react-dom mongoose morgan')
   helpers.installDevDependencies(' webpack babel-loader css-loader babel-core babel-preset-env babel-preset-react style-loader webpack-merge uglifyjs-webpack-plugin sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-cssnext postcss-import postcss-loader')
+  e2eSetup(e2e)
+  installReactTestingForRedux(test)
+  beOnlyInstallTesting(runner)
   process.stdout.write('\033c')
   log('The project was created!')
   log(`cd into ${name}`)
@@ -325,13 +333,16 @@ let mongooseRedux = () => {
   log('')
 }
 
-let noDBRedux= () => {
+let noDBRedux = (runner, test, e2e) => {
   reactRedux.ReactReduxWithBackend()
   shell.cd(`${name}`)
   process.stdout.write('\033c')
   log(chalk.cyanBright('Downloading dependencies and setting up the project, this may take a moment'))
   helpers.install('redux react-router-dom react-redux express nodemon dotenv body-parser compression helmet react react-dom morgan')
   helpers.installDevDependencies('webpack babel-loader css-loader babel-core babel-preset-env babel-preset-react style-loader webpack-merge uglifyjs-webpack-plugin sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-cssnext postcss-import postcss-loader')
+  e2eSetup(e2e)
+  installReactTestingForRedux(test)
+  beOnlyInstallTesting(runner)
   process.stdout.write('\033c')
   log(chalk.cyanBright('The project was created!'))
   log(chalk.cyanBright(`cd into ${name}`))
@@ -345,13 +356,15 @@ let noDBRedux= () => {
   log('')
 }
 
-let reduxNoBE = () => {
+let reduxNoBE = (test, e2e) => {
   reactRedux.reactReduxWithoutBackend()
   shell.cd(`${name}`)
   process.stdout.write('\033c')
   log('Downloading dependencies and setting up the project, this may take a moment')
   helpers.install('redux react-router-dom react-redux react react-dom')
   helpers.installDevDependencies('webpack webpack-dev-server babel-loader css-loader babel-core babel-preset-env babel-preset-react style-loader webpack-merge uglifyjs-webpack-plugin sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-cssnext postcss-import postcss-loader')
+  e2eSetup(e2e)
+  installReactTestingForRedux(test)
   process.stdout.write('\033c')
   log('The project was created!')
   log(`cd into ${name}`)
@@ -565,6 +578,36 @@ let beOnlyInstallTesting = test => {
   if (test === 'jest') helpers.installDevDependencies('jest supertest')
 }
 
+let installReactTestingForRedux = reactTests => {
+  if (!reactTests) return;
+  helpers.installDevDependencies('jest enzyme redux-mock-store enzyme-adapter-react-16 identity-obj-proxy')
+  if (!fs.existsSync('./test')) fs.mkdirSync('./test');
+  helpers.writeFile('./test/Home.spec.js', loadFile('./filesToCopy/enzymeRedux.js'))
+  let jest = {
+    "moduleNameMapper": {
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/__mocks__/fileMock.js",
+      "\\.(css|less)$": "identity-obj-proxy"
+    }
+  }
+
+  fs.readFile('package.json', (err, data) => {
+    var json = JSON.parse(data);
+    json["jest"] = jest 
+    let newPackage = JSON.stringify(json, null, 2)
+    helpers.writeFile('package.json', newPackage)
+  })
+  helpers.addScript('test', 'jest')
+
+    
+  // if src/containers exists use redux enzyme test 
+  // load and install enzyme file into
+  
+}
+
+let installReactTesting = () => {
+  
+}
+
 let e2eSetup = answer => {
   answer === 'cafe' ? installTestCafe() : answer === 'cypress' ? installCypress() : ''
 }
@@ -583,7 +626,7 @@ let installTestCafe = () => {
   if (!fs.existsSync('./test')) fs.mkdirSync('./test')
   fs.mkdirSync('./test/e2e')
   helpers.writeFile('./test/e2e/test.js', loadFile('./filesToCopy/testcafe.js'))
-  helpers.addScript('jest', '{\n\tmodulePathIgnorePatterns: [\n\t\t"<rootDir>/test/e2e"\n\t]\n}')
+  // helpers.addScript('jest', '{\n\tmodulePathIgnorePatterns: [\n\t\t"<rootDir>/test/e2e"\n\t]\n}')
 }
 
 
