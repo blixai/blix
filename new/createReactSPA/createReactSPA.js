@@ -72,7 +72,7 @@ let writeFilesWithSPAReact = () => {
   helpers.writeFile(`./${name}/src/index.js`, spaIndex)
   fs.mkdirSync(`./${name}/src/App`)
   helpers.writeFile(`./${name}/src/App/App.js`, spaReact)
-  // helpers.writeFile(`./${name}/src/App/App.css`, '')
+  helpers.writeFile(`./${name}/src/App/App.css`, '')
   helpers.writeFile(`./${name}/.babelrc`, babel)
 
   //backend
@@ -96,7 +96,7 @@ let writeFilesWithSPAReact = () => {
 
   //other files
   helpers.writeFile(`./${name}/.gitignore`, gitignore)
-  // helpers.writeFile(`./${name}/.env`, '')
+  helpers.writeFile(`./${name}/.env`, '')
   helpers.writeFile(`./${name}/README.md`, readme)
 
   fs.writeFileSync(`./${name}/package.json`, spaNoSQLPck)
