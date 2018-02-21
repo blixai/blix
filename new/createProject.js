@@ -288,7 +288,7 @@ let postgresRedux = (runner, test, e2e) => {
   helpers.installDevDependencies('webpack babel-loader css-loader babel-core babel-preset-env babel-preset-react style-loader webpack-merge uglifyjs-webpack-plugin sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-cssnext postcss-import postcss-loader')
   installReactTestingForRedux(test)
   e2eSetup(e2e)
-  beOnlyInstallTesting(runner)
+  testBackend(runner)
   helpers.installKnexGlobal()
   modifyKnex(name)
   try {
@@ -319,7 +319,7 @@ let mongooseRedux = (runner, test, e2e) => {
   helpers.installDevDependencies(' webpack babel-loader css-loader babel-core babel-preset-env babel-preset-react style-loader webpack-merge uglifyjs-webpack-plugin sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-cssnext postcss-import postcss-loader')
   installReactTestingForRedux(test)
   e2eSetup(e2e)
-  beOnlyInstallTesting(runner)
+  testBackend(runner)
   process.stdout.write('\033c')
   log('The project was created!')
   log(`cd into ${name}`)
@@ -343,8 +343,8 @@ let noDBRedux = (runner, test, e2e) => {
 
   installReactTestingForRedux(test)
   e2eSetup(e2e)
-  beOnlyInstallTesting(runner)
-  process.stdout.write('\033c')
+  testBackend(runner)
+  // process.stdout.write('\033c')
   log(chalk.cyanBright('The project was created!'))
   log(chalk.cyanBright(`cd into ${name}`))
   log(chalk.cyanBright(`First start webpack: `) + chalk.yellowBright(`npm run build`))
@@ -576,8 +576,37 @@ let noDbBE = (test) => {
 }
 
 let beOnlyInstallTesting = test => {
-  if (test === 'mocha') helpers.installDevDependencies('mocha chai chai-http')
-  if (test === 'jest') helpers.installDevDependencies('jest supertest')
+  if (test === 'mocha') helpers.installDevDependencies('mocha chai chai-http')  
+  if (test === 'jest' ) helpers.installDevDependencies('jest supertest')
+}
+
+let testBackend = test => {
+  if (test === 'mocha') {
+    helpers.installDevDependencies('mocha chai chai-http')
+    helpers.addScript('mocha', 'mocha test/server')
+    if (!fs.existsSync('./test')) fs.mkdirSync('./test');
+    if (!fs.existsSync('./test/server')) fs.mkdirSync('./test/server');
+    helpers.writeFile('./test/server/test.spec.js', loadFile('./filesToCopy/mocha.js'))
+    let json = JSON.parse(fs.readFileSync('./package.json', 'utf8'))
+    // let json = JSON.parse(data)
+    if (json.hasOwnProperty('jest')) {
+      json.jest["modulePathIgnorePatterns"] = ["<rootDir>/test/e2e/", "<rootDir>/cypress/", "<rootDir>/test/server/"]
+    } 
+    let newPackage = JSON.stringify(json, null, 2)
+    fs.writeFileSync('package.json', newPackage)
+  } else if (test === 'jest') {
+    helpers.installDevDependencies('jest supertest')
+    if (!fs.existsSync('./test')) fs.mkdirSync('./test');
+    if (!fs.existsSync('./test/server')) fs.mkdirSync('./test/server');
+    helpers.writeFile('./test/server/test.spec.js', loadFile('./filesToCopy/jest.js')) 
+    let json = JSON.parse(fs.readFile('package.json', 'utf8'))
+      // let json = JSON.parse(data);
+    json["jest"] = jest
+    let newPackage = JSON.stringify(json, null, 2)
+    fs.writeFileSync('package.json', newPackage)
+    // })
+    // test/server 
+  }
 }
 
 let installReactTestingForRedux = reactTests => {
@@ -591,19 +620,11 @@ let installReactTestingForRedux = reactTests => {
       "\\.(css|less)$": "identity-obj-proxy"
     }
   }
-
-  fs.readFile('package.json', (err, data) => {
-    var json = JSON.parse(data);
-    json["jest"] = jest 
-    let newPackage = JSON.stringify(json, null, 2)
-    helpers.writeFile('package.json', newPackage)
-  })
+  let json = JSON.parse(fs.readFileSync('package.json', 'utf8'))
+  json["jest"] = jest 
+  let newPackage = JSON.stringify(json, null, 2)
+  fs.writeFileSync('package.json', newPackage)
   helpers.addScript('test', 'jest')
-
-    
-  // if src/containers exists use redux enzyme test 
-  // load and install enzyme file into
-  
 }
 
 let installReactTesting = () => {
@@ -630,18 +651,14 @@ let installCypress = () => {
       "\\.(css|less)$": "identity-obj-proxy"
     }
   }
-  fs.readFile('./package.json', (err, data) => {
-    if (err) throw err
-    let json = JSON.parse(data);
-    if (!json.hasOwnProperty('jest')) {
-      json["jest"] = jest
-    } else {
-      json.jest["modulePathIgnorePatterns"] = ["<rootDir>/test/e2e/", "<rootDir>/cypress/"]
-    }
-    let newPackage = JSON.stringify(json, null, 2)
-    helpers.writeFile('package.json', newPackage)
-  })
-  // helpers.addJest()
+  let json = JSON.parse(fs.readFileSync('package.json', 'utf8'))
+  if (!json.hasOwnProperty('jest')) {
+    json["jest"] = jest
+  } else {
+    json.jest["modulePathIgnorePatterns"] = ["<rootDir>/test/e2e/", "<rootDir>/cypress/"]
+  }
+  let newPackage = JSON.stringify(json, null, 2)
+  fs.writeFileSync('package.json', newPackage)
 }
 
 let installTestCafe = () => {
@@ -657,18 +674,14 @@ let installTestCafe = () => {
       "\\.(css|less)$": "identity-obj-proxy"
     }
   }
-  fs.readFile('./package.json', (err, data) => {
-    if (err) throw err
-    let json = JSON.parse(data);
-    if (!json.hasOwnProperty('jest')) {
-      json["jest"] = jest
-    } else {
-      json.jest["modulePathIgnorePatterns"] = ["<rootDir>/test/e2e/", "<rootDir>/cypress/"]
-    }
-    let newPackage = JSON.stringify(json, null, 2)
-    helpers.writeFile('package.json', newPackage)
-  })
-  // helpers.addScript('jest', '{\n\tmodulePathIgnorePatterns: [\n\t\t"<rootDir>/test/e2e"\n\t]\n}')
+  let json = JSON.parse(fs.readFileSync('./package.json', 'utf8'))
+  if (!json.hasOwnProperty('jest')) {
+    json["jest"] = jest
+  } else {
+    json.jest["modulePathIgnorePatterns"] = ["<rootDir>/test/e2e/", "<rootDir>/cypress/"]
+  }
+  let newPackage = JSON.stringify(json, null, 2)
+  fs.writeFileSync('package.json', newPackage)
 }
 
 
