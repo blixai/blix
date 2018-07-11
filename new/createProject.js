@@ -24,76 +24,17 @@ let loadFile = filePath => {
   return fs.readFileSync(path.resolve(__dirname, filePath), "utf8");
 };
 
-//prompts
-let project = {
-  type: "list",
-  message: "What type of Project are you looking to build:",
-  name: "project",
-  choices: [
-    { name: "React SPA" },
-    { name: "React, Redux, React/Router", value: "redux" },
-    { name: "MVC" },
-    { name: "Backend Only" }
-  ]
-};
-
-let backend = {
-  type: "confirm",
-  message: "Do you need a backend:",
-  name: "backend"
-};
-
-let database = {
-  type: "list",
-  message: "Database:",
-  name: "database",
-  choices: [{ name: "MongoDB" }, { name: "Postgres" }, { name: "None" }]
-};
-
-let pug = {
-  type: "confirm",
-  message: "Do you want to use the templating engine pug",
-  name: "pug"
-};
-
-let testingWithoutReact = {
-  type: "list",
-  message: "Testing Tools:",
-  name: "test",
-  choices: [
-    { name: "Mocha & Chai", value: "mocha" },
-    { name: "Jest", value: "jest" },
-    { name: "None" }
-  ]
-};
-
-let serverTesting = {
-  type: "list",
-  message: "Do you want to test server routes and models with:",
-  name: "server",
-  choices: [
-    { name: "Mocha & Chai", value: "mocha" },
-    { name: "Jest", value: "jest" },
-    { name: "None" }
-  ]
-};
-
-let e2e = {
-  type: "list",
-  message: "e2e Testing:",
-  name: "e2e",
-  choices: [
-    { name: "Test Cafe", value: "cafe" },
-    { name: "Cypress", value: "cypress" },
-    { name: "None" }
-  ]
-};
-
-let reactTesting = {
-  type: "confirm",
-  message: "Do you want to use Jest and Enzyme for React Testing",
-  name: "enzyme"
-};
+// console prompts
+const {
+  project,
+  backend,
+  database,
+  pug,
+  testingWithoutReact,
+  serverTesting,
+  e2e,
+  reactTesting
+} = require("./prompts");
 
 let promptProject = () => {
   prompt([project]).then(answers => {
