@@ -15,6 +15,10 @@ let noReactApp = require("./createAppWithoutReact/createAppWithoutReact");
 let BE = require("./backendOnly/backendOnly");
 let helpers = require("../helpers");
 
+const { addMongooseToEnzo } = require("./addMongoDB");
+const { installCypress, installTestCafe } = require("./addEndToEndTesting");
+const { addBookshelfToEnzo } = require("./addBookshelf");
+
 // variables
 let name = process.argv[3];
 let frontend;
@@ -24,76 +28,17 @@ let loadFile = filePath => {
   return fs.readFileSync(path.resolve(__dirname, filePath), "utf8");
 };
 
-//prompts
-let project = {
-  type: "list",
-  message: "What type of Project are you looking to build:",
-  name: "project",
-  choices: [
-    { name: "React SPA" },
-    { name: "React, Redux, React/Router", value: "redux" },
-    { name: "MVC" },
-    { name: "Backend Only" }
-  ]
-};
-
-let backend = {
-  type: "confirm",
-  message: "Do you need a backend:",
-  name: "backend"
-};
-
-let database = {
-  type: "list",
-  message: "Database:",
-  name: "database",
-  choices: [{ name: "MongoDB" }, { name: "Postgres" }, { name: "None" }]
-};
-
-let pug = {
-  type: "confirm",
-  message: "Do you want to use the templating engine pug",
-  name: "pug"
-};
-
-let testingWithoutReact = {
-  type: "list",
-  message: "Testing Tools:",
-  name: "test",
-  choices: [
-    { name: "Mocha & Chai", value: "mocha" },
-    { name: "Jest", value: "jest" },
-    { name: "None" }
-  ]
-};
-
-let serverTesting = {
-  type: "list",
-  message: "Do you want to test server routes and models with:",
-  name: "server",
-  choices: [
-    { name: "Mocha & Chai", value: "mocha" },
-    { name: "Jest", value: "jest" },
-    { name: "None" }
-  ]
-};
-
-let e2e = {
-  type: "list",
-  message: "e2e Testing:",
-  name: "e2e",
-  choices: [
-    { name: "Test Cafe", value: "cafe" },
-    { name: "Cypress", value: "cypress" },
-    { name: "None" }
-  ]
-};
-
-let reactTesting = {
-  type: "confirm",
-  message: "Do you want to use Jest and Enzyme for React Testing",
-  name: "enzyme"
-};
+// console prompts
+const {
+  project,
+  backend,
+  database,
+  pug,
+  testingWithoutReact,
+  serverTesting,
+  e2e,
+  reactTesting
+} = require("./prompts");
 
 let promptProject = () => {
   prompt([project]).then(answers => {
@@ -1087,134 +1032,6 @@ let e2eSetup = answer => {
     : answer === "cypress"
       ? installCypress()
       : "";
-};
-
-let installCypress = () => {
-  helpers.addScript("e2e", "cypress open");
-  helpers.installDevDependencies("cypress");
-  fs.mkdirSync(`./cypress`);
-  fs.mkdirSync(`./cypress/integration`);
-  helpers.writeFile(
-    `./cypress/integration/test.js`,
-    loadFile("./filesToCopy/cypress.js")
-  );
-  // let ignore = {
-  //   "modulePathIgnorePatterns": ["<rootDir>/test/e2e/", "<rootDir>/cypress"]
-  // }
-  let jest = {
-    modulePathIgnorePatterns: ["<rootDir>/test/e2e/", "<rootDir>/cypress"],
-    moduleNameMapper: {
-      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$":
-        "<rootDir>/__mocks__/fileMock.js",
-      "\\.(css|less)$": "identity-obj-proxy"
-    }
-  };
-  let json = JSON.parse(fs.readFileSync("package.json", "utf8"));
-  if (!json.hasOwnProperty("jest")) {
-    json["jest"] = jest;
-  } else {
-    json.jest["modulePathIgnorePatterns"] = [
-      "<rootDir>/test/e2e/",
-      "<rootDir>/cypress/"
-    ];
-  }
-  let newPackage = JSON.stringify(json, null, 2);
-  fs.writeFileSync("package.json", newPackage);
-};
-
-let installTestCafe = () => {
-  helpers.addScript("e2e", "testcafe chrome test/e2e");
-  helpers.installDevDependencies("testcafe");
-  if (!fs.existsSync("./test")) fs.mkdirSync("./test");
-  fs.mkdirSync("./test/e2e");
-  helpers.writeFile(
-    "./test/e2e/test.js",
-    loadFile("./filesToCopy/testcafe.js")
-  );
-  let jest = {
-    modulePathIgnorePatterns: ["<rootDir>/test/e2e/", "<rootDir>/cypress"],
-    moduleNameMapper: {
-      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$":
-        "<rootDir>/__mocks__/fileMock.js",
-      "\\.(css|less)$": "identity-obj-proxy"
-    }
-  };
-  let json = JSON.parse(fs.readFileSync("./package.json", "utf8"));
-  if (!json.hasOwnProperty("jest")) {
-    json["jest"] = jest;
-  } else {
-    json.jest["modulePathIgnorePatterns"] = [
-      "<rootDir>/test/e2e/",
-      "<rootDir>/cypress/"
-    ];
-  }
-  let newPackage = JSON.stringify(json, null, 2);
-  fs.writeFileSync("package.json", newPackage);
-};
-
-let addBookshelfToEnzo = () => {
-  let bookshelf = loadFile("./templates/bookshelf.js");
-  let enzoCreateBookshelfModel = loadFile(
-    "./templates/enzoCreateBookshelfModel.js"
-  );
-  let migrationTemplate = loadFile("./templates/migrationTemplate.js");
-  let enzoBookshelfModelTemplate = loadFile(
-    "./templates/enzoBookshelfModelTemplate.js"
-  );
-
-  helpers.writeFile(`./${name}/server/models/bookshelf.js`, bookshelf);
-  helpers.writeFile(
-    `./${name}/scripts/enzoCreateBookshelfModel.js`,
-    enzoCreateBookshelfModel
-  );
-  helpers.writeFile(
-    `./${name}/scripts/templates/migrationTemplate.js`,
-    migrationTemplate
-  );
-  helpers.writeFile(
-    `./${name}/scripts/templates/enzoBookshelfModelTemplate.js`,
-    enzoBookshelfModelTemplate
-  );
-
-  helpers.addScriptToNewPackageJSON(
-    "model",
-    "node scripts/enzoCreateBookshelfModel.js",
-    name
-  );
-  // need to add script for this to package.json
-};
-
-let addMongooseToEnzo = () => {
-  let model = loadFile("./templates/enzoCreateMongooseModel.js");
-  let schemaTemplate = loadFile("./templates/schemaTemplate.js");
-
-  helpers.writeFile(`./${name}/scripts/model.js`, model);
-  helpers.writeFile(
-    `./${name}/scripts/templates/schemaTemplate.js`,
-    schemaTemplate
-  );
-
-  helpers.addScriptToNewPackageJSON("model", "node scripts/model.js", name);
-  addMongoDBToProject();
-};
-
-let addMongoDBToProject = () => {
-  let server = fs
-    .readFileSync(`./${name}/server/server.js`, "utf8")
-    .toString()
-    .split("\n");
-  server.splice(
-    0,
-    0,
-    `\nlet mongoose = require('mongoose')\nmongoose.connect(process.env.MONGO)\n`
-  );
-  let mongoAddedServer = server.join("\n");
-
-  helpers.writeFile(`./${name}/server/server.js`, mongoAddedServer);
-  helpers.writeFile(
-    `./${name}/.env`,
-    `MONGO="${`mongodb://localhost/${name}`}"`
-  );
 };
 
 module.exports = createProject;
