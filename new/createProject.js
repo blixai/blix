@@ -17,6 +17,7 @@ let helpers = require("../helpers");
 
 const { addMongooseToEnzo } = require("./addMongoDB");
 const { installCypress, installTestCafe } = require("./addEndToEndTesting");
+const { addBookshelfToEnzo } = require("./addBookshelf");
 
 // variables
 let name = process.argv[3];
@@ -1031,38 +1032,6 @@ let e2eSetup = answer => {
     : answer === "cypress"
       ? installCypress()
       : "";
-};
-
-let addBookshelfToEnzo = () => {
-  let bookshelf = loadFile("./templates/bookshelf.js");
-  let enzoCreateBookshelfModel = loadFile(
-    "./templates/enzoCreateBookshelfModel.js"
-  );
-  let migrationTemplate = loadFile("./templates/migrationTemplate.js");
-  let enzoBookshelfModelTemplate = loadFile(
-    "./templates/enzoBookshelfModelTemplate.js"
-  );
-
-  helpers.writeFile(`./${name}/server/models/bookshelf.js`, bookshelf);
-  helpers.writeFile(
-    `./${name}/scripts/enzoCreateBookshelfModel.js`,
-    enzoCreateBookshelfModel
-  );
-  helpers.writeFile(
-    `./${name}/scripts/templates/migrationTemplate.js`,
-    migrationTemplate
-  );
-  helpers.writeFile(
-    `./${name}/scripts/templates/enzoBookshelfModelTemplate.js`,
-    enzoBookshelfModelTemplate
-  );
-
-  helpers.addScriptToNewPackageJSON(
-    "model",
-    "node scripts/enzoCreateBookshelfModel.js",
-    name
-  );
-  // need to add script for this to package.json
 };
 
 module.exports = createProject;
