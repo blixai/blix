@@ -16,6 +16,7 @@ let BE = require("./backendOnly/backendOnly");
 let helpers = require("../helpers");
 
 const { addMongooseToEnzo } = require("./addMongoDB");
+const { installCypress, installTestCafe } = require("./addEndToEndTesting");
 
 // variables
 let name = process.argv[3];
@@ -1030,69 +1031,6 @@ let e2eSetup = answer => {
     : answer === "cypress"
       ? installCypress()
       : "";
-};
-
-let installCypress = () => {
-  helpers.addScript("e2e", "cypress open");
-  helpers.installDevDependencies("cypress");
-  fs.mkdirSync(`./cypress`);
-  fs.mkdirSync(`./cypress/integration`);
-  helpers.writeFile(
-    `./cypress/integration/test.js`,
-    loadFile("./filesToCopy/cypress.js")
-  );
-  // let ignore = {
-  //   "modulePathIgnorePatterns": ["<rootDir>/test/e2e/", "<rootDir>/cypress"]
-  // }
-  let jest = {
-    modulePathIgnorePatterns: ["<rootDir>/test/e2e/", "<rootDir>/cypress"],
-    moduleNameMapper: {
-      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$":
-        "<rootDir>/__mocks__/fileMock.js",
-      "\\.(css|less)$": "identity-obj-proxy"
-    }
-  };
-  let json = JSON.parse(fs.readFileSync("package.json", "utf8"));
-  if (!json.hasOwnProperty("jest")) {
-    json["jest"] = jest;
-  } else {
-    json.jest["modulePathIgnorePatterns"] = [
-      "<rootDir>/test/e2e/",
-      "<rootDir>/cypress/"
-    ];
-  }
-  let newPackage = JSON.stringify(json, null, 2);
-  fs.writeFileSync("package.json", newPackage);
-};
-
-let installTestCafe = () => {
-  helpers.addScript("e2e", "testcafe chrome test/e2e");
-  helpers.installDevDependencies("testcafe");
-  if (!fs.existsSync("./test")) fs.mkdirSync("./test");
-  fs.mkdirSync("./test/e2e");
-  helpers.writeFile(
-    "./test/e2e/test.js",
-    loadFile("./filesToCopy/testcafe.js")
-  );
-  let jest = {
-    modulePathIgnorePatterns: ["<rootDir>/test/e2e/", "<rootDir>/cypress"],
-    moduleNameMapper: {
-      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$":
-        "<rootDir>/__mocks__/fileMock.js",
-      "\\.(css|less)$": "identity-obj-proxy"
-    }
-  };
-  let json = JSON.parse(fs.readFileSync("./package.json", "utf8"));
-  if (!json.hasOwnProperty("jest")) {
-    json["jest"] = jest;
-  } else {
-    json.jest["modulePathIgnorePatterns"] = [
-      "<rootDir>/test/e2e/",
-      "<rootDir>/cypress/"
-    ];
-  }
-  let newPackage = JSON.stringify(json, null, 2);
-  fs.writeFileSync("package.json", newPackage);
 };
 
 let addBookshelfToEnzo = () => {
