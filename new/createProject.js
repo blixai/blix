@@ -18,6 +18,7 @@ let helpers = require("../helpers");
 const { addMongooseToEnzo } = require("./addMongoDB");
 const { installCypress, installTestCafe } = require("./addEndToEndTesting");
 const { addBookshelfToEnzo } = require("./addBookshelf");
+const { mochaTestBackend, testJestBackend } = require("./addBackendTests");
 
 // variables
 let name = process.argv[3];
@@ -927,55 +928,6 @@ let testBackend = test => {
     : test === "jest"
       ? testJestBackend()
       : "";
-};
-
-let mochaTestBackend = () => {
-  helpers.installDevDependencies("mocha chai chai-http");
-  helpers.addScript("mocha", "mocha test/server");
-  checkOrCreateServerTestFolder();
-  helpers.writeFile(
-    "./test/server/test.spec.js",
-    loadFile("./filesToCopy/mocha.js")
-  );
-  let json = JSON.parse(fs.readFileSync("./package.json", "utf8"));
-  if (json.hasOwnProperty("jest")) {
-    json.jest["modulePathIgnorePatterns"] = [
-      "<rootDir>/test/e2e/",
-      "<rootDir>/cypress/",
-      "<rootDir>/test/server/"
-    ];
-  }
-  let newPackage = JSON.stringify(json, null, 2);
-  fs.writeFileSync("package.json", newPackage);
-};
-
-let checkOrCreateServerTestFolder = () => {
-  if (!fs.existsSync("./test")) fs.mkdirSync("./test");
-  if (!fs.existsSync("./test/server")) fs.mkdirSync("./test/server");
-};
-
-let testJestBackend = () => {
-  helpers.installDevDependencies("jest supertest");
-  checkOrCreateServerTestFolder();
-  helpers.writeFile(
-    "./test/server/test.spec.js",
-    loadFile("./filesToCopy/jest.js")
-  );
-  let json = JSON.parse(fs.readFileSync("./package.json", "utf8"));
-  if (!json.hasOwnProperty("jest")) {
-    let jest = {
-      modulePathIgnorePatterns: ["<rootDir>/test/e2e/", "<rootDir>/cypress"],
-      moduleNameMapper: {
-        "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$":
-          "<rootDir>/__mocks__/fileMock.js",
-        "\\.(css|less)$": "identity-obj-proxy"
-      }
-    };
-    json["jest"] = jest;
-  }
-  let newPackage = JSON.stringify(json, null, 2);
-  fs.writeFileSync("package.json", newPackage);
-  helpers.addScript("jest", "jest");
 };
 
 let installReactTestingForRedux = reactTests => {
