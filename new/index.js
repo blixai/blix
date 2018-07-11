@@ -125,6 +125,7 @@ let beOnly = async () => {
   }
 };
 
+// file entry point 
 let createProject = () => {
   if (name) {
     // not sure we need this line here // maybe after they've made their selections
