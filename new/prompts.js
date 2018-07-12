@@ -1,24 +1,26 @@
-const project = {
+const frontendOptions = {
   type: "list",
-  message: "What type of Project are you looking to build:",
-  name: "project",
+  message: "Select a Frontend:",
+  name: "frontend",
   choices: [
-    { name: "React SPA" },
-    { name: "React, Redux, React/Router", value: "redux" },
-    { name: "MVC" },
-    { name: "Backend Only" }
+    { name: "React", value: "react" },
+    { name: "React, Redux, React-Router", value: "redux" },
+    { name: "Vue", value: "vue" },
+    { name: "Vue, Vuex, Vue-Router", value: "vuex" },
+    { name: "Vanilla JS", value: "JS" },
+    { name: "None" }
   ]
 };
 
 const backend = {
   type: "confirm",
-  message: "Do you need a backend:",
+  message: "Do you need an Express.js backend",
   name: "backend"
 };
 
 const database = {
   type: "list",
-  message: "Database:",
+  message: "Select a Database:",
   name: "database",
   choices: [{ name: "MongoDB" }, { name: "Postgres" }, { name: "None" }]
 };
@@ -29,20 +31,9 @@ const pug = {
   name: "pug"
 };
 
-const testingWithoutReact = {
-  type: "list",
-  message: "Testing Tools:",
-  name: "test",
-  choices: [
-    { name: "Mocha & Chai", value: "mocha" },
-    { name: "Jest", value: "jest" },
-    { name: "None" }
-  ]
-};
-
 const serverTesting = {
   type: "list",
-  message: "Do you want to test server routes and models with:",
+  message: "Do you want to test server routes with:",
   name: "server",
   choices: [
     { name: "Mocha & Chai", value: "mocha" },
@@ -64,16 +55,15 @@ const e2e = {
 
 const reactTesting = {
   type: "confirm",
-  message: "Do you want to use Jest and Enzyme for React Testing",
+  message: "Do you want to install Jest and Enzyme for React Testing",
   name: "enzyme"
 };
 
 module.exports = {
-  project,
+  frontendOptions,
   backend,
   database,
   pug,
-  testingWithoutReact,
   serverTesting,
   e2e,
   reactTesting

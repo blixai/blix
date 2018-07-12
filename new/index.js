@@ -19,6 +19,8 @@ const { addMongooseToEnzo } = require("./addMongoDB");
 const { installCypress, installTestCafe } = require("./addEndToEndTesting");
 const { addBookshelfToEnzo } = require("./addBookshelf");
 const { mochaTestBackend, testJestBackend } = require("./addBackendTests");
+const { createCommonFilesAndFolders } = require("./createCommonFiles");
+const { createBackend } = require("./createBackend");
 
 // variables
 let name = process.argv[3];
@@ -31,37 +33,40 @@ let loadFile = filePath => {
 
 // console prompts
 const {
-  project,
+  frontendOptions,
   backend,
   database,
   pug,
-  testingWithoutReact,
   serverTesting,
   e2e,
   reactTesting
 } = require("./prompts");
 
-let promptProject = () => {
-  prompt([project]).then(answers => {
-    let project = answers.project;
-    switch (project) {
-      case "React SPA":
-        spa();
-        break;
-      case "redux":
-        redux();
-        break;
-      case "MVC":
-        mvc();
-        break;
-      default:
-        beOnly();
-        break;
-    }
-  });
+// need to change this to use async await
+const promptFrontend = async () => {
+  const answer = await prompt([project]);
+  switch (answer.frontend) {
+    case "react":
+      react();
+      break;
+    case "redux":
+      redux();
+      break;
+    case "vue":
+      log("VUE");
+      break;
+    case "vuex":
+      log("VUEX");
+      break;
+    case "JS":
+      log("VANILLA JS");
+      break;
+    default:
+      break;
+  }
 };
 
-let spa = async () => {
+const react = async () => {
   let be = await prompt([backend]);
   let test = await prompt([reactTesting]);
   let ui = await prompt([e2e]);
@@ -98,7 +103,7 @@ let redux = async () => {
 let mvc = async () => {
   let db = await prompt([database]);
   let p = await prompt([pug]);
-  let test = await prompt([testingWithoutReact]);
+  let test = await prompt([backendOnlyTesting]);
   let ui = await prompt([e2e]);
   if (db.database === "Postgres") {
     p.pug
@@ -114,7 +119,7 @@ let mvc = async () => {
 };
 
 let beOnly = async () => {
-  let test = await prompt([testingWithoutReact]);
+  let test = await prompt([backendOnlyTesting]);
   let db = await prompt([database]);
   if (db.database === "Postgres") {
     postgresBE(test.test);
@@ -125,13 +130,18 @@ let beOnly = async () => {
   }
 };
 
-// file entry point 
+// file entry point
 let createProject = () => {
   if (name) {
     // not sure we need this line here // maybe after they've made their selections
-    fs.mkdirSync(`./${name}`);
+    if (!fs.existsSync(`./${name}`)) {
+      fs.mkdirSync(`./${name}`); 
+    } else {
+      console.error(`A project named ${name} already exists!`)
+      process.exit(1)
+    }
     process.stdout.write("\033c");
-    promptProject();
+    promptFrontend();
   } else {
     // need to include a message
     log('No name provided. Please run "enzo new <projectName>"');
@@ -890,7 +900,8 @@ let mongooseBE = test => {
 };
 
 let noDbBE = test => {
-  BE.backendOnly(test);
+  createBackend(name);
+  // BE.backendOnly(test);
   shell.cd(`${name}`);
   log(
     "Downloading dependencies and setting up the project, this may take a moment"
@@ -929,54 +940,6 @@ let testBackend = test => {
     : test === "jest"
       ? testJestBackend()
       : "";
-};
-
-let installReactTestingForRedux = reactTests => {
-  if (!reactTests) return;
-  helpers.installDevDependencies(
-    "jest enzyme redux-mock-store enzyme-adapter-react-16 identity-obj-proxy"
-  );
-  if (!fs.existsSync("./test")) fs.mkdirSync("./test");
-  helpers.writeFile(
-    "./test/Home.spec.js",
-    loadFile("./filesToCopy/enzymeRedux.js")
-  );
-  let jest = {
-    moduleNameMapper: {
-      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$":
-        "<rootDir>/__mocks__/fileMock.js",
-      "\\.(css|less)$": "identity-obj-proxy"
-    }
-  };
-  let json = JSON.parse(fs.readFileSync("package.json", "utf8"));
-  json["jest"] = jest;
-  let newPackage = JSON.stringify(json, null, 2);
-  fs.writeFileSync("package.json", newPackage);
-  helpers.addScript("test", "jest");
-};
-
-let installReactTesting = reactTests => {
-  if (!reactTests) return;
-  helpers.installDevDependencies(
-    "jest enzyme enzyme-adapter-react-16 identity-obj-proxy"
-  );
-  if (!fs.existsSync("./test")) fs.mkdirSync("./test");
-  helpers.writeFile(
-    "./test/App.spec.js",
-    loadFile("./filesToCopy/enzymeReact.js")
-  );
-  let jest = {
-    moduleNameMapper: {
-      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$":
-        "<rootDir>/__mocks__/fileMock.js",
-      "\\.(css|less)$": "identity-obj-proxy"
-    }
-  };
-  let json = JSON.parse(fs.readFileSync("package.json", "utf8"));
-  json["jest"] = jest;
-  let newPackage = JSON.stringify(json, null, 2);
-  fs.writeFileSync("package.json", newPackage);
-  helpers.addScript("test", "jest");
 };
 
 let e2eSetup = answer => {
