@@ -1,14 +1,20 @@
-const redux = () => {};
+const helpers = require("../helpers");
+const fs = require("fs");
+const path = require("path");
 
-let installReactTestingForRedux = reactTests => {
+const loadFile = filePath => {
+  return fs.readFileSync(path.resolve(__dirname, filePath), "utf8");
+};
+
+let installReactTesting = reactTests => {
   if (!reactTests) return;
   helpers.installDevDependencies(
-    "jest enzyme redux-mock-store enzyme-adapter-react-16 identity-obj-proxy"
+    "jest enzyme enzyme-adapter-react-16 identity-obj-proxy"
   );
   if (!fs.existsSync("./test")) fs.mkdirSync("./test");
   helpers.writeFile(
-    "./test/Home.spec.js",
-    loadFile("./filesToCopy/enzymeRedux.js")
+    "./test/App.spec.js",
+    loadFile("./filesToCopy/enzymeReact.js")
   );
   let jest = {
     moduleNameMapper: {
@@ -24,4 +30,4 @@ let installReactTestingForRedux = reactTests => {
   helpers.addScript("test", "jest");
 };
 
-module.exports = redux;
+module.exports = installReactTesting;

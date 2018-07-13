@@ -6,6 +6,14 @@ const loadFile = filePath => {
   return fs.readFileSync(path.resolve(__dirname, filePath), "utf8");
 };
 
+let e2eSetup = answer => {
+  answer === "cafe"
+    ? installTestCafe()
+    : answer === "cypress"
+      ? installCypress()
+      : "";
+};
+
 const installCypress = () => {
   helpers.addScript("e2e", "cypress open");
   helpers.installDevDependencies("cypress");
@@ -70,6 +78,7 @@ const installTestCafe = () => {
 };
 
 module.exports = {
+  e2eSetup,
   installCypress,
   installTestCafe
 };

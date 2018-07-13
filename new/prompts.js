@@ -1,14 +1,14 @@
 const frontendOptions = {
   type: "list",
-  message: "Select a Frontend:",
+  message: "Select a Frontend Framework:",
   name: "frontend",
   choices: [
     { name: "React", value: "react" },
     { name: "React, Redux, React-Router", value: "redux" },
     { name: "Vue", value: "vue" },
     { name: "Vue, Vuex, Vue-Router", value: "vuex" },
-    { name: "Vanilla JS", value: "JS" },
-    { name: "None" }
+    { name: "Vanilla JS", value: "js" },
+    { name: "None (Express.js as an API backend)", value: "none" }
   ]
 };
 
@@ -59,6 +59,18 @@ const reactTesting = {
   name: "enzyme"
 };
 
+const vueTesting = {
+  type: "list",
+  message: "Select a unit testing library for Vue",
+  name: "vueTesting",
+  choices: [
+    { name: "Vue Testing Utils", value: "utils" },
+    { name: "Karma.js", value: "karma" },
+    { name: "Jest", value: "jest" },
+    { name: "None", value: "none" }
+  ]
+};
+
 module.exports = {
   frontendOptions,
   backend,
@@ -66,5 +78,6 @@ module.exports = {
   pug,
   serverTesting,
   e2e,
-  reactTesting
+  reactTesting,
+  vueTesting
 };

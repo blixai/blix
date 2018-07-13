@@ -1,35 +1,21 @@
-let fs = require("fs");
-let path = require("path");
-let shell = require("shelljs");
-let execSync = require("child_process").execSync;
-let chalk = require("chalk");
-let log = console.log;
-let boxen = require("boxen");
-let inquirer = require("inquirer");
-let prompt = inquirer.prompt;
+const fs = require("fs");
+// const path = require("path");
+// const shell = require("shelljs");
+// const execSync = require("child_process").execSync;
+// const chalk = require("chalk");
+// const boxen = require("boxen");
+const inquirer = require("inquirer");
+const prompt = inquirer.prompt;
 
-// each project type and helpers
-let spaBuild = require("./createReactSPA/createReactSPA");
-let reactRedux = require("./reactRedux/reactRedux");
-let noReactApp = require("./createAppWithoutReact/createAppWithoutReact");
-let BE = require("./backendOnly/backendOnly");
-let helpers = require("../helpers");
-
-const { addMongooseToEnzo } = require("./addMongoDB");
-const { installCypress, installTestCafe } = require("./addEndToEndTesting");
-const { addBookshelfToEnzo } = require("./addBookshelf");
-const { mochaTestBackend, testJestBackend } = require("./addBackendTests");
-const { createCommonFilesAndFolders } = require("./createCommonFiles");
 const { createBackend } = require("./createBackend");
+const { vue } = require("./vue");
+const { vuex } = require("./vuex");
+const { react } = require("./react");
+const { redux } = require("./redux");
+const { vanillaJS } = require("./vanillaJS");
 
 // variables
-let name = process.argv[3];
-let frontend;
-
-// helper function to load files
-let loadFile = filePath => {
-  return fs.readFileSync(path.resolve(__dirname, filePath), "utf8");
-};
+const name = process.argv[3];
 
 // console prompts
 const {
@@ -39,915 +25,147 @@ const {
   pug,
   serverTesting,
   e2e,
-  reactTesting
+  reactTesting,
+  vueTesting
 } = require("./prompts");
 
-// need to change this to use async await
+// prompts user to select frontend type and branches into project specific questions from there
 const promptFrontend = async () => {
-  const answer = await prompt([project]);
+  const answer = await prompt([frontendOptions]);
   switch (answer.frontend) {
     case "react":
-      react();
+      reactProject();
       break;
     case "redux":
-      redux();
+      reduxProject();
       break;
     case "vue":
-      log("VUE");
+      vueProject();
       break;
     case "vuex":
-      log("VUEX");
+      vuexProject();
       break;
-    case "JS":
-      log("VANILLA JS");
+    case "js":
+      vanillaJSProject();
       break;
     default:
+      backendOnly();
       break;
   }
 };
 
-const react = async () => {
-  let be = await prompt([backend]);
-  let test = await prompt([reactTesting]);
-  let ui = await prompt([e2e]);
-  if (be.backend) {
-    let runner = await prompt([serverTesting]);
-    let db = await prompt([database]);
-    db.database === "Postgres"
-      ? postgresSPA(test.enzyme, ui.e2e, runner.server)
-      : db.database === "MongoDB"
-        ? mongooseSPA(test.enzyme, ui.e2e, runner.server)
-        : noDBSPA(test.enzyme, ui.e2e, runner.server);
+const reactProject = async () => {
+  const reactTestingSelection = await prompt([reactTesting]);
+  const e2eSelection = await prompt([e2e]);
+  const backendSelection = await prompt([backend]);
+  if (backendSelection.backend) {
+    const serverTestingSelection = await prompt([serverTesting]);
+    const databaseSelection = await prompt([database]);
+    react(
+      reactTestingSelection,
+      e2eSelection,
+      backendSelection.backend,
+      serverTestingSelection,
+      databaseSelection
+    );
   } else {
-    spaNoBE(test.enzyme, ui.e2e);
+    react(reactTestingSelection, e2eSelection);
   }
 };
 
-let redux = async () => {
-  let be = await prompt([backend]);
-  let test = await prompt([reactTesting]);
-  let ui = await prompt([e2e]);
-  if (be.backend) {
-    let runner = await prompt([serverTesting]);
-    let db = await prompt([database]);
-    db.database === "Postgres"
-      ? postgresRedux(runner.server, test.enzyme, ui.e2e)
-      : db.database === "MongoDB"
-        ? mongooseRedux(runner.server, test.enzyme, ui.e2e)
-        : noDBRedux(runner.server, test.enzyme, ui.e2e);
+const reduxProject = async () => {
+  const reactTestingSelection = await prompt([reactTesting]);
+  const e2eSelection = await prompt([e2e]);
+  const backendSelection = await prompt([backend]);
+  if (backendSelection.backend) {
+    const serverTestingSelection = await prompt([serverTesting]);
+    const databaseSelection = await prompt([database]);
+    redux(
+      reactTestingSelection,
+      e2eSelection,
+      backendSelection.backend,
+      serverTestingSelection,
+      databaseSelection
+    );
   } else {
-    reduxNoBE(test.enzyme, ui.e2e);
+    redux(reactTestingSelection, e2eSelection);
   }
 };
 
-let mvc = async () => {
-  let db = await prompt([database]);
-  let p = await prompt([pug]);
-  let test = await prompt([backendOnlyTesting]);
-  let ui = await prompt([e2e]);
-  if (db.database === "Postgres") {
-    p.pug
-      ? postgresMvcPug(test.test, ui.e2e)
-      : posgresMvcNoPug(test.test, ui.e2e);
-  } else if (db.database === "MongoDB") {
-    p.pug
-      ? mongooseMvcPug(test.test, ui.e2e)
-      : mongooseMvcNoPug(test.test, ui.e2e);
+const vueProject = async () => {
+  const vueTestingSelection = await prompt([vueTesting]);
+  const e2eSelection = await prompt([e2e]);
+  const backendSelection = await prompt([backend]);
+  if (backendSelection.backend) {
+    const serverTestingSelection = await prompt([serverTesting]);
+    const databaseSelection = await prompt([database]);
+    vue(
+      vueTestingSelection,
+      e2eSelection,
+      backendSelection,
+      serverTestingSelection,
+      databaseSelection
+    );
   } else {
-    p.pug ? noDbMvcPug(test.test, ui.e2e) : noDbMvcNoPug(test.test, ui.e2e);
+    vue(vueTestingSelection, e2e);
   }
 };
 
-let beOnly = async () => {
-  let test = await prompt([backendOnlyTesting]);
-  let db = await prompt([database]);
-  if (db.database === "Postgres") {
-    postgresBE(test.test);
-  } else if (db.database === "MongoDB") {
-    mongooseBE(test.test);
+const vuexProject = async () => {
+  const vueTestingSelection = await prompt([vueTesting]);
+  const e2eSelection = await prompt([e2e]);
+  const backendSelection = await prompt([backend]);
+  if (backendSelection.backend) {
+    const serverTestingSelection = await prompt([serverTesting]);
+    const databaseSelection = await prompt([database]);
+    vuex(
+      vueTestingSelection,
+      e2eSelection,
+      backendSelection.backend,
+      serverTestingSelection,
+      databaseSelection
+    );
   } else {
-    noDbBE(test.test);
+    vuex(false, vueTestingSelection, e2eSelection);
   }
 };
 
-// file entry point
-let createProject = () => {
-  if (name) {
-    // not sure we need this line here // maybe after they've made their selections
-    if (!fs.existsSync(`./${name}`)) {
-      fs.mkdirSync(`./${name}`); 
-    } else {
-      console.error(`A project named ${name} already exists!`)
-      process.exit(1)
-    }
-    process.stdout.write("\033c");
-    promptFrontend();
+const vanillaJSProject = async () => {
+  const e2eSelection = await prompt([e2e]);
+  const backendSelection = await prompt([backend]);
+  if (backendSelection.backend) {
+    const serverTestingSelection = await prompt([serverTesting]);
+    const databaseSelection = await prompt([database]);
+    vanillaJS(
+      e2eSelection,
+      backendSelection.backend,
+      serverTestingSelection,
+      databaseSelection
+    );
   } else {
-    // need to include a message
-    log('No name provided. Please run "enzo new <projectName>"');
+    vanillaJS(e2eSelection);
+  }
+};
+
+const backendOnly = async () => {
+  const serverTestingSelection = await prompt([serverTesting]);
+  const databaseSelection = await prompt([database]);
+  createBackend(serverTestingSelection, databaseSelection);
+};
+
+// create project ensures there shouldn't be errors before starting the prompts
+const createProject = () => {
+  if (!name) {
+    console.log('No name provided. Please run "enzo new <projectName>"');
     process.exit();
   }
-};
-
-let postgresSPA = (reactTesting, e2e, serverTesting) => {
-  spaBuild.writeFilesWithSPAReact();
-  addBookshelfToEnzo();
-  shell.cd(`${name}`);
-  log(
-    "Downloading dependencies and setting up the project, this may take a moment"
-  );
-  helpers.install(
-    "express nodemon pg knex body-parser compression helmet react react-dom dotenv bookshelf morgan"
-  );
-  helpers.installDevDependencies(
-    "webpack babel-loader css-loader babel-core babel-preset-env babel-preset-react style-loader webpack-merge uglifyjs-webpack-plugin sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-cssnext postcss-import postcss-loader"
-  );
-  helpers.installKnexGlobal();
-  helpers.modifyKnex(name);
-  installReactTesting(reactTesting);
-  e2eSetup(e2e);
-  testBackend(serverTesting);
-  try {
-    execSync(`createdb ${name}`, { stdio: "ignore" });
-  } catch (e) {
-    // need some variable to indicate this failed and the user needs to make a new database
+  if (fs.existsSync(`./${name}`)) {
+    console.error(`A project named ${name} already exists!`);
+    process.exit();
   }
+  // name is provided and project doesn't already exist, clear console and begin prompts
   process.stdout.write("\033c");
-  log("");
-  log("The project was created!");
-  log(`cd into ${name}`);
-  log("First: npm run build");
-  log("Then: npm start");
-  log("");
-  log(boxen(`served at localhost:3000`, { padding: 1, borderColor: "yellow" }));
-  log("");
-  log("Unique package.json Commands");
-  log(
-    boxen(
-      `api || example: ` +
-        chalk.bold.cyanBright(`npm run api <name>`) +
-        ` || use:` +
-        chalk.yellowBright(` quickly create`) +
-        chalk.bold.redBright(` api/v1 get/post/put/delete`) +
-        chalk.yellowBright(` endpoints for a resource`) +
-        `\n\nreact || example:` +
-        chalk.bold.cyanBright(` npm run react <componentName>`) +
-        ` || use: ` +
-        chalk.yellowBright(
-          `quickly create a stateful or stateless React component`
-        ) +
-        `\n\nmodel || example: ` +
-        chalk.bold.cyanBright(`npm run model User email:string`) +
-        ` || use: ` +
-        chalk.yellowBright(`create a Bookshelf model + database migration`),
-      { padding: 1, borderColor: "yellow" }
-    )
-  );
-  log("");
-};
-
-let mongooseSPA = (reactTesting, e2e, serverTesting) => {
-  spaBuild.writeFilesWithSPAReact();
-  addMongooseToEnzo();
-  fs.writeFileSync(`./${name}/.env`);
-  shell.cd(`${name}`);
-  log(
-    "Downloading dependencies and setting up the project, this may take a moment"
-  );
-  helpers.install(
-    "express nodemon compression helmet mongo dotenv body-parser react react-dom dotenv mongoose morgan"
-  );
-  helpers.installDevDependencies(
-    "webpack babel-loader css-loader babel-core babel-preset-env babel-preset-react style-loader webpack-merge uglifyjs-webpack-plugin sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-cssnext postcss-import postcss-loader"
-  );
-  installReactTesting(reactTesting);
-  e2eSetup(e2e);
-  testBackend(serverTesting);
-  process.stdout.write("\033c");
-  log("");
-  log("The project was created!");
-  log(`cd into ${name}`);
-  log("First: npm run build");
-  log("Then: npm start");
-  log("");
-  log(boxen(`served at localhost:3000`, { padding: 1, borderColor: "yellow" }));
-  log("");
-  log("Unique package.json Commands");
-  log(
-    boxen(
-      `api || example: ` +
-        chalk.bold.cyanBright(`npm run api <name>`) +
-        ` || use: ` +
-        chalk.yellowBright(`quickly create`) +
-        chalk.bold.redBright(` api/v1 get/post/put/delete`) +
-        chalk.yellowBright(` endpoints for a resource`) +
-        `\n\nreact || example: ` +
-        chalk.bold.cyanBright(`npm run react <componentName>`) +
-        ` || use: ` +
-        chalk.yellowBright(
-          `quickly create a stateful or stateless React component`
-        ) +
-        `\n\nmodel || example: ` +
-        chalk.bold.cyanBright(
-          `npm run model User email:String password:String posts:Number`
-        ) +
-        ` || use: ` +
-        chalk.yellowBright(`create a Mongoose model`),
-      { padding: 1, borderColor: "yellow" }
-    )
-  );
-  log("");
-};
-
-let noDBSPA = (reactTesting, e2e, serverTesting) => {
-  spaBuild.writeFilesWithSPAReact();
-  shell.cd(`${name}`);
-  log(
-    "Downloading dependencies and setting up the project, this may take a moment"
-  );
-  helpers.install(
-    "express nodemon compression helmet body-parser react react-dom dotenv morgan"
-  );
-  helpers.installDevDependencies(
-    "webpack babel-loader css-loader babel-core babel-preset-env babel-preset-react style-loader webpack-merge uglifyjs-webpack-plugin sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-cssnext postcss-import postcss-loader"
-  );
-  installReactTesting(reactTesting);
-  e2eSetup(e2e);
-  testBackend(serverTesting);
-  process.stdout.write("\033c");
-  log("");
-  log("The project was created!");
-  log(`cd into ${name}`);
-  log("First: npm run build");
-  log("Then: npm start");
-  log("");
-  log(boxen(`served at localhost:3000`, { padding: 1, borderColor: "yellow" }));
-  log("");
-  log("Unique package.json Commands");
-  log(
-    boxen(
-      `api || example: ` +
-        chalk.bold.cyanBright(`npm run api <name>`) +
-        ` || use:` +
-        chalk.yellowBright(` quickly create`) +
-        chalk.bold.redBright(` api/v1 get/post/put/delete`) +
-        chalk.yellowBright(` endpoints for a resource`) +
-        `\n\nreact || example: ` +
-        chalk.bold.cyanBright(`npm run react <componentName>`) +
-        ` || use: ` +
-        chalk.yellowBright(
-          `quickly create a stateful or stateless React component`
-        ),
-      { padding: 1, borderColor: "yellow" }
-    )
-  );
-  log("");
-};
-
-let spaNoBE = (reactTesting, e2e) => {
-  spaBuild.reactSPAWithoutBackend();
-  log("Installing dependencies and running setup, this may take a moment");
-  shell.cd(`${name}`);
-  helpers.install("react react-dom");
-  helpers.installDevDependencies(
-    "webpack webpack-dev-server babel-loader css-loader babel-core babel-preset-env babel-preset-react style-loader webpack-merge uglifyjs-webpack-plugin sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-cssnext postcss-import postcss-loader"
-  );
-  installReactTesting(reactTesting);
-  e2eSetup(e2e);
-  process.stdout.write("\033c");
-  log("The project was created!");
-  log(
-    `cd into ${name} and run npm start, then refresh the page after a second`
-  );
-  log("Unique package.json Commands");
-  log(
-    boxen(
-      `react || example: ` +
-        chalk.bold.cyanBright(`npm run react <componentName>`) +
-        ` || use: ` +
-        chalk.yellowBright(
-          `quickly create a stateful or stateless React component`
-        ),
-      { padding: 1, borderColor: "yellow" }
-    )
-  );
-  log("");
-};
-
-let postgresRedux = (runner, test, e2e) => {
-  reactRedux.ReactReduxWithBackend();
-  addBookshelfToEnzo();
-  shell.cd(`${name}`);
-  log(
-    "Downloading dependencies and setting up the project, this may take a moment"
-  );
-  helpers.install(
-    "redux react-router-dom react-redux express dotenv nodemon pg knex body-parser compression helmet react react-dom bookshelf morgan"
-  );
-  helpers.installDevDependencies(
-    "webpack babel-loader css-loader babel-core babel-preset-env babel-preset-react style-loader webpack-merge uglifyjs-webpack-plugin sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-cssnext postcss-import postcss-loader"
-  );
-  installReactTestingForRedux(test);
-  e2eSetup(e2e);
-  testBackend(runner);
-  helpers.installKnexGlobal();
-  helpers.modifyKnex(name);
-  try {
-    execSync(`createdb ${name};`, { stdio: "ignore" });
-  } catch (e) {
-    // need some variable to indicate this failed and the user needs to make a new database
-  }
-  process.stdout.write("\033c");
-  log("The project was created!");
-  log(`cd into ${name}`);
-  log(`First start webpack: npm run build`);
-  log(`To start server: npm start`);
-  log("");
-  log(boxen(`served at localhost:3000`, { padding: 1, borderColor: "yellow" }));
-  log("");
-  log("Unique package.json Commands");
-  log(
-    boxen(
-      `api || example: ` +
-        chalk.bold.cyanBright(`npm run api <name>`) +
-        ` || use: ` +
-        chalk.yellowBright(`quickly create`) +
-        chalk.bold.redBright(` api/v1 get/post/put/delete`) +
-        chalk.yellowBright(` endpoints for a resource`) +
-        `\n\nredux || example: ` +
-        chalk.bold.cyanBright(`npm run redux <componentName>`) +
-        ` || use:` +
-        chalk.bold.yellowBright(
-          `redux container + react component + react-router route`
-        ) +
-        `\n\nmodel || example: ` +
-        chalk.bold.cyanBright(`npm run model User email:string`) +
-        ` || use: ` +
-        chalk.yellowBright(
-          `create a Bookshelf model + knex database migration`
-        ) +
-        `\n\naction || example:` +
-        chalk.bold.cyanBright(` npm run action`) +
-        ` || use: ` +
-        chalk.yellowBright(
-          `create/apply action to existing/created reducer and selected containers`
-        ),
-      { padding: 1, borderColor: "yellow" }
-    )
-  );
-  log("");
-};
-
-let mongooseRedux = (runner, test, e2e) => {
-  reactRedux.ReactReduxWithBackend();
-  addMongooseToEnzo();
-  shell.cd(`${name}`);
-  process.stdout.write("\033c");
-  log(
-    "Downloading dependencies and setting up the project, this may take a moment"
-  );
-  helpers.install(
-    "redux react-router-dom react-redux express nodemon dotenv compression helmet mongo dotenv body-parser react react-dom mongoose morgan"
-  );
-  helpers.installDevDependencies(
-    " webpack babel-loader css-loader babel-core babel-preset-env babel-preset-react style-loader webpack-merge uglifyjs-webpack-plugin sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-cssnext postcss-import postcss-loader"
-  );
-  installReactTestingForRedux(test);
-  e2eSetup(e2e);
-  testBackend(runner);
-  process.stdout.write("\033c");
-  log("The project was created!");
-  log(`cd into ${name}`);
-  log(`First start webpack: ` + chalk.cyanBright(`npm run build`));
-  log(`To start server: ` + chalk.cyanBright(`npm start`));
-  log("");
-  log(boxen(`served at localhost:3000`, { padding: 1, borderColor: "yellow" }));
-  log("");
-  log("Unique package.json Commands");
-  log(
-    boxen(
-      `api || example:` +
-        chalk.bold.cyanBright(` npm run api <name>`) +
-        ` || use: quickly create` +
-        chalk.bold.redBright(` api/v1 get/post/put/delete`) +
-        chalk.yellowBright(` endpoints for a resource`) +
-        `\n\nredux || example: ` +
-        chalk.bold.cyanBright(`npm run redux <componentName>`) +
-        ` || use: ` +
-        chalk.yellowBright(
-          `redux container + react component + react-router route`
-        ) +
-        `\n\nmodel || example: ` +
-        chalk.bold.cyanBright(
-          `npm run model User email:String posts:Number password:String`
-        ) +
-        ` || use: ` +
-        chalk.yellowBright(`create a Mongoose model`) +
-        `\n\naction || example:` +
-        chalk.bold.cyanBright(` npm run action`) +
-        ` || use: ` +
-        chalk.yellowBright(
-          `create/apply action to existing/created reducer and selected containers`
-        ),
-      { padding: 1, borderColor: "yellow" }
-    )
-  );
-  log("");
-};
-
-let noDBRedux = (runner, test, e2e) => {
-  reactRedux.ReactReduxWithBackend();
-  shell.cd(`${name}`);
-  process.stdout.write("\033c");
-  log(
-    chalk.cyanBright(
-      "Downloading dependencies and setting up the project, this may take a moment"
-    )
-  );
-  helpers.install(
-    "redux react-router-dom react-redux express nodemon dotenv body-parser compression helmet react react-dom morgan"
-  );
-  helpers.installDevDependencies(
-    "webpack babel-loader css-loader babel-core babel-preset-env babel-preset-react style-loader webpack-merge uglifyjs-webpack-plugin sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-cssnext postcss-import postcss-loader"
-  );
-
-  installReactTestingForRedux(test);
-  e2eSetup(e2e);
-  testBackend(runner);
-  // process.stdout.write('\033c')
-  log(chalk.cyanBright("The project was created!"));
-  log(chalk.cyanBright(`cd into ${name}`));
-  log(
-    chalk.cyanBright(`First start webpack: `) +
-      chalk.yellowBright(`npm run build`)
-  );
-  log(chalk.cyanBright(`To start server: npm start`));
-  log("");
-  log(boxen(`served at localhost:3000`, { padding: 1, borderColor: "yellow" }));
-  log("");
-  log("Unique package.json Commands");
-  log(
-    boxen(
-      `api || example: ` +
-        chalk.bold.cyanBright(`npm run api <name>`) +
-        ` || use: ` +
-        chalk.yellowBright(`quickly create`) +
-        chalk.bold.redBright(` api/v1 get/post/put/delete`) +
-        chalk.yellowBright(` endpoints for a resource`) +
-        `\n\nredux || example: ` +
-        chalk.bold.cyanBright(`npm run redux <componentName>`) +
-        ` || use: ` +
-        chalk.yellowBright(
-          `redux container, react component, react-router route`
-        ) +
-        `\n\naction || example:` +
-        chalk.bold.cyanBright(` npm run action`) +
-        ` || use: ` +
-        chalk.yellowBright(
-          `create/apply action to existing/created reducer and selected containers`
-        ),
-      { padding: 1, borderColor: "yellow" }
-    )
-  );
-  log("");
-};
-
-let reduxNoBE = (test, e2e) => {
-  reactRedux.reactReduxWithoutBackend();
-  shell.cd(`${name}`);
-  process.stdout.write("\033c");
-  log(
-    "Downloading dependencies and setting up the project, this may take a moment"
-  );
-  helpers.install("redux react-router-dom react-redux react react-dom");
-  helpers.installDevDependencies(
-    "webpack webpack-dev-server babel-loader css-loader babel-core babel-preset-env babel-preset-react style-loader webpack-merge uglifyjs-webpack-plugin sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-cssnext postcss-import postcss-loader"
-  );
-
-  installReactTestingForRedux(test);
-  e2eSetup(e2e);
-  process.stdout.write("\033c");
-  log("The project was created!");
-  log(`cd into ${name}`);
-  log(`First start webpack: npm run build`);
-  log(`To open project: npm start`);
-  log("");
-  log("Unique package.json Commands");
-  log(
-    boxen(
-      `redux || example: ` +
-        chalk.bold.cyanBright(`npm run redux <componentName>`) +
-        ` || use: ` +
-        chalk.yellowBright(
-          `redux container, react component, react-router route`
-        ) +
-        `\n\naction || example:` +
-        chalk.bold.cyanBright(` npm run action`) +
-        ` || use: ` +
-        chalk.yellowBright(
-          `create/apply action to existing/created reducer and selected containers`
-        ),
-      { padding: 1, borderColor: "yellow" }
-    )
-  );
-  log("");
-};
-
-let postgresMvcPug = (test, e2e) => {
-  noReactApp.pugApp(test);
-  addBookshelfToEnzo();
-  shell.cd(`${name}`);
-  log(
-    "Downloading dependencies and setting up the project, this may take a moment"
-  );
-  helpers.install(
-    "express nodemon pg knex body-parser compression helmet dotenv bookshelf pug morgan cookie-parser"
-  );
-  helpers.installDevDependencies(
-    "webpack babel-loader css-loader babel-core babel-preset-env style-loader webpack-merge uglifyjs-webpack-plugin sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-cssnext postcss-import postcss-loader"
-  );
-  beOnlyInstallTesting(test);
-  e2eSetup(e2e);
-  helpers.installKnexGlobal();
-  helpers.modifyKnex(name);
-  try {
-    execSync(`createdb ${name};`, { stdio: "ignore" });
-  } catch (e) {
-    // need some variable to indicate this failed and the user needs to make a new database
-  }
-  process.stdout.write("\033c");
-  log("The project was created!");
-  log(`cd into ${name} and run npm start`);
-  log("");
-  log(boxen(`served at localhost:3000`, { padding: 1, borderColor: "yellow" }));
-  log("");
-  log("Unique package.json Commands");
-  log(
-    boxen(
-      `api || example:` +
-        chalk.bold.cyanBright(` npm run api <name>`) +
-        ` || use:` +
-        chalk.yellowBright(` quickly create`) +
-        chalk.bold.redBright(` api/v1 get/post/put/delete endpoints`) +
-        chalk.yellowBright(` for a resource`) +
-        `\n\nmodel || example: npm run model User email:string posts:integer || use: creates Bookshelf model + migration\n\npage || example: npm run page Landing signup login || creates page routes and pug pages`,
-      { padding: 1, borderColor: "yellow" }
-    )
-  );
-  log("");
-};
-
-let posgresMvcNoPug = (test, e2e) => {
-  noReactApp.railsApp(test);
-  addBookshelfToEnzo();
-  shell.cd(`${name}`);
-  log(
-    "Downloading dependencies and setting up the project, this may take a moment"
-  );
-  helpers.install(
-    "express nodemon pg knex body-parser compression helmet dotenv bookshelf morgan cookie-parser"
-  );
-  helpers.installDevDependencies(
-    "babel-core babel-preset-env babelify gulp gulp-uglify gulp-rename browserify gulp-htmlmin gulp-clean-css gulp-tap gulp-buffer del run-sequence envify bundle-collapser gulp-plumber gulp-sass gulp-postcss postcss-cssnext"
-  );
-  beOnlyInstallTesting(test);
-  e2eSetup(e2e);
-  helpers.installKnexGlobal();
-  helpers.modifyKnex(name);
-  try {
-    execSync(`createdb ${name};`, { stdio: "ignore" });
-  } catch (e) {
-    // need some variable to indicate this failed and the user needs to make a new database
-  }
-  process.stdout.write("\033c");
-  log("The project was created!");
-  log(`cd into ${name} and run npm start`);
-  log("");
-  log(boxen(`served at localhost:3000`, { padding: 1, borderColor: "yellow" }));
-  log("");
-  log("Unique package.json Commands");
-  log(
-    boxen(
-      `api || example:` +
-        chalk.bold.cyanBright(` npm run api <name>`) +
-        ` || ` +
-        chalk.yellowBright(`use: quickly create`) +
-        chalk.bold.redBright(` api/v1 get/post/put/delete `) +
-        chalk.yellowBright(`endpoints for a resource`) +
-        `\n\nmodel || example: ` +
-        chalk.bold.cyanBright(`npm run model User email:string posts:integer`) +
-        ` || use: ` +
-        chalk.yellowBright(`creates Bookshelf model + migration`) +
-        `\n\npage || example:` +
-        chalk.bold.cyanBright(` npm run page Landing`) +
-        ` || use: ` +
-        chalk.yellowBright(`creates page route and page`),
-      { padding: 1, borderColor: "yellow" }
-    )
-  );
-  log("");
-};
-
-let mongooseMvcPug = (test, e2e) => {
-  noReactApp.pugApp(test);
-  addMongooseToEnzo();
-  shell.cd(`${name}`);
-  log(
-    "Downloading dependencies and setting up the project, this may take a moment"
-  );
-  helpers.install(
-    "express nodemon mongo body-parser compression helmet dotenv mongoose pug morgan cookie-parser"
-  );
-  helpers.installDevDependencies(
-    "webpack babel-loader css-loader babel-core babel-preset-env style-loader webpack-merge uglifyjs-webpack-plugin sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-cssnext postcss-import postcss-loader"
-  );
-  beOnlyInstallTesting(test);
-  e2eSetup(e2e);
-  process.stdout.write("\033c");
-  log("The project was created!");
-  log(`cd into ${name} and run npm start`);
-  log("");
-  log(boxen(`served at localhost:3000`, { padding: 1, borderColor: "yellow" }));
-  log("");
-  log("Unique package.json Commands");
-  log(
-    boxen(
-      `api || example:` +
-        chalk.bold.cyanBright(` npm run api <name> `) +
-        ` || ` +
-        chalk.yellowBright(`use: quickly create`) +
-        chalk.bold.redBright(` api/v1 get/post/put/delete `) +
-        chalk.yellowBright(` endpoints for a resource`) +
-        `\n\nmodel || example: ` +
-        chalk.bold.cyanBright(
-          `npm run model User email: String posts: Number`
-        ) +
-        ` || use: ` +
-        chalk.yellowBright(`creates Mongoose model`) +
-        `\n\npage || example:` +
-        chalk.bold.cyanBright(` npm run page Article new all`) +
-        ` || use:` +
-        chalk.yellowBright(` creates controller and views`),
-      { padding: 1, borderColor: "yellow" }
-    )
-  );
-  log("");
-};
-
-let mongooseMvcNoPug = (test, e2e) => {
-  noReactApp.railsApp(test);
-  addMongooseToEnzo();
-  shell.cd(`${name}`);
-  log(
-    "Downloading dependencies and setting up the project, this may take a moment"
-  );
-  helpers.install(
-    "express nodemon mongo body-parser compression helmet dotenv mongoose morgan cookie-parser"
-  );
-  helpers.installDevDependencies(
-    "babel-core babel-preset-env babelify gulp gulp-uglify gulp-rename browserify gulp-htmlmin gulp-clean-css gulp-tap gulp-buffer del run-sequence envify bundle-collapser gulp-plumber gulp-sass gulp-postcss postcss-cssnext"
-  );
-  beOnlyInstallTesting(test);
-  e2eSetup(e2e);
-  process.stdout.write("\033c");
-  log("The project was created!");
-  log(`cd into ${name} and run npm start`);
-  log("");
-  log(boxen(`served at localhost:3000`, { padding: 1, borderColor: "yellow" }));
-  log("");
-  log("Unique package.json Commands");
-  log(
-    boxen(
-      `api || example:` +
-        chalk.bold.cyanBright(` npm run api <name> `) +
-        ` || ` +
-        chalk.yellowBright(`use: quickly create`) +
-        chalk.bold.redBright(` api/v1 get/post/put/delete`) +
-        chalk.yellowBright(` endpoints for a resource`) +
-        `\n\nmodel || example: ` +
-        chalk.bold.cyanBright(`npm run model User email:String posts:Number`) +
-        ` || use: ` +
-        chalk.yellowBright(`creates Mongoose model`) +
-        `\n\npage || example:` +
-        chalk.bold.cyanBright(` npm run page Landing`) +
-        ` || use:` +
-        chalk.yellowBright(` creates page and route`),
-      { padding: 1, borderColor: "yellow" }
-    )
-  );
-  log("");
-};
-
-let noDbMvcPug = (test, e2e) => {
-  noReactApp.pugApp(test);
-  process.stdout.write("\033c");
-  shell.cd(`${name}`);
-  log(
-    "Downloading dependencies and setting up the project, this may take a moment"
-  );
-  helpers.install(
-    "express nodemon body-parser compression helmet dotenv pug morgan cookie-parser"
-  );
-  helpers.installDevDependencies(
-    "webpack babel-loader css-loader babel-core babel-preset-env style-loader webpack-merge uglifyjs-webpack-plugin sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-cssnext postcss-import postcss-loader"
-  );
-  beOnlyInstallTesting(test);
-  e2eSetup(e2e);
-  process.stdout.write("\033c");
-  log("The project was created!");
-  log(`cd into ${name} and run npm start`);
-  log("");
-  log(boxen(`served at localhost:3000`, { padding: 1, borderColor: "yellow" }));
-  log("");
-  log("Unique package.json Commands");
-  log(
-    boxen(
-      `api || example:` +
-        chalk.bold.cyanBright(` npm run api <name> `) +
-        ` || ` +
-        chalk.yellowBright(`use: quickly create`) +
-        chalk.bold.redBright(` api/v1 get/post/put/delete`) +
-        chalk.yellowBright(` endpoints for a resource`) +
-        `\n\npage || example:` +
-        chalk.bold.cyanBright(` npm run page Article new all`) +
-        ` || use:` +
-        chalk.yellowBright(` creates resource controller and views`),
-      { padding: 1, borderColor: "yellow" }
-    )
-  );
-  log("");
-};
-
-let noDbMvcNoPug = (test, e2e) => {
-  noReactApp.railsApp(test);
-  process.stdout.write("\033c");
-  shell.cd(`${name}`);
-  log(
-    "Downloading dependencies and setting up the project, this may take a moment"
-  );
-  helpers.install(
-    "express nodemon body-parser compression helmet dotenv morgan cookie-parser"
-  );
-  helpers.installDevDependencies(
-    "babel-core babel-preset-env babelify gulp gulp-uglify gulp-rename browserify gulp-htmlmin gulp-clean-css gulp-tap gulp-buffer del run-sequence envify bundle-collapser gulp-plumber gulp-sass gulp-postcss postcss-cssnext"
-  );
-  beOnlyInstallTesting(test);
-  e2eSetup(e2e);
-  process.stdout.write("\033c");
-  log("The project was created!");
-  log(`cd into ${name} and run npm start`);
-  log("");
-  log(boxen(`served at localhost:3000`, { padding: 1, borderColor: "yellow" }));
-  log("");
-  log("Unique package.json Commands");
-  log(
-    boxen(
-      `api || example:` +
-        chalk.bold.cyanBright(` npm run api <name> `) +
-        ` || ` +
-        chalk.yellowBright(`use: quickly create`) +
-        chalk.bold.redBright(` api/v1 get/post/put/delete`) +
-        chalk.yellowBright(` endpoints for a resource`) +
-        `\n\npage || example:` +
-        chalk.cyanBright(`npm run page Landing`) +
-        ` || use:` +
-        chalk.yellowBright(` creates page in src folder + routes.js`),
-      { padding: 1, borderColor: "yellow" }
-    )
-  );
-  log("");
-};
-
-let postgresBE = test => {
-  BE.backendOnly(test);
-  addBookshelfToEnzo();
-  shell.cd(`${name}`);
-  log(
-    "Downloading dependencies and setting up the project, this may take a moment"
-  );
-  helpers.install(
-    "express nodemon pg knex body-parser helmet dotenv bookshelf morgan"
-  );
-  beOnlyInstallTesting(test);
-  helpers.installKnexGlobal();
-  helpers.modifyKnex(name);
-  try {
-    execSync(`createdb ${name};`, { stdio: "ignore" });
-  } catch (e) {
-    // need some variable to indicate this failed and the user needs to make a new database
-  }
-
-  process.stdout.write("\033c");
-  log("The project was created!");
-  log(`cd into ${name} and run npm start`);
-  log("");
-  log(boxen(`served at localhost:3000`, { padding: 1, borderColor: "yellow" }));
-  log("");
-  log("Unique package.json Commands");
-  log(
-    boxen(
-      `api || example:` +
-        chalk.bold.cyanBright(` npm run api <name> `) +
-        ` || ` +
-        chalk.yellowBright(`use: quickly create`) +
-        chalk.bold.redBright(` api/v1 get/post/put/delete`) +
-        chalk.yellowBright(` endpoints for a resource`) +
-        `\n\nmodel || example:` +
-        chalk.bold.cyanBright(
-          ` npm run model User email:string posts:integer`
-        ) +
-        ` || use: ` +
-        chalk.yellowBright(`create Bookshelf model + knex migration`),
-      { padding: 1, borderColor: "yellow" }
-    )
-  );
-  log("");
-};
-
-let mongooseBE = test => {
-  BE.backendOnly(test);
-  addMongooseToEnzo();
-  shell.cd(`${name}`);
-  log(
-    "Downloading dependencies and setting up the project, this may take a moment"
-  );
-  helpers.install(
-    "express nodemon mongo body-parser helmet dotenv mongoose morgan"
-  );
-  beOnlyInstallTesting(test);
-  process.stdout.write("\033c");
-  log("The project was created!");
-  log(`cd into ${name} and run npm start`);
-  log("");
-  log(boxen(`served at localhost:3000`, { padding: 1, borderColor: "yellow" }));
-  log("");
-  log("Unique package.json Commands");
-  log(
-    boxen(
-      `api || example:` +
-        chalk.bold.cyan(`example: npm run api <name> `) +
-        ` || ` +
-        chalk.yellowBright(`use: quickly create`) +
-        chalk.bold.redBright(` api/v1 get/post/put/delete`) +
-        chalk.yellowBright(` endpoints for a resource`) +
-        `\n\nmodel || example: ` +
-        chalk.bold.cyanBright(`npm run model User email:String posts:Number`) +
-        ` || use: create Mongoose model`,
-      { padding: 1, borderColor: "yellow" }
-    )
-  );
-  log("");
-};
-
-let noDbBE = test => {
-  createBackend(name);
-  // BE.backendOnly(test);
-  shell.cd(`${name}`);
-  log(
-    "Downloading dependencies and setting up the project, this may take a moment"
-  );
-  helpers.install("express nodemon body-parser helmet dotenv morgan");
-  beOnlyInstallTesting(test);
-  process.stdout.write("\033c");
-  log("The project was created!");
-  log(chalk.cyanBright(`cd into ${name} and run npm start`));
-  log("");
-  log(boxen(`served at localhost:3000`, { padding: 1, borderColor: "yellow" }));
-  log("");
-  log("Unique package.json Commands");
-  log(
-    boxen(
-      `api || example:` +
-        chalk.bold.cyanBright(` npm run api <name>`) +
-        ` || ` +
-        chalk.yellowBright(`use: quickly create`) +
-        chalk.bold.redBright(` api/v1 get/post/put/delete`) +
-        chalk.yellowBright(` endpoints for a resource`),
-      { padding: 1, borderColor: "yellow" }
-    )
-  );
-  log("");
-};
-
-let beOnlyInstallTesting = test => {
-  if (test === "mocha") helpers.installDevDependencies("mocha chai chai-http");
-  if (test === "jest") helpers.installDevDependencies("jest supertest");
-};
-
-let testBackend = test => {
-  test === "mocha"
-    ? mochaTestBackend()
-    : test === "jest"
-      ? testJestBackend()
-      : "";
-};
-
-let e2eSetup = answer => {
-  answer === "cafe"
-    ? installTestCafe()
-    : answer === "cypress"
-      ? installCypress()
-      : "";
+  promptFrontend();
 };
 
 module.exports = createProject;
