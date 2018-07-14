@@ -1,10 +1,11 @@
-let fs = require("fs");
-let path = require("path");
-let shell = require("shelljs");
-let execSync = require("child_process").execSync;
-let log = console.log;
+const fs = require("fs");
+const path = require("path");
+const shell = require("shelljs");
+const execSync = require("child_process").execSync;
+const log = console.log;
+const name = process.argv[3]
 
-let shouldUseYarn = () => {
+const shouldUseYarn = () => {
   try {
     execSync("yarnpkg --version", { stdio: "ignore" });
     return true;
@@ -14,21 +15,28 @@ let shouldUseYarn = () => {
 };
 
 exports.install = packages => {
+  shell.cd(`./${name}`)
   let yarn = shouldUseYarn();
   if (yarn) {
     shell.exec(`yarn add ${packages}`, { silent: false });
   } else {
     shell.exec(`npm install --save ${packages}`, { silent: false });
   }
+  shell.cd('..')
+
 };
 
 exports.installDevDependencies = packages => {
+  shell.cd(`./${name}`)
+
   let yarn = shouldUseYarn();
   if (yarn) {
     shell.exec(`yarn add ${packages} --dev`, { silent: false });
   } else {
     shell.exec(`npm install --save-dev ${packages}`, { silent: false });
   }
+  shell.cd('..')
+
 };
 
 exports.installKnexGlobal = () => {
@@ -49,7 +57,7 @@ exports.addScript = (command, script) => {
   fs.writeFileSync("package.json", newPackage);
 };
 
-exports.modifyKnex = name => {
+exports.modifyKnex = () => {
   let newKnex = `module.exports = {\n\n\tdevelopment: {\n\t\tclient: 'pg',\n\t\tconnection: 'postgres://localhost/${name}',\n\t\tmigrations: {\n\t\t\tdirectory: './db/migrations'\n\t\t},\n\t\tseeds: {\n\t\t\tdirectory: 'db/seeds/dev'\n\t\t},\n\t\tuseNullAsDefault: true\n\t},\n\n\tproduction: {\n\t\tclient: 'pg',\n\t\tconnection: process.env.DATABASE_URL + '?ssl=true',\n\t\tmigrations: {\n\t\t\tdirectory: 'db/migrations'\n\t\t},\n\t\tseeds: {\n\t\t\tdirectory: 'db/seeds/dev'\n\t\t},\n\t\tuseNullAsDefault: true\n\t}\n\n};`;
   if (fs.existsSync("./knexfile.js")) {
     fs.truncateSync("./knexfile.js", 0, function() {
@@ -63,7 +71,7 @@ exports.modifyKnex = name => {
   }
 };
 
-exports.addScriptToNewPackageJSON = (command, script, name) => {
+exports.addScriptToNewPackageJSON = (command, script) => {
   let buffer = fs.readFileSync(`./${name}/package.json`);
   let json = JSON.parse(buffer);
   json.scripts[command] = script;
@@ -84,7 +92,7 @@ exports.rename = (oldName, newName) => {
   });
 };
 
-exports.addKeytoPackageJSON = (key, value, projectName) => {
+exports.addKeytoPackageJSON = (key, value) => {
   const buffer = fs.readFileSync(`./${name}/package.json`);
   const json = JSON.parse(buffer);
   json[key] = value;

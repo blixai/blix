@@ -9,6 +9,7 @@ const loadFile = filePath => {
 
 /// create things like .gitignore, scripts folder, scripts templates folder, README.md, .env, and package.json
 const createCommonFilesAndFolders = () => {
+  console.log('Creating the project and downloading packages, this may take a moment')
   // creates new project folder first, this is important for all new projects
   fs.mkdirSync(`./${name}`)
   helpers.writeFile(
@@ -16,7 +17,7 @@ const createCommonFilesAndFolders = () => {
     loadFile("./files/common/.gitignore")
   );
   helpers.writeFile(`./${name}/README.md`, loadFile("./files/common/README.md"));
-  helpers.writeFile(
+  fs.writeFileSync(
     `./${name}/package.json`,
     loadFile("./files/common/package.json")
   );
@@ -24,6 +25,7 @@ const createCommonFilesAndFolders = () => {
   helpers.writeFile(`./${name}/.env`, "");
   fs.mkdirSync(`./${name}/scripts`);
   fs.mkdirSync(`./${name}/scripts/templates`);
+  fs.mkdirSync(`./${name}/test`)
   // synchronously adds key value pair of the project name in the name field to package.json
   // helpers.addKeytoPackageJSON("name", name, name)
 };

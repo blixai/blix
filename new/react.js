@@ -2,6 +2,8 @@ const helpers = require("../helpers");
 const fs = require("fs");
 const path = require("path");
 const { createCommonFilesAndFolders } = require("./createCommonFiles");
+const { createBackend } = require("./createBackend");
+const { installReactTesting } = require("./addReactTesting");
 const name = process.argv[3];
 
 const loadFile = filePath => {
@@ -11,7 +13,7 @@ const loadFile = filePath => {
 // load files
 // const webpack
 const babel = loadFile("./files/frontend/babel/reactBabel");
-const index = loadFile("./files/frontend/index.js");
+const index = loadFile("./files/frontend/react/index.js");
 const app = loadFile("./files/frontend/react/App.js");
 
 const htmlFile = loadFile("./files/frontend/other/index.html");
@@ -36,18 +38,46 @@ const react = (
   helpers.writeFile(`./${name}/src/App/App.css`, "");
   helpers.writeFile(`./${name}/postcss.config.js`, postcssConfig);
   helpers.writeFile(`./${name}/.babelrc`, babel);
+  // react testing setup
+  installReactTesting(reactTestingSelection)
+  // e2e setup
 
   // if no backend add webpack dev server and index.html in project, and different scripts to
   if (backend) {
+    createBackend();
   } else {
+    helpers.writeFile(
+      `./${name}/index.html`,
+      loadFile("./files/frontend/other/index.html")
+    );
   }
-  // if backend selected create backend
 
   // add scripts
+  scripts(backend);
 
   // install packages
 
-  // console log instructions
+  // console log instructions and add instructions to readme
+};
+
+const scripts = backend => {
+  if (!backend) {
+    helpers.addScriptToNewPackageJSON(
+      "start",
+      "webpack-dev-server --output-public-path=/dist/ --inline --hot --open --port 3000"
+    );
+  }
+  helpers.addScriptToNewPackageJSON("dev", "webpack --watch");
+  helpers.addScriptToNewPackageJSON("build", `webpack --mode="production"`);
+};
+
+const packages = backend => {
+  if (!backend) {
+    helpers.installDevDependencies("webpack-dev-server");
+  }
+  helpers.installDevDependencies(
+    "react react-dom webpack webpack-cli babel-loader css-loader babel-core babel-preset-env babel-preset-react style-loader webpack-merge uglifyjs-webpack-plugin sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-cssnext postcss-import postcss-loader"
+  );
 };
 
 module.exports = { react };

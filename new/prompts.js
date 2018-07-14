@@ -44,7 +44,7 @@ const serverTesting = {
 
 const e2e = {
   type: "list",
-  message: "e2e Testing:",
+  message: "e2e Testing: (warning: large downloads)",
   name: "e2e",
   choices: [
     { name: "Test Cafe", value: "cafe" },

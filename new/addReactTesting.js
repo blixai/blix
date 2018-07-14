@@ -1,6 +1,7 @@
 const helpers = require("../helpers");
 const fs = require("fs");
 const path = require("path");
+const name = process.argv[3];
 
 const loadFile = filePath => {
   return fs.readFileSync(path.resolve(__dirname, filePath), "utf8");
@@ -11,9 +12,8 @@ let installReactTesting = reactTests => {
   helpers.installDevDependencies(
     "jest enzyme enzyme-adapter-react-16 identity-obj-proxy"
   );
-  if (!fs.existsSync("./test")) fs.mkdirSync("./test");
   helpers.writeFile(
-    "./test/App.spec.js",
+    `./${name}/test/App.spec.js`,
     loadFile("./filesToCopy/enzymeReact.js")
   );
   let jest = {
@@ -23,11 +23,11 @@ let installReactTesting = reactTests => {
       "\\.(css|less)$": "identity-obj-proxy"
     }
   };
-  let json = JSON.parse(fs.readFileSync("package.json", "utf8"));
+  let json = JSON.parse(fs.readFileSync(`./${name}/package.json`, "utf8"));
   json["jest"] = jest;
   let newPackage = JSON.stringify(json, null, 2);
-  fs.writeFileSync("package.json", newPackage);
-  helpers.addScript("test", "jest");
+  fs.writeFileSync(`./${name}/package.json`, newPackage);
+  helpers.addScriptToNewPackageJSON("test", "jest");
 };
 
-module.exports = installReactTesting;
+module.exports = { installReactTesting };
