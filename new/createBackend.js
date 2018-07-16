@@ -18,7 +18,7 @@ const routes = loadFile("./files/backend/routes.js");
 // backendType is a string of either "MVC" or "API"
 // pug is a boolean
 // testingLib is a string of "mocha" or "jest"
-const createBackend = (frontend, backendType, pug, testingLib) => {
+const createBackend = (serverTestingSelection, databaseSelection) => {
   // create folders
   fs.mkdirSync(`./${name}/server`);
   fs.mkdirSync(`./${name}/server/models`);
@@ -38,7 +38,7 @@ const createBackend = (frontend, backendType, pug, testingLib) => {
   helpers.writeFile(`./${name}/scripts/controller.js`, controller);
 
   // setup endpoint tests
-  setupTesting();
+  setupTesting(serverTestingSelection);
 };
 
 let setupTesting = test => {

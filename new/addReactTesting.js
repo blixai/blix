@@ -8,7 +8,9 @@ const loadFile = filePath => {
 };
 
 let installReactTesting = reactTests => {
-  if (!reactTests) return;
+  if (!reactTests) {
+    return;
+  }
   helpers.installDevDependencies(
     "jest enzyme enzyme-adapter-react-16 identity-obj-proxy"
   );
@@ -23,7 +25,7 @@ let installReactTesting = reactTests => {
       "\\.(css|less)$": "identity-obj-proxy"
     }
   };
-  let json = JSON.parse(fs.readFileSync(`./${name}/package.json`, "utf8"));
+  let json = JSON.parse(fs.readFileSync(`./${name}/package.json`, 'utf8'));
   json["jest"] = jest;
   let newPackage = JSON.stringify(json, null, 2);
   fs.writeFileSync(`./${name}/package.json`, newPackage);

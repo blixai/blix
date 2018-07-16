@@ -1,23 +1,23 @@
 const fs = require("fs");
 const helpers = require("../helpers");
 const path = require("path");
-const name = process.argv[3]
+const name = process.argv[3];
 
 const loadFile = filePath => {
   return fs.readFileSync(path.resolve(__dirname, filePath), "utf8");
 };
 
 let e2eSetup = answer => {
-  answer === "cafe"
+  answer.e2e === "cafe"
     ? installTestCafe()
-    : answer === "cypress"
+    : answer.e2e === "cypress"
       ? installCypress()
       : "";
 };
 
 const installCypress = () => {
   helpers.addScriptToNewPackageJSON("e2e", "cypress open");
-  // helpers.installDevDependencies("cypress");
+  helpers.installDevDependencies("cypress");
   fs.mkdirSync(`./${name}/cypress`);
   fs.mkdirSync(`./${name}/cypress/integration`);
   helpers.writeFile(
@@ -50,7 +50,7 @@ const installCypress = () => {
 
 const installTestCafe = () => {
   helpers.addScriptToNewPackageJSON("e2e", "testcafe chrome test/e2e");
-  // helpers.installDevDependencies("testcafe");
+  helpers.installDevDependencies("testcafe");
   fs.mkdirSync(`./${name}/test/e2e`);
   helpers.writeFile(
     `./${name}/test/e2e/test.js`,
