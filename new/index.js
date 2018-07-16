@@ -1,17 +1,10 @@
 const fs = require("fs");
-// const path = require("path");
-// const shell = require("shelljs");
-// const execSync = require("child_process").execSync;
-// const chalk = require("chalk");
-// const boxen = require("boxen");
 const inquirer = require("inquirer");
 const prompt = inquirer.prompt;
 
 const { createBackend } = require("./createBackend");
 const { vue } = require("./vue");
-const { vuex } = require("./vuex");
 const { react } = require("./react");
-const { redux } = require("./redux");
 const { vanillaJS } = require("./vanillaJS");
 
 // variables
@@ -34,16 +27,19 @@ const promptFrontend = async () => {
   const answer = await prompt([frontendOptions]);
   switch (answer.frontend) {
     case "react":
-      reactProject();
+      reactProject("react");
       break;
+    case "react-router":
+      reactProject("react-router")
+      break
     case "redux":
-      reduxProject();
+      reactProject("redux")
       break;
     case "vue":
-      vueProject();
+      vueProject("vue");
       break;
     case "vuex":
-      vuexProject();
+      vueProject("vuex");
       break;
     case "js":
       vanillaJSProject();
@@ -73,24 +69,6 @@ const reactProject = async () => {
   }
 };
 
-const reduxProject = async () => {
-  const reactTestingSelection = await prompt([reactTesting]);
-  const e2eSelection = await prompt([e2e]);
-  const backendSelection = await prompt([backend]);
-  if (backendSelection.backend) {
-    const serverTestingSelection = await prompt([serverTesting]);
-    const databaseSelection = await prompt([database]);
-    redux(
-      reactTestingSelection,
-      e2eSelection,
-      backendSelection.backend,
-      serverTestingSelection,
-      databaseSelection
-    );
-  } else {
-    redux(reactTestingSelection, e2eSelection);
-  }
-};
 
 const vueProject = async () => {
   const vueTestingSelection = await prompt([vueTesting]);
@@ -108,25 +86,6 @@ const vueProject = async () => {
     );
   } else {
     vue(vueTestingSelection, e2e);
-  }
-};
-
-const vuexProject = async () => {
-  const vueTestingSelection = await prompt([vueTesting]);
-  const e2eSelection = await prompt([e2e]);
-  const backendSelection = await prompt([backend]);
-  if (backendSelection.backend) {
-    const serverTestingSelection = await prompt([serverTesting]);
-    const databaseSelection = await prompt([database]);
-    vuex(
-      vueTestingSelection,
-      e2eSelection,
-      backendSelection.backend,
-      serverTestingSelection,
-      databaseSelection
-    );
-  } else {
-    vuex(false, vueTestingSelection, e2eSelection);
   }
 };
 
