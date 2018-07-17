@@ -1,5 +1,5 @@
 import { connect } from react-redux
-import { Name } from './Name'
+import Name from './Name'
 
 const mapStateToProps = (state) => {
   return state

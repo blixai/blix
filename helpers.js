@@ -3,7 +3,7 @@ const path = require("path");
 const shell = require("shelljs");
 const execSync = require("child_process").execSync;
 const log = console.log;
-const name = process.argv[3]
+const name = process.argv[3];
 
 const shouldUseYarn = () => {
   try {
@@ -15,19 +15,18 @@ const shouldUseYarn = () => {
 };
 
 exports.install = packages => {
-  shell.cd(`./${name}`)
+  shell.cd(`./${name}`);
   let yarn = shouldUseYarn();
   if (yarn) {
     shell.exec(`yarn add ${packages}`, { silent: false });
   } else {
     shell.exec(`npm install --save ${packages}`, { silent: false });
   }
-  shell.cd('..')
-
+  shell.cd("..");
 };
 
 exports.installDevDependencies = packages => {
-  shell.cd(`./${name}`)
+  shell.cd(`./${name}`);
 
   let yarn = shouldUseYarn();
   if (yarn) {
@@ -35,8 +34,7 @@ exports.installDevDependencies = packages => {
   } else {
     shell.exec(`npm install --save-dev ${packages}`, { silent: false });
   }
-  shell.cd('..')
-
+  shell.cd("..");
 };
 
 exports.installKnexGlobal = () => {

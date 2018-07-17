@@ -6,12 +6,14 @@ class Name extends Component {
     super(props)
     this.state = {}
   }
-  
-  render() {
+
+  render () {
     return (
-      <div>Hello Name</div>
+      <div>
+        Hello Name
+      </div>
     )
   }
 }
 
-export default Name
+export default Name 
