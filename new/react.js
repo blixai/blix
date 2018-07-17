@@ -25,12 +25,12 @@ const index = loadFile("./files/frontend/react/index.js");
 const app = loadFile("./files/frontend/react/App.js");
 
 // load react-router files
-const reactRouterIndex = loadFile("./files/frontend/react-router/index.js")
+const reactRouterIndex = loadFile("./files/frontend/react-router/index.js");
 const appRouter = loadFile("./files/frontend/react-router/App.js");
 const Navbar = loadFile("./files/frontend/react-router/Navbar.js");
 const NavbarCSS = loadFile("./files/frontend/react-router/Navbar.css");
 const HomeView = loadFile("./files/frontend/react-router/Home.js");
-const globalStyle = loadFile("./files/frontend/react-router/global.css")
+const globalStyle = loadFile("./files/frontend/react-router/global.css");
 
 // load redux files
 const reduxIndex = loadFile("./files/frontend/redux/index.js");
@@ -38,7 +38,7 @@ const configStore = loadFile("./files/frontend/redux/configStore.js");
 const rootReducer = loadFile("./files/frontend/redux/rootReducer.js");
 const ReduxHomeView = loadFile("./files/frontend/redux/Home.js");
 
-const NavbarContainer = loadFile("./files/frontend/redux/NavbarContainer.js")
+const NavbarContainer = loadFile("./files/frontend/redux/NavbarContainer.js");
 
 const react = (
   reactType,
@@ -110,11 +110,11 @@ const reactRouter = () => {
   helpers.writeFile(`./${name}/src/components/Navbar/Navbar.css`, NavbarCSS);
   fs.mkdirSync(`./${name}/src/views`);
   helpers.writeFile(`./${name}/src/views/Home.js`, HomeView);
-  // styles folder 
-  fs.mkdirSync(`./${name}/src/styles`)
-  helpers.writeFile(`./${name}/src/styles/global.css`, globalStyle)
-  // install react-router-dom for src/index.js file 
-  helpers.installDevDependencies("react-router-dom")
+  // styles folder
+  fs.mkdirSync(`./${name}/src/styles`);
+  helpers.writeFile(`./${name}/src/styles/global.css`, globalStyle);
+  // install react-router-dom for src/index.js file
+  helpers.installDevDependencies("react-router-dom");
 };
 
 const redux = () => {
@@ -132,9 +132,9 @@ const redux = () => {
   // views folder
   fs.mkdirSync(`./${name}/src/views`);
   helpers.writeFile(`./${name}/src/views/Home.js`, ReduxHomeView);
-  // styles folder for views 
-  fs.mkdirSync(`./${name}/src/styles`)
-  helpers.writeFile(`./${name}/src/styles/global.css`, globalStyle)
+  // styles folder for views
+  fs.mkdirSync(`./${name}/src/styles`);
+  helpers.writeFile(`./${name}/src/styles/global.css`, globalStyle);
 
   // need to make actions folder and store file and configure store and reducers folder with rootReducer.js
   fs.mkdirSync(`./${name}/src/actions`);
@@ -143,7 +143,7 @@ const redux = () => {
   helpers.writeFile(`./${name}/src/reducers/rootReducer.js`, rootReducer);
   helpers.writeFile(`./${name}/src/configStore.js`, configStore);
   //install react-router-dom and other redux specific libs
-  helpers.installDevDependencies("redux react-redux react-router-dom")
+  helpers.installDevDependencies("redux react-redux react-router-dom");
 };
 
 const scripts = (reactType, backend) => {
@@ -157,8 +157,54 @@ const scripts = (reactType, backend) => {
   helpers.addScriptToNewPackageJSON("dev", "webpack --watch");
   helpers.addScriptToNewPackageJSON("build", "webpack --mode='production'");
   // need to add scripts for creating containers actions
-  if (reactType === "redux") {
-    // load and create a 
+  if (reactType === "react") {
+  } else if (reactType === "react-router") {
+  } else if (reactType === "redux") {
+    // action script and templates
+    helpers.writeFile(
+      `./${name}/scripts/action.js`,
+      loadFile("./files/scripts/frontend/redux/action.js")
+    );
+    helpers.writeFile(
+      `./${name}/scripts/templates/actionTemplate.js`,
+      loadFile("./files/scripts/frontend/redux/templates/actionTemplate.js")
+    );
+    helpers.writeFile(
+      `./${name}/scripts/templates/reducerTemplate.js`,
+      loadFile("./files/scripts/frontend/redux/templates/reducerTemplate.js")
+    );
+    // component script and templates
+    helpers.writeFile(
+      `./${name}/scripts/component.js`,
+      loadFile("./files/scripts/frontend/redux/component.js")
+    );
+    helpers.writeFile(
+      `./${name}/scripts/templates/dumbComponentTemplate.js`,
+      loadFile(
+        "./files/scripts/frontend/redux/templates/dumbComponentTemplate.js"
+      )
+    );
+    helpers.writeFile(
+      `./${name}/scripts/templates/dumbReduxContainerTemplate.js`,
+      loadFile(
+        "./files/scripts/frontend/redux/templates/dumbReduxContainerTemplate.js"
+      )
+    );
+    helpers.writeFile(
+      `./${name}/scripts/templates/reduxContainerTemplate.js`,
+      loadFile(
+        "./files/scripts/frontend/redux/templates/reduxContainerTemplate.js"
+      )
+    );
+    helpers.writeFile(
+      `./${name}/scripts/templates/smartComponentTemplate.js`,
+      loadFile(
+        "./files/scripts/frontend/redux/templates/smartComponentTemplate.js"
+      )
+    );
+    
+
+    // add scripts for action and component to package.json
     helpers.addScriptToNewPackageJSON("component", "node scripts/component.js");
     helpers.addScriptToNewPackageJSON("action", "node scripts/action.js");
   }
