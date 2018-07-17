@@ -50,7 +50,7 @@ const promptFrontend = async () => {
   }
 };
 
-const reactProject = async () => {
+const reactProject = async (reactType) => {
   const reactTestingSelection = await prompt([reactTesting]);
   const e2eSelection = await prompt([e2e]);
   const backendSelection = await prompt([backend]);
@@ -58,6 +58,7 @@ const reactProject = async () => {
     const serverTestingSelection = await prompt([serverTesting]);
     const databaseSelection = await prompt([database]);
     react(
+      reactType,
       reactTestingSelection,
       e2eSelection,
       backendSelection.backend,
@@ -65,7 +66,7 @@ const reactProject = async () => {
       databaseSelection
     );
   } else {
-    react(reactTestingSelection, e2eSelection);
+    react(reactType,reactTestingSelection, e2eSelection);
   }
 };
 

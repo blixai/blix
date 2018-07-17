@@ -16,7 +16,7 @@ let installReactTesting = reactTests => {
   );
   helpers.writeFile(
     `./${name}/test/App.spec.js`,
-    loadFile("./filesToCopy/enzymeReact.js")
+    loadFile("./files/frontend/enzyme/App.spec.js")
   );
   let jest = {
     moduleNameMapper: {

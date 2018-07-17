@@ -12,17 +12,33 @@ const loadFile = filePath => {
   return fs.readFileSync(path.resolve(__dirname, filePath), "utf8");
 };
 
-// load react files
-const index = loadFile("./files/frontend/react/index.js");
-const app = loadFile("./files/frontend/react/App.js");
-
-// load
+// load common files
 const babel = loadFile("./files/frontend/babel/reactBabel");
 const webpack = loadFile("./files/frontend/webpack/react.js");
 const postcssConfig = loadFile("./files/frontend/postcss.config.js");
 
-// html file for projects without backends
+// load html file for projects without backends
 const htmlFile = loadFile("./files/frontend/other/index.html");
+
+// load react files
+const index = loadFile("./files/frontend/react/index.js");
+const app = loadFile("./files/frontend/react/App.js");
+
+// load react-router files
+const reactRouterIndex = loadFile("./files/frontend/react-router/index.js")
+const appRouter = loadFile("./files/frontend/react-router/App.js");
+const Navbar = loadFile("./files/frontend/react-router/Navbar.js");
+const NavbarCSS = loadFile("./files/frontend/react-router/Navbar.css");
+const HomeView = loadFile("./files/frontend/react-router/Home.js");
+const globalStyle = loadFile("./files/frontend/react-router/global.css")
+
+// load redux files
+const reduxIndex = loadFile("./files/frontend/redux/index.js");
+const configStore = loadFile("./files/frontend/redux/configStore.js");
+const rootReducer = loadFile("./files/frontend/redux/rootReducer.js");
+const ReduxHomeView = loadFile("./files/frontend/redux/Home.js");
+
+const NavbarContainer = loadFile("./files/frontend/redux/NavbarContainer.js")
 
 const react = (
   reactType,
@@ -73,7 +89,7 @@ const createSrcContents = reactType => {
   } else if (reactType === "react-router") {
     reactRouter();
   } else if (reactType === "redux") {
-    redux()
+    redux();
   }
 };
 
@@ -85,22 +101,25 @@ const reactOnly = () => {
 };
 
 const reactRouter = () => {
-  helpers.writeFile(`./${name}/src/index.js`, index);
-  helpers.writeFile(`./${name}/src/App.js`, router);
+  helpers.writeFile(`./${name}/src/index.js`, reactRouterIndex);
+  helpers.writeFile(`./${name}/src/App.js`, appRouter);
 
   fs.mkdirSync(`./${name}/src/components`);
+  fs.mkdirSync(`./${name}/src/components/Navbar`);
   helpers.writeFile(`./${name}/src/components/Navbar/Navbar.js`, Navbar);
   helpers.writeFile(`./${name}/src/components/Navbar/Navbar.css`, NavbarCSS);
   fs.mkdirSync(`./${name}/src/views`);
   helpers.writeFile(`./${name}/src/views/Home.js`, HomeView);
-  helpers.writeFile(`./${name}/src/views/PageNotFound.js`, PageNotFound);
-
-  helpers.writeFile(`./${name}/`);
+  // styles folder 
+  fs.mkdirSync(`./${name}/src/styles`)
+  helpers.writeFile(`./${name}/src/styles/global.css`, globalStyle)
+  // install react-router-dom for src/index.js file 
+  helpers.installDevDependencies("react-router-dom")
 };
 
 const redux = () => {
   helpers.writeFile(`./${name}/src/index.js`, reduxIndex);
-  helpers.writeFile(`./${name}/src/App.js`, reduxRouter);
+  helpers.writeFile(`./${name}/src/App.js`, appRouter);
   // components folder, every component will have a folder with associated css, tests, and/or container for that component
   fs.mkdirSync(`./${name}/src/components`);
   fs.mkdirSync(`./${name}/src/components/Navbar`);
@@ -113,9 +132,18 @@ const redux = () => {
   // views folder
   fs.mkdirSync(`./${name}/src/views`);
   helpers.writeFile(`./${name}/src/views/Home.js`, ReduxHomeView);
-  helpers.writeFile(`./${name}/src/views/PageNotFound.js`, ReduxPageNotFound);
+  // styles folder for views 
+  fs.mkdirSync(`./${name}/src/styles`)
+  helpers.writeFile(`./${name}/src/styles/global.css`, globalStyle)
 
-  // need to make actions folder and store file 
+  // need to make actions folder and store file and configure store and reducers folder with rootReducer.js
+  fs.mkdirSync(`./${name}/src/actions`);
+  helpers.writeFile(`./${name}/src/actions/index.js`, "");
+  fs.mkdirSync(`./${name}/src/reducers`);
+  helpers.writeFile(`./${name}/src/reducers/rootReducer.js`, rootReducer);
+  helpers.writeFile(`./${name}/src/configStore.js`, configStore);
+  //install react-router-dom and other redux specific libs
+  helpers.installDevDependencies("redux react-redux react-router-dom")
 };
 
 const scripts = (reactType, backend) => {
@@ -130,8 +158,9 @@ const scripts = (reactType, backend) => {
   helpers.addScriptToNewPackageJSON("build", "webpack --mode='production'");
   // need to add scripts for creating containers actions
   if (reactType === "redux") {
-    helpers.addScriptToNewPackageJSON("component", "")
-    helpers.addScriptToNewPackageJSON("action", "")
+    // load and create a 
+    helpers.addScriptToNewPackageJSON("component", "node scripts/component.js");
+    helpers.addScriptToNewPackageJSON("action", "node scripts/action.js");
   }
 };
 

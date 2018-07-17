@@ -8,11 +8,11 @@ const loadFile = filePath => {
 };
 
 let e2eSetup = answer => {
-  answer.e2e === "cafe"
-    ? installTestCafe()
-    : answer.e2e === "cypress"
-      ? installCypress()
-      : "";
+  if (answer.e2e === "cafe") {
+    installTestCafe();
+  } else if (answer.e2e === "cypress") {
+    installCypress();
+  }
 };
 
 const installCypress = () => {
