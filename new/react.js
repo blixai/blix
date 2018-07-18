@@ -198,49 +198,55 @@ const reactRouterScripts = () => {
     `./${name}/scripts/templates/statelessComponent.js`,
     loadFile("./files/scripts/frontend/react/templates/statelessComponent.js")
   );
+  helpers.writeFile(
+    `./${name}/scripts/view.js`,
+    loadFile("./files/scripts/frontend/react-router/view.js")
+  );
   helpers.addScriptToNewPackageJSON("component", "node scripts/component.js");
+  helpers.addScriptToNewPackageJSON("view", "node scripts/view.js");
 };
 
 const reduxScripts = () => {
+  // action script and templates
   helpers.writeFile(
     `./${name}/scripts/action.js`,
     loadFile("./files/scripts/frontend/redux/action.js")
   );
   helpers.writeFile(
-    `./${name}/scripts/templates/actionTemplate.js`,
-    loadFile("./files/scripts/frontend/redux/templates/actionTemplate.js")
+    `./${name}/scripts/templates/action.js`,
+    loadFile("./files/scripts/frontend/redux/templates/action.js")
   );
   helpers.writeFile(
-    `./${name}/scripts/templates/reducerTemplate.js`,
-    loadFile("./files/scripts/frontend/redux/templates/reducerTemplate.js")
+    `./${name}/scripts/templates/reducer.js`,
+    loadFile("./files/scripts/frontend/redux/templates/reducer.js")
   );
   // component script and templates
   helpers.writeFile(
     `./${name}/scripts/component.js`,
-    loadFile("./files/scripts/frontend/react/statefulComponent.js")
+    loadFile("./files/scripts/frontend/redux/component.js")
   );
   helpers.writeFile(
-    `./${name}/scripts/templates/statelessComponentTemplate.js`,
+    `./${name}/scripts/templates/statelessComponent.js`,
     loadFile("./files/scripts/frontend/react/templates/statelessComponent.js")
   );
   helpers.writeFile(
-    `./${name}/scripts/templates/statelessContainerTemplate.js`,
-    loadFile(
-      "./files/scripts/frontend/redux/templates/statelessContainerTemplate.js"
-    )
+    `./${name}/scripts/templates/container.js`,
+    loadFile("./files/scripts/frontend/redux/templates/container.js")
   );
   helpers.writeFile(
-    `./${name}/scripts/templates/containerTemplate.js`,
-    loadFile("./files/scripts/frontend/redux/templates/containerTemplate.js")
-  );
-  helpers.writeFile(
-    `./${name}/scripts/templates/statefulComponentTemplate.js`,
+    `./${name}/scripts/templates/statefulComponent.js`,
     loadFile("./files/scripts/frontend/react/templates/statefulComponent.js")
+  );
+  // view script
+  helpers.writeFile(
+    `./${name}/scripts/view.js`,
+    loadFile("./files/scripts/frontend/redux/view.js")
   );
 
   // add scripts for action and component to package.json
   helpers.addScriptToNewPackageJSON("component", "node scripts/component.js");
   helpers.addScriptToNewPackageJSON("action", "node scripts/action.js");
+  helpers.addScriptToNewPackageJSON("view", "node scripts/view.js");
 };
 
 const packages = backend => {

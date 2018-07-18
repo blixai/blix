@@ -6,7 +6,7 @@ const rl = readline.createInterface({
 
 const fs = require("fs");
 const path = require("path");
-let name = process.argv[2];
+let name = process.argv[2] || "";
 
 // takes the name and capitalizes the first letter per React naming conventions
 const capitalizeFirstLetter = string => {
@@ -63,7 +63,10 @@ const askState = () => {
 if (name) {
   askState();
 } else {
-  console.log("No component name provided. Please try again.");
-  console.log()
+  console.log("No component name provided.");
+  console.log("Example: npm run component footer");
+  console.log("This will create a component Footer in src/footer with files Footer.js and Footer.css")
+  console.log("You can edit the Component templates by going to scripts/templates and opening the statefulComponent.js or statelessComponent.js files.")
+  console.log("Please try again.");
   process.exit();
 }
