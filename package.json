@@ -1,5 +1,5 @@
 {
-  "name": "enzo",
+  "name": "nexus",
   "version": "1.0.0",
   "description": "Quickly Create Applications",
   "main": "index.js",
@@ -17,7 +17,7 @@
   "author": "Devon Bull",
   "license": "MIT",
   "bin": {
-    "enzo": "./index.js"
+    "nexus": "./index.js"
   },
   "dependencies": {
     "boxen": "^1.2.2",
