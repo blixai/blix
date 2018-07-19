@@ -30,7 +30,7 @@ const addMongoDBToProject = () => {
   server.splice(
     0,
     0,
-    `\nlet mongoose = require('mongoose')\nmongoose.connect(process.env.MONGO)\n`
+    `const mongoose = require('mongoose')\nmongoose.connect(process.env.MONGO, { useNewUrlParser: true })\n`
   );
   let mongoAddedServer = server.join("\n");
 

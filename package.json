@@ -1,6 +1,6 @@
 {
-  "name": "@dbull7/enzo",
-  "version": "1.0.81",
+  "name": "blix",
+  "version": "1.0.0",
   "description": "Quickly Create Applications",
   "main": "index.js",
   "scripts": {
@@ -17,7 +17,7 @@
   "author": "Devon Bull",
   "license": "MIT",
   "bin": {
-    "enzo": "./index.js"
+    "blix": "./index.js"
   },
   "dependencies": {
     "boxen": "^1.2.2",

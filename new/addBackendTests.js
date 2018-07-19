@@ -55,7 +55,22 @@ const testJestBackend = () => {
   helpers.addScript("jest", "jest");
 };
 
+let beOnlyInstallTesting = test => {
+  if (test === "mocha") helpers.installDevDependencies("mocha chai chai-http");
+  if (test === "jest") helpers.installDevDependencies("jest supertest");
+};
+
+let testBackend = test => {
+  test === "mocha"
+    ? mochaTestBackend()
+    : test === "jest"
+      ? testJestBackend()
+      : "";
+};
+
 module.exports = {
   mochaTestBackend,
-  testJestBackend
+  testJestBackend,
+  beOnlyInstallTesting,
+  testBackend
 };
