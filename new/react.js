@@ -4,7 +4,7 @@ const path = require("path");
 const { createCommonFilesAndFolders } = require("./createCommonFiles");
 const { installReactTesting } = require("./addReactTesting");
 const { e2eSetup } = require("./addEndToEndTesting");
-const { createBackend } = require("./createBackend");
+const { createBackend } = require("./backend");
 const { newProjectInstructions } = require("./newProjectInstructions");
 const name = process.argv[3];
 
