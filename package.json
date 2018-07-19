@@ -1,5 +1,5 @@
 {
-  "name": "nexus",
+  "name": "blix",
   "version": "1.0.0",
   "description": "Quickly Create Applications",
   "main": "index.js",
@@ -17,7 +17,7 @@
   "author": "Devon Bull",
   "license": "MIT",
   "bin": {
-    "nexus": "./index.js"
+    "blix": "./index.js"
   },
   "dependencies": {
     "boxen": "^1.2.2",

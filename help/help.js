@@ -34,20 +34,20 @@ let runHelp = () => {
         log(chalk.cyanBright('See a list of commands or learn more about a specific command'))
         break
       case 'new':
-        log(chalk.cyanBright('Run enzo new <projectName> and be asked a series of questions to start a project from scratch'))
+        log(chalk.cyanBright('Run blix new <projectName> and be asked a series of questions to start a project from scratch'))
         break
       case 'redux':
         log(chalk.cyanBright('Add redux to an existing react project. Be careful, it can cause file loss.'))
-        log(chalk.cyanBright('Works best with create-react-app projects or enzo made react projects.'))
+        log(chalk.cyanBright('Works best with create-react-app projects or blix made react projects.'))
         break
       case 'update':
-        log(chalk.cyanBright('updates enzo from npm'))
+        log(chalk.cyanBright('updates blix from npm'))
         break
       case 'add':
         log(chalk.cyanBright('Choose from a list to add things like servers, databases, webpack, gulp, and redux to a project'))
         break
       case 'command':
-        log(chalk.cyanBright('Asks a series of questions to either add preconfigured enzo commands to a project or build your own'))
+        log(chalk.cyanBright('Asks a series of questions to either add preconfigured blix commands to a project or build your own'))
         break
       case 'webpack':
         log(chalk.cyanBright('Add webpack to project. Asks for the entry directory and output folder. Configured for React, Sass, JS, CSS.'))
@@ -59,7 +59,7 @@ let runHelp = () => {
         log(chalk.cyanBright('Add gulp to project. Asks for the entry directory and output folder. Configured for Sass, JS, CSS and Html.'))
         break 
       case 'version':
-        log(chalk.cyanBright('Displays the current version of enzo'))
+        log(chalk.cyanBright('Displays the current version of blix'))
         break
       default:
         noCommand()
