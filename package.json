@@ -1,6 +1,6 @@
 {
   "name": "enzo",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Quickly Create Applications",
   "main": "index.js",
   "scripts": {
