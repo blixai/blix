@@ -71,10 +71,12 @@ const createStatelessView = route => {
 
 const addRoute = route => {
   let search = "<Switch>";
-  let body = fs
-    .readFileSync("./src/App.js", "utf8")
-    .toString()
-    .split("\n");
+  let body = fs.readFileSync("./src/App.js", "utf8").toString();
+  if (body.indexOf(`/${route}`) !== -1) {
+    console.log(`Route already exists in src/App.js!!`);
+    return;
+  }
+  body = body.split("\n");
   body.splice(4, 0, `import ${name} from './views/${name}'`);
   let newBody = body.join("\n");
   let position = newBody.indexOf(search);
