@@ -70,7 +70,7 @@ const react = (
 
   // create backend
   if (backend) {
-    createBackend(serverTestingSelection, databaseSelection);
+    createBackend("backend", serverTestingSelection, databaseSelection);
   }
 
   // add scripts

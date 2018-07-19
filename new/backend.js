@@ -1,8 +1,7 @@
 const fs = require("fs");
 const helpers = require("../helpers");
 const path = require("path");
-const name = process.argv[3]
-
+const name = process.argv[3];
 
 const loadFile = filePath => {
   return fs.readFileSync(path.resolve(__dirname, filePath), "utf8");
@@ -18,7 +17,7 @@ const routes = loadFile("./files/backend/routes.js");
 // backendType is a string of either "MVC" or "API"
 // pug is a boolean
 // testingLib is a string of "mocha" or "jest"
-const createBackend = (serverTestingSelection, databaseSelection) => {
+const createBackend = (mode, serverTestingSelection, databaseSelection) => {
   // create folders
   fs.mkdirSync(`./${name}/server`);
   fs.mkdirSync(`./${name}/server/models`);
@@ -30,9 +29,18 @@ const createBackend = (serverTestingSelection, databaseSelection) => {
   helpers.writeFile(`./${name}/server/routes.js`, routes);
   helpers.writeFile(`./${name}/server/cluster.js`, cluster);
 
-  // if pug project add view engine to server.js and create views folder with layout.pug, error.pug, and home.pug
+  if (mode === "backend") {
+    fs.mkdirSync(`./${name}/server/views`);
+  } else if (mode === "mvc") {
+    // use pug 
+    fs.mkdirSync(`./${name}/server/views`);
+    // create page templates and scripts
+    // layout.pug in views folder
+    // error.pug 
+    // home folder and home.pug in views 
+  } 
 
-  // scripts: controller, model, and if pug project view and add their associated commands to the package.json 
+  // scripts: controller, model, and if pug project view and add their associated commands to the package.json
   let controller = loadFile("./files/scripts/backend/controller.js");
 
   helpers.writeFile(`./${name}/scripts/controller.js`, controller);

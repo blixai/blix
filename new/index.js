@@ -2,7 +2,7 @@ const fs = require("fs");
 const inquirer = require("inquirer");
 const prompt = inquirer.prompt;
 
-const { createBackend } = require("./createBackend");
+const { createBackend } = require("./backend");
 const { vue } = require("./vue");
 const { react } = require("./react");
 const { vanillaJS } = require("./vanillaJS");
@@ -30,10 +30,10 @@ const promptFrontend = async () => {
       reactProject("react");
       break;
     case "react-router":
-      reactProject("react-router")
-      break
+      reactProject("react-router");
+      break;
     case "redux":
-      reactProject("redux")
+      reactProject("redux");
       break;
     case "vue":
       vueProject("vue");
@@ -50,7 +50,7 @@ const promptFrontend = async () => {
   }
 };
 
-const reactProject = async (reactType) => {
+const reactProject = async reactType => {
   const reactTestingSelection = await prompt([reactTesting]);
   const e2eSelection = await prompt([e2e]);
   const backendSelection = await prompt([backend]);
@@ -66,10 +66,9 @@ const reactProject = async (reactType) => {
       databaseSelection
     );
   } else {
-    react(reactType,reactTestingSelection, e2eSelection);
+    react(reactType, reactTestingSelection, e2eSelection);
   }
 };
-
 
 const vueProject = async () => {
   const vueTestingSelection = await prompt([vueTesting]);
@@ -110,7 +109,7 @@ const vanillaJSProject = async () => {
 const backendOnly = async () => {
   const serverTestingSelection = await prompt([serverTesting]);
   const databaseSelection = await prompt([database]);
-  createBackend(serverTestingSelection, databaseSelection);
+  createBackend("api", serverTestingSelection, databaseSelection);
 };
 
 // create project ensures there shouldn't be errors before starting the prompts
