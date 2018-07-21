@@ -54,7 +54,10 @@ const react = (
   // create react files
   fs.mkdirSync(`./${name}/dist`);
   fs.mkdirSync(`./${name}/src`);
+  // A FOLDER TO HOLD FILES WITH RESOURCE FETCH CALLS TO ONE RESOURCE PER FILE (similar to controllers server side)
+  fs.mkdirSync(`./${name}/src/services`)
 
+  // build project specific contents based on type supplied from new/index.js 
   createSrcContents(reactType);
 
   // create webpack postcssConfig and babelrc files

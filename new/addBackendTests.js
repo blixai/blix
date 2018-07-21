@@ -1,14 +1,16 @@
 const helpers = require("../helpers");
 const fs = require("fs");
 const path = require("path");
+const name = process.argv[3];
 
 const loadFile = filePath => {
   return fs.readFileSync(path.resolve(__dirname, filePath), "utf8");
 };
 
 const checkOrCreateServerTestFolder = () => {
-  if (!fs.existsSync("./test")) fs.mkdirSync("./test");
-  if (!fs.existsSync("./test/server")) fs.mkdirSync("./test/server");
+  if (!fs.existsSync(`./${name}/test/server`)) {
+    fs.mkdirSync(`./${name}/test/server`);
+  }
 };
 
 const mochaTestBackend = () => {
@@ -17,9 +19,9 @@ const mochaTestBackend = () => {
   checkOrCreateServerTestFolder();
   helpers.writeFile(
     "./test/server/test.spec.js",
-    loadFile("./filesToCopy/mocha.js")
+    loadFile("./files/testing/backend/mocha.js")
   );
-  let json = JSON.parse(fs.readFileSync("./package.json", "utf8"));
+  let json = JSON.parse(fs.readFileSync(`./${name}/package.json`, "utf8"));
   if (json.hasOwnProperty("jest")) {
     json.jest["modulePathIgnorePatterns"] = [
       "<rootDir>/test/e2e/",
@@ -36,9 +38,9 @@ const testJestBackend = () => {
   checkOrCreateServerTestFolder();
   helpers.writeFile(
     "./test/server/test.spec.js",
-    loadFile("./filesToCopy/jest.js")
+    loadFile("./files/backend/testing/jest.js")
   );
-  let json = JSON.parse(fs.readFileSync("./package.json", "utf8"));
+  let json = JSON.parse(fs.readFileSync(`./${name}/package.json`, "utf8"));
   if (!json.hasOwnProperty("jest")) {
     let jest = {
       modulePathIgnorePatterns: ["<rootDir>/test/e2e/", "<rootDir>/cypress"],
@@ -51,8 +53,8 @@ const testJestBackend = () => {
     json["jest"] = jest;
   }
   let newPackage = JSON.stringify(json, null, 2);
-  fs.writeFileSync("package.json", newPackage);
-  helpers.addScript("jest", "jest");
+  fs.writeFileSync(`./${name}/package.json`, newPackage);
+  helpers.addScriptToNewPackageJSON("jest", "jest");
 };
 
 let beOnlyInstallTesting = test => {
