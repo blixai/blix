@@ -1,11 +1,11 @@
 const helpers = require("../helpers");
 const fs = require("fs");
 const path = require("path");
-const { createCommonFilesAndFolders } = require("./createCommonFiles");
-const { installReactTesting } = require("./addReactTesting");
-const { e2eSetup } = require("./addEndToEndTesting");
+const { createCommonFilesAndFolders } = require("./utils/createCommonFiles");
+const { installReactTesting } = require("./utils/addReactTesting");
+const { e2eSetup } = require("./utils/addEndToEndTesting");
 const { createBackend } = require("./backend");
-const { newProjectInstructions } = require("./newProjectInstructions");
+const { newProjectInstructions } = require("./utils/newProjectInstructions");
 const name = process.argv[3];
 
 const loadFile = filePath => {
@@ -55,9 +55,9 @@ const react = (
   fs.mkdirSync(`./${name}/dist`);
   fs.mkdirSync(`./${name}/src`);
   // A FOLDER TO HOLD FILES WITH RESOURCE FETCH CALLS TO ONE RESOURCE PER FILE (similar to controllers server side)
-  fs.mkdirSync(`./${name}/src/services`)
+  fs.mkdirSync(`./${name}/src/services`);
 
-  // build project specific contents based on type supplied from new/index.js 
+  // build project specific contents based on type supplied from new/index.js
   createSrcContents(reactType);
 
   // create webpack postcssConfig and babelrc files

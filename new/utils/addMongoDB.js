@@ -9,7 +9,7 @@ const loadFile = filePath => {
 
 //
 const addMongooseToEnzo = () => {
-  let model = loadFile("./templates/enzoCreateMongooseModel.js");
+  let model = loadFile("../files/backend/models/mongoose/model.js");
   let schemaTemplate = loadFile("./templates/schemaTemplate.js");
 
   helpers.writeFile(`./${name}/scripts/model.js`, model);

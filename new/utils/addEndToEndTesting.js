@@ -22,7 +22,7 @@ const installCypress = () => {
   fs.mkdirSync(`./${name}/cypress/integration`);
   helpers.writeFile(
     `./${name}/cypress/integration/test.js`,
-    loadFile("./files/frontend/e2e/cypress.js")
+    loadFile("../files/frontend/e2e/cypress.js")
   );
   // let ignore = {
   //   "modulePathIgnorePatterns": ["<rootDir>/test/e2e/", "<rootDir>/cypress"]
@@ -54,7 +54,7 @@ const installTestCafe = () => {
   fs.mkdirSync(`./${name}/test/e2e`);
   helpers.writeFile(
     `./${name}/test/e2e/test.js`,
-    loadFile("./files/frontend/e2e/testcafe.js")
+    loadFile("../files/frontend/e2e/testcafe.js")
   );
   let jest = {
     modulePathIgnorePatterns: ["<rootDir>/test/e2e/", "<rootDir>/cypress"],

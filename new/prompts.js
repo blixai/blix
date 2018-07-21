@@ -26,12 +26,6 @@ const database = {
   choices: [{ name: "MongoDB" }, { name: "Postgres" }, { name: "None" }]
 };
 
-const pug = {
-  type: "confirm",
-  message: "Do you want to use the templating engine pug",
-  name: "pug"
-};
-
 const serverTesting = {
   type: "list",
   message: "Do you want to test server routes with:",

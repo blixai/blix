@@ -15,7 +15,6 @@ const {
   frontendOptions,
   backend,
   database,
-  pug,
   serverTesting,
   e2e,
   reactTesting,
@@ -70,7 +69,7 @@ const reactProject = async reactType => {
   }
 };
 
-const vueProject = async () => {
+const vueProject = async vueType => {
   const vueTestingSelection = await prompt([vueTesting]);
   const e2eSelection = await prompt([e2e]);
   const backendSelection = await prompt([backend]);
@@ -78,6 +77,7 @@ const vueProject = async () => {
     const serverTestingSelection = await prompt([serverTesting]);
     const databaseSelection = await prompt([database]);
     vue(
+      vueType,
       vueTestingSelection,
       e2eSelection,
       backendSelection,

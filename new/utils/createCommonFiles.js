@@ -14,12 +14,12 @@ const createCommonFilesAndFolders = () => {
   fs.mkdirSync(`./${name}`)
   helpers.writeFile(
     `./${name}/.gitignore`,
-    loadFile("./files/common/.gitignore")
+    loadFile("../files/common/.gitignore")
   );
   helpers.writeFile(`./${name}/README.md`, loadFile("./files/common/README.md"));
   fs.writeFileSync(
     `./${name}/package.json`,
-    loadFile("./files/common/package.json")
+    loadFile("../files/common/package.json")
   );
 
   helpers.writeFile(`./${name}/.env`, "");
