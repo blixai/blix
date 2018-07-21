@@ -12,7 +12,7 @@ const options = {
 };
 
 const newProjectInstructions = ([...args]) => {
-  //   process.stdout.write("\033c");
+  console.clear();
   log("New Project created!");
   log(`To start: cd into ${name}`);
   log();

@@ -2,10 +2,27 @@
 
 ### bliss + blitz 
 
-In development: the goal of this project is to help Javascript developers create cutting edge projects quickly and easily. It also embeds customizable templates in scripts folder within the project structure to help developers automate common tasks like creating a new API endpoint or generating a new Redux/React component. These templates can be run using customizable npm commands. 
+In development: the goal of this project is to help Javascript developers create cutting edge projects quickly and easily. It also embeds customizable templates in scripts folder within the project structure to help developers automate common tasks like creating a new API endpoint or generating a new Redux/React component. These scripts are run as npm scripts.
 
-Before running commands download this project and run 
-```npm install -g``` from the project directory. This installs the project globally and allows the following commands to be run. 
+
+## Getting Started
+------
+blix requires node version 8 or above. 
+
+Install:
+
+```
+npm install -g blix
+# OR
+yarn global add blix 
+```
+
+Create a project:
+
+```
+blix new my-project 
+```
+
 
 Listed are a series of commmands to get started with blix
 
@@ -18,3 +35,5 @@ Commands:
   blix update 
   blix version
 ```  
+
+
