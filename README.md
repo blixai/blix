@@ -6,7 +6,7 @@ In development: the goal of this project is to help Javascript developers create
 
 
 ## Getting Started
-------
+
 blix requires node version 8 or above. 
 
 Install:
