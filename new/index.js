@@ -115,7 +115,7 @@ const backendOnly = async () => {
 // create project ensures there shouldn't be errors before starting the prompts
 const createProject = () => {
   if (!name) {
-    console.log('No name provided. Please run "enzo new <projectName>"');
+    console.log('No name provided. Please run "blix new <projectName>"');
     process.exit();
   }
   if (fs.existsSync(`./${name}`)) {

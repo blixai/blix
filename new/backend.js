@@ -30,14 +30,23 @@ const createBackend = (mode, serverTestingSelection, databaseSelection) => {
   helpers.writeFile(`./${name}/server/cluster.js`, cluster);
 
   if (mode === "backend") {
+    // mode for when their is a frontend framework 
     fs.mkdirSync(`./${name}/server/views`);
+    helpers.writeFile(`./${name}/server/views/index.html`, loadFile("./files/frontend/other/index.html"))
+    // controller home needs to serve html file 
+    // type backend and type api can have the same server.js file 
   } else if (mode === "mvc") {
+    // mode for when their is no frontend framework 
     // use pug 
     fs.mkdirSync(`./${name}/server/views`);
     // create page templates and scripts
     // layout.pug in views folder
     // error.pug 
     // home folder and home.pug in views 
+    // server.js specific to mvc 
+  } else {
+    // api mode 
+    // controller home.js should respond with json hello world 
   } 
 
   // scripts: controller, model, and if pug project view and add their associated commands to the package.json
