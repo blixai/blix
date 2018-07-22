@@ -38,7 +38,7 @@ const addMongoDBToProject = () => {
   helpers.writeFile(`./${name}/server/server.js`, mongoAddedServer);
   helpers.writeFile(
     `./${name}/.env`,
-    `MONGO="${`mongodb://localhost/${name}`}"`
+    `MONGO=${`mongodb://localhost:27017/${name}`}`
   );
   helpers.install("mongo mongoose")
 };

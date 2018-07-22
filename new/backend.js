@@ -65,7 +65,7 @@ const backendType = () => {
     `./${name}/server/views/home/index.html`,
     loadFile("./files/frontend/other/index.html")
   );
-  helpers.writeFile(
+  fs.writeFileSync(
     `./${name}/server/server.js`,
     loadFile("./files/backend/backend/server.js")
   );
@@ -93,14 +93,14 @@ const mvcType = () => {
     loadFile("./files/backend/mvc/index.pug")
   );
 
-  helpers.writeFile(
+  fs.writeFileSync(
     `./${name}/server/server.js`,
     loadFile("./files/backend/mvc/server.js")
   );
 };
 
 const apiType = () => {
-  helpers.writeFile(
+  fs.writeFileSync(
     `./${name}/server/server.js`,
     loadFile("./files/backend/api/server.js")
   );
@@ -119,7 +119,7 @@ const addDatabase = databaseSelection => {
 };
 
 const scripts = mode => {
-  helpers.addScriptToNewPackageJSON("start", "nodemon server/server.js");
+  helpers.addScriptToNewPackageJSON("start", "nodemon server/cluster.js");
   // controller script
   helpers.addScriptToNewPackageJSON("controller", "node scripts/controller.js");
   helpers.writeFile(

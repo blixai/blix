@@ -36,6 +36,7 @@ exports.installKnexGlobal = () => {
   try {
     process.chdir(`./${name}`)
     execSync(`npm install -g knex`, {stdio: [0, 1, 2]})
+    execSync(`createdb ${name}`, {stdio: [0, 1, 2]})
     process.chdir('../')
   } catch(err) {
     console.error(err)
