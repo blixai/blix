@@ -3,6 +3,9 @@ const helpers = require("../helpers");
 const path = require("path");
 const name = process.argv[3];
 const { createCommonFilesAndFolders } = require("./utils/createCommonFiles");
+const { testBackend } = require("./utils/addBackendTests");
+const { addMongooseToScripts } = require("./utils/addMongoDB");
+const { addBookshelfToScripts } = require("./utils/addBookshelf");
 
 const loadFile = filePath => {
   return fs.readFileSync(path.resolve(__dirname, filePath), "utf8");
@@ -43,13 +46,15 @@ const createBackend = (mode, serverTestingSelection, databaseSelection) => {
     apiType();
   }
 
+  addDatabase(databaseSelection);
+
   // scripts: controller, model, and if pug project view and add their associated commands to the package.json
   scripts(mode);
 
   // packages to install
   packages(mode);
   // setup endpoint tests
-  setupTesting(serverTestingSelection);
+  testBackend(serverTestingSelection);
 };
 
 const backendType = () => {
@@ -103,6 +108,14 @@ const apiType = () => {
     `./${name}/server/controllers/home.js`,
     loadFile("./files/backend/api/home.js")
   );
+};
+
+const addDatabase = databaseSelection => {
+  if (databaseSelection.database === "mongo") {
+    addMongooseToScripts();
+  } else if (databaseSelection.database === "pg") {
+    addBookshelfToScripts();
+  }
 };
 
 const scripts = mode => {

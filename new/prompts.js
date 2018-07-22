@@ -23,7 +23,11 @@ const database = {
   type: "list",
   message: "Select a Database:",
   name: "database",
-  choices: [{ name: "MongoDB" }, { name: "Postgres" }, { name: "None" }]
+  choices: [
+    { name: "MongoDB", value: "mongo" },
+    { name: "Postgres", value: 'pg' },
+    { name: "None" }
+  ]
 };
 
 const serverTesting = {

@@ -1,24 +1,25 @@
 const path = require("path");
 const fs = require("fs");
 const name = process.argv[3];
-const helpers = require("../helpers");
+const helpers = require("../../helpers");
 
 const loadFile = filePath => {
   return fs.readFileSync(path.resolve(__dirname, filePath), "utf8");
 };
 
 //
-const addMongooseToEnzo = () => {
-  let model = loadFile("../files/backend/models/mongoose/model.js");
-  let schemaTemplate = loadFile("./templates/schemaTemplate.js");
-
+const addMongooseToScripts = () => {
+  let model = loadFile("../files/scripts/backend/mongoose.js");
+  let schemaTemplate = loadFile(
+    "../files/scripts/backend/templates/mongoose.js"
+  );
   helpers.writeFile(`./${name}/scripts/model.js`, model);
   helpers.writeFile(
     `./${name}/scripts/templates/schemaTemplate.js`,
     schemaTemplate
   );
 
-  helpers.addScriptToNewPackageJSON("model", "node scripts/model.js", name);
+  helpers.addScriptToNewPackageJSON("model", "node scripts/model.js");
   addMongoDBToProject();
 };
 
@@ -39,8 +40,9 @@ const addMongoDBToProject = () => {
     `./${name}/.env`,
     `MONGO="${`mongodb://localhost/${name}`}"`
   );
+  helpers.install("mongo mongoose")
 };
 
 module.exports = {
-  addMongooseToEnzo
+  addMongooseToScripts
 };
