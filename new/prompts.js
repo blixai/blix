@@ -70,7 +70,6 @@ module.exports = {
   frontendOptions,
   backend,
   database,
-  pug,
   serverTesting,
   e2e,
   reactTesting,

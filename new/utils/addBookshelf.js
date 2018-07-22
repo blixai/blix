@@ -24,6 +24,8 @@ const addBookshelfToEnzo = () => {
   helpers.writeFile(`./${name}/scripts/templates/bookshelf.js`, model);
 
   helpers.addScriptToNewPackageJSON("model", "node scripts/model.js");
+  helpers.installKnexGlobal()
+  helpers.modifyKnex()
 };
 
 module.exports = {

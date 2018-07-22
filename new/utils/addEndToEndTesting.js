@@ -1,5 +1,5 @@
 const fs = require("fs");
-const helpers = require("../helpers");
+const helpers = require("../../helpers");
 const path = require("path");
 const name = process.argv[3];
 

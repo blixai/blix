@@ -4,7 +4,6 @@ let execSync = require('child_process').execSync;
 let chalk    = require('chalk');
 let log      = console.log;
 let boxen    = require('boxen')
-let shell    = require('shelljs')
 let inquirer = require('inquirer')
 let prompt   = inquirer.prompt
 
@@ -35,7 +34,7 @@ let removeDependencies = (packages) => {
   if (yarn) {
     arr.forEach(package => {
       try {
-        shell.exec(`yarn remove ${package}`)
+        execSync(`yarn remove ${package}`)
       } catch (e) {
   
       }
@@ -43,7 +42,7 @@ let removeDependencies = (packages) => {
   } else {
     arr.forEach(package => {
       try {
-        shell.exec(`npm uninstall ${package}`)
+        execSync.exec(`npm uninstall ${package}`)
       } catch (e) {
         
       }
