@@ -16,7 +16,7 @@ const createCommonFilesAndFolders = () => {
   fs.mkdirSync(`./${name}`);
   helpers.writeFile(
     `./${name}/.gitignore`,
-    loadFile("../files/common/.gitignore")
+    loadFile("../files/common/gitIgnore.txt")
   );
   helpers.writeFile(
     `./${name}/README.md`,
