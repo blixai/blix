@@ -1,6 +1,5 @@
 let fs         = require('fs')
 let path       = require('path')
-let shell      = require('shelljs')
 let execSync   = require('child_process').execSync;
 let BE         = require('./create')
 let inquirer   = require('inquirer')

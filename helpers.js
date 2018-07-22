@@ -1,6 +1,4 @@
 const fs = require("fs");
-const path = require("path");
-const shell = require("shelljs");
 const execSync = require("child_process").execSync;
 const log = console.log;
 const name = process.argv[3];
@@ -15,35 +13,34 @@ const shouldUseYarn = () => {
 };
 
 exports.install = packages => {
-  shell.cd(`./${name}`);
-  let yarn = shouldUseYarn();
-  if (yarn) {
-    shell.exec(`yarn add ${packages}`, { silent: false });
-  } else {
-    shell.exec(`npm install --save ${packages}`, { silent: false });
+  try {
+    process.chdir(`./${name}`)
+    execSync(`npm install --save ${packages}`, {stdio:[0,1,2]});
+    process.chdir('../')
+  } catch(err) {
+    console.error(err)
   }
-  shell.cd("..");
 };
 
 exports.installDevDependencies = packages => {
-  shell.cd(`./${name}`);
-
-  let yarn = shouldUseYarn();
-  if (yarn) {
-    shell.exec(`yarn add ${packages} --dev`, { silent: false });
-  } else {
-    shell.exec(`npm install --save-dev ${packages}`, { silent: false });
+  try {
+    process.chdir(`./${name}`)
+    execSync(`npm install --save-dev ${packages}`, {stdio:[0,1,2]})
+    process.chdir('../')
+  } catch(err) {
+    console.error(err)
   }
-  shell.cd("..");
 };
 
 exports.installKnexGlobal = () => {
-  if (shouldUseYarn()) {
-    shell.exec("yarn global add knex", { silent: true });
-    shell.exec("knex init", { silent: true });
-  } else {
-    shell.exec("npm install -g knex", { silent: true });
-    shell.exec("knex init", { silent: true });
+  try {
+    process.chdir(`./${name}`)
+    execSync(`npm install -g knex`, {stdio: [0, 1, 2]})
+    execSync(`createdb ${name}`, {stdio: [0, 1, 2]})
+    process.chdir('../')
+  } catch(err) {
+    console.error(err)
+    process.chdir('../')
   }
 };
 
@@ -57,16 +54,18 @@ exports.addScript = (command, script) => {
 
 exports.modifyKnex = () => {
   let newKnex = `module.exports = {\n\n\tdevelopment: {\n\t\tclient: 'pg',\n\t\tconnection: 'postgres://localhost/${name}',\n\t\tmigrations: {\n\t\t\tdirectory: './db/migrations'\n\t\t},\n\t\tseeds: {\n\t\t\tdirectory: 'db/seeds/dev'\n\t\t},\n\t\tuseNullAsDefault: true\n\t},\n\n\tproduction: {\n\t\tclient: 'pg',\n\t\tconnection: process.env.DATABASE_URL + '?ssl=true',\n\t\tmigrations: {\n\t\t\tdirectory: 'db/migrations'\n\t\t},\n\t\tseeds: {\n\t\t\tdirectory: 'db/seeds/dev'\n\t\t},\n\t\tuseNullAsDefault: true\n\t}\n\n};`;
-  if (fs.existsSync("./knexfile.js")) {
-    fs.truncateSync("./knexfile.js", 0, function() {
+  if (fs.existsSync(`./${name}/knexfile.js`)) {
+    fs.truncateSync(`./${name}/knexfile.js`, 0, function() {
       console.log("done");
     });
-    fs.appendFile("./knexfile.js", newKnex, err => {
+    fs.appendFile(`./${name}/knexfile.js`, newKnex, err => {
       if (err) throw err;
-      fs.mkdirSync(`./db`);
-      fs.mkdirSync(`./db/migrations`);
     });
+  } else {
+    fs.writeFileSync(`./${name}/knexfile.js`, newKnex)
   }
+  fs.mkdirSync(`./${name}/db`);
+  fs.mkdirSync(`./${name}/db/migrations`);
 };
 
 exports.addScriptToNewPackageJSON = (command, script) => {
@@ -98,6 +97,3 @@ exports.addKeytoPackageJSON = (key, value) => {
   fs.writeFileSync(`./${name}/package.json`, newPackageJSON);
 };
 
-// exports.loadFile = filePath => {
-//   return fs.readFileSync(path.resolve(__dirname, filePath), 'utf8')
-// }

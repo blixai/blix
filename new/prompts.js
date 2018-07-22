@@ -6,9 +6,9 @@ const frontendOptions = {
     { name: "React", value: "react" },
     { name: "React, React-Router", value: "react-router" },
     { name: "React, Redux, React-Router", value: "redux" },
-    { name: "Vue", value: "vue" },
-    { name: "Vue, Vuex, Vue-Router", value: "vuex" },
-    { name: "Vanilla JS", value: "js" },
+    // { name: "Vue", value: "vue" },
+    // { name: "Vue, Vuex, Vue-Router", value: "vuex" },
+    // { name: "Vanilla JS", value: "js" },
     { name: "None (Express.js as an API backend)", value: "none" }
   ]
 };
@@ -23,7 +23,11 @@ const database = {
   type: "list",
   message: "Select a Database:",
   name: "database",
-  choices: [{ name: "MongoDB" }, { name: "Postgres" }, { name: "None" }]
+  choices: [
+    { name: "MongoDB", value: "mongo" },
+    { name: "Postgres", value: 'pg' },
+    { name: "None" }
+  ]
 };
 
 const serverTesting = {
@@ -70,7 +74,6 @@ module.exports = {
   frontendOptions,
   backend,
   database,
-  pug,
   serverTesting,
   e2e,
   reactTesting,

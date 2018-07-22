@@ -3,7 +3,7 @@ const numCPUs = require("os").cpus().length;
 require("dotenv").config();
 
 if (cluster.isMaster) {
-  process.stdout.write("\033c");
+  console.clear();
   console.log(`Master ${process.pid} is running`);
   // make workers the numCPUs or whatever env variable your host provides
   const workers = process.env.WORKERS || numCPUs || 1;

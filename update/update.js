@@ -1,7 +1,7 @@
-let shell = require("shelljs");
+const execSync = require("child_process").execSync;
 
 let install = packages => {
-  shell.exec(`npm install -g ${packages}`);
+  execSync(`npm install -g ${packages}`);
 };
 
 let update = () => {

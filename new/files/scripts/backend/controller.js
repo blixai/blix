@@ -1,11 +1,15 @@
 const fs = require("fs");
 const path = require("path");
 
-const name = process.argv[2];
+let name = process.argv[2];
 if (name) {
   name = name.toLowerCase();
 } else {
-  console.log("No name provided. Try: npm run api <name>");
+  console.log("No name provided.");
+  console.log("Example: npm run controller <name>");
+  console.log(
+    "This will create a controller in the server/controllers folder and add GET/PUT/DELETE/POST routes to server/routes.js"
+  );
   process.exit();
 }
 
@@ -16,17 +20,19 @@ const addLines = data => {
   return final;
 };
 
-const endpoints = fs.readFileSync(
-  path.resolve(__dirname, "./templates/enzoEndpointTemplate.js"),
+let endpoints = fs.readFileSync(
+  path.resolve(__dirname, "./templates/routes.js"),
   "utf8"
 );
 endpoints = endpoints.replace(/Name/g, `${name}`);
-const controller = fs.readFileSync(
-  path.resolve(__dirname, "./templates/enzoControllerTemplate.js"),
+
+let controller = fs.readFileSync(
+  path.resolve(__dirname, "./templates/controller.js"),
   "utf8"
 );
 controller = controller.replace(/Name/g, `${name}`);
 
+// controller files exists (probably for a page)
 if (fs.existsSync(`./server/controllers/${name}.js`)) {
   endpoints = endpoints
     .split("\n")
@@ -40,7 +46,7 @@ if (fs.existsSync(`./server/controllers/${name}.js`)) {
     console.log(`${name} controller appended.`);
   });
 } else {
-  // create
+  // create controller
   fs.writeFile(`./server/controllers/${name}.js`, controller, err => {
     if (err) throw err;
     console.log(`${name} controller created`);

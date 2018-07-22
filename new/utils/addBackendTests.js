@@ -1,4 +1,4 @@
-const helpers = require("../helpers");
+const helpers = require("../../helpers");
 const fs = require("fs");
 const path = require("path");
 const name = process.argv[3];
@@ -15,11 +15,11 @@ const checkOrCreateServerTestFolder = () => {
 
 const mochaTestBackend = () => {
   helpers.installDevDependencies("mocha chai chai-http");
-  helpers.addScript("mocha", "mocha test/server");
+  helpers.addScriptToNewPackageJSON("mocha", "mocha test/server");
   checkOrCreateServerTestFolder();
   helpers.writeFile(
-    "./test/server/test.spec.js",
-    loadFile("./files/testing/backend/mocha.js")
+    `./${name}/test/server/test.spec.js`,
+    loadFile("../files/testing/backend/mocha.js")
   );
   let json = JSON.parse(fs.readFileSync(`./${name}/package.json`, "utf8"));
   if (json.hasOwnProperty("jest")) {
@@ -30,15 +30,15 @@ const mochaTestBackend = () => {
     ];
   }
   let newPackage = JSON.stringify(json, null, 2);
-  fs.writeFileSync("package.json", newPackage);
+  fs.writeFileSync(`./${name}/package.json`, newPackage);
 };
 
 const testJestBackend = () => {
   helpers.installDevDependencies("jest supertest");
   checkOrCreateServerTestFolder();
   helpers.writeFile(
-    "./test/server/test.spec.js",
-    loadFile("./files/backend/testing/jest.js")
+    `./${name}/test/server/test.spec.js`,
+    loadFile("../files/testing/backend/jest.js")
   );
   let json = JSON.parse(fs.readFileSync(`./${name}/package.json`, "utf8"));
   if (!json.hasOwnProperty("jest")) {
@@ -57,15 +57,10 @@ const testJestBackend = () => {
   helpers.addScriptToNewPackageJSON("jest", "jest");
 };
 
-let beOnlyInstallTesting = test => {
-  if (test === "mocha") helpers.installDevDependencies("mocha chai chai-http");
-  if (test === "jest") helpers.installDevDependencies("jest supertest");
-};
-
 let testBackend = test => {
-  test === "mocha"
+  test.server === "mocha"
     ? mochaTestBackend()
-    : test === "jest"
+    : test.server === "jest"
       ? testJestBackend()
       : "";
 };
@@ -73,6 +68,5 @@ let testBackend = test => {
 module.exports = {
   mochaTestBackend,
   testJestBackend,
-  beOnlyInstallTesting,
   testBackend
 };
