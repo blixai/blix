@@ -59,10 +59,12 @@ exports.modifyKnex = () => {
     });
     fs.appendFile(`./${name}/knexfile.js`, newKnex, err => {
       if (err) throw err;
-      fs.mkdirSync(`./${name}/db`);
-      fs.mkdirSync(`./${name}/db/migrations`);
     });
+  } else {
+    fs.writeFileSync(`./${name}/knexfile.js`, newKnex)
   }
+  fs.mkdirSync(`./${name}/db`);
+  fs.mkdirSync(`./${name}/db/migrations`);
 };
 
 exports.addScriptToNewPackageJSON = (command, script) => {
