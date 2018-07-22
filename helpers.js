@@ -15,7 +15,7 @@ const shouldUseYarn = () => {
 exports.install = packages => {
   try {
     process.chdir(`./${name}`)
-    execSync(`npm install --save ${packages}`);
+    execSync(`npm install --save ${packages}`, {stdio:[0,1,2]});
     process.chdir('../')
   } catch(err) {
     console.error(err)
@@ -25,7 +25,7 @@ exports.install = packages => {
 exports.installDevDependencies = packages => {
   try {
     process.chdir(`./${name}`)
-    execSync(`npm install --save-dev ${packages}`)
+    execSync(`npm install --save-dev ${packages}`, {stdio:[0,1,2]})
     process.chdir('../')
   } catch(err) {
     console.error(err)

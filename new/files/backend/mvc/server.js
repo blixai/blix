@@ -7,14 +7,14 @@ const helmet = require("helmet");
 const logger = require("morgan");
 const cookieParser = require("cookie-parser");
 
+if (!process.env.NODE_ENV) {
+  app.use(logger("dev"));
+}
+
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(compression());
 app.use(helmet());
-
-if (!process.env.NODE_ENV) {
-  app.use(logger("dev"));
-}
 
 app.set("views", "./server/views");
 app.set("view engine", "pug");

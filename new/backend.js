@@ -45,6 +45,9 @@ const createBackend = (mode, serverTestingSelection, databaseSelection) => {
 
   // scripts: controller, model, and if pug project view and add their associated commands to the package.json
   scripts(mode);
+
+  // packages to install
+  packages(mode);
   // setup endpoint tests
   setupTesting(serverTestingSelection);
 };
@@ -102,7 +105,39 @@ const apiType = () => {
   );
 };
 
-const scripts = mode => {};
+const scripts = mode => {
+  helpers.addScriptToNewPackageJSON("start", "nodemon server/server.js");
+  // controller script
+  helpers.addScriptToNewPackageJSON("controller", "node scripts/controller.js");
+  helpers.writeFile(
+    `./${name}/scripts/controller.js`,
+    loadFile("./files/scripts/backend/controller.js")
+  );
+  helpers.writeFile(
+    `./${name}/scripts/templates/controller.js`,
+    loadFile("./files/scripts/backend/templates/controller.js")
+  );
+  helpers.writeFile(
+    `./${name}/scripts/templates/routes.js`,
+    loadFile("./files/scripts/backend/templates/routes.js")
+  );
+};
+
+const packages = mode => {
+  if (mode === "backend") {
+    helpers.install(
+      "express nodemon body-parser compression helmet dotenv morgan cookie-parser"
+    );
+  } else if (mode === "mvc") {
+    helpers.install(
+      "express nodemon body-parser compression helmet dotenv morgan cookie-parser pug"
+    );
+  } else {
+    helpers.install(
+      "express nodemon body-parser compression helmet dotenv morgan"
+    );
+  }
+};
 
 let setupTesting = test => {
   if (test === "mocha") {

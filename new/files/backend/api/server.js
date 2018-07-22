@@ -6,13 +6,15 @@ const port = process.env.PORT || 3000;
 const helmet = require("helmet");
 const logger = require("morgan");
 
-app.use(helmet());
-app.use(bodyParser.json());
-app.use("/", routes);
+
 
 if (!process.env.NODE_ENV) {
   app.use(logger("dev"));
 }
+
+app.use(helmet());
+app.use(bodyParser.json());
+app.use("/", routes);
 
 app.use((req, res, next) => {
   let err = new Error("File Not Found");
