@@ -2,7 +2,7 @@
 
 ### bliss + blitz 
 
-In development: the goal of this project is to help Javascript developers create cutting edge projects quickly and easily. It also embeds customizable templates in scripts folder within the project structure to help developers automate common tasks like creating a new API endpoint or generating a new Redux/React component. These scripts are run as npm scripts.
+In development: the goal of this project is to help Javascript developers create cutting edge projects quickly and easily. It also embeds customizable templates in scripts folder within the project structure to help developers automate common tasks like creating a new API endpoint or generating a new Redux/React component.
 
 
 ## Getting Started
