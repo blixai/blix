@@ -1,9 +1,6 @@
-let command  = process.argv[3]
-let chalk    = require('chalk');
-let log      = console.log;
-let boxen    = require('boxen');
-let inquirer = require('inquirer')
-let prompt   = inquirer.prompt
+const log      = console.log;
+const inquirer = require('inquirer')
+const prompt   = inquirer.prompt
 
 let commands = {
   type    : 'list',
@@ -11,7 +8,7 @@ let commands = {
   name    : 'help',
   choices : [
     { name: 'new'     },
-    { name: 'command' },
+    { name: 'script'  },
     { name: 'add'     },
     { name: 'remove'  },
     { name: 'help'    },
@@ -21,7 +18,7 @@ let commands = {
 }
 
 let runHelp = () => {
-  process.stdout.write('\033c')
+  console.clear()
   prompt([commands]).then(answers => {
     switch (answers.help) {
       case 'backend':
@@ -46,8 +43,8 @@ let runHelp = () => {
       case 'add':
         log(chalk.cyanBright('Choose from a list to add things like servers, databases, webpack, gulp, and redux to a project'))
         break
-      case 'command':
-        log(chalk.cyanBright('Asks a series of questions to either add preconfigured blix commands to a project or build your own'))
+      case 'script':
+        log(chalk.cyanBright('Asks a series of questions to either add preconfigured blix scripts to a project or build your own'))
         break
       case 'webpack':
         log(chalk.cyanBright('Add webpack to project. Asks for the entry directory and output folder. Configured for React, Sass, JS, CSS.'))

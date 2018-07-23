@@ -3,7 +3,7 @@
 const createProject = require("./new");
 const update = require("./update/update");
 const help = require("./help/help.js");
-const createCommand = require("./command/command.js");
+const script = require("./script/script.js");
 const remove = require("./remove/remove.js");
 const add = require("./add/add");
 const command = process.argv[2];
@@ -19,8 +19,8 @@ const checkCommand = command => {
     case "help":
       help();
       break;
-    case "command":
-      createCommand();
+    case "script":
+      script();
       break;
     case "remove":
       remove();
