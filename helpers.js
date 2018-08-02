@@ -45,11 +45,15 @@ exports.installKnexGlobal = () => {
 };
 
 exports.addScript = (command, script) => {
-  let buffer = fs.readFileSync("package.json");
-  let json = JSON.parse(buffer);
-  json.scripts[command] = script;
-  let newPackage = JSON.stringify(json, null, 2);
-  fs.writeFileSync("package.json", newPackage);
+  try {
+    let buffer = fs.readFileSync("package.json");
+    let json = JSON.parse(buffer);
+    json.scripts[command] = script;
+    let newPackage = JSON.stringify(json, null, 2);
+    fs.writeFileSync("package.json", newPackage);
+  } catch (err) {
+    console.error("Failed to add script to package.json: ", err)
+  }
 };
 
 exports.modifyKnex = () => {

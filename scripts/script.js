@@ -1,7 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 const log = console.log;
-const inquirer = require("inquirer");
+const inquirer = require('inquirer');
 const prompt = inquirer.prompt;
 const helpers = require("../helpers");
 
@@ -12,7 +12,7 @@ let loadFile = filePath => {
 
 const commands = {
   type: "list",
-  message: "Add a blix command to a project:",
+  message: "Add a blix script to a project or create your own:",
   pageSize: 10,
   name: "commands",
   choices: [
@@ -26,7 +26,7 @@ const commands = {
         "redux: create a new react component, a redux container, and a new route in your routing component",
       value: "redux"
     },
-    { name: "api: create new api endpoints and controller", value: "api" },
+    { name: "controller: create new controller and associated endpoints", value: "api" },
     {
       name:
         "page: create a new folder, html or pug, css, and js files along with adding the route in routes.js",
@@ -113,15 +113,15 @@ const command = () => {
 
 const addAction = () => {
   helpers.addScript("action", "node scripts/action.js");
-  checkEnzoExists();
+  checkScriptsFolderExists();
 
-  let action = loadFile("./files/enzoCreateAction.js");
-  let actionTemplate = loadFile("./templates/actionTemplate.js");
-  let reducerTemplate = loadFile("./templates/reducerTemplate.js");
+  let action = loadFile("../new/files/scripts/frontend/redux/action.js");
+  let actionTemplate = loadFile("../new/files/scripts/frontend/redux/templates/action.js");
+  let reducerTemplate = loadFile("../new/files/scripts/frontend/redux/templates/reducer.js");
 
   helpers.writeFile("./scripts/action.js", action);
-  helpers.writeFile("./scripts/templates/actionTemplate.js", actionTemplate);
-  helpers.writeFile("./scripts/templates/reducerTemplate.js", reducerTemplate);
+  helpers.writeFile("./scripts/templates/action.js", actionTemplate);
+  helpers.writeFile("./scripts/templates/reducer.js", reducerTemplate);
 };
 
 const addModel = () => {
@@ -129,7 +129,7 @@ const addModel = () => {
   prompt([model]).then(ans => {
     if (ans.model === "m") {
       // add moongoose
-      checkEnzoExists();
+      checkScriptsFolderExists();
       let model = loadFile("./templates/enzoCreateMongooseModel.js");
       let schemaTemplate = loadFile("./templates/schemaTemplate.js");
 
@@ -141,7 +141,7 @@ const addModel = () => {
       );
     } else {
       // add bookshelf
-      checkEnzoExists();
+      checkScriptsFolderExists();
       let model = loadFile("./templates/enzoCreateBookshelfModel.js");
       let migrationTemplate = loadFile("./templates/migrationTemplate.js");
       let bookshelf = loadFile("./templates/bookshelf.js");
@@ -188,7 +188,7 @@ let addReact = () => {
 let addRedux = () => {
   helpers.addScript("redux", "node scripts/redux.js");
 
-  let redux = loadFile("./files/enzoCreateContainer.js");
+  let redux = loadFile("./files/redux.js");
   let enzoDumbComponentTemplate = loadFile(
     "./templates/enzoDumbComponentTemplate.js"
   );
@@ -202,7 +202,7 @@ let addRedux = () => {
     "./templates/reduxContainerTemplate.js"
   );
 
-  checkEnzoExists();
+  checkScriptsFolderExists();
 
   helpers.writeFile("./scripts/redux.js", redux);
   helpers.writeFile(
@@ -224,24 +224,22 @@ let addRedux = () => {
 };
 
 let addAPI = () => {
-  helpers.addScript("api", "node scripts/api.js");
+  helpers.addScript("controller", "node scripts/controller.js");
 
-  let api = loadFile("./files/enzoCreateAPI.js");
-  let enzoControllerTemplate = loadFile(
-    "./templates/enzoControllerTemplate.js"
-  );
-  let enzoEndpointTemplate = loadFile("./templates/enzoEndpointTemplate.js");
+  let controller = loadFile("../new/files/scripts/backend/controller.js");
+  let controllerTemplate = loadFile("../new/files/scripts/backend/templates/controller.js");
+  let routes = loadFile("../new/files/scripts/backend/templates/routes.js");
 
-  checkEnzoExists();
+  checkScriptsFolderExists();
 
-  helpers.writeFile("./scripts/api.js", api);
+  helpers.writeFile("./scripts/controller.js", controller);
   helpers.writeFile(
-    "./scripts/templates/enzoControllerTemplate.js",
-    enzoControllerTemplate
+    "./scripts/templates/controller.js",
+    controllerTemplate
   );
   helpers.writeFile(
-    "./scripts/templates/enzoEndpointTemplate.js",
-    enzoEndpointTemplate
+    "./scripts/templates/routes.js",
+    routes
   );
 };
 
@@ -255,7 +253,7 @@ let addPage = () => {
 let pugPage = () => {
   let page = loadFile("./files/enzoPugPage.js");
   let template = loadFile("./templates/pugTemplate.pug");
-  checkEnzoExists();
+  checkScriptsFolderExists();
   helpers.writeFile("./scripts/page.js", page);
   helpers.writeFile("./scripts/templates/pugTemplate.pug", template);
 };
@@ -263,21 +261,21 @@ let pugPage = () => {
 let htmlPage = () => {
   let page = loadFile("./files/enzoNewPage.js");
   let html = loadFile("./templates/htmlPageTemplate.html");
-  checkEnzoExists();
+  checkScriptsFolderExists();
   helpers.writeFile("./scripts/page.js", page);
   helpers.writeFile("./scripts/templates/htmlPageTemplate.html", html);
 };
 
 let createNew = name => {
   helpers.addScript(name, `node scripts/${name}.js`);
-  checkEnzoExists();
+  checkScriptsFolderExists();
   helpers.writeFile(`./scripts/${name}.js`, "");
   prompt([template]).then(a => {
     a = a.template;
     if (a) {
       prompt([templateName]).then(ans => {
         ans = ans.templateName;
-        let importTemplate = `let fs = require('fs')\nlet path = require('path')\n\nlet ${ans}Template = fs.readFileSync(path.resolve(__dirname, './templates/${ans}.js'), 'utf8')`;
+        let importTemplate = loadFile('./templates/custom.js');
         fs.appendFile(`./scripts/${name}.js`, importTemplate, err => {
           if (err) console.error(err);
           log(`Imported the template ${ans} into scripts/${name}.js`);
@@ -292,11 +290,9 @@ let createNew = name => {
   });
 };
 
-let checkEnzoExists = () => {
+let checkScriptsFolderExists = () => {
   if (fs.existsSync("./scripts")) {
-    if (fs.existsSync("./scripts/templates")) {
-      return;
-    } else {
+    if (!fs.existsSync("./scripts/templates")) {
       fs.mkdirSync("./scripts/templates");
     }
   } else {
