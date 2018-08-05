@@ -201,7 +201,7 @@ let addReact = () => {
   checkReactTemplatesExist()
   log("")
   log("Added script to project, to run: npm run component <name>")
-  log("This will create a stateless or stateful component in src/components")
+  log("This will create a stateless or stateful component in a folder <name> within src/")
 };
 
 let addRedux = () => {
