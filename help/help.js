@@ -8,7 +8,7 @@ let commands = {
   name    : 'help',
   choices : [
     { name: 'new'     },
-    { name: 'script'  },
+    { name: 'scripts' },
     { name: 'add'     },
     { name: 'remove'  },
     { name: 'help'    },
@@ -43,7 +43,7 @@ let runHelp = () => {
       case 'add':
         log('Choose from a list to add things like servers, databases, webpack, gulp, and redux to a project')
         break
-      case 'script':
+      case 'scripts':
         log('Asks a series of questions to either add preconfigured blix scripts to a project or build your own')
         break
       case 'webpack':
@@ -52,9 +52,6 @@ let runHelp = () => {
       case 'remove': 
         log('Remove gulp or webpack from a project. Removes common dependencies, npm scripts, and files.')
         break
-      case 'gulp':
-        log('Add gulp to project. Asks for the entry directory and output folder. Configured for Sass, JS, CSS and Html.')
-        break 
       case 'version':
         log('Displays the current version of blix')
         break

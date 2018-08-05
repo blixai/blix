@@ -39,7 +39,7 @@ exports.installKnexGlobal = () => {
     execSync(`createdb ${name}`, {stdio: [0, 1, 2]})
     process.chdir('../')
   } catch(err) {
-    console.error(err)
+    console.error(`Error creating db: make sure postgres is installed and running and try again by entering: createdb ${name}`)
     process.chdir('../')
   }
 };
@@ -86,6 +86,15 @@ exports.writeFile = (filePath, file, message) => {
     message ? log(message) : "";
   });
 };
+
+exports.writeFileSync = (filePath, file, message) => {
+  try {
+    fs.writeFileSync(filePath, file)
+    message ? log(message) : "";
+  } catch (err) {
+    console.error("Couldn't create file", err)
+  }
+}
 
 exports.rename = (oldName, newName) => {
   fs.rename(oldName, newName, err => {

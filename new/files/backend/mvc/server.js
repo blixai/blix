@@ -21,7 +21,7 @@ app.set("view engine", "pug");
 
 const routes = require("./routes");
 app.use("/", routes);
-app.use(express.static("dist"));
+app.use("/dist", express.static("dist"));
 app.use("/assets", express.static("assets"));
 
 app.use((req, res, next) => {
