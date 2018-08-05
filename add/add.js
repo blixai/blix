@@ -1,5 +1,4 @@
 let webpack = require('./webpack/webpack.js')
-let addGulp = require('./gulp/gulp.js')
 let addBackend = require('./backend/addBackend')
 let addDatabase = require('./database/addDataBase')
 let addRedux = require('./redux/addRedux')
@@ -17,8 +16,7 @@ let commands = {
     { name: 'webpack'  },
     { name: 'redux'    },
     { name: 'database' },
-    { name: 'backend'  },
-    { name: 'gulp'     }
+    { name: 'backend'  }
   ]
 }
 
@@ -40,9 +38,6 @@ let add = () => {
         break
       case "backend":
         addBackend()
-        break
-      case "gulp":
-        addGulp()
         break
       default:
         break;

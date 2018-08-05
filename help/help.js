@@ -41,7 +41,7 @@ let runHelp = () => {
         log('updates blix from npm')
         break
       case 'add':
-        log('Choose from a list to add things like servers, databases, webpack, gulp, and redux to a project')
+        log('Choose from a list to add things like servers, databases, webpack, and redux to a project')
         break
       case 'scripts':
         log('Asks a series of questions to either add preconfigured blix scripts to a project or build your own')

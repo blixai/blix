@@ -8,7 +8,6 @@ let prompt     = inquirer.prompt
 // custom vars
 let helpers    = require('../../helpers')
 let log        = console.log
-let clear      = process.stdout.write('\033c')
 
 //prompts
 let database = {
@@ -64,7 +63,7 @@ let basicBackend = () => {
 }
 
 let backendType = () => {
-  clear()
+  console.clear()
   prompt([html]).then(html => {
     html.html ? askPug() : basicBackend()
   })
@@ -118,7 +117,7 @@ let pugPostgres = () => {
     helpers.addScript('server', 'nodemon server/cluster.js' )
     helpers.addScript('api'   , 'node enzo/api.js'          )
     helpers.addScript('page'  , 'node enzo/page.js'         )
-    clear()
+    console.clear()
     log('The backend was added!')
     log(`to start server enter npm run server`)
   })
@@ -140,7 +139,7 @@ let basicPostgres = () => {
     addBookshelfToEnzo()
     helpers.addScript('server', 'nodemon server/cluster.js')
     helpers.addScript('api', 'node enzo/api.js')
-    clear()
+    console.clear()
     log('The backend was added!')
     log(`to start server enter npm run server`)
   })
@@ -156,7 +155,7 @@ let pugMongo = () => {
     helpers.addScript('api', 'node enzo/api.js')
     helpers.addScript('page', 'node enzo/page.js')
     addMongooseToEnzo(name)
-    clear()
+    console.clear()
     log('The backend was added!')
     log(`to start server enter npm run server`) 
   })
@@ -171,7 +170,7 @@ let basicMongo = () => {
     helpers.addScript('server', 'nodemon server/cluster.js')
     helpers.addScript('api', 'node enzo/api.js')
     addMongooseToEnzo(name)
-    clear()
+    console.clear()
     log('The backend was added!')
     log(`to start server enter npm run server`)
   })
@@ -183,7 +182,7 @@ let basicPug = () => {
   helpers.install('express nodemon body-parser helmet compression dotenv morgan pug cookie-parser')
   helpers.addScript('server', 'nodemon server/cluster.js')
   helpers.addScript('api', 'node enzo/api.js')
-  clear()
+  console.clear()
   log('The backend was added!')
   log(`to start server enter npm run server`) 
 }
@@ -195,7 +194,7 @@ let backendOnly = () => {
   helpers.install('express nodemon body-parser helmet compression dotenv morgan')
   helpers.addScript('server', 'nodemon server/cluster.js')
   helpers.addScript('api', 'node enzo/api.js')
-  clear()
+  console.clear()
   log('The backend was added!')
   log(`to start server enter npm run server`)
 }
@@ -216,7 +215,7 @@ let htmlPostgres = () => {
     helpers.addScript('server', 'nodemon server/cluster.js')
     helpers.addScript('api', 'node enzo/api.js')
     helpers.addScript('page', 'node enzo/page.js')
-    clear()
+    console.clear()
     log('The backend was added!')
     log(`to start server enter npm run server`)
   })
@@ -232,7 +231,7 @@ let htmlMongo = () => {
     helpers.addScript('api', 'node enzo/api.js')
     helpers.addScript('page', 'node enzo/page.js')
     addMongooseToEnzo(name)
-    clear()
+    console.clear()
     log('The backend was added!')
     log(`to start server enter npm run server`)
   })
@@ -244,7 +243,7 @@ let htmlBasic = () => {
   helpers.install('express nodemon body-parser helmet compression dotenv morgan pug cookie-parser')
   helpers.addScript('server', 'nodemon server/cluster.js')
   helpers.addScript('api', 'node enzo/api.js')
-  clear()
+  console.clear()
   log('The backend was added!')
   log(`to start server enter npm run server`) 
 }
