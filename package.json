@@ -1,7 +1,7 @@
 {
   "name": "blix",
-  "version": "1.0.3",
-  "description": "Quickly Create Applications",
+  "version": "1.0.6",
+  "description": "Yeoman on steroids: quickly create a multitude of Javascript applications from scratch and automate tasks with hackable scrips or add scripts and tools to existing projects.",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
@@ -9,9 +9,12 @@
   "keywords": [
     "express",
     "postgres",
+    "bookshelf",
     "knex",
     "react",
-    "rails",
+    "redux",
+    "react-router",
+    "mongoose",
     "mongodb"
   ],
   "author": "Devon Bull",

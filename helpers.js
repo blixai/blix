@@ -39,17 +39,21 @@ exports.installKnexGlobal = () => {
     execSync(`createdb ${name}`, {stdio: [0, 1, 2]})
     process.chdir('../')
   } catch(err) {
-    console.error(err)
+    console.error(`Error creating db: make sure postgres is installed and running and try again by entering: createdb ${name}`)
     process.chdir('../')
   }
 };
 
 exports.addScript = (command, script) => {
-  let buffer = fs.readFileSync("package.json");
-  let json = JSON.parse(buffer);
-  json.scripts[command] = script;
-  let newPackage = JSON.stringify(json, null, 2);
-  fs.writeFileSync("package.json", newPackage);
+  try {
+    let buffer = fs.readFileSync("package.json");
+    let json = JSON.parse(buffer);
+    json.scripts[command] = script;
+    let newPackage = JSON.stringify(json, null, 2);
+    fs.writeFileSync("package.json", newPackage);
+  } catch (err) {
+    console.error("Failed to add script to package.json: ", err)
+  }
 };
 
 exports.modifyKnex = () => {
@@ -82,6 +86,15 @@ exports.writeFile = (filePath, file, message) => {
     message ? log(message) : "";
   });
 };
+
+exports.writeFileSync = (filePath, file, message) => {
+  try {
+    fs.writeFileSync(filePath, file)
+    message ? log(message) : "";
+  } catch (err) {
+    console.error("Couldn't create file", err)
+  }
+}
 
 exports.rename = (oldName, newName) => {
   fs.rename(oldName, newName, err => {
