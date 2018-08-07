@@ -1,7 +1,7 @@
 const fs = require("fs");
 const helpers = require("../helpers");
 const path = require("path");
-const name = process.argv[3];
+let name;
 const { createCommonFilesAndFolders } = require("./utils/createCommonFiles");
 const { testBackend } = require("./utils/addBackendTests");
 const { addMongooseToScripts } = require("./utils/addMongoDB");
@@ -18,6 +18,7 @@ const routes = loadFile("./files/backend/common/routes.js");
 // mode is a string of either "backend","mvc" or "api"
 // serverTestingSelection is a string of "mocha" or "jest"
 const createBackend = (mode, serverTestingSelection, databaseSelection) => {
+  name = process.argv[3];
   // if api mode need to create common files and folders
   if (mode === "api") {
     createCommonFilesAndFolders();

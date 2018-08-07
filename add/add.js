@@ -18,8 +18,6 @@ let commands = {
   ]
 }
 
-
-
 let add = () => {
   process.stdout.write('\033c')
   prompt([commands]).then(ans => {
