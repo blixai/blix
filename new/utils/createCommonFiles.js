@@ -1,7 +1,8 @@
 const fs = require("fs");
 const path = require("path");
 const helpers = require("../../helpers");
-const name = process.argv[3];
+let store = require('../store')
+let name = process.argv[3] || '';
 
 const loadFile = filePath => {
   return fs.readFileSync(path.resolve(__dirname, filePath), "utf8");
@@ -9,6 +10,7 @@ const loadFile = filePath => {
 
 /// create things like .gitignore, scripts folder, scripts templates folder, README.md, .env, and package.json
 const createCommonFilesAndFolders = () => {
+  name = store.name
   console.log(
     "Creating the project and downloading packages, this may take a moment"
   );

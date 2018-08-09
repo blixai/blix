@@ -24,8 +24,8 @@ const backendType = {
   message: "What type of backend do you need",
   name: "mode",
   choices: [
-    { name: "MVC", value: "mvc" },
-    { name: "Standard (serve html files, assets, and create JSON rest endpoints)" },
+    { name: "MVC", value: "mvc"},
+    { name: "Standard (serve html files, assets, and create JSON rest endpoints)", value: "standard" },
     { name: "API", value: "api" }
   ]
 }
@@ -81,6 +81,12 @@ const vueTesting = {
   ]
 };
 
+const namePrompt = {
+  type: "input",
+  message: "Please enter a name for this project:",
+  name: 'name'
+}
+
 module.exports = {
   frontendOptions,
   backend,
@@ -89,5 +95,6 @@ module.exports = {
   serverTesting,
   e2e,
   reactTesting,
-  vueTesting
+  vueTesting,
+  namePrompt
 };

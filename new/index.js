@@ -2,13 +2,13 @@ const fs = require("fs");
 const inquirer = require("inquirer");
 const prompt = inquirer.prompt;
 
+let store = require('./store');
 const { createBackend } = require("./backend");
 const { vue } = require("./vue");
 const { react } = require("./react");
 const { vanillaJS } = require("./vanillaJS");
 
-// variables
-const name = process.argv[3];
+store.name = process.argv[3] || '';
 
 // console prompts
 const {
@@ -18,7 +18,8 @@ const {
   serverTesting,
   e2e,
   reactTesting,
-  vueTesting
+  vueTesting,
+  namePrompt
 } = require("./prompts");
 
 // prompts user to select frontend type and branches into project specific questions from there
@@ -112,18 +113,25 @@ const backendOnly = async () => {
   createBackend("api", serverTestingSelection, databaseSelection);
 };
 
+const promptName = async () => {
+  let name = await prompt([namePrompt]);
+  store.name = name.name
+  return
+}
+
 // create project ensures there shouldn't be errors before starting the prompts
-const createProject = () => {
-  if (!name) {
-    console.log('No name provided. Please run "blix new <projectName>"');
-    process.exit();
+const createProject = async () => {
+  console.clear()
+  if (!store.name) {
+    await promptName()
   }
-  if (fs.existsSync(`./${name}`)) {
-    console.error(`A project named ${name} already exists!`);
-    process.exit();
+  console.log(store.name)
+  if (fs.existsSync(`./${store.name}`)) {
+    console.error(`A project named ${store.name} already exists!`);
+    await promptName()
+    createProject()
   }
-  // name is provided and project doesn't already exist, clear console and begin prompts
-  process.stdout.write("\033c");
+  console.clear()
   promptFrontend();
 };
 
