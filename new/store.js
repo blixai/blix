@@ -1,5 +1,4 @@
 module.export = {
-    name: '',
     frontend: '',
     backend: '',
     database: '',

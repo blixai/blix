@@ -81,12 +81,6 @@ const vueTesting = {
   ]
 };
 
-const namePrompt = {
-  type: "input",
-  message: "Please enter a name for this project:",
-  name: 'name'
-}
-
 module.exports = {
   frontendOptions,
   backend,
@@ -96,5 +90,4 @@ module.exports = {
   e2e,
   reactTesting,
   vueTesting,
-  namePrompt
 };

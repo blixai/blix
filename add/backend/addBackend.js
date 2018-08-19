@@ -5,7 +5,6 @@ const helpers = require('../../helpers')
 const fs = require('fs')
 const path = require('path')
 
-const { createCommonFilesAndFolders } = require("../../new/utils/createCommonFiles");
 const { testBackend } = require("../../new/utils/addBackendTests");
 const { addMongooseToScripts } = require("../../new/utils/addMongoDB");
 const { addBookshelfToScripts } = require("../../new/utils/addBookshelf");
