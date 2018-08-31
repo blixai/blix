@@ -11,10 +11,10 @@ let commands = {
   message: 'Select what to add to your project',
   name: 'command',
   choices: [
+    { name: 'backend'  },
     { name: 'webpack'  },
     { name: 'redux'    },
-    { name: 'database' },
-    { name: 'backend'  }
+    { name: 'database' }
   ]
 }
 
