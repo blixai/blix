@@ -1,7 +1,7 @@
 const fs = require("fs");
 const execSync = require("child_process").execSync;
-const log = console.log;
 const name = process.argv[3];
+const log = console.log;
 
 const shouldUseYarn = () => {
   try {
@@ -57,6 +57,7 @@ exports.addScript = (command, script) => {
 };
 
 exports.modifyKnex = () => {
+  
   let newKnex = `module.exports = {\n\n\tdevelopment: {\n\t\tclient: 'pg',\n\t\tconnection: 'postgres://localhost/${name}',\n\t\tmigrations: {\n\t\t\tdirectory: './db/migrations'\n\t\t},\n\t\tseeds: {\n\t\t\tdirectory: 'db/seeds/dev'\n\t\t},\n\t\tuseNullAsDefault: true\n\t},\n\n\tproduction: {\n\t\tclient: 'pg',\n\t\tconnection: process.env.DATABASE_URL + '?ssl=true',\n\t\tmigrations: {\n\t\t\tdirectory: 'db/migrations'\n\t\t},\n\t\tseeds: {\n\t\t\tdirectory: 'db/seeds/dev'\n\t\t},\n\t\tuseNullAsDefault: true\n\t}\n\n};`;
   if (fs.existsSync(`./${name}/knexfile.js`)) {
     fs.truncateSync(`./${name}/knexfile.js`, 0, function() {
@@ -82,7 +83,7 @@ exports.addScriptToNewPackageJSON = (command, script) => {
 
 exports.writeFile = (filePath, file, message) => {
   fs.writeFile(filePath, file, err => {
-    if (err) throw err;
+    if (err) console.error(err);
     message ? log(message) : "";
   });
 };
@@ -109,4 +110,74 @@ exports.addKeytoPackageJSON = (key, value) => {
   const newPackageJSON = JSON.stringify(json, null, 2);
   fs.writeFileSync(`./${name}/package.json`, newPackageJSON);
 };
+
+exports.installDependenciesToExistingProject = packages => {
+  checkIfPackageJSONExists(packages)
+  try {
+    execSync(`npm install --save ${packages}`, { stdio: [0, 1, 2] })
+  } catch (err) {
+    console.error(err)
+  }
+}
+
+exports.installDevDependenciesToExistingProject = packages => {
+  checkIfPackageJSONExists(packages)
+  try {
+    execSync(`npm install --save-dev ${packages}`, { stdio: [0, 1, 2] })
+  } catch (err) {
+    console.error(err)
+  }
+}
+
+exports.checkScriptsFolderExist = () => {
+  if (!fs.existsSync('./scripts')) {
+    fs.mkdirSync('./scripts')
+    fs.mkdirSync('./scripts/templates')
+  } else if (!fs.existsSync('./scripts/templates')) {
+    fs.mkdirSync('./scripts/templates')
+  }
+}
+
+exports.getCWDName = () => {
+  let name = process.cwd()
+  name = name.split('/')
+  name = name.pop()
+  return name
+}
+
+exports.modifyKnexExistingProject = (cwd) => {
+  let newKnex = `module.exports = {\n\n\tdevelopment: {\n\t\tclient: 'pg',\n\t\tconnection: 'postgres://localhost/${cwd}',\n\t\tmigrations: {\n\t\t\tdirectory: './db/migrations'\n\t\t},\n\t\tseeds: {\n\t\t\tdirectory: 'db/seeds/dev'\n\t\t},\n\t\tuseNullAsDefault: true\n\t},\n\n\tproduction: {\n\t\tclient: 'pg',\n\t\tconnection: process.env.DATABASE_URL + '?ssl=true',\n\t\tmigrations: {\n\t\t\tdirectory: 'db/migrations'\n\t\t},\n\t\tseeds: {\n\t\t\tdirectory: 'db/seeds/dev'\n\t\t},\n\t\tuseNullAsDefault: true\n\t}\n\n};`
+  if (fs.existsSync(`./knexfile.js`)) {
+    fs.truncateSync(`./knexfile.js`, 0, function() {
+      console.log("done")
+    })
+    fs.appendFile(`./knexfile.js`, newKnex, err => {
+      if (err) throw err
+    })
+  } else {
+    fs.writeFileSync(`./knexfile.js`, newKnex)
+  }
+  fs.mkdirSync(`./db`)
+  fs.mkdirSync(`./db/migrations`)
+}
+
+exports.checkIfScriptIsTaken = (scriptName) => {
+  try {
+    let buffer = fs.readFileSync('./package.json')
+    let packageJson = JSON.parse(buffer)
+    return scriptName in packageJson['scripts']
+  } catch (err) {
+    return false
+  }
+}
+
+// local helpers 
+
+const checkIfPackageJSONExists = packages => {
+  if (!fs.existsSync('package.json')) {
+    console.error('package.json not found. Unable to install packages')
+    console.error(`You will need to install ${packages} yourself`)
+    return 
+  }
+}
 

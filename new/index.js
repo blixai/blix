@@ -7,7 +7,6 @@ const { vue } = require("./vue");
 const { react } = require("./react");
 const { vanillaJS } = require("./vanillaJS");
 
-// variables
 const name = process.argv[3];
 
 // console prompts
@@ -115,15 +114,15 @@ const backendOnly = async () => {
 // create project ensures there shouldn't be errors before starting the prompts
 const createProject = () => {
   if (!name) {
-    console.log('No name provided. Please run "blix new <projectName>"');
-    process.exit();
+    console.log('No name provided for new project.')
+    console.log('Try again with: blix new my-project')
+    process.exit(1)
   }
   if (fs.existsSync(`./${name}`)) {
     console.error(`A project named ${name} already exists!`);
-    process.exit();
+    process.exit(1)
   }
-  // name is provided and project doesn't already exist, clear console and begin prompts
-  process.stdout.write("\033c");
+  console.clear()
   promptFrontend();
 };
 

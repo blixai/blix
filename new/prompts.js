@@ -19,6 +19,17 @@ const backend = {
   name: "backend"
 };
 
+const backendType = {
+  type: "list",
+  message: "What type of backend do you need",
+  name: "mode",
+  choices: [
+    { name: "MVC", value: "mvc"},
+    { name: "Standard (serve html files, assets, and create JSON rest endpoints)", value: "standard" },
+    { name: "API", value: "api" }
+  ]
+}
+
 const database = {
   type: "list",
   message: "Select a Database:",
@@ -73,9 +84,10 @@ const vueTesting = {
 module.exports = {
   frontendOptions,
   backend,
+  backendType,
   database,
   serverTesting,
   e2e,
   reactTesting,
-  vueTesting
+  vueTesting,
 };

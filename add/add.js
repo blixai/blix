@@ -1,26 +1,22 @@
-let webpack = require('./webpack/webpack.js')
-let addBackend = require('./backend/addBackend')
+let webpack     = require('./webpack/webpack.js')
+let addBackend  = require('./backend/addBackend')
 let addDatabase = require('./database/addDataBase')
-let addRedux = require('./redux/addRedux')
+let addRedux    = require('./redux/addRedux')
 
-
-let log = console.log
 let inquirer = require('inquirer')
-let prompt = inquirer.prompt
+let prompt   = inquirer.prompt
 
 let commands = {
   type: 'list',
   message: 'Select what to add to your project',
   name: 'command',
   choices: [
+    { name: 'backend'  },
     { name: 'webpack'  },
     { name: 'redux'    },
-    { name: 'database' },
-    { name: 'backend'  }
+    { name: 'database' }
   ]
 }
-
-
 
 let add = () => {
   process.stdout.write('\033c')
