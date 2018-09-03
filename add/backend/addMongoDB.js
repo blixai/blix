@@ -9,6 +9,7 @@ const loadFile = filePath => {
 
 //
 const addMongooseToScripts = () => {
+  helpers.checkScriptsFolderExist()
   let model = loadFile('scripts/backend/mongoose.js')
   let schemaTemplate = loadFile('scripts/backend/templates/mongoose.js')
   helpers.writeFile(`./scripts/model.js`, model)
@@ -31,9 +32,21 @@ const addMongoDBToProject = () => {
   let mongoAddedServer = server.join('\n')
 
   helpers.writeFile(`./server/server.js`, mongoAddedServer)
-  let name = helpers.getCWDName()
-  helpers.writeFile(`./.env`, `MONGO=${`mongodb://localhost:27017/${name}`}`)
+  envFileExists()
   helpers.installDependenciesToExistingProject('mongo mongoose')
+}
+
+const envFileExists = () => {
+  let name = helpers.getCWDName()
+  try {
+    if (fs.existsSync('./.env')) {
+      fs.appendFileSync('./.env', `MONGO=${`mongodb://localhost:27017/${name}`}`)
+    } else {
+      helpers.writeFileSync('./.env', `MONGO=${`mongodb://localhost:27017/${name}`}`)
+    }
+  } catch (err) {
+    console.error('Failed to find, create or append .env file')
+  }
 }
 
 module.exports = {
