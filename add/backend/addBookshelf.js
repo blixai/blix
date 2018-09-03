@@ -10,6 +10,7 @@ const loadFile = filePath => {
 
 const addBookshelfToScripts = () => {
   // load files for scripts folder
+  helpers.checkScriptsFolderExist()
   const bookshelf = loadFile('scripts/backend/bookshelf.js')
   const model = loadFile('scripts/backend/templates/bookshelf.js')
   const migration = loadFile('scripts/backend/templates/migration.js')
