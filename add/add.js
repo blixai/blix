@@ -19,7 +19,7 @@ let commands = {
 }
 
 let add = () => {
-  process.stdout.write('\033c')
+  console.clear()
   prompt([commands]).then(ans => {
     command = ans.command
     switch (command) {

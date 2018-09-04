@@ -38,128 +38,85 @@ let addReact = {
   message: 'Do you want webpack configured for React: '
 }
 
-let style = {
-  type: 'checkbox',
-  name: 'style',
-  message: 'Select additional webpack loaders:',
-  choices: [
-    { name: 'PostCSS', value: 'post' },
-    { name: 'Sass',    value: 'sass' }
-  ]
+let noPackageJSON = {
+  type: 'confirm',
+  name: 'answer',
+  message: `No package.json file found. You're in the ${helpers.getCWDName()} directory. Do you wish continue: `
 }
 
-let installWebpack = () => {
-let files = glob.sync('{,!(node_modules)/**/}*.js')
+let fileChecks = async () => {
+  if (fs.existsSync('./webpack.config.js')) {
+    console.error('Webpack config file already exists')
+    process.exit(1)
+  } else if (!fs.existsSync('./package.json')) {
+    let continuePrompt = await prompt([noPackageJSON])
+    if (!continuePrompt.answer) {
+      process.exit()
+    }
+  }
+}
+
+let installWebpack = async () => {
+  await fileChecks()
+  let files = glob.sync('{,!(node_modules)/**/}*.js')
   webpackEntry.choices = files 
-
-  prompt([webpackEntry]).then(ans => {
-    ans = ans.src 
-    ans = './' + ans
-    prompt([webpackOutput]).then(output => {
-      output = output.output
-      reactQuestion(ans, output)
-    })
-  })
+  let ans = await prompt([webpackEntry])
+  ans = ans.src 
+  ans = './' + ans
+  let output = await prompt([webpackOutput])
+  output = output.output
+  reactQuestion(ans, output)
 }
 
-let reactQuestion = (ans, output) => {
-  prompt([addReact]).then(react => {
-    react = react.react
-    // createConfig(ans, output, react)
-    styleQuestion(ans, output, react)
-  })
+let reactQuestion = async (ans, output) => {
+  let react = await prompt([addReact])
+  react = react.react
+  createConfig(ans, output, react)
 }
 
-let styleQuestion = (entry, output, react) => {
-  prompt([style]).then(ans => {
-    let selectedStyles = ans.style
-    createConfig(entry, output, react, selectedStyles)
-  })
-}
 
-let createConfig = (input, output, react, styles) => {
+let createConfig = (input, output, react) => {
   log('Downloading dependencies, this may take a moment.')
-  let webpack = loadFile('./files/webpack.config.js')
+  let webpack = loadFile('./webpack.config.js')
   let babel
   if (react) {
-    babel = loadFile('./files/react-babel.js')
-    helpers.install('react react-dom')   
-    helpers.installDevDependencies('webpack babel-loader css-loader babel-core babel-preset-env babel-preset-react style-loader webpack-merge uglifyjs-webpack-plugin extract-text-webpack-plugin ')
+    babel = loadFile('../../new/files/frontend/babel/reactBabel')
+    helpers.installDependenciesToExistingProject('react react-dom')
+    helpers.installDevDependenciesToExistingProject('webpack babel-loader css-loader @babel/core @babel/preset-env style-loader sass-loader node-sass cssnano postcss postcss-preset-env postcss-import postcss-loader webpack-cli @babel/preset-react')
   } else {
-    babel = loadFile('./files/.babelrc')
-    helpers.installDevDependencies('webpack babel-loader css-loader babel-core babel-preset-env style-loader webpack-merge uglifyjs-webpack-plugin extract-text-webpack-plugin')
+    babel = loadFile('../../new/files/frontend/babel/.babelrc')
+    helpers.installDevDependenciesToExistingProject('webpack babel-loader css-loader @babel/core @babel/preset-env style-loader sass-loader node-sass cssnano postcss postcss-preset-env postcss-import postcss-loader webpack-cli')
   }
 
   webpack = webpack.replace(/INPUT/g, input)
   webpack = webpack.replace(/OUTPUT/g, output)
-  webpack = addLoader(styles, webpack)
 
+  let postcss = loadFile('../../new/files/frontend/postcss.config.js')
+  helpers.writeFile('./postcss.config.js', postcss, 'Created postcss.config.js')
 
-  helpers.writeFile('./webpack.config.js', webpack, 'Created webpack.config.js file')
+  helpers.writeFile('./webpack.config.js', webpack, 'Created webpack.config.js')
+  if (!fs.existsSync('./.babelrc')) {
+    helpers.writeFile('./.babelrc', babel, 'Created .babelrc')
+  }
 
-  helpers.writeFile('./.babelrc', babel, 'Created .babelrc file')
-
-  let webpackProd = loadFile('./files/webpack.prod.js')
-  helpers.writeFile('./webpack.prod.js', webpackProd, 'Created webpack.prod.js file')
 
   try {
-    helpers.addScript('webpack', 'webpack --watch')
-    helpers.addScript('webpack-prod', 'webpack --config webpack.prod.js')
-  } catch (e) {
-    log(`Couldn't add the webpack and webpack-prod scripts to package json. `)
-  }
-}
-
-let addLoader = (styles, webpack) => {
-  if (styles.includes('sass')) {
-    let subwebpack = addSass(webpack)
-    if (styles.includes('post')) {
-      webpack = addPostCSS(subwebpack)
+    if (helpers.checkIfScriptIsTaken('build')) {
+      helpers.addScript('build:prod', "webpack --mode='production'")
     } else {
-      webpack = subwebpack
+      helpers.addScript('build', "webpack --mode='production'")
     }
 
-  } else if (styles.includes('post')) {
-    webpack = addPostCSS(webpack)
+    if (helpers.checkIfScriptIsTaken('dev')) {
+      helpers.addScript('build:dev', "webpack --watch --mode='development'") 
+    } else {
+      helpers.addScript('dev', "webpack --watch --mode='development'")
+    }
+  } catch (e) {
+    console.error(`Couldn't add webpack development and production scripts to package json.`)
   }
-  return webpack 
 }
 
-let addSass = (webpack) => {
-  let extractSass = `const extractSass = new ExtractTextPlugin('main.css')`
-  let body = webpack.split('\n')
-  body.splice(2, 0, extractSass)
-  body = body.join('\n')
-  let search = 'loaders: ['
-  let position = body.indexOf(search)
-  let sassLoader = `\n\t\t\t{\n\t\t\t\ttest: /\\.scss$/,\n\t\t\t\tuse: extractSass.extract({\n\t\t\t\t\tfallback: "style-loader",\n\t\t\t\t\tuse: "css-loader!sass-loader"\n\t\t\t\t})\n\t\t\t},`
-  let sassPlugin = '\n\t\textractSass,'
-  webpack = [body.slice(0, position + 10), sassLoader, body.slice(position + 10)].join('')
-  let newBody = webpack
-  let index = newBody.indexOf('plugins: [')
-  webpack = [newBody.slice(0, index + 10), sassPlugin, newBody.slice(index + 10)].join('')
-  helpers.installDevDependencies('sass-loader node-sass')
-  // add plugin
-  return webpack 
-}
 
-// must go last as if scss support is there itll need to be added to that loader 
-let addPostCSS = (webpack) => {
-  // detect css-loader and add to it
-  let body = webpack
-  let position = body.lastIndexOf("css-loader")
-  webpack = [body.slice(0, position + 10), '!postcss-loader', body.slice(position + 10)].join('')
-  // detect scss loader and add to it
-  let newBody = webpack
-  let index = body.indexOf("sass-loader")
-  if (index !== -1) {
-    newBody = [newBody.slice(0, index + 11), '!postcss-loader', newBody.slice(index + 11)].join('')
-  }
-  webpack = newBody
-  let postcss = loadFile('./files/postcss.config.js')
-  helpers.writeFile('./postcss.config.js', postcss, 'Created postcss.config.js')
-  helpers.installDevDependencies('cssnano postcss postcss-cssnext postcss-import postcss-loader')
-  return webpack
-}
 
 module.exports = webpack
