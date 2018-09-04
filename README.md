@@ -4,6 +4,7 @@
 
 In development: the goal of this project is to help Javascript developers create cutting edge projects quickly and easily. It also embeds customizable templates in scripts folder within the project structure to help developers automate common tasks like creating a new API endpoint or generating a new Redux/React component.
 
+![Automate all the things!](https://imgur.com/TfXuJlH.jpg)
 
 ## Getting Started
 
