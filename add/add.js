@@ -1,4 +1,5 @@
-let webpack     = require('./webpack/webpack.js')
+let addWebpack  = require('./webpack/addWebpack.js')
+let addWebpackDevServer = require('./webpack/addWebpackDevServer')
 let addBackend  = require('./backend/addBackend')
 let addDatabase = require('./database/addDataBase')
 let addRedux    = require('./redux/addRedux')
@@ -13,18 +14,22 @@ let commands = {
   choices: [
     { name: 'backend'  },
     { name: 'webpack'  },
+    { name: 'webpack-dev-server' },
     { name: 'redux'    },
     { name: 'database' }
   ]
 }
 
 let add = () => {
-  process.stdout.write('\033c')
+  console.clear()
   prompt([commands]).then(ans => {
     command = ans.command
     switch (command) {
       case "webpack":  
-        webpack()
+        addWebpack()
+        break;
+      case "webpack-dev-server":
+        addWebpackDevServer();
         break;
       case "redux":
         addRedux()

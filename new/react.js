@@ -257,7 +257,7 @@ const packages = backend => {
     helpers.installDevDependencies("webpack-dev-server");
   }
   helpers.installDevDependencies(
-    "react react-dom webpack webpack-cli babel-loader css-loader babel-core babel-preset-env babel-preset-react style-loader sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-preset-env postcss-import postcss-loader"
+    "react react-dom webpack webpack-cli babel-loader css-loader @babel/core @babel/preset-env @babel/preset-react style-loader sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-preset-env postcss-import postcss-loader"
   );
 };
 
