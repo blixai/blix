@@ -57,9 +57,9 @@ let fileChecks = async () => {
 }
 
 let installWebpack = async () => {
-  await fileChecks()
+   await fileChecks()
   let files = glob.sync('{,!(node_modules)/**/}*.js')
-  webpackEntry.choices = files 
+  webpackEntry.choices = files
   let ans = await prompt([webpackEntry])
   ans = ans.src 
   ans = './' + ans
