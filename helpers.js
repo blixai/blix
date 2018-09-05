@@ -99,7 +99,7 @@ exports.writeFileSync = (filePath, file, message) => {
 
 exports.rename = (oldName, newName) => {
   fs.rename(oldName, newName, err => {
-    if (err) throw err;
+    if (err) console.error(err);
   });
 };
 
