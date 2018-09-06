@@ -39,7 +39,7 @@ let redux = () => {
   }
 }
 
-
+// creates an index.js file that imports the App.js router and creates store provider
 let createIndex = () => {
   fs.truncate('./src/index.js', 0, () => {
     helpers.writeFile('./src/index.js', index)
@@ -70,16 +70,13 @@ let createScripts = () => {
   helpers.writeFile('./scripts/view.js', view)
 }
 
+// option add router selected, and was created with create-react-app
 let createReactApp = () => {
-  if (fs.existsSync('./src/components')) {
-    // if it already exists this could be a problem. 
-    process.exit()
-  } else {
-    createIndex()
-    fs.mkdirSync('./src/components')
-    fs.mkdirSync('./src/components/App')
-    fs.mkdirSync('./src/views')
-  }
+  createIndex()
+  fs.mkdirSync('./src/components')
+  fs.mkdirSync('./src/components/App')
+  fs.mkdirSync('./src/views')
+  
   helpers.rename('./src/App.js', './src/components/App/App.js')
 
   let router = loadFile('frontend/react-router/App.js')
@@ -100,6 +97,7 @@ let createReactApp = () => {
   createScripts()
 }
 
+// add router option selected and created by blix
 let basicReactCreatedByBlix = () => {
   let router = loadFile('frontend/react-router/App.js')
   helpers.writeFile('./src/App.js', router)
@@ -117,6 +115,7 @@ let basicReactCreatedByBlix = () => {
   }
 }
 
+// project already has react router, create container for each component and create new index.js with store provider
 let reactRouterCreatedByBlix = () => {
   let filesInComponents = fs.readdirSync('./src/components')
   filesInComponents.forEach(file => {
@@ -126,14 +125,14 @@ let reactRouterCreatedByBlix = () => {
     }
   })
   createIndex()
-  createScripts()
 }
 
+// add react router option selected
 let createdByBlix = () => {
   if (fs.existsSync('./src/views') && fs.existsSync('./src/components')) {
     // blix react-router style
-    console.log('It appears this project is already configured for React-Router.')
-    process.exit()
+    reactRouterCreatedByBlix()
+    createIndex()
   } else {
     // blix basic react style
     createIndex()
@@ -150,12 +149,13 @@ let createdByBlix = () => {
 let createFilesWithRouter = () => {
   redux()
 
-  if (fs.existsSync('./src/App.js')) {
+  if (fs.existsSync('./src/App.js') && !fs.existsSync('./src/components')) {
     createReactApp()
-  } else if (fs.existsSync('./src/App/App.js')) {
+  } else if (fs.existsSync('./src/App/App.js') || (fs.existsSync('./src/components') && fs.existsSync('./src/views'))) {
     createdByBlix()
   } else {
       // not created by either blix or create-react-app
+    console.log("This doesn't seem to have been created by ")
   }
 
   helpers.installDependenciesToExistingProject('redux react-redux react-router-dom')
@@ -167,6 +167,7 @@ let dontAddReactRouter = () => {
   if (fs.existsSync('./src/components') && fs.existsSync('./src/views')) {
     // react-router type blix project
     reactRouterCreatedByBlix()
+    createScripts()
   } else if (fs.existsSync('./src/App/App.js')) {
     // basic react type blix project
     let AppContainer = createContainer('App')
