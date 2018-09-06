@@ -27,20 +27,20 @@ let action = loadFile('scripts/frontend/redux/action.js')
 let view   = loadFile('scripts/frontend/redux/view.js')
 
 let redux = () => {
-  if (fs.existsSync('./src')) {
+  if (fs.existsSync('./src') && !fs.existsSync('./src/actions')) {
     fs.mkdirSync('./src/actions')
     helpers.writeFile('./src/actions/index.js', '')
     fs.mkdirSync('./src/reducers')
     helpers.writeFile('./src/reducers/rootReducer.js', rootReducer)
     helpers.writeFile('./src/configStore.js', configStore)
   } else {
-    console.log('No src folder found. Are you in a project?')
+    console.log('No src folder found or src/actions folder already exists.')
     process.exit()
   }
 }
 
 
-let createIndex = (name) => {
+let createIndex = () => {
   fs.truncate('./src/index.js', 0, () => {
     helpers.writeFile('./src/index.js', index)
   })
@@ -118,14 +118,22 @@ let basicReactCreatedByBlix = () => {
 }
 
 let reactRouterCreatedByBlix = () => {
-  // maybe for each component create a container?
-  // scripts will be added/updated
+  let filesInComponents = fs.readdirSync('./src/components')
+  filesInComponents.forEach(file => {
+    if (fs.lstatSync(`./src/components/${file}`).isDirectory()) {
+      let container = createContainer(file)
+      helpers.writeFile(`./src/components/${file}/${file}Container.js`, container)
+    }
+  })
+  createIndex()
+  createScripts()
 }
 
 let createdByBlix = () => {
   if (fs.existsSync('./src/views') && fs.existsSync('./src/components')) {
     // blix react-router style
-    reactRouterCreatedByBlix()
+    console.log('It appears this project is already configured for React-Router.')
+    process.exit()
   } else {
     // blix basic react style
     createIndex()
@@ -144,7 +152,7 @@ let createFilesWithRouter = () => {
 
   if (fs.existsSync('./src/App.js')) {
     createReactApp()
-  } else if (fs.existsSync('./src/App/App.js') || fs.existsSync('./src/views')) {
+  } else if (fs.existsSync('./src/App/App.js')) {
     createdByBlix()
   } else {
       // not created by either blix or create-react-app
@@ -154,24 +162,35 @@ let createFilesWithRouter = () => {
 }
 
 // for a basic redux setup without a router
-let createFilesWithoutRouter = () => {
+let dontAddReactRouter = () => {
   redux()
-  if (fs.existsSync('./src/App.js')) {
+  if (fs.existsSync('./src/components') && fs.existsSync('./src/views')) {
+    // react-router type blix project
+    reactRouterCreatedByBlix()
+  } else if (fs.existsSync('./src/App/App.js')) {
+    // basic react type blix project
+    let AppContainer = createContainer('App')
+    helpers.writeFile('./src/App/AppContainer.js', AppContainer)
+    let index = `import React from 'react'\nimport ReactDOM from 'react-dom'\nimport AppContainer from './App/AppContainer'\nimport { configureStore } from './configStore'\nimport { Provider } from 'react-redux'\n\n\nconst store = configureStore()\n\n\nReactDOM.render(\n\t<Provider store={store}>\n\t\t<AppContainer/>\n\t</Provider>\n, document.getElementById('root'))`
+
+    fs.truncate('./src/index.js', 0, () => {
+      helpers.writeFile('./src/index.js', index)
+    })
+  } else if (fs.existsSync('./src/App.js')) {
+    // create-react-app
     let AppContainer = createContainer('App')
     helpers.writeFile('./src/AppContainer.js', AppContainer)
     let index = `import React from 'react'\nimport ReactDOM from 'react-dom'\nimport AppContainer from './AppContainer'\nimport { configureStore } from './configStore'\nimport { Provider } from 'react-redux'\n\n\nconst store = configureStore()\n\n\nReactDOM.render(\n\t<Provider store={store}>\n\t\t<AppContainer/>\n\t</Provider>\n, document.getElementById('root'))`
     fs.truncate('./src/index.js', 0, () => {
       helpers.writeFile('./src/index.js', index)
     })
-    helpers.installDependenciesToExistingProject('react-redux redux')
   }
-
-  // need to setup if blix was used and not create-react-app
+  helpers.installDependenciesToExistingProject('react-redux redux')
 }
 
 let reactRouter = {
   type: 'confirm',
-  message: 'Do you need React Router:',
+  message: 'Do you want to add React Router: ',
   name: 'router'
 }
 
@@ -183,7 +202,7 @@ let addRedux = async () => {
   if (answer) {
     createFilesWithRouter()
   } else {
-    createFilesWithoutRouter()
+    dontAddReactRouter()
   }
 }
 
