@@ -2,7 +2,7 @@
 
 ### bliss + blitz 
 
-In development: the goal of this project is to help Javascript developers create cutting edge projects quickly and easily. It also embeds customizable templates in scripts folder within the project structure to help developers automate common tasks like creating a new API endpoint or generating a new Redux/React component.
+In development: the goal of this project is to help Javascript developers create cutting edge projects quickly and easily. Besides creating dozens of different projects from scratch it can also embed easily hackable scripts inside your project to help developers automate common tasks like creating a new API endpoint or generating a new Redux/React component. 
 
 ![Automate all the things!](https://imgur.com/TfXuJlH.jpg)
 
