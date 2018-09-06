@@ -155,7 +155,7 @@ let createFilesWithRouter = () => {
     createdByBlix()
   } else {
       // not created by either blix or create-react-app
-    console.log("This doesn't seem to have been created by ")
+    console.log("This doesn't seem to have been created by create-react-app or blix. We're not sure how to handle this so to be safe we won't modify anything.")
   }
 
   helpers.installDependenciesToExistingProject('redux react-redux react-router-dom')
