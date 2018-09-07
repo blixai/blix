@@ -8,7 +8,7 @@ const loadFile = filePath => {
 };
 
 let installReactTesting = reactTests => {
-  if (!reactTests) {
+  if (!reactTests['enzyme']) {
     return;
   }
   helpers.installDevDependencies(
