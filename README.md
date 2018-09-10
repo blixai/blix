@@ -31,7 +31,7 @@ Commands:
 ```
   blix new <projectName>
   blix add
-  blix script
+  blix scripts
   blix help
   blix version
 ```  
