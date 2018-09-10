@@ -30,7 +30,8 @@ Listed are a series of commmands to get started with blix
 Commands: 
 ```
   blix new <projectName>
-  blix add 
+  blix add
+  blix script
   blix help
   blix version
 ```  
