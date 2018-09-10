@@ -57,8 +57,8 @@ const createBackend = (mode, serverTestingSelection, databaseSelection) => {
 
 const standard = () => {
   const html = loadFile('frontend/other/index.html')
-  const server = loadFile('backend/backend/server.js')
-  const controller = loadFile('backend/backend/home.js')
+  const server = loadFile('backend/standard/server.js')
+  const controller = loadFile('backend/standard/home.js')
 
   helpers.writeFileSync('./server/server.js', server)
   helpers.writeFile('./server/controllers/home.js', controller)

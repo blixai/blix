@@ -6,6 +6,7 @@ const { createBackend } = require("./backend");
 const { vue } = require("./vue");
 const { react } = require("./react");
 const { vanillaJS } = require("./vanillaJS");
+let store = require('./store')
 
 const name = process.argv[3];
 
@@ -49,22 +50,17 @@ const promptFrontend = async () => {
 };
 
 const reactProject = async reactType => {
-  const reactTestingSelection = await prompt([reactTesting]);
-  const e2eSelection = await prompt([e2e]);
-  const backendSelection = await prompt([backend]);
-  if (backendSelection.backend) {
-    const serverTestingSelection = await prompt([serverTesting]);
-    const databaseSelection = await prompt([database]);
-    react(
-      reactType,
-      reactTestingSelection,
-      e2eSelection,
-      backendSelection.backend,
-      serverTestingSelection,
-      databaseSelection
-    );
+  store.reactType = reactType
+  store.reactTesting = await prompt([reactTesting]);
+  store.e2e = await prompt([e2e]);
+  store.backend = await prompt([backend]);
+
+  if (store.backend.backend) {
+    store.serverTesting = await prompt([serverTesting]);
+    store.database = await prompt([database]);
+    react();
   } else {
-    react(reactType, reactTestingSelection, e2eSelection);
+    react();
   }
 };
 
@@ -106,9 +102,10 @@ const vanillaJSProject = async () => {
 };
 
 const backendOnly = async () => {
-  const serverTestingSelection = await prompt([serverTesting]);
-  const databaseSelection = await prompt([database]);
-  createBackend("api", serverTestingSelection, databaseSelection);
+  store.serverTesting = await prompt([serverTesting]);
+  store.database = await prompt([database]);
+  store.backendType = "api" 
+  createBackend();
 };
 
 // create project ensures there shouldn't be errors before starting the prompts
