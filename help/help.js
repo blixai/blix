@@ -10,9 +10,7 @@ let commands = {
     { name: 'new'     },
     { name: 'scripts' },
     { name: 'add'     },
-    { name: 'remove'  },
     { name: 'help'    },
-    { name: 'update'  },
     { name: 'version' }
   ]
 }
@@ -37,9 +35,6 @@ let runHelp = () => {
         log('Add redux to an existing react project. Be careful, it can cause file loss.')
         log('Works best with create-react-app projects or blix made react projects.')
         break
-      case 'update':
-        log('updates blix from npm')
-        break
       case 'add':
         log('Choose from a list to add things like servers, databases, webpack, and redux to a project')
         break
@@ -48,9 +43,6 @@ let runHelp = () => {
         break
       case 'webpack':
         log('Add webpack to project. Asks for the entry directory and output folder. Configured for React, Sass, JS, CSS.')
-        break
-      case 'remove': 
-        log('Remove gulp or webpack from a project. Removes common dependencies, npm scripts, and files.')
         break
       case 'version':
         log('Displays the current version of blix')
