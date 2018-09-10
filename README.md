@@ -31,9 +31,7 @@ Commands:
 ```
   blix new <projectName>
   blix add 
-  blix remove
   blix help
-  blix update 
   blix version
 ```  
 

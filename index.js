@@ -1,10 +1,8 @@
 #!/usr/bin/env node
 
 const createProject = require("./new");
-const update = require("./update/update");
 const help = require("./help/help.js");
 const scripts = require("./scripts/script.js");
-const remove = require("./remove/remove.js");
 const add = require("./add/add");
 const command = process.argv[2];
 
