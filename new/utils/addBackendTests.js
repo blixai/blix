@@ -1,6 +1,7 @@
 const helpers = require("../../helpers");
 const fs = require("fs");
 const path = require("path");
+const store = require('../store')
 const name = process.argv[3];
 
 const loadFile = filePath => {
@@ -57,10 +58,10 @@ const testJestBackend = () => {
   helpers.addScriptToNewPackageJSON("jest", "jest");
 };
 
-let testBackend = test => {
-  test.server === "mocha"
+let testBackend = () => {
+  store.serverTesting.server === "mocha"
     ? mochaTestBackend()
-    : test.server === "jest"
+    : store.serverTesting.server === "jest"
       ? testJestBackend()
       : "";
 };

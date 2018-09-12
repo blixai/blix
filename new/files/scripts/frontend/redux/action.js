@@ -21,7 +21,7 @@ rl.question("? What is the actions name: ", ans => {
     log(`Action ${lowercase} already exists.`);
   } else {
     let actionTemplate = fs.readFileSync(
-      path.resolve(__dirname, "./templates/actionTemplate.js"),
+      path.resolve(__dirname, "./templates/action.js"),
       "utf8"
     );
     actionTemplate = actionTemplate.replace(/name/g, lowercase);
@@ -65,7 +65,7 @@ rl.question("? What is the actions name: ", ans => {
     } else {
       // create reducer
       let reducerTemplate = fs.readFileSync(
-        path.resolve(__dirname, "./templates/reducerTemplate.js"),
+        path.resolve(__dirname, "./templates/reducer.js"),
         "utf8"
       );
       reducerTemplate = reducerTemplate.replace(/NAME/g, upperCase);

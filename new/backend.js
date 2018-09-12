@@ -6,6 +6,7 @@ const { createCommonFilesAndFolders } = require('./utils/createCommonFiles')
 const { testBackend } = require('./utils/addBackendTests')
 const { addMongooseToScripts } = require('./utils/addMongoDB')
 const { addBookshelfToScripts } = require('./utils/addBookshelf')
+const store = require('./store')
 
 const loadFile = filePath => {
   return fs.readFileSync(path.resolve(__dirname, filePath), 'utf8')
@@ -15,11 +16,9 @@ const loadFile = filePath => {
 const cluster = loadFile('./files/backend/common/cluster.js')
 const routes = loadFile('./files/backend/common/routes.js')
 
-// mode is a string of either "backend","mvc" or "api"
-// serverTestingSelection is a string of "mocha" or "jest"
-const createBackend = (mode, serverTestingSelection, databaseSelection) => {
+const createBackend = () => {
   // if api mode need to create common files and folders
-  if (mode === 'api') {
+  if (store.backendType === 'api') {
     createCommonFilesAndFolders()
   }
   // create folders
@@ -27,7 +26,7 @@ const createBackend = (mode, serverTestingSelection, databaseSelection) => {
   fs.mkdirSync(`./${name}/server/models`)
   fs.mkdirSync(`./${name}/server/controllers`)
   fs.mkdirSync(`./${name}/server/helpers`)
-  if (mode !== 'api') {
+  if (store.backendType !== 'api') {
     fs.mkdirSync(`./${name}/assets`)
   }
 
@@ -35,10 +34,10 @@ const createBackend = (mode, serverTestingSelection, databaseSelection) => {
   helpers.writeFile(`./${name}/server/routes.js`, routes)
   helpers.writeFile(`./${name}/server/cluster.js`, cluster)
 
-  if (mode === 'standard') {
+  if (store.backendType === 'standard') {
     // type when there is a frontend framework and for the most part the backend is a soa but serves some assets and files
     standard()
-  } else if (mode === 'mvc') {
+  } else if (store.backendType === 'mvc') {
     // mode for when their is no frontend framework so pug is default (this is a rails style mvc with ssr)
     mvcType()
   } else {
@@ -46,34 +45,28 @@ const createBackend = (mode, serverTestingSelection, databaseSelection) => {
     apiType()
   }
 
-  addDatabase(databaseSelection)
+  addDatabase(store.database)
 
   // scripts: controller, model, and if pug project view and add their associated commands to the package.json
-  scripts(mode)
+  scripts(store.backendType)
 
   // packages to install
-  packages(mode)
+  packages(store.backendType)
   // setup endpoint tests
-  testBackend(serverTestingSelection)
+  testBackend(store.serverTesting)
 }
 
 const standard = () => {
+  let html = loadFile('./files/frontend/other/index.html')
+  let server = loadFile('./files/backend/standard/server.js')
+  let controller = loadFile('./files/backend/standard/home.js')
+
   // mode for when there is a frontend framework
   fs.mkdirSync(`./${name}/server/views`)
   fs.mkdirSync(`./${name}/server/views/home`)
-  helpers.writeFile(
-    `./${name}/server/views/home/index.html`,
-    loadFile('./files/frontend/other/index.html')
-  )
-  fs.writeFileSync(
-    `./${name}/server/server.js`,
-    loadFile('./files/backend/backend/server.js')
-  )
-
-  helpers.writeFile(
-    `./${name}/server/controllers/home.js`,
-    loadFile('./files/backend/backend/home.js')
-  )
+  helpers.writeFile(`./${name}/server/views/home/index.html`, html)
+  helpers.writeFileSync(`./${name}/server/server.js`, server)
+  helpers.writeFile(`./${name}/server/controllers/home.js`, controller)
 }
 
 const mvcType = () => {
@@ -93,14 +86,11 @@ const mvcType = () => {
 }
 
 const apiType = () => {
-  fs.writeFileSync(
-    `./${name}/server/server.js`,
-    loadFile('./files/backend/api/server.js')
-  )
-  helpers.writeFile(
-    `./${name}/server/controllers/home.js`,
-    loadFile('./files/backend/api/home.js')
-  )
+  let server = loadFile('./files/backend/api/server.js')
+  let controller = loadFile('./files/backend/api/home.js')
+
+  helpers.writeFileSync(`./${name}/server/server.js`, server)
+  helpers.writeFile(`./${name}/server/controllers/home.js`, controller)
 }
 
 const addDatabase = databaseSelection => {
@@ -112,21 +102,17 @@ const addDatabase = databaseSelection => {
 }
 
 const scripts = mode => {
+  let controller = loadFile('./files/scripts/backend/controller.js')
+  let controllerTemplate = loadFile('./files/scripts/backend/templates/controller.js')
+  let routesTemplate = loadFile('./files/scripts/backend/templates/routes.js')
+
   helpers.addScriptToNewPackageJSON('start', 'nodemon server/cluster.js')
   // controller script
   helpers.addScriptToNewPackageJSON('controller', 'node scripts/controller.js')
-  helpers.writeFile(
-    `./${name}/scripts/controller.js`,
-    loadFile('./files/scripts/backend/controller.js')
-  )
-  helpers.writeFile(
-    `./${name}/scripts/templates/controller.js`,
-    loadFile('./files/scripts/backend/templates/controller.js')
-  )
-  helpers.writeFile(
-    `./${name}/scripts/templates/routes.js`,
-    loadFile('./files/scripts/backend/templates/routes.js')
-  )
+  // create files
+  helpers.writeFile(`./${name}/scripts/controller.js`, controller)
+  helpers.writeFile(`./${name}/scripts/templates/controller.js`, controllerTemplate)
+  helpers.writeFile(`./${name}/scripts/templates/routes.js`, routesTemplate)
 }
 
 const packages = mode => {
