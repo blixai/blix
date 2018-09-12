@@ -107,7 +107,7 @@ const backendOnly = async () => {
 };
 
 // create project ensures there shouldn't be errors before starting the prompts
-const createProject = async () => {
+const createProject = () => {
   if (!name) {
     console.log('No name provided for new project.')
     console.log('Try again with: blix new my-project')
