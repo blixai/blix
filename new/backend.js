@@ -6,6 +6,7 @@ const { createCommonFilesAndFolders } = require('./utils/createCommonFiles')
 const { testBackend } = require('./utils/addBackendTests')
 const { addMongooseToScripts } = require('./utils/addMongoDB')
 const { addBookshelfToScripts } = require('./utils/addBookshelf')
+const { newProjectInstructions } = require('./utils/newProjectInstructions')
 const store = require('./store')
 
 const loadFile = filePath => {
@@ -54,6 +55,9 @@ const createBackend = () => {
   packages(store.backendType)
   // setup endpoint tests
   testBackend(store.serverTesting)
+
+  // new project instructions and add to readme
+  newProjectInstructions()
 }
 
 const standard = () => {

@@ -4,8 +4,8 @@ const path = require("path");
 const { createCommonFilesAndFolders } = require("./utils/createCommonFiles");
 const { installReactTesting } = require("./utils/addReactTesting");
 const { e2eSetup } = require("./utils/addEndToEndTesting");
+const { newProjectInstructions } = require('./utils/newProjectInstructions')
 const { createBackend } = require("./backend");
-const { newProjectInstructions } = require("./utils/newProjectInstructions");
 const name = process.argv[3];
 const store = require('./store')
 
@@ -64,21 +64,20 @@ const react = () => {
   // e2e setup
   e2eSetup();
 
-  // create backend
-  if (store.backend.backend) {
-    store.backendType = "standard"
-    createBackend()
-    // createBackend("backend", store.serverTesting, store.database);
-  }
-
   // add scripts
   scripts();
 
   // install packages
   packages();
 
-  // console log instructions and add instructions to readme
-  // newProjectInstructions(reactType,  );
+  // create backend
+  if (store.backend && store.backend.backend) {
+    store.backendType = "standard"
+    createBackend()
+    // createBackend("backend", store.serverTesting, store.database);
+  } else {
+    newProjectInstructions()
+  }
 };
 
 const createSrcContents = () => {

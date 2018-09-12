@@ -22,7 +22,7 @@ const createCommonFilesAndFolders = () => {
     `./${name}/.gitignore`,
     loadFile("../files/common/gitIgnore.txt")
   );
-  helpers.writeFile(
+  helpers.writeFileSync(
     `./${name}/README.md`,
     loadFile("../files/common/README.md")
   );

@@ -1,7 +1,6 @@
 const fs = require("fs");
 const inquirer = require("inquirer");
 const prompt = inquirer.prompt;
-
 const { createBackend } = require("./backend");
 const { vue } = require("./vue");
 const { react } = require("./react");
@@ -103,6 +102,7 @@ const backendOnly = async () => {
   store.serverTesting = await prompt([serverTesting]);
   store.database = await prompt([database]);
   store.backendType = "api" 
+  store.backend = { backend: true } 
   createBackend();
 };
 
