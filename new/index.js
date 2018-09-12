@@ -58,10 +58,8 @@ const reactProject = async reactType => {
   if (store.backend.backend) {
     store.serverTesting = await prompt([serverTesting]);
     store.database = await prompt([database]);
-    react();
-  } else {
-    react();
   }
+  react();
 };
 
 const vueProject = async vueType => {
