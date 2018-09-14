@@ -30,5 +30,6 @@
   },
   "devDependencies": {
     "prettier": "^1.14.2"
-  }
+  },
+  "homepage": "https://github.com/blixjs/blix"
 }
