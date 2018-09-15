@@ -11,30 +11,43 @@ const checkCommand = command => {
     case "new":
       createProject();
       break;
-    case "update":
-      update();
-      break;
     case "help":
       help();
       break;
     case "scripts":
       scripts();
       break;
-    case "remove":
-      remove();
-      break;
     case "add":
       add();
       break;
     case "version":
-      var pjson = require("./package.json");
-      console.log(pjson.version);
-      process.exit();
+      checkVersion()
+      break
+    case "-v":
+      checkVersion()
+      break
     default:
-      console.log(`? Try: enzo help to see a list of commands`);
-      process.exit();
+      noCommand()
       break;
   }
 };
+
+const checkVersion = () => {
+  var pjson = require("./package.json");
+  console.log(pjson.version);
+}
+
+const noCommand = () => {
+  console.log('No command entered')
+  console.log('')
+  console.log('Here is a list of blix commands:')
+  console.log('new')
+  console.log('add')
+  console.log('scripts')
+  console.log('version | -v')
+  console.log('help')
+  console.log('')
+  console.log('Run: "blix help" to learn more about a command')
+}
 
 checkCommand(command);
