@@ -5,7 +5,8 @@ const frontendOptions = {
   choices: [
     { name: "React", value: "react" },
     { name: "React, React-Router", value: "react-router" },
-    { name: "React, Redux, React-Router", value: "redux" },
+    { name: "React, Redux ", value: "redux" },
+    { name: "React, Redux, React-Router", value: "reactRouter-redux" },
     // { name: "Vue", value: "vue" },
     // { name: "Vue, Vuex, Vue-Router", value: "vuex" },
     // { name: "Vanilla JS", value: "js" },

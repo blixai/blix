@@ -113,12 +113,12 @@ rl.question("? What is the actions name: ", ans => {
 
 let importAction = () => {
   let folders = [];
-  let p = `./src`;
+  let p = `./src/components`;
 
-  fs.readdirSync("./src").forEach(file => {
+  fs.readdirSync("./src/components").forEach(file => {
     let filePath = `${p}/` + `${file}`;
     let stats = fs.statSync(filePath, "utf8");
-    if (stats.isDirectory() && file !== 'reducers' && file !== 'services' && file !== 'actions') {
+    if (stats.isDirectory()) {
       folders.push(file);
     }
   });
@@ -130,7 +130,7 @@ let importAction = () => {
       if (folders.includes(folder)) {
         let container = fs
           .readFileSync(
-            `./src/${folder}/${folder}Container.js`,
+            `./src/components/${folder}/${folder}Container.js`,
             "utf8"
           )
           .toString();
@@ -159,7 +159,7 @@ let importAction = () => {
               container.slice(foundIndex + find.length)
             ].join("");
             fs.writeFile(
-              `./src/${folder}/${folder}Container.js`,
+              `./src/components/${folder}/${folder}Container.js`,
               container,
               err => {
                 if (err) console.error(err);
@@ -175,7 +175,7 @@ let importAction = () => {
             container = container.join("\n");
             container = container.replace(/null/g, "mapDispatchToProps");
             fs.writeFile(
-              `./src/${folder}/${folder}Container.js`,
+              `./src/components/${folder}/${folder}Container.js`,
               container,
               err => {
                 if (err) console.error(err);
@@ -200,7 +200,7 @@ let importAction = () => {
           container = container.join("\n");
           container = container.replace(/null/g, "mapDispatchToProps");
           fs.writeFile(
-            `./src/${folder}/${folder}Container.js`,
+            `./src/components/${folder}/${folder}Container.js`,
             container,
             err => {
               if (err) throw err;

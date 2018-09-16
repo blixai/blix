@@ -11,8 +11,9 @@ const options = {
   postgresModel: { command: "model", example: "npm run model User email:string age:number", use: "Creates Bookself model" },
   reactComponent: { command: "component", example: "npm run component <name>", use: "Creates a stateful or stateless React component and CSS file in a folder within src/" },
   reactRouterComponent: { command: "component", example: "npm run component <name>", use: "Creates a stateful or stateless React component and CSS file in a folder within src/components/"},
+  reduxComponent: { command: "component", example: "npm run component <name>", use: "Create a React component, Redux container, and CSS file in a folder within src/"},
   view: { command: "view", example: "npm run view about", use: "Create a stateful or stateless React component in src/views/ and add the route to the src/App.js router file. Also imports components in the new view."},
-  reduxComponent: { command: "component", example: "npm run component <name>", use: "Create a React component, Redux container, and CSS file in a folder within src/components"},
+  reactRouterReduxComponent: { command: "component", example: "npm run component <name>", use: "Create a React component, Redux container, and CSS file in a folder within src/components"},
   action: { command: "action", example: "npm run action", use: "Create new action, and creates or appends a Reducer, and adds the action to selected containers"},
   controller: { command: "controller", example: "npm run controller <name>", use: "Quickly create api/v1 get|post|put|delete endpoints for a resource"},
 };
@@ -28,6 +29,9 @@ const logCustomScriptInstructions = () => {
     optionsToLog.push(options.view)
   } else if (store.reactType === 'redux') {
     optionsToLog.push(options.reduxComponent)
+    optionsToLog.push(options.action)
+  } else if (store.reactType === 'reactRouter-redux') {
+    optionsToLog.push(options.reactRouterReduxComponent)
     optionsToLog.push(options.view)
     optionsToLog.push(options.action)
   }

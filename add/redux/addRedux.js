@@ -12,7 +12,7 @@ let loadFile = filePath => {
 // files
 let rootReducer = loadFile('frontend/redux/rootReducer.js')
 let configStore = loadFile('frontend/redux/configStore.js')
-let index       = loadFile('frontend/redux/index.js')
+let index       = loadFile('frontend/redux/reactRouterReduxIndex.js')
 let homeView    = fs.readFileSync(path.resolve(__dirname, './files/Home.js'), 'utf-8')
 
 // script templates
@@ -23,8 +23,8 @@ let actionTemplate     = loadFile('scripts/frontend/redux/templates/action.js')
 let reducerTemplate    = loadFile('scripts/frontend/redux/templates/reducer.js')
 
 // scripts 
-let action = loadFile('scripts/frontend/redux/action.js')
-let view   = loadFile('scripts/frontend/redux/view.js')
+let action = loadFile('scripts/frontend/reactRouter-redux/action.js')
+let view   = loadFile('scripts/frontend/reactRouter-redux/view.js')
 
 let redux = () => {
   if (fs.existsSync('./src') && !fs.existsSync('./src/actions')) {
