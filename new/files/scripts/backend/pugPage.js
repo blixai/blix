@@ -68,15 +68,17 @@ let newPage = () => {
       if (err) throw err
       log(`Created index.pug file in server/views/${name}/index.pug`)
     })
+
     let index = `exports.index = (req, res) => {\n\tres.render('${name}/index', {})\n}`
+    let viewIndex = `exports.${name} = (req, res) => {\n\tres.render('${name}/index', {})\n}`
     let pageRoute;
 
     if (fs.existsSync(`./server/controllers/${name}.js`)) {
-      index = '\n\n' + index
-      fs.appendFile(`./server/controllers/${name}.js`, index, (err) => {
+      viewIndex = '\n\n' + viewIndex
+      fs.appendFile(`./server/controllers/${name}.js`, viewIndex, (err) => {
         if (err) throw err 
       })
-      pageRoute = `\n\nr.get('/${name}', ${name}.index)`
+      pageRoute = `\n\nr.get('/${name}', ${name}.${name})`
     } else {
       fs.writeFile(`./server/controllers/${name}.js`, index, (err) => {
         if (err) throw err
@@ -108,7 +110,18 @@ let addEntry = (name, path) => {
   let search = `entry: {`
   let index = body.indexOf(search)
   let newEntry = `\n\t\t${name}: './src/${path}',`
-  let output = [body.slice(0, index + 8), newEntry, body.slice(index + 8)].join('')
+  let output
+  if (index !== -1) {
+    output = [body.slice(0, index + 8), newEntry, body.slice(index + 8)].join('')
+  } else {
+    // entry is a string and not an object, need to convert to object to add new path
+    console.log(`Unable to add route to webpack.config.js`)
+    console.log('You need to change the webpack entry point into an object.')
+    console.log(`Then the entry key will be: ${name} and the entry value will be ./src/${path}`)
+    console.log('To learn more checkout this link: https://webpack.js.org/concepts/entry-points/')
+    process.exit()
+  }
+
   try {
     fs.writeFileSync('./webpack.config.js', output, 'utf8')
     log(`Add entry ${name} to webpack.config.js`)
@@ -119,3 +132,4 @@ let addEntry = (name, path) => {
 
 
 newPage()
+
