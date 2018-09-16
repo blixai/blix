@@ -31,8 +31,11 @@ const promptFrontend = async () => {
       reactProject("react-router");
       break;
     case "redux":
-      reactProject("redux");
+      reactProject('redux');
       break;
+    case "reactRouter-redux":
+      reactProject("reactRouter-redux")
+      break
     case "vue":
       vueProject("vue");
       break;
