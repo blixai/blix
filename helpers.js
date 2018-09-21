@@ -171,6 +171,19 @@ exports.checkIfScriptIsTaken = (scriptName) => {
   }
 }
 
+exports.moveAllFilesInDir = (dirToSearch, dirToMoveTo) => {
+  fs.readdirSync(dirToSearch).forEach(file => {
+    if (file === 'actions' || file === 'components' || file === 'store' || file === 'services') {
+      return
+    }
+    try {
+      fs.renameSync(dirToSearch + '/' + file, dirToMoveTo + '/' + file)
+    } catch(err) {
+      console.error(`Error: Couldn't move ${file} from ${dirToSearch} into ${dirToMoveTo}`, err)
+    }
+  })
+}
+
 // local helpers 
 
 const checkIfPackageJSONExists = packages => {

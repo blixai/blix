@@ -2,6 +2,7 @@ let addWebpack  = require('./webpack/addWebpack.js')
 let addWebpackDevServer = require('./webpack/addWebpackDevServer')
 let addBackend  = require('./backend/addBackend')
 let addDatabase = require('./database/addDataBase')
+let addReactRouter = require('./react-router/addReactRouter')
 let addRedux    = require('./redux/addRedux')
 
 let inquirer = require('inquirer')
@@ -15,6 +16,7 @@ let commands = {
     { name: 'backend'  },
     { name: 'webpack'  },
     { name: 'webpack-dev-server' },
+    { name: 'react-router' },
     { name: 'redux'    },
     { name: 'database' }
   ]
@@ -31,6 +33,9 @@ let add = () => {
       case "webpack-dev-server":
         addWebpackDevServer();
         break;
+      case "react-router":
+        addReactRouter()
+        break
       case "redux":
         addRedux()
         break
