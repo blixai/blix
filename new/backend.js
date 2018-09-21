@@ -1,185 +1,140 @@
-const fs = require("fs");
-const helpers = require("../helpers");
-const path = require("path");
-const name = process.argv[3];
-const { createCommonFilesAndFolders } = require("./utils/createCommonFiles");
-const { testBackend } = require("./utils/addBackendTests");
-const { addMongooseToScripts } = require("./utils/addMongoDB");
-const { addBookshelfToScripts } = require("./utils/addBookshelf");
+const fs = require('fs')
+const helpers = require('../helpers')
+const path = require('path')
+const name = process.argv[3]
+const { createCommonFilesAndFolders } = require('./utils/createCommonFiles')
+const { testBackend } = require('./utils/addBackendTests')
+const { addMongooseToScripts } = require('./utils/addMongoDB')
+const { addBookshelfToScripts } = require('./utils/addBookshelf')
+const { newProjectInstructions } = require('./utils/newProjectInstructions')
+const store = require('./store')
 
 const loadFile = filePath => {
-  return fs.readFileSync(path.resolve(__dirname, filePath), "utf8");
-};
+  return fs.readFileSync(path.resolve(__dirname, filePath), 'utf8')
+}
 
 // load files
-const cluster = loadFile("./files/backend/common/cluster.js");
-const routes = loadFile("./files/backend/common/routes.js");
+const cluster = loadFile('./files/backend/common/cluster.js')
+const routes = loadFile('./files/backend/common/routes.js')
 
-// mode is a string of either "backend","mvc" or "api"
-// serverTestingSelection is a string of "mocha" or "jest"
-const createBackend = (mode, serverTestingSelection, databaseSelection) => {
+const createBackend = () => {
   // if api mode need to create common files and folders
-  if (mode === "api") {
-    createCommonFilesAndFolders();
+  if (store.backendType === 'api') {
+    createCommonFilesAndFolders()
   }
   // create folders
-  fs.mkdirSync(`./${name}/server`);
-  fs.mkdirSync(`./${name}/server/models`);
-  fs.mkdirSync(`./${name}/server/controllers`);
-  fs.mkdirSync(`./${name}/server/helpers`);
-  if (mode !== "api") {
-    fs.mkdirSync(`./${name}/assets`);
+  fs.mkdirSync(`./${name}/server`)
+  fs.mkdirSync(`./${name}/server/models`)
+  fs.mkdirSync(`./${name}/server/controllers`)
+  fs.mkdirSync(`./${name}/server/helpers`)
+  if (store.backendType !== 'api') {
+    fs.mkdirSync(`./${name}/assets`)
   }
 
   // create files: routes.js cluster.js
-  helpers.writeFile(`./${name}/server/routes.js`, routes);
-  helpers.writeFile(`./${name}/server/cluster.js`, cluster);
+  helpers.writeFile(`./${name}/server/routes.js`, routes)
+  helpers.writeFile(`./${name}/server/cluster.js`, cluster)
 
-  if (mode === "backend") {
+  if (store.backendType === 'standard') {
     // type when there is a frontend framework and for the most part the backend is a soa but serves some assets and files
-    backendType();
-  } else if (mode === "mvc") {
+    standard()
+  } else if (store.backendType === 'mvc') {
     // mode for when their is no frontend framework so pug is default (this is a rails style mvc with ssr)
-    mvcType();
+    mvcType()
   } else {
     // api mode json only, no views, no cookies
-    apiType();
+    apiType()
   }
 
-  addDatabase(databaseSelection);
+  addDatabase(store.database)
 
   // scripts: controller, model, and if pug project view and add their associated commands to the package.json
-  scripts(mode);
+  scripts(store.backendType)
 
   // packages to install
-  packages(mode);
+  packages(store.backendType)
   // setup endpoint tests
-  testBackend(serverTestingSelection);
-};
+  testBackend(store.serverTesting)
 
-const backendType = () => {
+  // new project instructions and add to readme
+  newProjectInstructions()
+}
+
+const standard = () => {
+  let html = loadFile('./files/frontend/other/index.html')
+  let server = loadFile('./files/backend/standard/server.js')
+  let controller = loadFile('./files/backend/standard/home.js')
+
   // mode for when there is a frontend framework
-  fs.mkdirSync(`./${name}/server/views`);
-  fs.mkdirSync(`./${name}/server/views/home`);
-  helpers.writeFile(
-    `./${name}/server/views/home/index.html`,
-    loadFile("./files/frontend/other/index.html")
-  );
-  fs.writeFileSync(
-    `./${name}/server/server.js`,
-    loadFile("./files/backend/backend/server.js")
-  );
-
-  helpers.writeFile(
-    `./${name}/server/controllers/home.js`,
-    loadFile("./files/backend/backend/home.js")
-  );
-};
+  fs.mkdirSync(`./${name}/server/views`)
+  fs.mkdirSync(`./${name}/server/views/home`)
+  helpers.writeFile(`./${name}/server/views/home/index.html`, html)
+  helpers.writeFileSync(`./${name}/server/server.js`, server)
+  helpers.writeFile(`./${name}/server/controllers/home.js`, controller)
+}
 
 const mvcType = () => {
-  fs.mkdirSync(`./${name}/server/views`);
+  const server = loadFile('./files/backend/mvc/server.js')
+  const error = loadFile('./files/backend/mvc/error.pug')
+  const layout = loadFile('./files/backend/mvc/layout.pug')
+  const pug = loadFile('./files/backend/mvc/index.pug')
 
-  helpers.writeFile(
-    `./${name}/server/views/error.pug`,
-    loadFile("./files/backend/mvc/error.pug")
-  );
-  helpers.writeFile(
-    `./${name}/server/views/layout.pug`,
-    loadFile("./files/backend/mvc/layout.pug")
-  );
-  fs.mkdirSync(`./${name}/server/views/home`);
-  helpers.writeFile(
-    `./${name}/server/views/home/index.pug`,
-    loadFile("./files/backend/mvc/index.pug")
-  );
+  fs.mkdirSync(`./${name}/server/views`)
 
-  fs.writeFileSync(
-    `./${name}/server/server.js`,
-    loadFile("./files/backend/mvc/server.js")
-  );
-};
+  helpers.writeFile(`./${name}/server/views/error.pug`, error)
+  helpers.writeFile(`./${name}/server/views/layout.pug`, layout)
+  fs.mkdirSync(`./${name}/server/views/home`)
+  helpers.writeFile(`./${name}/server/views/home/index.pug`, pug)
+
+  fs.writeFileSync(`./${name}/server/server.js`, server)
+}
 
 const apiType = () => {
-  fs.writeFileSync(
-    `./${name}/server/server.js`,
-    loadFile("./files/backend/api/server.js")
-  );
-  helpers.writeFile(
-    `./${name}/server/controllers/home.js`,
-    loadFile("./files/backend/api/home.js")
-  );
-};
+  let server = loadFile('./files/backend/api/server.js')
+  let controller = loadFile('./files/backend/api/home.js')
+
+  helpers.writeFileSync(`./${name}/server/server.js`, server)
+  helpers.writeFile(`./${name}/server/controllers/home.js`, controller)
+}
 
 const addDatabase = databaseSelection => {
-  if (databaseSelection.database === "mongo") {
-    addMongooseToScripts();
-  } else if (databaseSelection.database === "pg") {
-    addBookshelfToScripts();
+  if (databaseSelection.database === 'mongo') {
+    addMongooseToScripts()
+  } else if (databaseSelection.database === 'pg') {
+    addBookshelfToScripts()
   }
-};
+}
 
 const scripts = mode => {
-  helpers.addScriptToNewPackageJSON("start", "nodemon server/cluster.js");
+  let controller = loadFile('./files/scripts/backend/controller.js')
+  let controllerTemplate = loadFile('./files/scripts/backend/templates/controller.js')
+  let routesTemplate = loadFile('./files/scripts/backend/templates/routes.js')
+
+  helpers.addScriptToNewPackageJSON('start', 'nodemon server/cluster.js')
   // controller script
-  helpers.addScriptToNewPackageJSON("controller", "node scripts/controller.js");
-  helpers.writeFile(
-    `./${name}/scripts/controller.js`,
-    loadFile("./files/scripts/backend/controller.js")
-  );
-  helpers.writeFile(
-    `./${name}/scripts/templates/controller.js`,
-    loadFile("./files/scripts/backend/templates/controller.js")
-  );
-  helpers.writeFile(
-    `./${name}/scripts/templates/routes.js`,
-    loadFile("./files/scripts/backend/templates/routes.js")
-  );
-};
+  helpers.addScriptToNewPackageJSON('controller', 'node scripts/controller.js')
+  // create files
+  helpers.writeFile(`./${name}/scripts/controller.js`, controller)
+  helpers.writeFile(`./${name}/scripts/templates/controller.js`, controllerTemplate)
+  helpers.writeFile(`./${name}/scripts/templates/routes.js`, routesTemplate)
+}
 
 const packages = mode => {
-  if (mode === "backend") {
+  if (mode === 'standard') {
     helpers.install(
-      "express nodemon body-parser compression helmet dotenv morgan cookie-parser"
-    );
-  } else if (mode === "mvc") {
+      'express nodemon body-parser compression helmet dotenv morgan cookie-parser'
+    )
+  } else if (mode === 'mvc') {
     helpers.install(
-      "express nodemon body-parser compression helmet dotenv morgan cookie-parser pug"
-    );
+      'express nodemon body-parser compression helmet dotenv morgan cookie-parser pug'
+    )
   } else {
     helpers.install(
-      "express nodemon body-parser compression helmet dotenv morgan"
-    );
+      'express nodemon body-parser compression helmet dotenv morgan'
+    )
   }
-};
-
-let setupTesting = test => {
-  if (test === "mocha") {
-    mochaChia();
-  } else if (test === "jest") {
-    jest();
-  }
-};
-
-let mochaChia = () => {
-  helpers.addScriptToNewPackageJSON("test", "mocha", name);
-  fs.mkdirSync(`./${name}/test`);
-  helpers.writeFile(
-    `./${name}/test/test.js`,
-    loadFile("./files/testing/backend/mocha.js")
-  );
-};
-
-let jest = () => {
-  helpers.addScriptToNewPackageJSON("test", "jest", name);
-  if (!fs.existsSync(`./${name}/test/server`)) {
-    fs.mkdirSync(`./${name}/test/server`);
-  }
-  helpers.writeFile(
-    `./${name}/test/server/test.test.js`,
-    loadFile("./files/testing/backend/jest.js")
-  );
-};
+}
 
 module.exports = {
   createBackend
-};
+}

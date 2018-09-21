@@ -5,7 +5,8 @@ const frontendOptions = {
   choices: [
     { name: "React", value: "react" },
     { name: "React, React-Router", value: "react-router" },
-    { name: "React, Redux, React-Router", value: "redux" },
+    { name: "React, Redux ", value: "redux" },
+    { name: "React, Redux, React-Router", value: "reactRouter-redux" },
     // { name: "Vue", value: "vue" },
     // { name: "Vue, Vuex, Vue-Router", value: "vuex" },
     // { name: "Vanilla JS", value: "js" },
@@ -18,6 +19,17 @@ const backend = {
   message: "Do you need an Express.js backend",
   name: "backend"
 };
+
+const backendType = {
+  type: "list",
+  message: "What type of backend do you need",
+  name: "mode",
+  choices: [
+    { name: "MVC", value: "mvc"},
+    { name: "Standard (serve html files, assets, and create JSON rest endpoints)", value: "standard" },
+    { name: "API", value: "api" }
+  ]
+}
 
 const database = {
   type: "list",
@@ -73,9 +85,10 @@ const vueTesting = {
 module.exports = {
   frontendOptions,
   backend,
+  backendType,
   database,
   serverTesting,
   e2e,
   reactTesting,
-  vueTesting
+  vueTesting,
 };

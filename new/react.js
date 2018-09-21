@@ -4,9 +4,10 @@ const path = require("path");
 const { createCommonFilesAndFolders } = require("./utils/createCommonFiles");
 const { installReactTesting } = require("./utils/addReactTesting");
 const { e2eSetup } = require("./utils/addEndToEndTesting");
+const { newProjectInstructions } = require('./utils/newProjectInstructions')
 const { createBackend } = require("./backend");
-const { newProjectInstructions } = require("./utils/newProjectInstructions");
 const name = process.argv[3];
+const store = require('./store')
 
 const loadFile = filePath => {
   return fs.readFileSync(path.resolve(__dirname, filePath), "utf8");
@@ -33,22 +34,16 @@ const HomeView = loadFile("./files/frontend/react-router/Home.js");
 const globalStyle = loadFile("./files/frontend/react-router/global.css");
 
 // load redux files
-const reduxIndex = loadFile("./files/frontend/redux/index.js");
+const reduxIndex = loadFile('./files/frontend/redux/reduxIndex.js')
+const reduxAppContainer = loadFile('./files/frontend/redux/AppContainer.js')
+const reactRouterReduxIndex = loadFile("./files/frontend/redux/reactRouterReduxIndex.js");
 const configStore = loadFile("./files/frontend/redux/configStore.js");
 const rootReducer = loadFile("./files/frontend/redux/rootReducer.js");
 const ReduxHomeView = loadFile("./files/frontend/redux/Home.js");
 
 const NavbarContainer = loadFile("./files/frontend/redux/NavbarContainer.js");
 
-const react = (
-  reactType,
-  reactTestingSelection,
-  e2eSelection,
-  backend,
-  serverTestingSelection,
-  databaseSelection
-) => {
-  // create common files and folders
+const react = () => {
   createCommonFilesAndFolders();
 
   // create react files
@@ -58,7 +53,7 @@ const react = (
   fs.mkdirSync(`./${name}/src/services`);
 
   // build project specific contents based on type supplied from new/index.js
-  createSrcContents(reactType);
+  createSrcContents();
 
   // create webpack postcssConfig and babelrc files
   helpers.writeFile(`./${name}/postcss.config.js`, postcssConfig);
@@ -66,33 +61,36 @@ const react = (
   helpers.writeFile(`./${name}/webpack.config.js`, webpack);
 
   // react testing setup
-  installReactTesting(reactTestingSelection);
+  installReactTesting();
 
   // e2e setup
-  e2eSetup(e2eSelection);
-
-  // create backend
-  if (backend) {
-    createBackend("backend", serverTestingSelection, databaseSelection);
-  }
+  e2eSetup();
 
   // add scripts
-  scripts(reactType, backend);
+  scripts();
 
   // install packages
-  packages(backend);
+  packages();
 
-  // console log instructions and add instructions to readme
-  // newProjectInstructions(reactType,  );
+  // create backend
+  if (store.backend && store.backend.backend) {
+    store.backendType = "standard"
+    createBackend()
+    // createBackend("backend", store.serverTesting, store.database);
+  } else {
+    newProjectInstructions()
+  }
 };
 
-const createSrcContents = reactType => {
-  if (reactType === "react") {
+const createSrcContents = () => {
+  if (store.reactType === "react") {
     reactOnly();
-  } else if (reactType === "react-router") {
+  } else if (store.reactType === "react-router") {
     reactRouter();
-  } else if (reactType === "redux") {
-    redux();
+  } else if (store.reactType === "redux") {
+    redux()
+  } else if (store.reactType === "reactRouter-redux") {
+    reactRouterRedux();
   }
 };
 
@@ -121,7 +119,25 @@ const reactRouter = () => {
 };
 
 const redux = () => {
-  helpers.writeFile(`./${name}/src/index.js`, reduxIndex);
+  helpers.writeFile(`./${name}/src/index.js`, reduxIndex)
+  fs.mkdirSync(`./${name}/src/App`)
+  helpers.writeFile(`./${name}/src/App/App.js`, app)
+  helpers.writeFile(`./${name}/src/App/AppContainer.js`, reduxAppContainer)
+  helpers.writeFile(`./${name}/src/App/App.css`, "")
+
+  fs.mkdirSync(`./${name}/src/actions`)
+  helpers.writeFile(`./${name}/src/actions/index.js`, "")
+
+  fs.mkdirSync(`./${name}/src/reducers`)
+  helpers.writeFile(`./${name}/src/reducers/rootReducer.js`, rootReducer);
+  helpers.writeFile(`./${name}/src/configStore.js`, configStore);
+
+  helpers.install("redux react-redux")
+
+}
+
+const reactRouterRedux = () => {
+  helpers.writeFile(`./${name}/src/index.js`, reactRouterReduxIndex);
   helpers.writeFile(`./${name}/src/App.js`, appRouter);
   // components folder, every component will have a folder with associated css, tests, and/or container for that component
   fs.mkdirSync(`./${name}/src/components`);
@@ -149,8 +165,8 @@ const redux = () => {
   helpers.installDevDependencies("redux react-redux react-router-dom");
 };
 
-const scripts = (reactType, backend) => {
-  if (!backend) {
+const scripts = () => {
+  if (!store.backend.backend) {
     helpers.addScriptToNewPackageJSON(
       "start",
       "webpack-dev-server --output-public-path=/dist/ --inline --hot --open --port 3000 --mode='development'"
@@ -163,88 +179,87 @@ const scripts = (reactType, backend) => {
   );
   helpers.addScriptToNewPackageJSON("build", "webpack --mode='production'");
   // need to add scripts for creating containers actions
-  if (reactType === "react") {
+  if (store.reactType === "react") {
     reactScripts();
-  } else if (reactType === "react-router") {
+  } else if (store.reactType === "react-router") {
     reactRouterScripts();
-  } else if (reactType === "redux") {
-    reduxScripts();
+  } else if (store.reactType === 'redux') {
+    reduxScripts()
+  } else if (store.reactType === "reactRouter-redux") {
+    reactRouterReduxScripts();
   }
 };
 
 const reactScripts = () => {
-  helpers.writeFile(
-    `./${name}/scripts/component.js`,
-    loadFile("./files/scripts/frontend/react/component.js")
-  );
-  helpers.writeFile(
-    `./${name}/scripts/templates/statefulComponent.js`,
-    loadFile("./files/scripts/frontend/react/templates/statefulComponent.js")
-  );
-  helpers.writeFile(
-    `./${name}/scripts/templates/statelessComponent.js`,
-    loadFile("./files/scripts/frontend/react/templates/statelessComponent.js")
-  );
+  let component = loadFile("./files/scripts/frontend/react/component.js")
+  let statefulComponentTemplate = loadFile('./files/scripts/frontend/react/templates/statefulComponent.js')
+  let statelessComponentTemplate = loadFile("./files/scripts/frontend/react/templates/statelessComponent.js")
+
+  helpers.writeFile(`./${name}/scripts/component.js`, component);
+  helpers.writeFile(`./${name}/scripts/templates/statefulComponent.js`, statefulComponentTemplate);
+  helpers.writeFile(`./${name}/scripts/templates/statelessComponent.js`, statelessComponentTemplate);
   helpers.addScriptToNewPackageJSON("component", "node scripts/component.js");
 };
 
 const reactRouterScripts = () => {
-  helpers.writeFile(
-    `./${name}/scripts/component.js`,
-    loadFile("./files/scripts/frontend/react-router/component.js")
-  );
-  helpers.writeFile(
-    `./${name}/scripts/templates/statefulComponent.js`,
-    loadFile("./files/scripts/frontend/react/templates/statefulComponent.js")
-  );
-  helpers.writeFile(
-    `./${name}/scripts/templates/statelessComponent.js`,
-    loadFile("./files/scripts/frontend/react/templates/statelessComponent.js")
-  );
-  helpers.writeFile(
-    `./${name}/scripts/view.js`,
-    loadFile("./files/scripts/frontend/react-router/view.js")
-  );
+  let component = loadFile("./files/scripts/frontend/react-router/component.js")
+  let statefulComponentTemplate = loadFile("./files/scripts/frontend/react/templates/statefulComponent.js")
+  let statelessComponentTemplate = loadFile("./files/scripts/frontend/react/templates/statelessComponent.js")
+  let view = loadFile('./files/scripts/frontend/react-router/view.js')
+
+  helpers.writeFile(`./${name}/scripts/component.js`, component);
+  helpers.writeFile(`./${name}/scripts/templates/statefulComponent.js`, statefulComponentTemplate);
+  helpers.writeFile(`./${name}/scripts/templates/statelessComponent.js`, statelessComponentTemplate);
+  helpers.writeFile(`./${name}/scripts/view.js`, view);
+  // add scripts to package.json
   helpers.addScriptToNewPackageJSON("component", "node scripts/component.js");
   helpers.addScriptToNewPackageJSON("view", "node scripts/view.js");
 };
 
 const reduxScripts = () => {
+  let action = loadFile("./files/scripts/frontend/redux/action.js")
+  let actionTemplate = loadFile("./files/scripts/frontend/redux/templates/action.js")
+  let reducerTemplate = loadFile("./files/scripts/frontend/redux/templates/reducer.js")
+  let component = loadFile("./files/scripts/frontend/redux/component.js")
+  let statelessComponentTemplate = loadFile("./files/scripts/frontend/react/templates/statelessComponent.js")
+  let containerTemplate = loadFile("./files/scripts/frontend/redux/templates/container.js")
+  let statefulComponentTemplate = loadFile("./files/scripts/frontend/react/templates/statefulComponent.js")
+
   // action script and templates
-  helpers.writeFile(
-    `./${name}/scripts/action.js`,
-    loadFile("./files/scripts/frontend/redux/action.js")
-  );
-  helpers.writeFile(
-    `./${name}/scripts/templates/action.js`,
-    loadFile("./files/scripts/frontend/redux/templates/action.js")
-  );
-  helpers.writeFile(
-    `./${name}/scripts/templates/reducer.js`,
-    loadFile("./files/scripts/frontend/redux/templates/reducer.js")
-  );
+  helpers.writeFile(`./${name}/scripts/action.js`, action)
+  helpers.writeFile(`./${name}/scripts/templates/action.js`, actionTemplate)
+  helpers.writeFile(`./${name}/scripts/templates/reducer.js`, reducerTemplate)
   // component script and templates
-  helpers.writeFile(
-    `./${name}/scripts/component.js`,
-    loadFile("./files/scripts/frontend/redux/component.js")
-  );
-  helpers.writeFile(
-    `./${name}/scripts/templates/statelessComponent.js`,
-    loadFile("./files/scripts/frontend/react/templates/statelessComponent.js")
-  );
-  helpers.writeFile(
-    `./${name}/scripts/templates/container.js`,
-    loadFile("./files/scripts/frontend/redux/templates/container.js")
-  );
-  helpers.writeFile(
-    `./${name}/scripts/templates/statefulComponent.js`,
-    loadFile("./files/scripts/frontend/react/templates/statefulComponent.js")
-  );
+  helpers.writeFile(`./${name}/scripts/component.js`, component) 
+  helpers.writeFile(`./${name}/scripts/templates/statelessComponent.js`, statelessComponentTemplate)
+  helpers.writeFile(`./${name}/scripts/templates/container.js`, containerTemplate)
+  helpers.writeFile(`./${name}/scripts/templates/statefulComponent.js`, statefulComponentTemplate)
+
+  // add scripts for action and component to package.json
+  helpers.addScriptToNewPackageJSON('component', 'node scripts/component.js')
+  helpers.addScriptToNewPackageJSON('action', 'node scripts/action.js')
+}
+
+const reactRouterReduxScripts = () => {
+  let action = loadFile("./files/scripts/frontend/reactRouter-redux/action.js")
+  let actionTemplate = loadFile("./files/scripts/frontend/redux/templates/action.js")
+  let reducerTemplate = loadFile("./files/scripts/frontend/redux/templates/reducer.js")
+  let component = loadFile("./files/scripts/frontend/reactRouter-redux/component.js")
+  let statelessComponentTemplate = loadFile("./files/scripts/frontend/react/templates/statelessComponent.js")
+  let containerTemplate = loadFile("./files/scripts/frontend/redux/templates/container.js")
+  let statefulComponentTemplate = loadFile("./files/scripts/frontend/react/templates/statefulComponent.js")
+  let view = loadFile('./files/scripts/frontend/redux/view.js')
+  // action script and templates
+  helpers.writeFile(`./${name}/scripts/action.js`, action)
+  helpers.writeFile(`./${name}/scripts/templates/action.js`, actionTemplate);
+  helpers.writeFile(`./${name}/scripts/templates/reducer.js`, reducerTemplate);
+  // component script and templates
+  helpers.writeFile(`./${name}/scripts/component.js`, component);
+  helpers.writeFile(`./${name}/scripts/templates/statelessComponent.js`, statelessComponentTemplate);
+  helpers.writeFile(`./${name}/scripts/templates/container.js`, containerTemplate);
+  helpers.writeFile(`./${name}/scripts/templates/statefulComponent.js`, statefulComponentTemplate);
   // view script
-  helpers.writeFile(
-    `./${name}/scripts/view.js`,
-    loadFile("./files/scripts/frontend/redux/view.js")
-  );
+  helpers.writeFile(`./${name}/scripts/view.js`, view);
 
   // add scripts for action and component to package.json
   helpers.addScriptToNewPackageJSON("component", "node scripts/component.js");
@@ -252,12 +267,12 @@ const reduxScripts = () => {
   helpers.addScriptToNewPackageJSON("view", "node scripts/view.js");
 };
 
-const packages = backend => {
-  if (!backend) {
+const packages = () => {
+  if (!store.backend.backend) {
     helpers.installDevDependencies("webpack-dev-server");
   }
   helpers.installDevDependencies(
-    "react react-dom webpack webpack-cli babel-loader css-loader babel-core babel-preset-env babel-preset-react style-loader sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-preset-env postcss-import postcss-loader"
+    "react react-dom webpack webpack-cli babel-loader css-loader @babel/core @babel/preset-env @babel/preset-react style-loader sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-preset-env postcss-import postcss-loader"
   );
 };
 

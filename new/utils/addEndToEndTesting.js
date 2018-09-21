@@ -2,15 +2,16 @@ const fs = require("fs");
 const helpers = require("../../helpers");
 const path = require("path");
 const name = process.argv[3];
+const store = require('../store')
 
 const loadFile = filePath => {
   return fs.readFileSync(path.resolve(__dirname, filePath), "utf8");
 };
 
-let e2eSetup = answer => {
-  if (answer.e2e === "cafe") {
+let e2eSetup = () => {
+  if (store.e2e.e2e === "cafe") {
     installTestCafe();
-  } else if (answer.e2e === "cypress") {
+  } else if (store.e2e.e2e === "cypress") {
     installCypress();
   }
 };

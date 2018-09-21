@@ -1,13 +1,12 @@
 const fs = require("fs");
 const inquirer = require("inquirer");
 const prompt = inquirer.prompt;
-
 const { createBackend } = require("./backend");
 const { vue } = require("./vue");
 const { react } = require("./react");
 const { vanillaJS } = require("./vanillaJS");
+let store = require('./store')
 
-// variables
 const name = process.argv[3];
 
 // console prompts
@@ -32,8 +31,11 @@ const promptFrontend = async () => {
       reactProject("react-router");
       break;
     case "redux":
-      reactProject("redux");
+      reactProject('redux');
       break;
+    case "reactRouter-redux":
+      reactProject("reactRouter-redux")
+      break
     case "vue":
       vueProject("vue");
       break;
@@ -50,23 +52,16 @@ const promptFrontend = async () => {
 };
 
 const reactProject = async reactType => {
-  const reactTestingSelection = await prompt([reactTesting]);
-  const e2eSelection = await prompt([e2e]);
-  const backendSelection = await prompt([backend]);
-  if (backendSelection.backend) {
-    const serverTestingSelection = await prompt([serverTesting]);
-    const databaseSelection = await prompt([database]);
-    react(
-      reactType,
-      reactTestingSelection,
-      e2eSelection,
-      backendSelection.backend,
-      serverTestingSelection,
-      databaseSelection
-    );
-  } else {
-    react(reactType, reactTestingSelection, e2eSelection);
+  store.reactType = reactType
+  store.reactTesting = await prompt([reactTesting]);
+  store.e2e = await prompt([e2e]);
+  store.backend = await prompt([backend]);
+
+  if (store.backend.backend) {
+    store.serverTesting = await prompt([serverTesting]);
+    store.database = await prompt([database]);
   }
+  react();
 };
 
 const vueProject = async vueType => {
@@ -107,23 +102,25 @@ const vanillaJSProject = async () => {
 };
 
 const backendOnly = async () => {
-  const serverTestingSelection = await prompt([serverTesting]);
-  const databaseSelection = await prompt([database]);
-  createBackend("api", serverTestingSelection, databaseSelection);
+  store.serverTesting = await prompt([serverTesting]);
+  store.database = await prompt([database]);
+  store.backendType = "api" 
+  store.backend = { backend: true } 
+  createBackend();
 };
 
 // create project ensures there shouldn't be errors before starting the prompts
 const createProject = () => {
   if (!name) {
-    console.log('No name provided. Please run "blix new <projectName>"');
-    process.exit();
+    console.log('No name provided for new project.')
+    console.log('Try again with: blix new my-project')
+    process.exit(1)
   }
   if (fs.existsSync(`./${name}`)) {
     console.error(`A project named ${name} already exists!`);
-    process.exit();
+    process.exit(1)
   }
-  // name is provided and project doesn't already exist, clear console and begin prompts
-  process.stdout.write("\033c");
+  console.clear()
   promptFrontend();
 };
 

@@ -122,7 +122,7 @@ const addComponentsToView = () => {
   folders.map(folder => {
     let filePath = `${p}/` + `${folder}`;
     fs.readdirSync(filePath).forEach(file => {
-      if (!file.includes(".css")) {
+      if (file.includes(".js") && !file.includes('.spec') && !file.includes('.test')) {
         file = file.replace(".js", "");
         files.push(file);
       }

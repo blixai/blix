@@ -2,13 +2,14 @@ const helpers = require("../../helpers");
 const fs = require("fs");
 const path = require("path");
 const name = process.argv[3];
+const store = require('../store')
 
 const loadFile = filePath => {
   return fs.readFileSync(path.resolve(__dirname, filePath), "utf8");
 };
 
-let installReactTesting = reactTests => {
-  if (!reactTests) {
+let installReactTesting = () => {
+  if (!store.reactTesting['enzyme']) {
     return;
   }
   helpers.installDevDependencies(
