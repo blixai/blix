@@ -29,7 +29,7 @@ app.use((req, res, next) => {
 
 app.use((err, req, res, next) => {
   res.status(err.status || 500);
-  res.render("error", { error: err.status, message: err.message });
+  res.send({ error: err.status, message: err.message });
 });
 
 app.listen(port, () => {
