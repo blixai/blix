@@ -56,6 +56,9 @@ const createBackend = () => {
   // setup endpoint tests
   testBackend(store.serverTesting)
 
+  //add variables to .env file
+  envSetup()
+
   // new project instructions and add to readme
   newProjectInstructions()
 }
@@ -133,6 +136,10 @@ const packages = mode => {
       'express nodemon body-parser compression helmet dotenv morgan'
     )
   }
+}
+
+const envSetup = () => {
+  fs.appendFileSync(`./${name}/.env`, '\nWORKERS=1')
 }
 
 module.exports = {

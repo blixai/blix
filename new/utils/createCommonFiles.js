@@ -31,7 +31,7 @@ const createCommonFilesAndFolders = () => {
     loadFile("../files/common/package.json")
   );
 
-  helpers.writeFile(`./${name}/.env`, "");
+  helpers.writeFileSync(`./${name}/.env`, "");
   fs.mkdirSync(`./${name}/scripts`);
   fs.mkdirSync(`./${name}/scripts/templates`);
   fs.mkdirSync(`./${name}/test`);
