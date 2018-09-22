@@ -7,7 +7,7 @@ const loadFile = filePath => {
   return fs.readFileSync(path.resolve(__dirname, filePath), "utf8");
 };
 
-const addBookshelfToScripts = () => {
+const addBookshelfToScripts = async () => {
   // load files for scripts folder
   const bookshelf = loadFile("../files/scripts/backend/bookshelf.js");
   const model = loadFile("../files/scripts/backend/templates/bookshelf.js");
@@ -24,9 +24,9 @@ const addBookshelfToScripts = () => {
   helpers.writeFile(`./${name}/scripts/templates/bookshelf.js`, model);
 
   helpers.addScriptToNewPackageJSON("model", "node scripts/model.js");
-  helpers.installKnexGlobal();
+  await helpers.installKnexGlobal();
   helpers.modifyKnex();
-  helpers.install("pg bookshelf knex");
+  await helpers.install("pg bookshelf knex");
 };
 
 module.exports = {

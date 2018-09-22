@@ -14,8 +14,8 @@ const checkOrCreateServerTestFolder = () => {
   }
 };
 
-const mochaTestBackend = () => {
-  helpers.installDevDependencies("mocha chai chai-http");
+const mochaTestBackend = async () => {
+  await helpers.installDevDependencies("mocha chai chai-http");
   helpers.addScriptToNewPackageJSON("mocha", "mocha test/server");
   checkOrCreateServerTestFolder();
   helpers.writeFile(
@@ -34,8 +34,8 @@ const mochaTestBackend = () => {
   fs.writeFileSync(`./${name}/package.json`, newPackage);
 };
 
-const testJestBackend = () => {
-  helpers.installDevDependencies("jest supertest");
+const testJestBackend = async () => {
+  await helpers.installDevDependencies("jest supertest");
   checkOrCreateServerTestFolder();
   helpers.writeFile(
     `./${name}/test/server/test.spec.js`,
@@ -58,11 +58,11 @@ const testJestBackend = () => {
   helpers.addScriptToNewPackageJSON("jest", "jest");
 };
 
-let testBackend = () => {
+let testBackend = async () => {
   store.serverTesting.server === "mocha"
-    ? mochaTestBackend()
+    ? await mochaTestBackend()
     : store.serverTesting.server === "jest"
-      ? testJestBackend()
+      ? await testJestBackend()
       : "";
 };
 

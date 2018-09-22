@@ -10,9 +10,6 @@ const loadFile = filePath => {
 
 /// create things like .gitignore, scripts folder, scripts templates folder, README.md, .env, and package.json
 const createCommonFilesAndFolders = () => {
-  console.log(
-    "Creating the project and downloading packages, this may take a moment"
-  );
   // creates new project folder first, this is important for all new projects
   fs.mkdirSync(`./${name}`);
   process.chdir(`./${name}`)

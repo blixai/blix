@@ -8,9 +8,9 @@ const { addBookshelfToScripts } = require('../backend/addBookshelf')
 const addDatabase = async () => {
   let databaseSelection = await prompt([database])
   if (databaseSelection.database === 'mongo') {
-    addMongooseToScripts()
+    await addMongooseToScripts()
   } else if (databaseSelection.database === 'pg') {
-    addBookshelfToScripts()
+    await addBookshelfToScripts()
   }
 }
 

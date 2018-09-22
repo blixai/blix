@@ -8,11 +8,11 @@ const loadFile = filePath => {
   return fs.readFileSync(path.resolve(__dirname, filePath), "utf8");
 };
 
-let installReactTesting = () => {
+let installReactTesting = async () => {
   if (!store.reactTesting['enzyme']) {
     return;
   }
-  helpers.installDevDependencies(
+  await helpers.installDevDependencies(
     "jest enzyme enzyme-adapter-react-16 identity-obj-proxy"
   );
   helpers.writeFile(

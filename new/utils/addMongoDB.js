@@ -8,7 +8,7 @@ const loadFile = filePath => {
 };
 
 //
-const addMongooseToScripts = () => {
+const addMongooseToScripts = async () => {
   let model = loadFile("../files/scripts/backend/mongoose.js");
   let schemaTemplate = loadFile(
     "../files/scripts/backend/templates/mongoose.js"
@@ -20,10 +20,10 @@ const addMongooseToScripts = () => {
   );
 
   helpers.addScriptToNewPackageJSON("model", "node scripts/model.js");
-  addMongoDBToProject();
+  await addMongoDBToProject();
 };
 
-const addMongoDBToProject = () => {
+const addMongoDBToProject = async () => {
   let server = fs
     .readFileSync(`./${name}/server/server.js`, "utf8")
     .toString()
@@ -40,7 +40,7 @@ const addMongoDBToProject = () => {
     `./${name}/.env`,
     `MONGO=${`mongodb://localhost:27017/${name}`}`
   );
-  helpers.install("mongo mongoose")
+  await helpers.install("mongo mongoose")
 };
 
 module.exports = {
