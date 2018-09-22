@@ -1,1 +1,1 @@
-## created with blix
+## created with [blix](https://blixjs.com/)
