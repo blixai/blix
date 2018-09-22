@@ -248,7 +248,7 @@ const reactRouterReduxScripts = () => {
   let statelessComponentTemplate = loadFile("./files/scripts/frontend/react/templates/statelessComponent.js")
   let containerTemplate = loadFile("./files/scripts/frontend/redux/templates/container.js")
   let statefulComponentTemplate = loadFile("./files/scripts/frontend/react/templates/statefulComponent.js")
-  let view = loadFile('./files/scripts/frontend/redux/view.js')
+  let view = loadFile('./files/scripts/frontend/reactRouter-redux/view.js')
   // action script and templates
   helpers.writeFile(`./${name}/scripts/action.js`, action)
   helpers.writeFile(`./${name}/scripts/templates/action.js`, actionTemplate);
