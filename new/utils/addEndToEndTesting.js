@@ -8,17 +8,17 @@ const loadFile = filePath => {
   return fs.readFileSync(path.resolve(__dirname, filePath), "utf8");
 };
 
-let e2eSetup = () => {
+let e2eSetup = async () => {
   if (store.e2e.e2e === "cafe") {
-    installTestCafe();
+    await installTestCafe();
   } else if (store.e2e.e2e === "cypress") {
-    installCypress();
+    await installCypress();
   }
 };
 
-const installCypress = () => {
+const installCypress = async () => {
   helpers.addScriptToNewPackageJSON("e2e", "cypress open");
-  helpers.installDevDependencies("cypress");
+  await helpers.installDevDependencies("cypress");
   fs.mkdirSync(`./${name}/cypress`);
   fs.mkdirSync(`./${name}/cypress/integration`);
   helpers.writeFile(
@@ -49,9 +49,9 @@ const installCypress = () => {
   fs.writeFileSync(`./${name}/package.json`, newPackage);
 };
 
-const installTestCafe = () => {
+const installTestCafe = async () => {
   helpers.addScriptToNewPackageJSON("e2e", "testcafe chrome test/e2e");
-  helpers.installDevDependencies("testcafe");
+  await helpers.installDevDependencies("testcafe");
   fs.mkdirSync(`./${name}/test/e2e`);
   helpers.writeFile(
     `./${name}/test/e2e/test.js`,

@@ -43,7 +43,7 @@ const ReduxHomeView = loadFile("./files/frontend/redux/Home.js");
 
 const NavbarContainer = loadFile("./files/frontend/redux/NavbarContainer.js");
 
-const react = () => {
+const react = async () => {
   createCommonFilesAndFolders();
 
   // create react files
@@ -53,7 +53,7 @@ const react = () => {
   fs.mkdirSync(`./${name}/src/services`);
 
   // build project specific contents based on type supplied from new/index.js
-  createSrcContents();
+  await createSrcContents();
 
   // create webpack postcssConfig and babelrc files
   helpers.writeFile(`./${name}/postcss.config.js`, postcssConfig);
@@ -61,16 +61,16 @@ const react = () => {
   helpers.writeFile(`./${name}/webpack.config.js`, webpack);
 
   // react testing setup
-  installReactTesting();
+  await installReactTesting();
 
   // e2e setup
-  e2eSetup();
+  await e2eSetup();
 
   // add scripts
   scripts();
 
   // install packages
-  packages();
+  await packages();
 
   // create backend
   if (store.backend && store.backend.backend) {
@@ -82,15 +82,15 @@ const react = () => {
   }
 };
 
-const createSrcContents = () => {
+const createSrcContents = async () => {
   if (store.reactType === "react") {
-    reactOnly();
+    await reactOnly();
   } else if (store.reactType === "react-router") {
-    reactRouter();
+    await reactRouter();
   } else if (store.reactType === "redux") {
-    redux()
+    await redux()
   } else if (store.reactType === "reactRouter-redux") {
-    reactRouterRedux();
+    await reactRouterRedux();
   }
 };
 
@@ -101,7 +101,7 @@ const reactOnly = () => {
   helpers.writeFile(`./${name}/src/App/App.css`, "");
 };
 
-const reactRouter = () => {
+const reactRouter = async () => {
   helpers.writeFile(`./${name}/src/index.js`, reactRouterIndex);
   helpers.writeFile(`./${name}/src/App.js`, appRouter);
 
@@ -115,10 +115,10 @@ const reactRouter = () => {
   fs.mkdirSync(`./${name}/src/styles`);
   helpers.writeFile(`./${name}/src/styles/global.css`, globalStyle);
   // install react-router-dom for src/index.js file
-  helpers.installDevDependencies("react-router-dom");
+  await helpers.installDevDependencies("react-router-dom");
 };
 
-const redux = () => {
+const redux = async () => {
   helpers.writeFile(`./${name}/src/index.js`, reduxIndex)
   fs.mkdirSync(`./${name}/src/App`)
   helpers.writeFile(`./${name}/src/App/App.js`, app)
@@ -132,11 +132,11 @@ const redux = () => {
   helpers.writeFile(`./${name}/src/reducers/rootReducer.js`, rootReducer);
   helpers.writeFile(`./${name}/src/configStore.js`, configStore);
 
-  helpers.install("redux react-redux")
+  await helpers.install("redux react-redux")
 
 }
 
-const reactRouterRedux = () => {
+const reactRouterRedux = async () => {
   helpers.writeFile(`./${name}/src/index.js`, reactRouterReduxIndex);
   helpers.writeFile(`./${name}/src/App.js`, appRouter);
   // components folder, every component will have a folder with associated css, tests, and/or container for that component
@@ -162,7 +162,7 @@ const reactRouterRedux = () => {
   helpers.writeFile(`./${name}/src/reducers/rootReducer.js`, rootReducer);
   helpers.writeFile(`./${name}/src/configStore.js`, configStore);
   //install react-router-dom and other redux specific libs
-  helpers.installDevDependencies("redux react-redux react-router-dom");
+  await helpers.installDevDependencies("redux react-redux react-router-dom");
 };
 
 const scripts = () => {
@@ -248,7 +248,7 @@ const reactRouterReduxScripts = () => {
   let statelessComponentTemplate = loadFile("./files/scripts/frontend/react/templates/statelessComponent.js")
   let containerTemplate = loadFile("./files/scripts/frontend/redux/templates/container.js")
   let statefulComponentTemplate = loadFile("./files/scripts/frontend/react/templates/statefulComponent.js")
-  let view = loadFile('./files/scripts/frontend/redux/view.js')
+  let view = loadFile('./files/scripts/frontend/reactRouter-redux/view.js')
   // action script and templates
   helpers.writeFile(`./${name}/scripts/action.js`, action)
   helpers.writeFile(`./${name}/scripts/templates/action.js`, actionTemplate);
@@ -267,11 +267,11 @@ const reactRouterReduxScripts = () => {
   helpers.addScriptToNewPackageJSON("view", "node scripts/view.js");
 };
 
-const packages = () => {
+const packages = async () => {
   if (!store.backend.backend) {
-    helpers.installDevDependencies("webpack-dev-server");
+    await helpers.installDevDependencies("webpack-dev-server");
   }
-  helpers.installDevDependencies(
+  await helpers.installDevDependencies(
     "react react-dom webpack webpack-cli babel-loader css-loader @babel/core @babel/preset-env @babel/preset-react style-loader sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-preset-env postcss-import postcss-loader"
   );
 };

@@ -8,7 +8,7 @@ const loadFile = filePath => {
 }
 
 //
-const addMongooseToScripts = () => {
+const addMongooseToScripts = async () => {
   helpers.checkScriptsFolderExist()
   let model = loadFile('scripts/backend/mongoose.js')
   let schemaTemplate = loadFile('scripts/backend/templates/mongoose.js')
@@ -16,10 +16,10 @@ const addMongooseToScripts = () => {
   helpers.writeFile(`./scripts/templates/schemaTemplate.js`, schemaTemplate)
 
   helpers.addScript('model', 'node scripts/model.js')
-  addMongoDBToProject()
+  await addMongoDBToProject()
 }
 
-const addMongoDBToProject = () => {
+const addMongoDBToProject = async () => {
   let server = fs
     .readFileSync(`./server/server.js`, 'utf8')
     .toString()
@@ -33,7 +33,7 @@ const addMongoDBToProject = () => {
 
   helpers.writeFile(`./server/server.js`, mongoAddedServer)
   envFileExists()
-  helpers.installDependenciesToExistingProject('mongo mongoose')
+  await helpers.installDependenciesToExistingProject('mongo mongoose')
 }
 
 const envFileExists = () => {

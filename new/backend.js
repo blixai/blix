@@ -17,7 +17,7 @@ const loadFile = filePath => {
 const cluster = loadFile('./files/backend/common/cluster.js')
 const routes = loadFile('./files/backend/common/routes.js')
 
-const createBackend = () => {
+const createBackend = async () => {
   // if api mode need to create common files and folders
   if (store.backendType === 'api') {
     createCommonFilesAndFolders()
@@ -46,15 +46,15 @@ const createBackend = () => {
     apiType()
   }
 
-  addDatabase(store.database)
+  await addDatabase(store.database)
 
   // scripts: controller, model, and if pug project view and add their associated commands to the package.json
   scripts(store.backendType)
 
   // packages to install
-  packages(store.backendType)
+  await packages(store.backendType)
   // setup endpoint tests
-  testBackend(store.serverTesting)
+  await testBackend(store.serverTesting)
 
   //add variables to .env file
   envSetup()
@@ -100,11 +100,11 @@ const apiType = () => {
   helpers.writeFile(`./${name}/server/controllers/home.js`, controller)
 }
 
-const addDatabase = databaseSelection => {
+const addDatabase = async databaseSelection => {
   if (databaseSelection.database === 'mongo') {
-    addMongooseToScripts()
+    await addMongooseToScripts()
   } else if (databaseSelection.database === 'pg') {
-    addBookshelfToScripts()
+    await addBookshelfToScripts()
   }
 }
 
@@ -122,17 +122,17 @@ const scripts = mode => {
   helpers.writeFile(`./${name}/scripts/templates/routes.js`, routesTemplate)
 }
 
-const packages = mode => {
+const packages = async mode => {
   if (mode === 'standard') {
-    helpers.install(
+    await helpers.install(
       'express nodemon body-parser compression helmet dotenv morgan cookie-parser'
     )
   } else if (mode === 'mvc') {
-    helpers.install(
+    await helpers.install(
       'express nodemon body-parser compression helmet dotenv morgan cookie-parser pug'
     )
   } else {
-    helpers.install(
+    await helpers.install(
       'express nodemon body-parser compression helmet dotenv morgan'
     )
   }

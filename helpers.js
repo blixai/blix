@@ -2,8 +2,11 @@ const fs = require("fs");
 const execSync = require("child_process").execSync;
 const name = process.argv[3];
 const log = console.log;
+const inquirer = require('inquirer')
+const prompt   = inquirer.prompt
+const store = require('./new/store')
 
-const shouldUseYarn = () => {
+const canUseYarn = () => {
   try {
     execSync("yarnpkg --version", { stdio: "ignore" });
     return true;
@@ -12,37 +15,79 @@ const shouldUseYarn = () => {
   }
 };
 
-exports.install = packages => {
+const yarnPrompt = {
+  type: 'confirm',
+  message: 'Do you want to use Yarn to install packages',
+  name: "yarn"
+}
+
+const checkIfNeedYarnAnswer = async () => {
+  if (canUseYarn() && store.useYarn === '') {
+    let yarnAnswer = await prompt([yarnPrompt])
+    store.useYarn = yarnAnswer.yarn
+  }
+}
+
+module.exports.checkIfNeedYarnAnswer = checkIfNeedYarnAnswer
+
+const install = async packages => {
+  await checkIfNeedYarnAnswer()
   try {
     process.chdir(`./${name}`)
-    execSync(`npm install --save ${packages}`, {stdio:[0,1,2]});
+    if (store.useYarn) {
+      execSync(`yarn add ${packages}`, {stdio:[0,1,2]})
+    } else {
+      execSync(`npm install --save ${packages}`, {stdio:[0,1,2]});
+    }
     process.chdir('../')
-  } catch(err) {
+  } catch (err) {
+    process.chdir('../')
     console.error(err)
   }
 };
 
-exports.installDevDependencies = packages => {
+exports.install = install
+
+const installDevDependencies = async packages => {
+  await checkIfNeedYarnAnswer()
   try {
     process.chdir(`./${name}`)
-    execSync(`npm install --save-dev ${packages}`, {stdio:[0,1,2]})
+    if (store.useYarn) {
+      execSync(`yarn add ${packages} --dev`, {stdio:[0,1,2]})
+    } else {
+      execSync(`npm install --save-dev ${packages}`, {stdio:[0,1,2]})
+    }
     process.chdir('../')
-  } catch(err) {
+    return
+  } catch (err) {
+    process.chdir('../')
     console.error(err)
+    return
   }
 };
 
-exports.installKnexGlobal = () => {
+module.exports.installDevDependencies = installDevDependencies
+
+const installKnexGlobal = async () => {
+  await checkIfNeedYarnAnswer()
   try {
     process.chdir(`./${name}`)
-    execSync(`npm install -g knex`, {stdio: [0, 1, 2]})
+    if (store.useYarn) {
+      execSync(`yarn add knex global`, { stdio: [0, 1, 2] })
+    } else {
+      execSync(`npm install -g knex`, {stdio: [0, 1, 2]})
+    }
     execSync(`createdb ${name}`, {stdio: [0, 1, 2]})
     process.chdir('../')
+    return
   } catch(err) {
     console.error(`Error creating db: make sure postgres is installed and running and try again by entering: createdb ${name}`)
     process.chdir('../')
+    return
   }
 };
+
+module.exports.installKnexGlobal = installKnexGlobal
 
 exports.addScript = (command, script) => {
   try {
@@ -57,7 +102,6 @@ exports.addScript = (command, script) => {
 };
 
 exports.modifyKnex = () => {
-  
   let newKnex = `module.exports = {\n\n\tdevelopment: {\n\t\tclient: 'pg',\n\t\tconnection: 'postgres://localhost/${name}',\n\t\tmigrations: {\n\t\t\tdirectory: './db/migrations'\n\t\t},\n\t\tseeds: {\n\t\t\tdirectory: 'db/seeds/dev'\n\t\t},\n\t\tuseNullAsDefault: true\n\t},\n\n\tproduction: {\n\t\tclient: 'pg',\n\t\tconnection: process.env.DATABASE_URL + '?ssl=true',\n\t\tmigrations: {\n\t\t\tdirectory: 'db/migrations'\n\t\t},\n\t\tseeds: {\n\t\t\tdirectory: 'db/seeds/dev'\n\t\t},\n\t\tuseNullAsDefault: true\n\t}\n\n};`;
   if (fs.existsSync(`./${name}/knexfile.js`)) {
     fs.truncateSync(`./${name}/knexfile.js`, 0, function() {
@@ -111,23 +155,42 @@ exports.addKeytoPackageJSON = (key, value) => {
   fs.writeFileSync(`./${name}/package.json`, newPackageJSON);
 };
 
-exports.installDependenciesToExistingProject = packages => {
-  checkIfPackageJSONExists(packages)
+const installDependenciesToExistingProject = async packages => {
+  await checkIfPackageJSONExists(packages)
+  await checkIfNeedYarnAnswer()
   try {
-    execSync(`npm install --save ${packages}`, { stdio: [0, 1, 2] })
+    if (store.useYarn) {
+      execSync(`yarn add ${packages}`, { stdio: [0, 1, 2] })
+    } else {
+      execSync(`npm install --save ${packages}`, { stdio: [0, 1, 2] })
+    }
+    return
   } catch (err) {
     console.error(err)
+    return
+  }
+
+}
+
+module.exports.installDependenciesToExistingProject = installDependenciesToExistingProject
+
+const installDevDependenciesToExistingProject = async packages => {
+  await checkIfPackageJSONExists(packages)
+  await checkIfNeedYarnAnswer()
+  try {
+    if (store.useYarn) {
+      execSync(`yarn add ${packages} --dev`, { stdio: [0, 1, 2] })
+    } else {
+      execSync(`npm install --save-dev ${packages}`, { stdio: [0, 1, 2] })
+    }
+    return
+  } catch (err) {
+    console.error(err)
+    return
   }
 }
 
-exports.installDevDependenciesToExistingProject = packages => {
-  checkIfPackageJSONExists(packages)
-  try {
-    execSync(`npm install --save-dev ${packages}`, { stdio: [0, 1, 2] })
-  } catch (err) {
-    console.error(err)
-  }
-}
+module.exports.installDevDependenciesToExistingProject = installDevDependenciesToExistingProject
 
 exports.checkScriptsFolderExist = () => {
   if (!fs.existsSync('./scripts')) {
@@ -186,10 +249,19 @@ exports.moveAllFilesInDir = (dirToSearch, dirToMoveTo) => {
 
 // local helpers 
 
-const checkIfPackageJSONExists = packages => {
+const checkIfPackageJSONExists = async packages => {
   if (!fs.existsSync('package.json')) {
-    console.error('package.json not found. Unable to install packages')
-    console.error(`You will need to install ${packages} yourself`)
+    await checkIfNeedYarnAnswer()
+    try {
+      if (store.useYarn) {
+        execSync('yarn init -y')
+      } else {
+        execSync('npm init -y')
+      }
+    } catch (err) {
+      console.error('Failed to create package.json. You may need to add script commands or packages yourself.')
+    }
+
     return 
   }
 }

@@ -65,27 +65,26 @@ let installWebpack = async () => {
   ans = './' + ans
   let output = await prompt([webpackOutput])
   output = output.output
-  reactQuestion(ans, output)
+  await reactQuestion(ans, output)
 }
 
 let reactQuestion = async (ans, output) => {
   let react = await prompt([addReact])
   react = react.react
-  createConfig(ans, output, react)
+  await createConfig(ans, output, react)
 }
 
 
-let createConfig = (input, output, react) => {
-  log('Downloading dependencies, this may take a moment.')
+let createConfig = async (input, output, react) => {
   let webpack = loadFile('./webpack.config.js')
   let babel
   if (react) {
     babel = loadFile('../../new/files/frontend/babel/reactBabel')
-    helpers.installDependenciesToExistingProject('react react-dom')
-    helpers.installDevDependenciesToExistingProject('webpack babel-loader css-loader @babel/core @babel/preset-env style-loader sass-loader node-sass cssnano postcss postcss-preset-env postcss-import postcss-loader webpack-cli @babel/preset-react')
+    await helpers.installDependenciesToExistingProject('react react-dom')
+    await helpers.installDevDependenciesToExistingProject('webpack babel-loader css-loader @babel/core @babel/preset-env style-loader sass-loader node-sass cssnano postcss postcss-preset-env postcss-import postcss-loader webpack-cli @babel/preset-react')
   } else {
     babel = loadFile('../../new/files/frontend/babel/.babelrc')
-    helpers.installDevDependenciesToExistingProject('webpack babel-loader css-loader @babel/core @babel/preset-env style-loader sass-loader node-sass cssnano postcss postcss-preset-env postcss-import postcss-loader webpack-cli')
+    await helpers.installDevDependenciesToExistingProject('webpack babel-loader css-loader @babel/core @babel/preset-env style-loader sass-loader node-sass cssnano postcss postcss-preset-env postcss-import postcss-loader webpack-cli')
   }
 
   webpack = webpack.replace(/INPUT/g, input)

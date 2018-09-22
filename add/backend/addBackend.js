@@ -26,7 +26,7 @@ let addBackend = async () => {
 const cluster = loadFile('backend/common/cluster.js')
 const routes = loadFile('backend/common/routes.js')
 
-const createBackend = (mode, serverTestingSelection, databaseSelection) => {
+const createBackend = async (mode, serverTestingSelection, databaseSelection) => {
   try {
     fs.mkdirSync('./server')
   } catch (err) {
@@ -51,7 +51,7 @@ const createBackend = (mode, serverTestingSelection, databaseSelection) => {
 
   addDatabase(databaseSelection)
   scripts(mode.mode)
-  packages(mode)
+  await packages(mode)
   testBackend(serverTestingSelection)
 }
 
@@ -93,18 +93,18 @@ const api = () => {
   helpers.writeFile('./server/controllers/home.js', homeController)
 }
 
-const packages = mode => {
+const packages = async mode => {
   mode = mode.mode
   if (mode === 'standard') {
-    helpers.installDependenciesToExistingProject(
+    await helpers.installDependenciesToExistingProject(
       'express nodemon body-parser compression helmet dotenv morgan cookie-parser'
     )
   } else if (mode === 'mvc') {
-    helpers.installDependenciesToExistingProject(
+    await helpers.installDependenciesToExistingProject(
       'express nodemon body-parser compression helmet dotenv morgan cookie-parser pug'
     )
   } else {
-    helpers.installDependenciesToExistingProject(
+    await helpers.installDependenciesToExistingProject(
       'express nodemon body-parser compression helmet dotenv morgan'
     )
   }
