@@ -1,12 +1,14 @@
 const helpers = require('../helpers')
 const fs = require('fs')
+const chalk = require('chalk')
 const execSync = require('child_process').execSync
 let possibleScripts = ['component', 'view', 'model', 'page', 'controller', 'action']
 
 
 const generate = () => {
     if (!fs.existsSync('package.json')) {
-        console.error('Unable to find package.json. Are you in a project')
+        console.error(chalk.red`Unable to find package.json. Are you in a project`)
+        process.exit(1)
     } else if (!process.argv[3]) {
         noArg()
     }
@@ -30,10 +32,10 @@ const generate = () => {
 module.exports = generate 
 
 const noArg = () => {
-    console.log('No command type entered.')
+    console.log(chalk.red`No command type entered.`)
     possibleScripts.forEach(script => {
         if (helpers.checkIfScriptIsTaken(script)) {
-            console.log('Try: blix generate ' + script)
+            console.log('Try: ' + chalk.green`blix generate ` + chalk`{cyan ${script}}`)
         }
     })
     console.log('Please try again.')
@@ -41,10 +43,10 @@ const noArg = () => {
 }
 
 const scriptNotFound = () => {
-    console.log("It seems you're trying to run a command that doesn't exist.")
+    console.log(chalk.red`It seems you're trying to run a command that doesn't exist.`)
     possibleScripts.forEach(script => {
         if (helpers.checkIfScriptIsTaken(script)) {
-            console.log('Try: blix generate ' + script)
+            console.log('Try: ' + chalk.green`blix generate ` + chalk`{cyan ${script}}`)
         }
     })
     console.log('Please try again.')
