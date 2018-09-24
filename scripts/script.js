@@ -327,7 +327,7 @@ let checkScriptsFolderExists = () => {
       }
     } else {
       helpers.mkdirSync("./scripts");
-      helpers("./scripts/templates");
+      helpers.mkdirSync("./scripts/templates");
     }
   } catch (err) {
     console.error("Could not create scripts and scripts/templates folder. Here is the error: ", err)
