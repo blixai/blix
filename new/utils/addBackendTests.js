@@ -10,12 +10,12 @@ const loadFile = filePath => {
 
 const checkOrCreateServerTestFolder = () => {
   if (!fs.existsSync(`./${name}/test/server`)) {
-    fs.mkdirSync(`./${name}/test/server`);
+    helpers.mkdirSync(`./${name}/test/server`);
   }
 };
 
 const mochaTestBackend = () => {
-  helpers.installDevDependencies("mocha chai chai-http");
+  store.devDependencies += " mocha chai chai-http";
   helpers.addScriptToNewPackageJSON("mocha", "mocha test/server");
   checkOrCreateServerTestFolder();
   helpers.writeFile(
@@ -35,7 +35,7 @@ const mochaTestBackend = () => {
 };
 
 const testJestBackend = () => {
-  helpers.installDevDependencies("jest supertest");
+  store.devDependencies += " jest supertest";
   checkOrCreateServerTestFolder();
   helpers.writeFile(
     `./${name}/test/server/test.spec.js`,

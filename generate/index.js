@@ -1,7 +1,7 @@
 const helpers = require('../helpers')
 const fs = require('fs')
 const execSync = require('child_process').execSync
-let possibleScripts = ['component', 'view', 'model', 'page', 'controller']
+let possibleScripts = ['component', 'view', 'model', 'page', 'controller', 'action']
 
 
 const generate = () => {

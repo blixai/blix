@@ -7,5 +7,7 @@ module.export = {
   e2e: '',
   reactTesting: '',
   vueTesting: '',
-  reactType: ''
+  reactType: '',
+  dependencies: '',
+  devDependencies: ''
 }

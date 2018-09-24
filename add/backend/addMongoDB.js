@@ -42,7 +42,7 @@ const envFileExists = () => {
     if (fs.existsSync('./.env')) {
       fs.appendFileSync('./.env', `MONGO=${`mongodb://localhost:27017/${name}`}`)
     } else {
-      helpers.writeFileSync('./.env', `MONGO=${`mongodb://localhost:27017/${name}`}`)
+      helpers.writeFile('./.env', `MONGO=${`mongodb://localhost:27017/${name}`}`)
     }
   } catch (err) {
     console.error('Failed to find, create or append .env file')

@@ -9,7 +9,7 @@ const loadFile = filePath => {
 
 const checkOrCreateServerTestFolder = () => {
   if (!fs.existsSync(`./test/server`)) {
-    fs.mkdirSync(`./test/server`)
+    helpers.mkdirSync(`./test/server`)
   }
 }
 

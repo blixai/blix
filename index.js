@@ -6,6 +6,7 @@ const scripts = require("./scripts/script.js");
 const add = require("./add/add");
 const generate = require('./generate')
 const command = process.argv[2];
+const store = require('./new/store')
 
 const checkCommand = command => {
   switch (command) {
@@ -38,6 +39,10 @@ const checkCommand = command => {
       break;
   }
 };
+
+if (process.argv.includes('--verbose')) {
+  store.env = 'development'
+}
 
 const checkVersion = () => {
   var pjson = require("./package.json");

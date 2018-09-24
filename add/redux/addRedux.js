@@ -28,9 +28,9 @@ let view   = loadFile('scripts/frontend/reactRouter-redux/view.js')
 
 let redux = () => {
   if (fs.existsSync('./src') && !fs.existsSync('./src/actions')) {
-    fs.mkdirSync('./src/actions')
+    helpers.mkdirSync('./src/actions')
     helpers.writeFile('./src/actions/index.js', '')
-    fs.mkdirSync('./src/reducers')
+    helpers.mkdirSync('./src/reducers')
     helpers.writeFile('./src/reducers/rootReducer.js', rootReducer)
     helpers.writeFile('./src/configStore.js', configStore)
   } else {
@@ -73,9 +73,9 @@ let createScripts = () => {
 // option add router selected, and was created with create-react-app
 let createReactApp = () => {
   createIndex()
-  fs.mkdirSync('./src/components')
-  fs.mkdirSync('./src/components/App')
-  fs.mkdirSync('./src/views')
+  helpers.mkdirSync('./src/components')
+  helpers.mkdirSync('./src/components/App')
+  helpers.mkdirSync('./src/views')
   
   helpers.rename('./src/App.js', './src/components/App/App.js')
 
@@ -136,9 +136,9 @@ let createdByBlix = () => {
   } else {
     // blix basic react style
     createIndex()
-    fs.mkdirSync('./src/components')
-    fs.mkdirSync('./src/components/App')
-    fs.mkdirSync('./src/views')
+    helpers.mkdirSync('./src/components')
+    helpers.mkdirSync('./src/components/App')
+    helpers.mkdirSync('./src/views')
     basicReactCreatedByBlix()
   }
 
