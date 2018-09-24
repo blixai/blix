@@ -27,7 +27,7 @@ const app = loadFile("./files/frontend/react/App.js");
 
 // load react-router files
 const reactRouterIndex = loadFile("./files/frontend/react-router/index.js");
-const appRouter = loadFile("./files/frontend/react-router/App.js");
+const appRouter = loadFile("./files/frontend/react-router/Router.js");
 const Navbar = loadFile("./files/frontend/react-router/Navbar.js");
 const NavbarCSS = loadFile("./files/frontend/react-router/Navbar.css");
 const HomeView = loadFile("./files/frontend/react-router/Home.js");
@@ -103,7 +103,7 @@ const reactOnly = () => {
 
 const reactRouter = () => {
   helpers.writeFile(`./${name}/src/index.js`, reactRouterIndex);
-  helpers.writeFile(`./${name}/src/App.js`, appRouter);
+  helpers.writeFile(`./${name}/src/Router.js`, appRouter);
 
   fs.mkdirSync(`./${name}/src/components`);
   fs.mkdirSync(`./${name}/src/components/Navbar`);
@@ -138,7 +138,7 @@ const redux = () => {
 
 const reactRouterRedux = () => {
   helpers.writeFile(`./${name}/src/index.js`, reactRouterReduxIndex);
-  helpers.writeFile(`./${name}/src/App.js`, appRouter);
+  helpers.writeFile(`./${name}/src/Router.js`, appRouter);
   // components folder, every component will have a folder with associated css, tests, and/or container for that component
   fs.mkdirSync(`./${name}/src/components`);
   fs.mkdirSync(`./${name}/src/components/Navbar`);
@@ -248,7 +248,7 @@ const reactRouterReduxScripts = () => {
   let statelessComponentTemplate = loadFile("./files/scripts/frontend/react/templates/statelessComponent.js")
   let containerTemplate = loadFile("./files/scripts/frontend/redux/templates/container.js")
   let statefulComponentTemplate = loadFile("./files/scripts/frontend/react/templates/statefulComponent.js")
-  let view = loadFile('./files/scripts/frontend/redux/view.js')
+  let view = loadFile('./files/scripts/frontend/reactRouter-redux/view.js')
   // action script and templates
   helpers.writeFile(`./${name}/scripts/action.js`, action)
   helpers.writeFile(`./${name}/scripts/templates/action.js`, actionTemplate);
