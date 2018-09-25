@@ -11,6 +11,7 @@ const name = process.argv[3];
 
 // console prompts
 const {
+  defaultOrCustom,
   frontendOptions,
   backend,
   database,
@@ -19,6 +20,23 @@ const {
   reactTesting,
   vueTesting
 } = require("./prompts");
+
+const promptPreset = async () => {
+  const answer = await prompt([defaultOrCustom])
+  if (answer.preset === 'react-default') {
+    store.reactType = 'reactRouter-redux'
+    store.reactTesting = { enzyme: true }
+    store.e2e = 'None'
+    store.backend = { backend: true }
+    store.serverTesting = 'jest'
+    store.database = 'mongo'
+
+    react()
+  } else {
+    promptFrontend()
+  }
+}
+
 
 // prompts user to select frontend type and branches into project specific questions from there
 const promptFrontend = async () => {
@@ -121,7 +139,7 @@ const createProject = () => {
     process.exit(1)
   }
   console.clear()
-  promptFrontend();
+  promptPreset()
 };
 
 module.exports = createProject;
