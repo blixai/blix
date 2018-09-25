@@ -1,3 +1,15 @@
+const chalk = require('chalk')
+
+const defaultOrCustom = {
+  type: "list",
+  message: "Please select a preset: ",
+  name: "preset",
+  choices: [
+    { name: `default: (${chalk.yellow`React`}, ${chalk.yellow`React-Router`}, ${chalk.yellow`Redux`}, ${chalk.yellow`Express`}, ${chalk.yellow`MongoDB`}, ${chalk.yellow`Mongoose`})`, value: "react-default" },
+    { name: "Manually Select Features", value: "manual" }
+  ]
+}
+
 const frontendOptions = {
   type: "list",
   message: "Select a Frontend Framework:",
@@ -83,6 +95,7 @@ const vueTesting = {
 };
 
 module.exports = {
+  defaultOrCustom,
   frontendOptions,
   backend,
   backendType,
