@@ -9,16 +9,24 @@ const loadFile = filePath => {
 };
 
 let installReactTesting = () => {
+  let file
   if (!store.reactTesting['enzyme']) {
     return;
   }
   helpers.installDevDependencies(
     "jest enzyme enzyme-adapter-react-16 identity-obj-proxy"
   );
+    console.log("This is the store:\n" + store.reactType)
+  if (store.reactType === 'react-router' || store.reactType === 'reactRouter-redux'){
+    file = "Router.spec.js"
+  } else {
+    file = "App.spec.js"
+  }
   helpers.writeFile(
-    `./${name}/test/App.spec.js`,
-    loadFile("../files/frontend/enzyme/App.spec.js")
+    `./${name}/test/${file}`,
+    loadFile(`../files/frontend/enzyme/${file}`)
   );
+
   let jest = {
     moduleNameMapper: {
       "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$":

@@ -82,7 +82,7 @@ const createStatelessView = route => {
 const addRoute = route => {
   // need to check if route already exists
   let search = "<Switch>";
-  let body = fs.readFileSync("./src/App.js", "utf8").toString();
+  let body = fs.readFileSync("./src/Router.js", "utf8").toString();
   // if route already exists in App.js log warning and return
   if (body.indexOf(`/${route}`) !== -1) {
     console.log(`Route already exists in src/App.js!!`);
@@ -99,8 +99,8 @@ const addRoute = route => {
     newBody.slice(position + 8)
   ].join("");
   try {
-    fs.writeFileSync("./src/App.js", output);
-    console.log(`Created route: /${route} in src/App.js`);
+    fs.writeFileSync("./src/Router.js", output);
+    console.log(`Created route: /${route} in src/Router.js`);
   } catch (err) {
     console.error(err);
   }

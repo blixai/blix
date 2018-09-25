@@ -27,7 +27,7 @@ const app = loadFile("./files/frontend/react/App.js");
 
 // load react-router files
 const reactRouterIndex = loadFile("./files/frontend/react-router/index.js");
-const appRouter = loadFile("./files/frontend/react-router/App.js");
+const appRouter = loadFile("./files/frontend/react-router/Router.js");
 const Navbar = loadFile("./files/frontend/react-router/Navbar.js");
 const NavbarCSS = loadFile("./files/frontend/react-router/Navbar.css");
 const HomeView = loadFile("./files/frontend/react-router/Home.js");
@@ -103,7 +103,7 @@ const reactOnly = () => {
 
 const reactRouter = () => {
   helpers.writeFile(`./${name}/src/index.js`, reactRouterIndex);
-  helpers.writeFile(`./${name}/src/App.js`, appRouter);
+  helpers.writeFile(`./${name}/src/Router.js`, appRouter);
 
   fs.mkdirSync(`./${name}/src/components`);
   fs.mkdirSync(`./${name}/src/components/Navbar`);
@@ -138,7 +138,7 @@ const redux = () => {
 
 const reactRouterRedux = () => {
   helpers.writeFile(`./${name}/src/index.js`, reactRouterReduxIndex);
-  helpers.writeFile(`./${name}/src/App.js`, appRouter);
+  helpers.writeFile(`./${name}/src/Router.js`, appRouter);
   // components folder, every component will have a folder with associated css, tests, and/or container for that component
   fs.mkdirSync(`./${name}/src/components`);
   fs.mkdirSync(`./${name}/src/components/Navbar`);
