@@ -52,7 +52,7 @@ let projectType = () => {
 }
 
 let createView = type => {
-    fs.mkdirSync('./src/views')
+    helpers.mkdirSync('./src/views')
 
     if (type === 'redux') {
         let homeView = loadFile('frontend/react-router/HomeAppContainerView.js')
@@ -128,24 +128,24 @@ let createView = type => {
 }
 
 let blixRedux = () => {
-    fs.mkdirSync('./src/components')
-    fs.mkdirSync('./src/components/App')
+    helpers.mkdirSync('./src/components')
+    helpers.mkdirSync('./src/components/App')
     helpers.moveAllFilesInDir('./src/App', './src/components/App')
 
     createView('redux')
 }
 
 let blixReact = () => {
-    fs.mkdirSync('./src/components')
-    fs.mkdirSync('./src/components/App')
+    helpers.mkdirSync('./src/components')
+    helpers.mkdirSync('./src/components/App')
     helpers.moveAllFilesInDir('./src/App', './src/components/App')
 
     createView()
 }
 
 let createReactApp = () => {
-    fs.mkdirSync('./src/components')
-    fs.mkdirSync('./src/components/App')
+    helpers.mkdirSync('./src/components')
+    helpers.mkdirSync('./src/components/App')
 
     helpers.rename('./src/App.js', './src/components/App/App.js')
     if (fs.existsSync('./src/App.css')) {

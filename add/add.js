@@ -4,7 +4,8 @@ let addBackend  = require('./backend/addBackend')
 let addDatabase = require('./database/addDataBase')
 let addReactRouter = require('./react-router/addReactRouter')
 let addRedux    = require('./redux/addRedux')
-
+let fs = require('fs')
+let chalk = require('chalk')
 let inquirer = require('inquirer')
 let prompt   = inquirer.prompt
 
@@ -23,6 +24,11 @@ let commands = {
 }
 
 let add = () => {
+  if (!fs.existsSync('package.json')) {
+    console.error(chalk.red`Not inside a project. If you're starting a new project use the blix new command.`)
+    process.exit(1)
+  }
+
   console.clear()
   prompt([commands]).then(ans => {
     command = ans.command

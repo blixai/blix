@@ -23,12 +23,12 @@ const createBackend = () => {
     createCommonFilesAndFolders()
   }
   // create folders
-  fs.mkdirSync(`./${name}/server`)
-  fs.mkdirSync(`./${name}/server/models`)
-  fs.mkdirSync(`./${name}/server/controllers`)
-  fs.mkdirSync(`./${name}/server/helpers`)
+  helpers.mkdirSync(`./${name}/server`)
+  helpers.mkdirSync(`./${name}/server/models`)
+  helpers.mkdirSync(`./${name}/server/controllers`)
+  helpers.mkdirSync(`./${name}/server/helpers`)
   if (store.backendType !== 'api') {
-    fs.mkdirSync(`./${name}/assets`)
+    helpers.mkdirSync(`./${name}/assets`)
   }
 
   // create files: routes.js cluster.js
@@ -59,7 +59,8 @@ const createBackend = () => {
   //add variables to .env file
   envSetup()
 
-  // new project instructions and add to readme
+  helpers.installAllPackages()
+  // new project instructions and add to readms
   newProjectInstructions()
 }
 
@@ -69,10 +70,10 @@ const standard = () => {
   let controller = loadFile('./files/backend/standard/home.js')
 
   // mode for when there is a frontend framework
-  fs.mkdirSync(`./${name}/server/views`)
-  fs.mkdirSync(`./${name}/server/views/home`)
+  helpers.mkdirSync(`./${name}/server/views`)
+  helpers.mkdirSync(`./${name}/server/views/home`)
   helpers.writeFile(`./${name}/server/views/home/index.html`, html)
-  helpers.writeFileSync(`./${name}/server/server.js`, server)
+  helpers.writeFile(`./${name}/server/server.js`, server)
   helpers.writeFile(`./${name}/server/controllers/home.js`, controller)
 }
 
@@ -82,21 +83,21 @@ const mvcType = () => {
   const layout = loadFile('./files/backend/mvc/layout.pug')
   const pug = loadFile('./files/backend/mvc/index.pug')
 
-  fs.mkdirSync(`./${name}/server/views`)
+  helpers.mkdirSync(`./${name}/server/views`)
 
   helpers.writeFile(`./${name}/server/views/error.pug`, error)
   helpers.writeFile(`./${name}/server/views/layout.pug`, layout)
-  fs.mkdirSync(`./${name}/server/views/home`)
+  helpers.mkdirSync(`./${name}/server/views/home`)
   helpers.writeFile(`./${name}/server/views/home/index.pug`, pug)
 
-  fs.writeFileSync(`./${name}/server/server.js`, server)
+  helpers.writeFile(`./${name}/server/server.js`, server)
 }
 
 const apiType = () => {
   let server = loadFile('./files/backend/api/server.js')
   let controller = loadFile('./files/backend/api/home.js')
 
-  helpers.writeFileSync(`./${name}/server/server.js`, server)
+  helpers.writeFile(`./${name}/server/server.js`, server)
   helpers.writeFile(`./${name}/server/controllers/home.js`, controller)
 }
 
@@ -124,15 +125,15 @@ const scripts = mode => {
 
 const packages = mode => {
   if (mode === 'standard') {
-    helpers.install(
+    helpers.addDependenciesToStore(
       'express nodemon body-parser compression helmet dotenv morgan cookie-parser'
     )
   } else if (mode === 'mvc') {
-    helpers.install(
+    helpers.addDependenciesToStore(
       'express nodemon body-parser compression helmet dotenv morgan cookie-parser pug'
     )
   } else {
-    helpers.install(
+    helpers.addDependenciesToStore(
       'express nodemon body-parser compression helmet dotenv morgan'
     )
   }

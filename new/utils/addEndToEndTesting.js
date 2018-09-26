@@ -18,9 +18,9 @@ let e2eSetup = () => {
 
 const installCypress = () => {
   helpers.addScriptToNewPackageJSON("e2e", "cypress open");
-  helpers.installDevDependencies("cypress");
-  fs.mkdirSync(`./${name}/cypress`);
-  fs.mkdirSync(`./${name}/cypress/integration`);
+  helpers.addDevDependenciesToStore("cypress");
+  helpers.mkdirSync(`./${name}/cypress`);
+  helpers.mkdirSync(`./${name}/cypress/integration`);
   helpers.writeFile(
     `./${name}/cypress/integration/test.js`,
     loadFile("../files/frontend/e2e/cypress.js")
@@ -51,8 +51,8 @@ const installCypress = () => {
 
 const installTestCafe = () => {
   helpers.addScriptToNewPackageJSON("e2e", "testcafe chrome test/e2e");
-  helpers.installDevDependencies("testcafe");
-  fs.mkdirSync(`./${name}/test/e2e`);
+  helpers.addDevDependenciesToStore("testcafe");
+  helpers.mkdirSync(`./${name}/test/e2e`);
   helpers.writeFile(
     `./${name}/test/e2e/test.js`,
     loadFile("../files/frontend/e2e/testcafe.js")

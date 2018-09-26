@@ -16,12 +16,12 @@ let installReactTesting = () => {
   helpers.installDevDependencies(
     "jest enzyme enzyme-adapter-react-16 identity-obj-proxy"
   );
-    console.log("This is the store:\n" + store.reactType)
   if (store.reactType === 'react-router' || store.reactType === 'reactRouter-redux'){
     file = "Router.spec.js"
   } else {
     file = "App.spec.js"
   }
+  helpers.addDevDependenciesToStore("jest enzyme enzyme-adapter-react-16 identity-obj-proxy")
   helpers.writeFile(
     `./${name}/test/${file}`,
     loadFile(`../files/frontend/enzyme/${file}`)

@@ -144,8 +144,19 @@ const addComponentsToView = () => {
             componentFolder = componentFolder.replace("Container", "");
           }
           let search = `import ${component} from '../components/${componentFolder}/${component}';`;
-          if (view.indexOf(search) !== -1) {
+          let secondSearch = `import ${component}Component from '../components/${componentFolder}/${component}';`
+          if (view.indexOf(search) !== -1 || view.indexOf(secondSearch) !== -1) {
             log(`This view already has the ${component} component`);
+          } else if (view.indexOf(component) !== -1) {
+            view = view.split("\n");
+            view.splice(1, 0, secondSearch);
+            view = view.join("\n");
+            try {
+              fs.writeFileSync(`./src/views/${name}.js`, view);
+              console.log(`Imported ${component} into view/${name}.js`);
+            } catch (err) {
+              console.error(err);
+            } 
           } else {
             // rewrite the view
             view = view.split("\n");

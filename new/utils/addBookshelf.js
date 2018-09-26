@@ -26,7 +26,7 @@ const addBookshelfToScripts = () => {
   helpers.addScriptToNewPackageJSON("model", "node scripts/model.js");
   helpers.installKnexGlobal();
   helpers.modifyKnex();
-  helpers.install("pg bookshelf knex");
+  helpers.addDependenciesToStore("pg bookshelf knex");
 };
 
 module.exports = {

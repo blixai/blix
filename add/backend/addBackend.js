@@ -28,17 +28,17 @@ const routes = loadFile('backend/common/routes.js')
 
 const createBackend = (mode, serverTestingSelection, databaseSelection) => {
   try {
-    fs.mkdirSync('./server')
+    helpers.mkdirSync('./server')
   } catch (err) {
     console.error('Server folder already exists')
     process.exit(1)
   }
-  fs.mkdirSync('./server/models')
-  fs.mkdirSync('./server/controllers')
-  fs.mkdirSync('./server/helpers')
+  helpers.mkdirSync('./server/models')
+  helpers.mkdirSync('./server/controllers')
+  helpers.mkdirSync('./server/helpers')
   if (mode !== 'api') {
     try {
-      fs.mkdirSync('./assets')
+      helpers.mkdirSync('./assets')
     } catch (err) {
       console.error('Tried to create assets folder but one already exists')
     }
@@ -60,10 +60,10 @@ const standard = () => {
   const server = loadFile('backend/standard/server.js')
   const controller = loadFile('backend/standard/home.js')
 
-  helpers.writeFileSync('./server/server.js', server)
+  helpers.writeFile('./server/server.js', server)
   helpers.writeFile('./server/controllers/home.js', controller)
-  fs.mkdirSync('./server/views')
-  fs.mkdirSync('./server/views/home')
+  helpers.mkdirSync('./server/views')
+  helpers.mkdirSync('./server/views/home')
   helpers.writeFile('./server/views/home/index.html', html)
 }
 
@@ -74,12 +74,12 @@ const mvc = () => {
   const pug = loadFile('backend/mvc/index.pug')
   const controller = loadFile('backend/mvc/home.js')
 
-  helpers.writeFileSync('./server/server.js', server)
+  helpers.writeFile('./server/server.js', server)
 
-  fs.mkdirSync('./server/views')
+  helpers.mkdirSync('./server/views')
   helpers.writeFile('./server/views/error.pug', error)
   helpers.writeFile('./server/views/layout.pug', layout)
-  fs.mkdirSync('./server/views/home')
+  helpers.mkdirSync('./server/views/home')
   helpers.writeFile('./server/views/home/index.pug', pug)
 
   helpers.writeFile('./server/controllers/home.js', controller)
@@ -89,7 +89,7 @@ const api = () => {
   const server = loadFile('backend/api/server.js')
   const homeController = loadFile('backend/api/home.js')
 
-  helpers.writeFileSync('./server/server.js', server)
+  helpers.writeFile('./server/server.js', server)
   helpers.writeFile('./server/controllers/home.js', homeController)
 }
 

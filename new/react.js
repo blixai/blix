@@ -47,10 +47,10 @@ const react = () => {
   createCommonFilesAndFolders();
 
   // create react files
-  fs.mkdirSync(`./${name}/dist`);
-  fs.mkdirSync(`./${name}/src`);
+  helpers.mkdirSync(`./${name}/dist`);
+  helpers.mkdirSync(`./${name}/src`);
   // A FOLDER TO HOLD FILES WITH RESOURCE FETCH CALLS TO ONE RESOURCE PER FILE (similar to controllers server side)
-  fs.mkdirSync(`./${name}/src/services`);
+  helpers.mkdirSync(`./${name}/src/services`);
 
   // build project specific contents based on type supplied from new/index.js
   createSrcContents();
@@ -69,7 +69,7 @@ const react = () => {
   // add scripts
   scripts();
 
-  // install packages
+  // add packages to store
   packages();
 
   // create backend
@@ -78,6 +78,7 @@ const react = () => {
     createBackend()
     // createBackend("backend", store.serverTesting, store.database);
   } else {
+    helpers.installAllPackages()
     newProjectInstructions()
   }
 };
@@ -95,7 +96,7 @@ const createSrcContents = () => {
 };
 
 const reactOnly = () => {
-  fs.mkdirSync(`./${name}/src/App`);
+  helpers.mkdirSync(`./${name}/src/App`);
   helpers.writeFile(`./${name}/src/index.js`, index);
   helpers.writeFile(`./${name}/src/App/App.js`, app);
   helpers.writeFile(`./${name}/src/App/App.css`, "");
@@ -105,34 +106,34 @@ const reactRouter = () => {
   helpers.writeFile(`./${name}/src/index.js`, reactRouterIndex);
   helpers.writeFile(`./${name}/src/Router.js`, appRouter);
 
-  fs.mkdirSync(`./${name}/src/components`);
-  fs.mkdirSync(`./${name}/src/components/Navbar`);
+  helpers.mkdirSync(`./${name}/src/components`);
+  helpers.mkdirSync(`./${name}/src/components/Navbar`);
   helpers.writeFile(`./${name}/src/components/Navbar/Navbar.js`, Navbar);
   helpers.writeFile(`./${name}/src/components/Navbar/Navbar.css`, NavbarCSS);
-  fs.mkdirSync(`./${name}/src/views`);
+  helpers.mkdirSync(`./${name}/src/views`);
   helpers.writeFile(`./${name}/src/views/Home.js`, HomeView);
   // styles folder
-  fs.mkdirSync(`./${name}/src/styles`);
+  helpers.mkdirSync(`./${name}/src/styles`);
   helpers.writeFile(`./${name}/src/styles/global.css`, globalStyle);
   // install react-router-dom for src/index.js file
-  helpers.installDevDependencies("react-router-dom");
+  helpers.addDevDependenciesToStore("react-router-dom");
 };
 
 const redux = () => {
   helpers.writeFile(`./${name}/src/index.js`, reduxIndex)
-  fs.mkdirSync(`./${name}/src/App`)
+  helpers.mkdirSync(`./${name}/src/App`)
   helpers.writeFile(`./${name}/src/App/App.js`, app)
   helpers.writeFile(`./${name}/src/App/AppContainer.js`, reduxAppContainer)
   helpers.writeFile(`./${name}/src/App/App.css`, "")
 
-  fs.mkdirSync(`./${name}/src/actions`)
+  helpers.mkdirSync(`./${name}/src/actions`)
   helpers.writeFile(`./${name}/src/actions/index.js`, "")
 
-  fs.mkdirSync(`./${name}/src/reducers`)
+  helpers.mkdirSync(`./${name}/src/reducers`)
   helpers.writeFile(`./${name}/src/reducers/rootReducer.js`, rootReducer);
   helpers.writeFile(`./${name}/src/configStore.js`, configStore);
 
-  helpers.install("redux react-redux")
+  helpers.addDevDependenciesToStore("redux react-redux")
 
 }
 
@@ -140,8 +141,8 @@ const reactRouterRedux = () => {
   helpers.writeFile(`./${name}/src/index.js`, reactRouterReduxIndex);
   helpers.writeFile(`./${name}/src/Router.js`, appRouter);
   // components folder, every component will have a folder with associated css, tests, and/or container for that component
-  fs.mkdirSync(`./${name}/src/components`);
-  fs.mkdirSync(`./${name}/src/components/Navbar`);
+  helpers.mkdirSync(`./${name}/src/components`);
+  helpers.mkdirSync(`./${name}/src/components/Navbar`);
   helpers.writeFile(`./${name}/src/components/Navbar/Navbar.js`, Navbar);
   helpers.writeFile(
     `./${name}/src/components/Navbar/NavbarContainer.js`,
@@ -149,20 +150,20 @@ const reactRouterRedux = () => {
   );
   helpers.writeFile(`./${name}/src/components/Navbar/Navbar.css`, NavbarCSS);
   // views folder
-  fs.mkdirSync(`./${name}/src/views`);
+  helpers.mkdirSync(`./${name}/src/views`);
   helpers.writeFile(`./${name}/src/views/Home.js`, ReduxHomeView);
   // styles folder for views
-  fs.mkdirSync(`./${name}/src/styles`);
+  helpers.mkdirSync(`./${name}/src/styles`);
   helpers.writeFile(`./${name}/src/styles/global.css`, globalStyle);
 
   // need to make actions folder and store file and configure store and reducers folder with rootReducer.js
-  fs.mkdirSync(`./${name}/src/actions`);
+  helpers.mkdirSync(`./${name}/src/actions`);
   helpers.writeFile(`./${name}/src/actions/index.js`, "");
-  fs.mkdirSync(`./${name}/src/reducers`);
+  helpers.mkdirSync(`./${name}/src/reducers`);
   helpers.writeFile(`./${name}/src/reducers/rootReducer.js`, rootReducer);
   helpers.writeFile(`./${name}/src/configStore.js`, configStore);
   //install react-router-dom and other redux specific libs
-  helpers.installDevDependencies("redux react-redux react-router-dom");
+  helpers.addDevDependenciesToStore("redux react-redux react-router-dom");
 };
 
 const scripts = () => {
@@ -269,11 +270,9 @@ const reactRouterReduxScripts = () => {
 
 const packages = () => {
   if (!store.backend.backend) {
-    helpers.installDevDependencies("webpack-dev-server");
+    helpers.addDevDependenciesToStore("webpack-dev-server")
   }
-  helpers.installDevDependencies(
-    "react react-dom webpack webpack-cli babel-loader css-loader @babel/core @babel/preset-env @babel/preset-react style-loader sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-preset-env postcss-import postcss-loader"
-  );
+  helpers.addDevDependenciesToStore("react react-dom webpack webpack-cli babel-loader css-loader @babel/core @babel/preset-env @babel/preset-react style-loader sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-preset-env postcss-import postcss-loader")
 };
 
 module.exports = { react };

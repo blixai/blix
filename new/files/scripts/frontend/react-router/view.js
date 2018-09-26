@@ -112,8 +112,25 @@ const addComponentsToView = () => {
             .readFileSync(`./src/views/${name}.js`, "utf8")
             .toString();
           let search = `import ${component} from '../components/${component}/${component}';`;
-          if (view.indexOf(search) !== -1) {
+          let secondSearch = `import ${component}Component from '../components/${component}/${component}';`
+          if (view.indexOf(search) !== -1 || view.indexOf(secondSearch) !== -1) {
             log(`This view already has the ${component} component`);
+          } else if (view.indexOf(component) !== -1) {
+            // view is named the same as the component and could cause a conflict so import it <componentName>Component
+            view = view.split("\n");
+            view.splice(1, 0, secondSearch);
+            view = view.join("\n");
+            fs.writeFile(`./src/views/${name}.js`, view, err => {
+              if (err) {
+                log(
+                  `Something went wrong. Failed to add ${component} to view ${name}`
+                );
+              } else {
+                log(
+                  `Imported ${component} component into src/views/${name}.js`
+                );
+              }
+            }); 
           } else {
             // rewrite the view
             view = view.split("\n");
