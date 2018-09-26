@@ -40,7 +40,7 @@ const addMongoDBToProject = () => {
     `./${name}/.env`,
     `MONGO=${`mongodb://localhost:27017/${name}`}`
   );
-  helpers.install("mongo mongoose")
+  helpers.addDependenciesToStore("mongo mongoose")
 };
 
 module.exports = {

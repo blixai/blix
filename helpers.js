@@ -2,6 +2,8 @@ const fs = require("fs");
 const execSync = require("child_process").execSync;
 const name = process.argv[3];
 const log = console.log;
+const chalk = require('chalk');
+const store = require('./new/store')
 
 const shouldUseYarn = () => {
   try {
@@ -12,13 +14,18 @@ const shouldUseYarn = () => {
   }
 };
 
-exports.install = packages => {
+exports.installDependencies = packages => {
   try {
     process.chdir(`./${name}`)
     execSync(`npm install --save ${packages}`, {stdio:[0,1,2]});
     process.chdir('../')
   } catch(err) {
-    console.error(err)
+    process.chdir('../')
+    if (store.env === 'development') {
+      console.error(err)
+    } else {
+      console.log('Something went wrong installing the packages')
+    }
   }
 };
 
@@ -28,7 +35,12 @@ exports.installDevDependencies = packages => {
     execSync(`npm install --save-dev ${packages}`, {stdio:[0,1,2]})
     process.chdir('../')
   } catch(err) {
-    console.error(err)
+    process.chdir('../')
+    if (store.env === 'development') {
+      console.error(err)
+    } else {
+      console.log('Something went wrong installing the packages')
+    }
   }
 };
 
@@ -39,7 +51,7 @@ exports.installKnexGlobal = () => {
     execSync(`createdb ${name}`, {stdio: [0, 1, 2]})
     process.chdir('../')
   } catch(err) {
-    console.error(`Error creating db: make sure postgres is installed and running and try again by entering: createdb ${name}`)
+    console.error(chalk.red`Error creating db: make sure postgres is installed and running and try again by entering: createdb ${name}`)
     process.chdir('../')
   }
 };
@@ -69,8 +81,8 @@ exports.modifyKnex = () => {
   } else {
     fs.writeFileSync(`./${name}/knexfile.js`, newKnex)
   }
-  fs.mkdirSync(`./${name}/db`);
-  fs.mkdirSync(`./${name}/db/migrations`);
+  helpers.mkdirSync(`./${name}/db`);
+  helpers.mkdirSync(`./${name}/db/migrations`);
 };
 
 exports.addScriptToNewPackageJSON = (command, script) => {
@@ -82,25 +94,31 @@ exports.addScriptToNewPackageJSON = (command, script) => {
 };
 
 exports.writeFile = (filePath, file, message) => {
-  fs.writeFile(filePath, file, err => {
-    if (err) console.error(err);
-    message ? log(message) : "";
-  });
-};
-
-exports.writeFileSync = (filePath, file, message) => {
   try {
     fs.writeFileSync(filePath, file)
-    message ? log(message) : "";
+    filePath = filePath.slice(2)
+    message ? log(message) : log(chalk`{green.bold create} ${filePath}`);
   } catch (err) {
     console.error("Couldn't create file", err)
   }
 }
 
+exports.mkdirSync = (folderPath, message) => {
+  try {
+    fs.mkdirSync(folderPath)
+    folderPath = folderPath.slice(2)
+    message ? log(message) : log(chalk`{green.bold create} ${folderPath}`)
+  } catch (err) {
+    log(chalk`\t{red.bold Error Making Directory ${folderPath} }`)
+  }
+}
+
 exports.rename = (oldName, newName) => {
-  fs.rename(oldName, newName, err => {
-    if (err) console.error(err);
-  });
+  try {
+    fs.renameSync(oldName, newName)
+  } catch (err) {
+    store.env === 'development' ? log(err) : log()
+  }
 };
 
 exports.addKeytoPackageJSON = (key, value) => {
@@ -131,10 +149,10 @@ exports.installDevDependenciesToExistingProject = packages => {
 
 exports.checkScriptsFolderExist = () => {
   if (!fs.existsSync('./scripts')) {
-    fs.mkdirSync('./scripts')
-    fs.mkdirSync('./scripts/templates')
+    this.mkdirSync('./scripts')
+    this.mkdirSync('./scripts/templates')
   } else if (!fs.existsSync('./scripts/templates')) {
-    fs.mkdirSync('./scripts/templates')
+    this.mkdirSync('./scripts/templates')
   }
 }
 
@@ -157,8 +175,8 @@ exports.modifyKnexExistingProject = (cwd) => {
   } else {
     fs.writeFileSync(`./knexfile.js`, newKnex)
   }
-  fs.mkdirSync(`./db`)
-  fs.mkdirSync(`./db/migrations`)
+  this.mkdirSync(`./db`)
+  this.mkdirSync(`./db/migrations`)
 }
 
 exports.checkIfScriptIsTaken = (scriptName) => {
@@ -182,6 +200,33 @@ exports.moveAllFilesInDir = (dirToSearch, dirToMoveTo) => {
       console.error(`Error: Couldn't move ${file} from ${dirToSearch} into ${dirToMoveTo}`, err)
     }
   })
+}
+
+exports.addDependenciesToStore = deps => {
+  if (!store.dependencies) {
+    store.dependencies = deps
+  } else {
+    store.dependencies += ' ' + deps
+  }
+}
+
+exports.addDevDependenciesToStore = deps => {
+  if (!store.devDependencies) {
+    store.devDependencies = deps
+  } else {
+    store.devDependencies += ' ' + deps
+  }
+}
+
+exports.installAllPackages = () => {
+  if (store.dependencies) {
+    this.installDependencies(store.dependencies)
+  }
+
+  if (store.devDependencies) {
+    this.installDevDependencies(store.devDependencies)
+  }
+
 }
 
 // local helpers 

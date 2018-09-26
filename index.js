@@ -4,7 +4,9 @@ const createProject = require("./new");
 const help = require("./help/help.js");
 const scripts = require("./scripts/script.js");
 const add = require("./add/add");
+const generate = require('./generate')
 const command = process.argv[2];
+const store = require('./new/store')
 
 const checkCommand = command => {
   switch (command) {
@@ -20,6 +22,12 @@ const checkCommand = command => {
     case "add":
       add();
       break;
+    case "generate":
+      generate()
+      break
+    case "g":
+      generate()
+      break
     case "version":
       checkVersion()
       break
@@ -31,6 +39,10 @@ const checkCommand = command => {
       break;
   }
 };
+
+if (process.argv.includes('--verbose')) {
+  store.env = 'development'
+}
 
 const checkVersion = () => {
   var pjson = require("./package.json");
@@ -48,6 +60,21 @@ const noCommand = () => {
   console.log('help')
   console.log('')
   console.log('Run: "blix help" to learn more about a command')
+}
+
+let currentNodeVersion = process.versions.node;
+let semver = currentNodeVersion.split('.');
+let major = semver[0];
+
+if (major < 8) {
+  console.error(
+    'You are running Node ' +
+      currentNodeVersion +
+      '.\n' +
+      'Blix requires Node 8 or higher. \n' +
+      'Please update your version of Node.'
+  );
+  process.exit(1);
 }
 
 checkCommand(command);

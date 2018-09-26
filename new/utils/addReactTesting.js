@@ -12,9 +12,7 @@ let installReactTesting = () => {
   if (!store.reactTesting['enzyme']) {
     return;
   }
-  helpers.installDevDependencies(
-    "jest enzyme enzyme-adapter-react-16 identity-obj-proxy"
-  );
+  helpers.addDevDependenciesToStore("jest enzyme enzyme-adapter-react-16 identity-obj-proxy")
   helpers.writeFile(
     `./${name}/test/App.spec.js`,
     loadFile("../files/frontend/enzyme/App.spec.js")
