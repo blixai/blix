@@ -65,8 +65,8 @@ let createView = type => {
         helpers.writeFile('./src/views/Home.js', homeView)
     }
 
-    let AppRouter = loadFile('frontend/react-router/App.js')
-    helpers.writeFile('./src/App.js', AppRouter)
+    let AppRouter = loadFile('frontend/react-router/Router.js')
+    helpers.writeFile('./src/Router.js', AppRouter)
 
     if (type === 'redux') {
         let index = loadFile('frontend/redux/reactRouterReduxIndex.js')

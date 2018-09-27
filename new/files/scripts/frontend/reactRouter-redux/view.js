@@ -82,10 +82,10 @@ const createStatelessView = route => {
 const addRoute = route => {
   // need to check if route already exists
   let search = "<Switch>";
-  let body = fs.readFileSync("./src/App.js", "utf8").toString();
-  // if route already exists in App.js log warning and return
+  let body = fs.readFileSync("./src/Router.js", "utf8").toString();
+  // if route already exists in Router.js log warning and return
   if (body.indexOf(`/${route}`) !== -1) {
-    console.log(`Route already exists in src/App.js!!`);
+    console.log(`Route already exists in src/Router.js!!`);
     return;
   }
   body = body.split("\n");
@@ -99,8 +99,8 @@ const addRoute = route => {
     newBody.slice(position + 8)
   ].join("");
   try {
-    fs.writeFileSync("./src/App.js", output);
-    console.log(`Created route: /${route} in src/App.js`);
+    fs.writeFileSync("./src/Router.js", output);
+    console.log(`Created route: /${route} in src/Router.js`);
   } catch (err) {
     console.error(err);
   }
@@ -197,7 +197,7 @@ if (name) {
   log("No View name provided.");
   log("Example: npm run view about");
   log(
-    "This will create a component About in src/views and add a route to src/App.js as well as give the option to import components or containers into the view"
+    "This will create a component About in src/views and add a route to src/Router.js as well as give the option to import components or containers into the view"
   );
   log("Please try again");
   process.exit();

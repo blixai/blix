@@ -79,8 +79,8 @@ let createReactApp = () => {
   
   helpers.rename('./src/App.js', './src/components/App/App.js')
 
-  let router = loadFile('frontend/react-router/App.js')
-  helpers.writeFile('./src/App.js', router)
+  let router = loadFile('frontend/react-router/Router.js')
+  helpers.writeFile('./src/Router.js', router)
   
   let AppContainer = createContainer('App')
   helpers.writeFile(`./src/components/App/AppContainer.js`, AppContainer)
@@ -99,8 +99,8 @@ let createReactApp = () => {
 
 // add router option selected and created by blix
 let basicReactCreatedByBlix = () => {
-  let router = loadFile('frontend/react-router/App.js')
-  helpers.writeFile('./src/App.js', router)
+  let router = loadFile('frontend/react-router/Router.js')
+  helpers.writeFile('./src/Router.js', router)
 
   helpers.rename('./src/App/App.js', './src/components/App/App.js')
   let AppContainer = createContainer('App')
