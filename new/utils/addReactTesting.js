@@ -13,9 +13,6 @@ let installReactTesting = () => {
   if (!store.reactTesting['enzyme']) {
     return;
   }
-  helpers.installDevDependencies(
-    "jest enzyme enzyme-adapter-react-16 identity-obj-proxy"
-  );
   if (store.reactType === 'react-router' || store.reactType === 'reactRouter-redux'){
     file = "Router.spec.js"
   } else {
