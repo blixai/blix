@@ -2,7 +2,7 @@ let fs = require("fs");
 let path = require("path");
 let modelName = process.argv[2];
 const execSync = require("child_process").execSync;
-let tableColumns = process.argv.splice(3, process.argv.length);
+let tableColumns = process.argv.slice(3);
 
 if (!modelName) {
   console.log("no model name provided");
@@ -78,12 +78,13 @@ fs.readdir("./db/migrations", (err, files) => {
   if (err) throw err;
   for (let i = 0; i < files.length; i++) {
     if (files[i].indexOf(`${modelName.toLowerCase()}`) !== -1) {
-      fs.truncate(`./db/migrations/${files[i]}`, 0, () => {
-        fs.writeFile(`./db/migrations/${files[i]}`, migration, err => {
-          if (err) throw err;
-          console.log(`Created migration file ${files[i]}`);
-        });
-      });
+      try {
+        fs.truncateSync(`./db/migrations/${files[i]}`, 0)
+        fs.writeFileSync(`./db/migrations/${files[i]}`, migration)
+        console.log(`Created migration file ${files[i]}`);
+      } catch (err) {
+        console.error(err)
+      }
     }
   }
 });
