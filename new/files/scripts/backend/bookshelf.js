@@ -22,14 +22,15 @@ bookshelf = bookshelf.replace(
 );
 bookshelf = bookshelf.replace(/ModelName/g, modelName);
 fs.writeFile(`./server/models/${modelName}.js`, bookshelf, err => {
-  if (err) console.error(err);
+  if (err) return console.error(err);
   console.log(`Created Model ${modelName}`);
 });
 
 try {
   execSync(`knex migrate:make ${modelName.toLowerCase()}s`);
 } catch (e) {
-  console.log(e);
+  console.error(e);
+  process.exit(1)
 }
 
 let migration = fs.readFileSync(

@@ -81,8 +81,8 @@ exports.modifyKnex = () => {
   } else {
     fs.writeFileSync(`./${name}/knexfile.js`, newKnex)
   }
-  helpers.mkdirSync(`./${name}/db`);
-  helpers.mkdirSync(`./${name}/db/migrations`);
+  this.mkdirSync(`./${name}/db`);
+  this.mkdirSync(`./${name}/db/migrations`);
 };
 
 exports.addScriptToNewPackageJSON = (command, script) => {
