@@ -6,6 +6,7 @@ const boxen = require("boxen");
 const store = require('../store')
 const name = process.argv[3];
 const chalk = require('chalk')
+const helpers = require('../../helpers')
 
 const link = 'blixjs.com'
 
@@ -64,7 +65,11 @@ const readmeFormatter = () => {
   })
 
   let readmeOutputString = ('\n' + '## Project Scripts' + '\n\n' + outputString)
-  fs.appendFileSync(`./${name}/README.md`, readmeOutputString)
+  try {
+    fs.appendFileSync(`./${name}/README.md`, readmeOutputString)
+  } catch (err) {
+    store.env === 'development' ? log(err) : ""
+  }
 
   consoleFormatter()
 }

@@ -115,14 +115,10 @@ exports.addScript = (command, script) => {
 exports.modifyKnex = () => {
   let newKnex = `module.exports = {\n\n\tdevelopment: {\n\t\tclient: 'pg',\n\t\tconnection: 'postgres://localhost/${name}',\n\t\tmigrations: {\n\t\t\tdirectory: './db/migrations'\n\t\t},\n\t\tseeds: {\n\t\t\tdirectory: 'db/seeds/dev'\n\t\t},\n\t\tuseNullAsDefault: true\n\t},\n\n\tproduction: {\n\t\tclient: 'pg',\n\t\tconnection: process.env.DATABASE_URL + '?ssl=true',\n\t\tmigrations: {\n\t\t\tdirectory: 'db/migrations'\n\t\t},\n\t\tseeds: {\n\t\t\tdirectory: 'db/seeds/dev'\n\t\t},\n\t\tuseNullAsDefault: true\n\t}\n\n};`;
   if (fs.existsSync(`./${name}/knexfile.js`)) {
-    fs.truncateSync(`./${name}/knexfile.js`, 0, function() {
-      console.log("done");
-    });
-    fs.appendFile(`./${name}/knexfile.js`, newKnex, err => {
-      if (err) throw err;
-    });
+    fs.truncateSync(`./${name}/knexfile.js`, 0)
+    this.appendFile(`./${name}/knexfile.js`, newKnex)
   } else {
-    fs.writeFileSync(`./${name}/knexfile.js`, newKnex)
+    this.writeFile(`./${name}/knexfile.js`, newKnex)
   }
   this.mkdirSync(`./${name}/db`);
   this.mkdirSync(`./${name}/db/migrations`);
@@ -159,6 +155,9 @@ exports.mkdirSync = (folderPath, message) => {
 exports.rename = (oldName, newName) => {
   try {
     fs.renameSync(oldName, newName)
+    oldName = oldName.slice(2)
+    newName = newName.slice(2)
+    log(chalk`{yellow.bold move}   ${oldName} into ${newName}`)
   } catch (err) {
     store.env === 'development' ? log(err) : log()
   }
@@ -229,17 +228,22 @@ exports.getCWDName = () => {
 exports.modifyKnexExistingProject = (cwd) => {
   let newKnex = `module.exports = {\n\n\tdevelopment: {\n\t\tclient: 'pg',\n\t\tconnection: 'postgres://localhost/${cwd}',\n\t\tmigrations: {\n\t\t\tdirectory: './db/migrations'\n\t\t},\n\t\tseeds: {\n\t\t\tdirectory: 'db/seeds/dev'\n\t\t},\n\t\tuseNullAsDefault: true\n\t},\n\n\tproduction: {\n\t\tclient: 'pg',\n\t\tconnection: process.env.DATABASE_URL + '?ssl=true',\n\t\tmigrations: {\n\t\t\tdirectory: 'db/migrations'\n\t\t},\n\t\tseeds: {\n\t\t\tdirectory: 'db/seeds/dev'\n\t\t},\n\t\tuseNullAsDefault: true\n\t}\n\n};`
   if (fs.existsSync(`./knexfile.js`)) {
-    fs.truncateSync(`./knexfile.js`, 0, function() {
-      console.log("done")
-    })
-    fs.appendFile(`./knexfile.js`, newKnex, err => {
-      if (err) throw err
-    })
+    fs.truncateSync(`./knexfile.js`, 0)
+    this.appendFile(`./knexfile.js`, newKnex)
   } else {
-    fs.writeFileSync(`./knexfile.js`, newKnex)
+    this.writeFile(`./knexfile.js`, newKnex)
   }
   this.mkdirSync(`./db`)
   this.mkdirSync(`./db/migrations`)
+}
+
+exports.appendFile = (file, stringToAppend) => {
+  try {
+    fs.appendFileSync(file, stringToAppend)
+    log(chalk`{cyan.bold append} ${file}`)
+  } catch (err) {
+    store.env === 'development' ? log(err) : log(chalk.red`Failed to append ${file}`)
+  }
 }
 
 exports.checkIfScriptIsTaken = (scriptName) => {
@@ -258,9 +262,9 @@ exports.moveAllFilesInDir = (dirToSearch, dirToMoveTo) => {
       return
     }
     try {
-      fs.renameSync(dirToSearch + '/' + file, dirToMoveTo + '/' + file)
+      this.rename(dirToSearch + '/' + file, dirToMoveTo + '/' + file)
     } catch(err) {
-      console.error(`Error: Couldn't move ${file} from ${dirToSearch} into ${dirToMoveTo}`, err)
+      console.error(chalk.red`Error: Couldn't move ${file} from ${dirToSearch} into ${dirToMoveTo}`, err)
     }
   })
 }
@@ -305,6 +309,7 @@ const installAllPackagesToExistingProject = async () => {
 }
 
 exports.installAllPackagesToExistingProject = installAllPackagesToExistingProject
+
 // local helpers 
 
 const checkIfPackageJSONExists = packages => {

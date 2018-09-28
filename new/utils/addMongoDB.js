@@ -36,7 +36,7 @@ const addMongoDBToProject = () => {
   let mongoAddedServer = server.join("\n");
 
   helpers.writeFile(`./${name}/server/server.js`, mongoAddedServer);
-  fs.appendFileSync(
+  helpers.appendFile(
     `./${name}/.env`,
     `MONGO=${`mongodb://localhost:27017/${name}`}`
   );
