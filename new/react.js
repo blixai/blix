@@ -43,7 +43,7 @@ const ReduxHomeView = loadFile("./files/frontend/redux/Home.js");
 
 const NavbarContainer = loadFile("./files/frontend/redux/NavbarContainer.js");
 
-const react = () => {
+const react = async () => {
   createCommonFilesAndFolders();
 
   // create react files
@@ -78,7 +78,7 @@ const react = () => {
     createBackend()
     // createBackend("backend", store.serverTesting, store.database);
   } else {
-    helpers.installAllPackages()
+    await helpers.installAllPackages()
     newProjectInstructions()
   }
 };

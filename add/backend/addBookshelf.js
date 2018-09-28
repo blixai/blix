@@ -2,13 +2,14 @@ const fs = require('fs')
 const helpers = require('../../helpers')
 const execSync = require('child_process').execSync
 const path = require('path')
+const chalk = require('chalk')
 
 const loadFile = filePath => {
   let root = '../../new/files/'
   return fs.readFileSync(path.resolve(__dirname, root + filePath), 'utf8')
 }
 
-const addBookshelfToScripts = () => {
+const addBookshelfToScripts = async () => {
   // load files for scripts folder
   helpers.checkScriptsFolderExist()
   const bookshelf = loadFile('scripts/backend/bookshelf.js')
@@ -28,7 +29,7 @@ const addBookshelfToScripts = () => {
   helpers.addScript('model', 'node scripts/model.js')
   installKnexGlobal()
   helpers.modifyKnexExistingProject(helpers.getCWDName())
-  helpers.installDependenciesToExistingProject('pg bookshelf knex')
+  helpers.addDependenciesToStore('pg bookshelf knex')
 }
 
 module.exports = {
@@ -38,11 +39,15 @@ module.exports = {
 const installKnexGlobal = () => {
   let name = helpers.getCWDName()
   try {
-    execSync('npm install -g knex', { stdio: [0, 1, 2] })
+    if (fs.existsSync('./yarn.lock')) {
+      execSync('yarn add knex global', { stdio: [0, 1, 2] })
+    } else {
+      execSync('npm install -g knex', { stdio: [0, 1, 2] })
+    }
 
     execSync(`createdb ${name}`, { stdio: [0, 1, 2] })
   } catch (err) {
-    console.error(
+    console.error(chalk.red
       `Error creating db: make sure postgres is installed and running and try again by entering: createdb ${name}`
     )
   }

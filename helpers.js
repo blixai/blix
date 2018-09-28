@@ -4,8 +4,10 @@ const name = process.argv[3];
 const log = console.log;
 const chalk = require('chalk');
 const store = require('./new/store')
+const inquirer = require('inquirer')
+const prompt   = inquirer.prompt
 
-const shouldUseYarn = () => {
+const canUseYarn = () => {
   try {
     execSync("yarnpkg --version", { stdio: "ignore" });
     return true;
@@ -14,11 +16,32 @@ const shouldUseYarn = () => {
   }
 };
 
-exports.installDependencies = packages => {
+const yarnPrompt = {
+  type: 'confirm',
+  message: 'Do you want to use Yarn to install packages',
+  name: "yarn"
+}
+
+const checkIfNeedYarnAnswer = async () => {
+  if (canUseYarn() && store.useYarn === '') {
+    let yarnAnswer = await prompt([yarnPrompt])
+    store.useYarn = yarnAnswer.yarn
+  }
+}
+
+exports.checkIfNeedYarnAnswer = checkIfNeedYarnAnswer
+
+const installDependencies = async packages => {
+  await checkIfNeedYarnAnswer()
   try {
     process.chdir(`./${name}`)
-    execSync(`npm install --save ${packages}`, {stdio:[0,1,2]});
+    if (store.useYarn) {
+      execSync(`yarn add ${packages}`, {stdio:[0,1,2]})
+    } else {
+      execSync(`npm install --save ${packages}`, {stdio:[0,1,2]});
+    }
     process.chdir('../')
+    return
   } catch(err) {
     process.chdir('../')
     if (store.env === 'development') {
@@ -26,14 +49,23 @@ exports.installDependencies = packages => {
     } else {
       console.log('Something went wrong installing the packages')
     }
+    return
   }
 };
 
-exports.installDevDependencies = packages => {
+exports.installDependencies = installDependencies
+
+const installDevDependencies = async packages => {
+  await checkIfNeedYarnAnswer()
   try {
     process.chdir(`./${name}`)
-    execSync(`npm install --save-dev ${packages}`, {stdio:[0,1,2]})
+    if (store.useYarn) {
+      execSync(`yarn add ${packages} --dev`, {stdio:[0,1,2]})
+    } else {
+      execSync(`npm install --save-dev ${packages}`, {stdio:[0,1,2]})
+    }
     process.chdir('../')
+    return
   } catch(err) {
     process.chdir('../')
     if (store.env === 'development') {
@@ -41,20 +73,32 @@ exports.installDevDependencies = packages => {
     } else {
       console.log('Something went wrong installing the packages')
     }
+    return
   }
 };
 
-exports.installKnexGlobal = () => {
+exports.installDevDependencies = installDevDependencies
+
+const installKnexGlobal = async () => {
+  await checkIfNeedYarnAnswer()
   try {
     process.chdir(`./${name}`)
-    execSync(`npm install -g knex`, {stdio: [0, 1, 2]})
+    if (store.useYarn) {
+      execSync(`yarn add knex global`, { stdio: [0, 1, 2] })
+    } else {
+      execSync(`npm install -g knex`, {stdio: [0, 1, 2]})
+    }
     execSync(`createdb ${name}`, {stdio: [0, 1, 2]})
     process.chdir('../')
+    return
   } catch(err) {
     console.error(chalk.red`Error creating db: make sure postgres is installed and running and try again by entering: createdb ${name}`)
     process.chdir('../')
+    return
   }
 };
+
+exports.installKnexGlobal = installKnexGlobal
 
 exports.addScript = (command, script) => {
   try {
@@ -69,7 +113,6 @@ exports.addScript = (command, script) => {
 };
 
 exports.modifyKnex = () => {
-  
   let newKnex = `module.exports = {\n\n\tdevelopment: {\n\t\tclient: 'pg',\n\t\tconnection: 'postgres://localhost/${name}',\n\t\tmigrations: {\n\t\t\tdirectory: './db/migrations'\n\t\t},\n\t\tseeds: {\n\t\t\tdirectory: 'db/seeds/dev'\n\t\t},\n\t\tuseNullAsDefault: true\n\t},\n\n\tproduction: {\n\t\tclient: 'pg',\n\t\tconnection: process.env.DATABASE_URL + '?ssl=true',\n\t\tmigrations: {\n\t\t\tdirectory: 'db/migrations'\n\t\t},\n\t\tseeds: {\n\t\t\tdirectory: 'db/seeds/dev'\n\t\t},\n\t\tuseNullAsDefault: true\n\t}\n\n};`;
   if (fs.existsSync(`./${name}/knexfile.js`)) {
     fs.truncateSync(`./${name}/knexfile.js`, 0, function() {
@@ -129,23 +172,43 @@ exports.addKeytoPackageJSON = (key, value) => {
   fs.writeFileSync(`./${name}/package.json`, newPackageJSON);
 };
 
-exports.installDependenciesToExistingProject = packages => {
+const installDependenciesToExistingProject = async packages => {
+  await checkIfNeedYarnAnswer()
   checkIfPackageJSONExists(packages)
   try {
-    execSync(`npm install --save ${packages}`, { stdio: [0, 1, 2] })
+    if (store.useYarn) {
+      execSync(`yarn add ${packages}`, { stdio: [0, 1, 2] })
+    } else {
+      execSync(`npm install --save ${packages}`, { stdio: [0, 1, 2] })
+    }
+    return
   } catch (err) {
-    console.error(err)
+    store.env === 'development' ? log(chalk.red`${err}`) : ""
+    return
   }
 }
 
-exports.installDevDependenciesToExistingProject = packages => {
+exports.installDependenciesToExistingProject = installDependenciesToExistingProject
+
+
+const installDevDependenciesToExistingProject = async packages => {
   checkIfPackageJSONExists(packages)
+  await checkIfNeedYarnAnswer()
   try {
-    execSync(`npm install --save-dev ${packages}`, { stdio: [0, 1, 2] })
+    if (store.useYarn) {
+      execSync(`yarn add ${packages} --dev`, { stdio: [0, 1, 2] })
+    } else {
+      execSync(`npm install --save-dev ${packages}`, { stdio: [0, 1, 2] })
+    }
+    return
   } catch (err) {
-    console.error(err)
+    store.env === 'development' ? log(chalk.red`${err}`) : ""
+    return
   }
 }
+
+exports.installDevDependenciesToExistingProject = installDevDependenciesToExistingProject
+
 
 exports.checkScriptsFolderExist = () => {
   if (!fs.existsSync('./scripts')) {
@@ -218,17 +281,30 @@ exports.addDevDependenciesToStore = deps => {
   }
 }
 
-exports.installAllPackages = () => {
+const installAllPackages = async () => {
   if (store.dependencies) {
-    this.installDependencies(store.dependencies)
+    await this.installDependencies(store.dependencies)
   }
 
   if (store.devDependencies) {
-    this.installDevDependencies(store.devDependencies)
+    await this.installDevDependencies(store.devDependencies)
   }
 
 }
 
+exports.installAllPackages = installAllPackages
+
+const installAllPackagesToExistingProject = async () => {
+  if (store.dependencies) {
+    await this.installDependenciesToExistingProject(store.dependencies)
+  }
+
+  if (store.devDependencies) {
+    await this.installDevDependenciesToExistingProject(store.devDependencies)
+  }
+}
+
+exports.installAllPackagesToExistingProject = installAllPackagesToExistingProject
 // local helpers 
 
 const checkIfPackageJSONExists = packages => {

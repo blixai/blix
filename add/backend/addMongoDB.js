@@ -33,7 +33,7 @@ const addMongoDBToProject = () => {
 
   helpers.writeFile(`./server/server.js`, mongoAddedServer)
   envFileExists()
-  helpers.installDependenciesToExistingProject('mongo mongoose')
+  helpers.addDependenciesToStore('mongo mongoose')
 }
 
 const envFileExists = () => {

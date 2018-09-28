@@ -1,4 +1,4 @@
-module.export = {
+let store = {
   frontend: '',
   backend: '',
   backendType: '',
@@ -9,5 +9,8 @@ module.export = {
   vueTesting: '',
   reactType: '',
   dependencies: '',
-  devDependencies: ''
+  devDependencies: '',
+  useYarn: ''
 }
+
+module.exports = store
