@@ -18,7 +18,8 @@ const {
   serverTesting,
   e2e,
   reactTesting,
-  vueTesting
+  vueTesting,
+  reactCSS
 } = require("./prompts");
 
 const promptPreset = async () => {
@@ -71,6 +72,8 @@ const promptFrontend = async () => {
 
 const reactProject = async reactType => {
   store.reactType = reactType
+  let cssOption = await prompt([reactCSS])
+  store.reactCSS = cssOption.css
   store.reactTesting = await prompt([reactTesting]);
   store.e2e = await prompt([e2e]);
   store.backend = await prompt([backend]);

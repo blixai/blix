@@ -9,5 +9,6 @@ module.export = {
   vueTesting: '',
   reactType: '',
   dependencies: '',
-  devDependencies: ''
+  devDependencies: '',
+  reactCSS: ''
 }
