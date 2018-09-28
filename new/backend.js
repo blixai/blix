@@ -140,7 +140,7 @@ const packages = mode => {
 }
 
 const envSetup = () => {
-  fs.appendFileSync(`./${name}/.env`, '\nWORKERS=1')
+  helpers.appendFile(`./${name}/.env`, '\nWORKERS=1')
 }
 
 module.exports = {

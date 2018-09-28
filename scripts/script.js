@@ -176,7 +176,7 @@ const addModel = () => {
       );
       // bookshelf required file needs to be placed inside the project, preferably the models folder
       try {
-        fs.writeFileSync("./server/models/bookshelf.js", bookshelfRequiredFile);
+        helpers.writeFile("./server/models/bookshelf.js", bookshelfRequiredFile);
         log("Created Bookshelf file in server/models/bookshelf.js");
       } catch (e) {
         log(
@@ -299,11 +299,8 @@ let createNewScript = name => {
         ans = ans.templateName;
         let importTemplate = fs.readFileSync(path.resolve(__dirname, './templates/customScript.js'), 'utf8');
         importTemplate = importTemplate.replace(/Name/g, ans)
-        fs.appendFile(`./scripts/${name}.js`, importTemplate, err => {
-          if (err) console.error(err);
-          log(`Imported the template ${ans} into scripts/${name}.js`);
-        });
-        fs.writeFileSync(`./scripts/templates/${ans}.js`, "", "utf8");
+        helpers.appendFile(`./scripts/${name}.js`, importTemplate)
+        helpers.writeFile(`./scripts/templates/${ans}.js`, "");
         log("");
         log(`Added script to project, to run npm run ${name}`)
         log(`Created template ${ans} in scripts/templates`)

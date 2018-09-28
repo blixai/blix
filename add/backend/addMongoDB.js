@@ -33,14 +33,14 @@ const addMongoDBToProject = () => {
 
   helpers.writeFile(`./server/server.js`, mongoAddedServer)
   envFileExists()
-  helpers.installDependenciesToExistingProject('mongo mongoose')
+  helpers.addDependenciesToStore('mongo mongoose')
 }
 
 const envFileExists = () => {
   let name = helpers.getCWDName()
   try {
     if (fs.existsSync('./.env')) {
-      fs.appendFileSync('./.env', `MONGO=${`mongodb://localhost:27017/${name}`}`)
+      helpers.appendFile('./.env', `\nMONGO=${`mongodb://localhost:27017/${name}`}`)
     } else {
       helpers.writeFile('./.env', `MONGO=${`mongodb://localhost:27017/${name}`}`)
     }

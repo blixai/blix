@@ -53,6 +53,7 @@ const createBackend = (mode, serverTestingSelection, databaseSelection) => {
   scripts(mode.mode)
   packages(mode)
   testBackend(serverTestingSelection)
+  helpers.installAllPackagesToExistingProject()
 }
 
 const standard = () => {
@@ -96,15 +97,15 @@ const api = () => {
 const packages = mode => {
   mode = mode.mode
   if (mode === 'standard') {
-    helpers.installDependenciesToExistingProject(
+    helpers.addDependenciesToStore(
       'express nodemon body-parser compression helmet dotenv morgan cookie-parser'
     )
   } else if (mode === 'mvc') {
-    helpers.installDependenciesToExistingProject(
+    helpers.addDependenciesToStore(
       'express nodemon body-parser compression helmet dotenv morgan cookie-parser pug'
     )
   } else {
-    helpers.installDependenciesToExistingProject(
+    helpers.addDependenciesToStore(
       'express nodemon body-parser compression helmet dotenv morgan'
     )
   }
