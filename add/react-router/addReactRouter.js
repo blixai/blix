@@ -69,7 +69,7 @@ let createView = type => {
     helpers.writeFile('./src/Router.js', AppRouter)
 
     if (type === 'redux') {
-        let index = loadFile('frontend/redux/reactRouterReduxIndex.js')
+        let index = loadFile('frontend/reactRouter-redux/index.js')
         helpers.writeFile('./src/index.js', index)
     } else {
         let index = loadFile('frontend/react-router/index.js')
