@@ -14,7 +14,7 @@ const checkOrCreateServerTestFolder = () => {
 }
 
 const mochaTestBackend = () => {
-  helpers.installDevDependenciesToExistingProject('mocha chai chai-http')
+  helpers.addDevDependenciesToStore('mocha chai chai-http')
   helpers.addScript('mocha', 'mocha test/server')
   checkOrCreateServerTestFolder()
   helpers.writeFile(
@@ -34,7 +34,7 @@ const mochaTestBackend = () => {
 }
 
 const testJestBackend = () => {
-  helpers.installDevDependenciesToExistingProject('jest supertest')
+  helpers.addDevDependenciesToStore('jest supertest')
   checkOrCreateServerTestFolder()
   helpers.writeFile(
     `./test/server/test.spec.js`,
