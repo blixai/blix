@@ -101,7 +101,7 @@ const reactCSS = {
   choices: [
     { name: 'Material-UI', value: "material" },
     { name: 'React-Bootstrap', value: 'bootstrap' },
-    { name: 'Styled-Component', value: 'styled' },
+    { name: 'Styled-Components', value: 'styled' },
     { name: 'None', value: '' }
   ]
 }
