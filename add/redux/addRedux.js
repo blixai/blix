@@ -12,7 +12,7 @@ let loadFile = filePath => {
 // files
 let rootReducer = loadFile('frontend/redux/rootReducer.js')
 let configStore = loadFile('frontend/redux/configStore.js')
-let index       = loadFile('frontend/redux/reactRouterReduxIndex.js')
+let index       = loadFile('frontend/reactRouter-redux/index.js')
 let homeView    = fs.readFileSync(path.resolve(__dirname, './files/Home.js'), 'utf-8')
 
 // script templates
@@ -41,9 +41,8 @@ let redux = () => {
 
 // creates an index.js file that imports the App.js router and creates store provider
 let createIndex = () => {
-  fs.truncate('./src/index.js', 0, () => {
-    helpers.writeFile('./src/index.js', index)
-  })
+  fs.truncateSync('./src/index.js', 0)
+  helpers.writeFile('./src/index.js', index)
 }
 
 let createContainer = (name) => {

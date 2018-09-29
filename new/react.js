@@ -34,9 +34,9 @@ const HomeView = loadFile("./files/frontend/react-router/Home.js");
 const globalStyle = loadFile("./files/frontend/react-router/global.css");
 
 // load redux files
-const reduxIndex = loadFile('./files/frontend/redux/reduxIndex.js')
+const reduxIndex = loadFile('./files/frontend/redux/index.js')
 const reduxAppContainer = loadFile('./files/frontend/redux/AppContainer.js')
-const reactRouterReduxIndex = loadFile("./files/frontend/redux/reactRouterReduxIndex.js");
+const reactRouterReduxIndex = loadFile("./files/frontend/reactRouter-redux/index.js");
 const configStore = loadFile("./files/frontend/redux/configStore.js");
 const rootReducer = loadFile("./files/frontend/redux/rootReducer.js");
 const ReduxHomeView = loadFile("./files/frontend/redux/Home.js");
@@ -60,6 +60,7 @@ const react = async () => {
   helpers.writeFile(`./${name}/.babelrc`, babel);
   helpers.writeFile(`./${name}/webpack.config.js`, webpack);
 
+  cssLibrary()
   // react testing setup
   installReactTesting();
 
@@ -82,6 +83,16 @@ const react = async () => {
     newProjectInstructions()
   }
 };
+
+const cssLibrary = () => {
+  if (store.reactCSS === 'material') {
+    helpers.addDevDependenciesToStore('@material-ui/core')
+  } else if (store.reactCSS === 'bootstrap') {
+    helpers.addDevDependenciesToStore('react-bootstrap')
+  } else if (store.reactCSS === 'styled') {
+    helpers.addDevDependenciesToStore('styled-components')
+  }
+}
 
 const createSrcContents = () => {
   if (store.reactType === "react") {
