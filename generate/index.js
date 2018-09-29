@@ -16,9 +16,9 @@ const generate = () => {
     if (possibleScripts.includes(process.argv[3]) && helpers.checkIfScriptIsTaken(process.argv[3])) {
         try {
             if (fs.existsSync('yarn.lock')) {
-                execSync(`yarn ${process.argv[3]} ${process.argv.slice(4)}`, { stdio: [0, 1, 2] })
+                execSync(`yarn ${process.argv[3]} ${process.argv.slice(4).join(' ')}`, { stdio: [0, 1, 2] })
             } else {
-                execSync(`npm run ${process.argv[3]} ${process.argv.slice(4)}`, { stdio: [0, 1, 2] })
+                execSync(`npm run ${process.argv[3]} ${process.argv.slice(4).join(' ')}`, { stdio: [0, 1, 2] })
             }
         } catch (err) {
             console.error('Something went wrong.')
