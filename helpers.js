@@ -8,6 +8,10 @@ const inquirer = require('inquirer')
 const prompt   = inquirer.prompt
 
 const canUseYarn = () => {
+  if (fs.existsSync('yarn.lock')) {
+    store.useYarn = { yarn: true }
+    return true
+  }
   try {
     execSync("yarnpkg --version", { stdio: "ignore" });
     return true;
