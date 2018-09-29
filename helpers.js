@@ -63,6 +63,7 @@ exports.addScript = (command, script) => {
     json.scripts[command] = script;
     let newPackage = JSON.stringify(json, null, 2);
     fs.writeFileSync("package.json", newPackage);
+    log(chalk`{cyan insert} ${command} script into package.json`)
   } catch (err) {
     console.error("Failed to add script to package.json: ", err)
   }
@@ -91,9 +92,15 @@ exports.addScriptToNewPackageJSON = (command, script) => {
 
 exports.writeFile = (filePath, file, message) => {
   try {
-    fs.writeFileSync(filePath, file)
-    filePath = filePath.slice(2)
-    message ? log(message) : log(chalk`{green.bold create} ${filePath}`);
+    let filePathLog = filePath.slice(2)
+
+    if (fs.existsSync(filePath)) {
+        fs.writeFileSync(filePath, file)
+        message ? log(message) : log(chalk`{yellow mutate} ${filePathLog}`);
+    } else {
+      fs.writeFileSync(filePath, file)
+      message ? log(message) : log(chalk`{green create} ${filePathLog}`);
+    }
   } catch (err) {
     console.error("Couldn't create file", err)
   }
@@ -103,9 +110,9 @@ exports.mkdirSync = (folderPath, message) => {
   try {
     fs.mkdirSync(folderPath)
     folderPath = folderPath.slice(2)
-    message ? log(message) : log(chalk`{green.bold create} ${folderPath}`)
+    message ? log(message) : log(chalk`{green create} ${folderPath}`)
   } catch (err) {
-    log(chalk`\t{red.bold Error Making Directory ${folderPath} }`)
+    log(chalk`\t{red Error Making Directory ${folderPath} }`)
   }
 }
 
@@ -114,7 +121,7 @@ exports.rename = (oldName, newName) => {
     fs.renameSync(oldName, newName)
     oldName = oldName.slice(2)
     newName = newName.slice(2)
-    log(chalk`{yellow.bold move}   ${oldName} into ${newName}`)
+    log(chalk`{yellow move}   ${oldName} into ${newName}`)
   } catch (err) {
     store.env === 'development' ? log(err) : log()
   }
@@ -177,7 +184,7 @@ exports.modifyKnexExistingProject = (cwd) => {
 exports.appendFile = (file, stringToAppend) => {
   try {
     fs.appendFileSync(file, stringToAppend)
-    log(chalk`{cyan.bold append} ${file}`)
+    log(chalk`{cyan append} ${file}`)
   } catch (err) {
     store.env === 'development' ? log(err) : log(chalk.red`Failed to append ${file}`)
   }

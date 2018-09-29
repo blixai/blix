@@ -41,9 +41,8 @@ let redux = () => {
 
 // creates an index.js file that imports the App.js router and creates store provider
 let createIndex = () => {
-  fs.truncate('./src/index.js', 0, () => {
-    helpers.writeFile('./src/index.js', index)
-  })
+  fs.truncateSync('./src/index.js', 0)
+  helpers.writeFile('./src/index.js', index)
 }
 
 let createContainer = (name) => {
@@ -174,17 +173,15 @@ let dontAddReactRouter = () => {
     helpers.writeFile('./src/App/AppContainer.js', AppContainer)
     let index = `import React from 'react'\nimport ReactDOM from 'react-dom'\nimport AppContainer from './App/AppContainer'\nimport { configureStore } from './configStore'\nimport { Provider } from 'react-redux'\n\n\nconst store = configureStore()\n\n\nReactDOM.render(\n\t<Provider store={store}>\n\t\t<AppContainer/>\n\t</Provider>\n, document.getElementById('root'))`
 
-    fs.truncate('./src/index.js', 0, () => {
-      helpers.writeFile('./src/index.js', index)
-    })
+    fs.truncateSync('./src/index.js', 0)
+    helpers.writeFile('./src/index.js', index)
   } else if (fs.existsSync('./src/App.js')) {
     // create-react-app
     let AppContainer = createContainer('App')
     helpers.writeFile('./src/AppContainer.js', AppContainer)
     let index = `import React from 'react'\nimport ReactDOM from 'react-dom'\nimport AppContainer from './AppContainer'\nimport { configureStore } from './configStore'\nimport { Provider } from 'react-redux'\n\n\nconst store = configureStore()\n\n\nReactDOM.render(\n\t<Provider store={store}>\n\t\t<AppContainer/>\n\t</Provider>\n, document.getElementById('root'))`
-    fs.truncate('./src/index.js', 0, () => {
-      helpers.writeFile('./src/index.js', index)
-    })
+    fs.truncateSync('./src/index.js', 0)
+    helpers.writeFile('./src/index.js', index)
   }
   helpers.installDependenciesToExistingProject('react-redux redux')
 }
