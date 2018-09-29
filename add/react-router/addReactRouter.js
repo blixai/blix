@@ -27,8 +27,8 @@ let addReactRouter = async () => {
 
 module.exports = addReactRouter
 
-let projectType = () => {
-    helpers.installDevDependenciesToExistingProject('react-router-dom')
+let projectType = async () => {
+    await helpers.installDevDependenciesToExistingProject('react-router-dom')
     // make sure there is a src folder
     if (!fs.existsSync('./src')) {
         console.error('No src/ directory found. Unable to add React-Router.')

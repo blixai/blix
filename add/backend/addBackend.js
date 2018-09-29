@@ -26,7 +26,7 @@ let addBackend = async () => {
 const cluster = loadFile('backend/common/cluster.js')
 const routes = loadFile('backend/common/routes.js')
 
-const createBackend = (mode, serverTestingSelection, databaseSelection) => {
+const createBackend = async (mode, serverTestingSelection, databaseSelection) => {
   try {
     helpers.mkdirSync('./server')
   } catch (err) {
@@ -53,7 +53,7 @@ const createBackend = (mode, serverTestingSelection, databaseSelection) => {
   scripts(mode.mode)
   packages(mode)
   testBackend(serverTestingSelection)
-  helpers.installAllPackagesToExistingProject()
+  await helpers.installAllPackagesToExistingProject()
 }
 
 const standard = () => {

@@ -1,4 +1,4 @@
-module.export = {
+let store = {
   frontend: '',
   backend: '',
   backendType: '',
@@ -10,5 +10,8 @@ module.export = {
   reactType: '',
   dependencies: '',
   devDependencies: '',
+  useYarn: '',
   reactCSS: ''
 }
+
+module.exports = store

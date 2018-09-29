@@ -17,7 +17,7 @@ const loadFile = filePath => {
 const cluster = loadFile('./files/backend/common/cluster.js')
 const routes = loadFile('./files/backend/common/routes.js')
 
-const createBackend = () => {
+const createBackend = async () => {
   // if api mode need to create common files and folders
   if (store.backendType === 'api') {
     createCommonFilesAndFolders()
@@ -59,7 +59,7 @@ const createBackend = () => {
   //add variables to .env file
   envSetup()
 
-  helpers.installAllPackages()
+  await helpers.installAllPackages()
   // new project instructions and add to readms
   newProjectInstructions()
 }

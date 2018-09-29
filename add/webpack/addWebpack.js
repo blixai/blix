@@ -75,17 +75,16 @@ let reactQuestion = async (ans, output) => {
 }
 
 
-let createConfig = (input, output, react) => {
-  log('Downloading dependencies, this may take a moment.')
+let createConfig = async (input, output, react) => {
   let webpack = loadFile('./webpack.config.js')
   let babel
   if (react) {
     babel = loadFile('../../new/files/frontend/babel/reactBabel')
-    helpers.installDependenciesToExistingProject('react react-dom')
-    helpers.installDevDependenciesToExistingProject('webpack babel-loader css-loader @babel/core @babel/preset-env style-loader sass-loader node-sass cssnano postcss postcss-preset-env postcss-import postcss-loader webpack-cli @babel/preset-react')
+    helpers.addDependenciesToStore('react react-dom')
+    helpers.addDependenciesToStore('webpack babel-loader css-loader @babel/core @babel/preset-env style-loader sass-loader node-sass cssnano postcss postcss-preset-env postcss-import postcss-loader webpack-cli @babel/preset-react')
   } else {
     babel = loadFile('../../new/files/frontend/babel/.babelrc')
-    helpers.installDevDependenciesToExistingProject('webpack babel-loader css-loader @babel/core @babel/preset-env style-loader sass-loader node-sass cssnano postcss postcss-preset-env postcss-import postcss-loader webpack-cli')
+    helpers.addDevDependenciesToStore('webpack babel-loader css-loader @babel/core @babel/preset-env style-loader sass-loader node-sass cssnano postcss postcss-preset-env postcss-import postcss-loader webpack-cli')
   }
 
   webpack = webpack.replace(/INPUT/g, input)
@@ -115,6 +114,7 @@ let createConfig = (input, output, react) => {
   } catch (e) {
     console.error(`Couldn't add webpack development and production scripts to package json.`)
   }
+  await helpers.installAllPackagesToExistingProject()
 }
 
 
