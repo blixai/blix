@@ -94,6 +94,18 @@ const vueTesting = {
   ]
 };
 
+const reactCSS = {
+  type: "list",
+  message: "Select a CSS Library",
+  name: "css",
+  choices: [
+    { name: 'Material-UI', value: "material" },
+    { name: 'React-Bootstrap', value: 'bootstrap' },
+    { name: 'Styled-Components', value: 'styled' },
+    { name: 'None', value: '' }
+  ]
+}
+
 module.exports = {
   defaultOrCustom,
   frontendOptions,
@@ -104,4 +116,5 @@ module.exports = {
   e2e,
   reactTesting,
   vueTesting,
+  reactCSS
 };

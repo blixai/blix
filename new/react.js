@@ -60,6 +60,7 @@ const react = () => {
   helpers.writeFile(`./${name}/.babelrc`, babel);
   helpers.writeFile(`./${name}/webpack.config.js`, webpack);
 
+  cssLibrary()
   // react testing setup
   installReactTesting();
 
@@ -82,6 +83,16 @@ const react = () => {
     newProjectInstructions()
   }
 };
+
+const cssLibrary = () => {
+  if (store.reactCSS === 'material') {
+    helpers.addDevDependenciesToStore('@material-ui/core')
+  } else if (store.reactCSS === 'bootstrap') {
+    helpers.addDevDependenciesToStore('react-bootstrap')
+  } else if (store.reactCSS === 'styled') {
+    helpers.addDevDependenciesToStore('styled-components')
+  }
+}
 
 const createSrcContents = () => {
   if (store.reactType === "react") {
