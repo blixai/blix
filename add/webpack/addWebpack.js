@@ -3,7 +3,6 @@ let path       = require('path')
 let execSync   = require('child_process').execSync;
 let chalk      = require('chalk');
 let log        = console.log;
-let boxen      = require('boxen')
 let glob       = require('glob')
 let inquirer   = require('inquirer')
 let prompt     = inquirer.prompt

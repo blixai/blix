@@ -2,7 +2,6 @@
 // also need to add the instructions to the README (should be easy)
 const log = console.log;
 const fs = require('fs')
-const boxen = require("boxen");
 const store = require('../store')
 const name = process.argv[3];
 const chalk = require('chalk')
