@@ -1,16 +1,14 @@
-# blix
+# What is [blix.js](https://blixjs.com)?
 
-### bliss + blitz 
-
-In development: the goal of this project is to help Javascript developers create cutting edge projects quickly and easily. Besides creating dozens of different projects from scratch it can also embed easily hackable scripts inside your project to help developers automate common tasks like creating a new API endpoint or generating a new Redux/React component. 
+blix is a **command line tool** for Javascript applications. It can be used to create projects from scratch or integrate new features and tools into existing applications. blix works to provide a pleasant, rapid development experience by leveraging **convention + configuration**. 
 
 ![Automate all the things!](https://imgur.com/TfXuJlH.jpg)
 
-## Getting Started
+## Installation
 
-blix requires node version 8 or above. 
+System requirements: blix requires node version 8 or above. 
 
-Install:
+To install packages globally (recommended):
 
 ```
 npm install -g blix
@@ -18,22 +16,32 @@ npm install -g blix
 yarn global add blix 
 ```
 
-Create a project:
-
-```
-blix new my-project 
-```
-
-
-Listed are a series of commmands to get started with blix
-
-Commands: 
+## Blix commands: 
 ```
   blix new <projectName>
   blix add
   blix scripts
+  blix generate | g
   blix help
-  blix version
+  blix version | -v
 ```  
+
+## Quick Start: Build a new project from scratch:
+
+To run blix without installing it you can use [npx](https://medium.com/@maybekatz/introducing-npx-an-npm-package-runner-55f7d4bd282b) to try it out!
+
+```
+npx blix new my-project 
+```
+
+You will then be prompted on what you need for your new project. 
+
+For more in-depth walkthroughs check out these quick start examples on our website:
+
+[New React/Redux Project](https://blixjs.com/~/drafts/-LNcDiE86HFqObpQYu_J/primary/quick-start-examples/new-react-redux-project)
+
+
+[Add Redux/React-Router to Create-React-App](https://blixjs.com/~/drafts/-LNcDiE86HFqObpQYu_J/primary/quick-start-examples/create-new-react-react-router-redux-project)
+
 
 

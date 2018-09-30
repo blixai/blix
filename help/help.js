@@ -9,7 +9,8 @@ let commands = {
   choices : [
     { name: 'new'     },
     { name: 'scripts' },
-    { name: 'add'     }
+    { name: 'add'     },
+    { name: 'generate'}
   ]
 }
 
@@ -19,6 +20,7 @@ let runHelp = () => {
     switch (answers.help) {
       case 'new':
         log('Run blix new <projectName> and be asked a series of questions to start a project from scratch')
+        log('Try it: blix new <name>')
         break
       case 'add':
         log('Choose from a list to add things like servers, databases, webpack, and redux to a project')
@@ -28,6 +30,9 @@ let runHelp = () => {
         log('Asks a series of questions to either add preconfigured blix scripts to a project or build your own')
         log('Try it: blix scripts')
         break
+      case 'generate':
+        log('Inside a project execute generator scripts')
+        log('Try it: blix g <command>')
       default:
         break;
     }

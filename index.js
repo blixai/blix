@@ -7,6 +7,7 @@ const add = require("./add/add");
 const generate = require('./generate')
 const command = process.argv[2];
 const store = require('./new/store')
+const log = console.log
 
 const checkCommand = command => {
   switch (command) {
@@ -46,20 +47,21 @@ if (process.argv.includes('--verbose')) {
 
 const checkVersion = () => {
   var pjson = require("./package.json");
-  console.log(pjson.version);
+  log(pjson.version);
 }
 
 const noCommand = () => {
-  console.log('No command entered')
-  console.log('')
-  console.log('Here is a list of blix commands:')
-  console.log('new')
-  console.log('add')
-  console.log('scripts')
-  console.log('version | -v')
-  console.log('help')
-  console.log('')
-  console.log('Run: "blix help" to learn more about a command')
+  log('No command entered')
+  log('')
+  log('Here is a list of blix commands:')
+  log('new')
+  log('add')
+  log('scripts')
+  log('generate | g')
+  log('version | -v')
+  log('help')
+  log('')
+  log('Run: "blix help" to learn more about a command')
 }
 
 let currentNodeVersion = process.versions.node;
