@@ -192,11 +192,26 @@ let reactRouter = {
   name: 'router'
 }
 
+let continuePrompt = {
+  type: 'confirm',
+  message: 'Do you want to continue: ',
+  name: 'confirm'
+}
+
 let addRedux = async () => {
   console.clear()
   console.log('Mutating a project can cause loss of files. Make sure you have everything committed.')
-  let answer = await prompt([reactRouter])
-  answer = answer.router
+  let continueAnswer = await prompt([continuePrompt])
+  if (!continueAnswer.confirm) {
+    return
+  }
+  let packageJSON = fs.readFileSync('./package.json', 'utf8')
+  let answer;
+  if (!packageJSON.includes('react-router')) {
+    answer = await prompt([reactRouter])
+    answer = answer.router
+  }
+
   if (answer) {
     createFilesWithRouter()
   } else {
