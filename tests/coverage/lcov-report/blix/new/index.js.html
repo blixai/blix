@@ -1,0 +1,509 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for blix/new/index.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../prettify.css" />
+    <link rel="stylesheet" href="../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../index.html">All files</a> / <a href="index.html">blix/new</a> index.js
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>0/85</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>0/20</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>0/7</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>0/85</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149</td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">const fs = <span class="cstat-no" title="statement not covered" >require("fs");</span>
+const inquirer = <span class="cstat-no" title="statement not covered" >require("inquirer");</span>
+const prompt = <span class="cstat-no" title="statement not covered" >inquirer.prompt;</span>
+const { createBackend } = <span class="cstat-no" title="statement not covered" >require("./backend");</span>
+const { vue } = <span class="cstat-no" title="statement not covered" >require("./vue");</span>
+const { react } = <span class="cstat-no" title="statement not covered" >require("./react");</span>
+const { vanillaJS } = <span class="cstat-no" title="statement not covered" >require("./vanillaJS");</span>
+let store = <span class="cstat-no" title="statement not covered" >require('./store')</span>
+&nbsp;
+const name = <span class="cstat-no" title="statement not covered" >process.argv[3];</span>
+&nbsp;
+// console prompts
+const {
+  defaultOrCustom,
+  frontendOptions,
+  backend,
+  database,
+  serverTesting,
+  e2e,
+  reactTesting,
+  vueTesting,
+  reactCSS
+} = <span class="cstat-no" title="statement not covered" >require("./prompts");</span>
+&nbsp;
+const promptPreset = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >async () =&gt; </span>{</span>
+  const answer = <span class="cstat-no" title="statement not covered" >await prompt([defaultOrCustom])</span>
+<span class="cstat-no" title="statement not covered" >  if (answer.preset === 'react-default') {</span>
+<span class="cstat-no" title="statement not covered" >    store.reactType = 'reactRouter-redux'</span>
+<span class="cstat-no" title="statement not covered" >    store.reactTesting = { enzyme: true }</span>
+<span class="cstat-no" title="statement not covered" >    store.e2e = 'None'</span>
+<span class="cstat-no" title="statement not covered" >    store.backend = { backend: true }</span>
+<span class="cstat-no" title="statement not covered" >    store.serverTesting = 'jest'</span>
+<span class="cstat-no" title="statement not covered" >    store.database = 'mongo'</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    react()</span>
+  } else {
+<span class="cstat-no" title="statement not covered" >    promptFrontend()</span>
+  }
+}
+&nbsp;
+&nbsp;
+// prompts user to select frontend type and branches into project specific questions from there
+const promptFrontend = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >async () =&gt; </span>{</span>
+  const answer = <span class="cstat-no" title="statement not covered" >await prompt([frontendOptions]);</span>
+<span class="cstat-no" title="statement not covered" >  switch (answer.frontend) {</span>
+    case "react":
+<span class="cstat-no" title="statement not covered" >      reactProject("react");</span>
+<span class="cstat-no" title="statement not covered" >      break;</span>
+    case "react-router":
+<span class="cstat-no" title="statement not covered" >      reactProject("react-router");</span>
+<span class="cstat-no" title="statement not covered" >      break;</span>
+    case "redux":
+<span class="cstat-no" title="statement not covered" >      reactProject('redux');</span>
+<span class="cstat-no" title="statement not covered" >      break;</span>
+    case "reactRouter-redux":
+<span class="cstat-no" title="statement not covered" >      reactProject("reactRouter-redux")</span>
+<span class="cstat-no" title="statement not covered" >      break</span>
+    case "vue":
+<span class="cstat-no" title="statement not covered" >      vueProject("vue");</span>
+<span class="cstat-no" title="statement not covered" >      break;</span>
+    case "vuex":
+<span class="cstat-no" title="statement not covered" >      vueProject("vuex");</span>
+<span class="cstat-no" title="statement not covered" >      break;</span>
+    case "js":
+<span class="cstat-no" title="statement not covered" >      vanillaJSProject();</span>
+<span class="cstat-no" title="statement not covered" >      break;</span>
+    default:
+<span class="cstat-no" title="statement not covered" >      backendOnly();</span>
+<span class="cstat-no" title="statement not covered" >      break;</span>
+  }
+};
+&nbsp;
+const reactProject = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >async </span>reactType =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >  store.reactType = reactType</span>
+  let cssOption = <span class="cstat-no" title="statement not covered" >await prompt([reactCSS])</span>
+<span class="cstat-no" title="statement not covered" >  store.reactCSS = cssOption.css</span>
+<span class="cstat-no" title="statement not covered" >  store.reactTesting = await prompt([reactTesting]);</span>
+<span class="cstat-no" title="statement not covered" >  store.e2e = await prompt([e2e]);</span>
+<span class="cstat-no" title="statement not covered" >  store.backend = await prompt([backend]);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  if (store.backend.backend) {</span>
+<span class="cstat-no" title="statement not covered" >    store.serverTesting = await prompt([serverTesting]);</span>
+<span class="cstat-no" title="statement not covered" >    store.database = await prompt([database]);</span>
+  }
+<span class="cstat-no" title="statement not covered" >  react();</span>
+};
+&nbsp;
+const vueProject = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >async </span>vueType =&gt; {</span>
+  const vueTestingSelection = <span class="cstat-no" title="statement not covered" >await prompt([vueTesting]);</span>
+  const e2eSelection = <span class="cstat-no" title="statement not covered" >await prompt([e2e]);</span>
+  const backendSelection = <span class="cstat-no" title="statement not covered" >await prompt([backend]);</span>
+<span class="cstat-no" title="statement not covered" >  if (backendSelection.backend) {</span>
+    const serverTestingSelection = <span class="cstat-no" title="statement not covered" >await prompt([serverTesting]);</span>
+    const databaseSelection = <span class="cstat-no" title="statement not covered" >await prompt([database]);</span>
+<span class="cstat-no" title="statement not covered" >    vue(</span>
+      vueType,
+      vueTestingSelection,
+      e2eSelection,
+      backendSelection,
+      serverTestingSelection,
+      databaseSelection
+    );
+  } else {
+<span class="cstat-no" title="statement not covered" >    vue(vueTestingSelection, e2e);</span>
+  }
+};
+&nbsp;
+const vanillaJSProject = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >async () =&gt; </span>{</span>
+  const e2eSelection = <span class="cstat-no" title="statement not covered" >await prompt([e2e]);</span>
+  const backendSelection = <span class="cstat-no" title="statement not covered" >await prompt([backend]);</span>
+<span class="cstat-no" title="statement not covered" >  if (backendSelection.backend) {</span>
+    const serverTestingSelection = <span class="cstat-no" title="statement not covered" >await prompt([serverTesting]);</span>
+    const databaseSelection = <span class="cstat-no" title="statement not covered" >await prompt([database]);</span>
+<span class="cstat-no" title="statement not covered" >    vanillaJS(</span>
+      e2eSelection,
+      backendSelection.backend,
+      serverTestingSelection,
+      databaseSelection
+    );
+  } else {
+<span class="cstat-no" title="statement not covered" >    vanillaJS(e2eSelection);</span>
+  }
+};
+&nbsp;
+const backendOnly = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >async () =&gt; </span>{</span>
+<span class="cstat-no" title="statement not covered" >  store.serverTesting = await prompt([serverTesting]);</span>
+<span class="cstat-no" title="statement not covered" >  store.database = await prompt([database]);</span>
+<span class="cstat-no" title="statement not covered" >  store.backendType = "api" </span>
+<span class="cstat-no" title="statement not covered" >  store.backend = { backend: true } </span>
+<span class="cstat-no" title="statement not covered" >  createBackend();</span>
+};
+&nbsp;
+// create project ensures there shouldn't be errors before starting the prompts
+const createProject = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >() =&gt; </span>{</span>
+<span class="cstat-no" title="statement not covered" >  if (!name) {</span>
+<span class="cstat-no" title="statement not covered" >    console.log('No name provided for new project.')</span>
+<span class="cstat-no" title="statement not covered" >    console.log('Try again with: blix new my-project')</span>
+<span class="cstat-no" title="statement not covered" >    process.exit(1)</span>
+  }
+<span class="cstat-no" title="statement not covered" >  if (fs.existsSync(`./${name}`)) {</span>
+<span class="cstat-no" title="statement not covered" >    console.error(`A project named ${name} already exists!`);</span>
+<span class="cstat-no" title="statement not covered" >    process.exit(1)</span>
+  }
+<span class="cstat-no" title="statement not covered" >  console.clear()</span>
+<span class="cstat-no" title="statement not covered" >  promptPreset()</span>
+};
+&nbsp;
+<span class="cstat-no" title="statement not covered" >module.exports = createProject;</span>
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Sat Sep 29 2018 16:01:48 GMT-0700 (Pacific Daylight Time)
+</div>
+</div>
+<script src="../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../sorter.js"></script>
+</body>
+</html>
