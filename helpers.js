@@ -328,11 +328,15 @@ const insert = async (fileToInsertInto, whatToInsert, lineToInsertAt) => {
   try {
     let file = fs.readFileSync(fileToInsertInto, 'utf8').toString().split('\n')
     if (lineToInsertAt === undefined) {
-      // pass file line array to the prompt, await selection append after index
       filePrompt.choices = file
       let lineToInsertAfter = prompt([filePrompt])
       lineToInsertAt = file.indexOf(lineToInsertAfter) + 1
 
+    } else if (isNaN(Number(lineToInsertAt))) {
+      let indexToFind = file.indexOf(lineToInsertAt)
+      if (indexToFind !== -1) {
+        lineToInsertAt = indexToFind + 1
+      }
     }
     // insert at lineToInsertAt
     file.splice(lineToInsertAt, 0, whatToInsert)
