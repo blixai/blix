@@ -24,18 +24,9 @@ const addMongooseToScripts = () => {
 };
 
 const addMongoDBToProject = () => {
-  let server = fs
-    .readFileSync(`./${name}/server/server.js`, "utf8")
-    .toString()
-    .split("\n");
-  server.splice(
-    0,
-    0,
-    `const mongoose = require('mongoose')\nmongoose.connect(process.env.MONGO, { useNewUrlParser: true })\n`
-  );
-  let mongoAddedServer = server.join("\n");
+  let connectionString = `const mongoose = require('mongoose')\nmongoose.connect(process.env.MONGO, { useNewUrlParser: true })\n`
+  helpers.insert(`./${name}/server/server.js`, connectionString, 0)
 
-  helpers.writeFile(`./${name}/server/server.js`, mongoAddedServer);
   helpers.appendFile(
     `./${name}/.env`,
     `MONGO=${`mongodb://localhost:27017/${name}`}`
