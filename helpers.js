@@ -321,6 +321,37 @@ const installAllPackagesToExistingProject = async () => {
 
 exports.installAllPackagesToExistingProject = installAllPackagesToExistingProject
 
+
+const insert = async (fileToInsertInto, whatToInsert, lineToInsertAt) => {
+  let filePrompt = { type: 'list', name: 'lineNumber', message: 'Select a line to insert below', choices: [] }
+  // if no lineToInsertAt then readfile and pass to inquirer prompt
+  try {
+    let file = fs.readFileSync(fileToInsertInto, 'utf8').toString().split('\n')
+    if (lineToInsertAt === undefined) {
+      filePrompt.choices = file
+      let lineToInsertAfter = prompt([filePrompt])
+      lineToInsertAt = file.indexOf(lineToInsertAfter) + 1
+
+    } else if (isNaN(Number(lineToInsertAt))) {
+      let indexToFind = file.indexOf(lineToInsertAt)
+      if (indexToFind !== -1) {
+        lineToInsertAt = indexToFind + 1
+      } else {
+        lineToInsertAt = 0
+      }
+    }
+    // insert at lineToInsertAt
+    file.splice(lineToInsertAt, 0, whatToInsert)
+    file = file.join('\n')
+    fs.writeFileSync(fileToInsertInto, file)
+    log(chalk`{cyan insert} ${fileToInsertInto}`)
+  } catch (err) {
+    store.env === 'development' ? log(chalk.red`err`) : log(chalk.red`Failed to insert into ${fileToInsertInto.slice(2)}`)
+  }
+}
+
+exports.insert = insert
+
 // local helpers 
 
 const checkIfPackageJSONExists = packages => {
