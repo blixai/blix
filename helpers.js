@@ -336,6 +336,8 @@ const insert = async (fileToInsertInto, whatToInsert, lineToInsertAt) => {
       let indexToFind = file.indexOf(lineToInsertAt)
       if (indexToFind !== -1) {
         lineToInsertAt = indexToFind + 1
+      } else {
+        lineToInsertAt = 0
       }
     }
     // insert at lineToInsertAt
