@@ -1,0 +1,1064 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for blix/helpers.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../prettify.css" />
+    <link rel="stylesheet" href="../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../index.html">All files</a> / <a href="index.html">blix</a> helpers.js
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">20.9% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>42/201</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>0/64</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>0/26</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">20.9% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>42/201</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261
+262
+263
+264
+265
+266
+267
+268
+269
+270
+271
+272
+273
+274
+275
+276
+277
+278
+279
+280
+281
+282
+283
+284
+285
+286
+287
+288
+289
+290
+291
+292
+293
+294
+295
+296
+297
+298
+299
+300
+301
+302
+303
+304
+305
+306
+307
+308
+309
+310
+311
+312
+313
+314
+315
+316
+317
+318
+319
+320
+321
+322
+323
+324
+325
+326
+327
+328
+329
+330
+331
+332
+333
+334</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">const fs = require("fs");
+const execSync = require("child_process").execSync;
+const name = process.argv[3];
+const log = console.log;
+const chalk = require('chalk');
+const store = require('./new/store')
+const inquirer = require('inquirer')
+const prompt   = inquirer.prompt
+&nbsp;
+const canUseYarn = <span class="fstat-no" title="function not covered" >()</span> =&gt; {
+<span class="cstat-no" title="statement not covered" >  if (fs.existsSync('yarn.lock')) {</span>
+<span class="cstat-no" title="statement not covered" >    store.useYarn = { yarn: true }</span>
+<span class="cstat-no" title="statement not covered" >    return true</span>
+  }
+<span class="cstat-no" title="statement not covered" >  try {</span>
+<span class="cstat-no" title="statement not covered" >    execSync("yarnpkg --version", { stdio: "ignore" });</span>
+<span class="cstat-no" title="statement not covered" >    return true;</span>
+  } catch (e) {
+<span class="cstat-no" title="statement not covered" >    return false;</span>
+  }
+};
+&nbsp;
+const yarnPrompt = {
+  type: 'confirm',
+  message: 'Do you want to use Yarn to install packages',
+  name: "yarn"
+}
+&nbsp;
+const checkIfNeedYarnAnswer = <span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {
+<span class="cstat-no" title="statement not covered" >  if (canUseYarn() &amp;&amp; store.useYarn === '') {</span>
+    let yarnAnswer = <span class="cstat-no" title="statement not covered" >await prompt([yarnPrompt])</span>
+<span class="cstat-no" title="statement not covered" >    store.useYarn = yarnAnswer.yarn</span>
+  }
+}
+&nbsp;
+exports.checkIfNeedYarnAnswer = checkIfNeedYarnAnswer
+&nbsp;
+const installDependencies = <span class="fstat-no" title="function not covered" >as</span>ync packages =&gt; {
+<span class="cstat-no" title="statement not covered" >  await checkIfNeedYarnAnswer()</span>
+<span class="cstat-no" title="statement not covered" >  try {</span>
+<span class="cstat-no" title="statement not covered" >    process.chdir(`./${name}`)</span>
+<span class="cstat-no" title="statement not covered" >    if (store.useYarn) {</span>
+<span class="cstat-no" title="statement not covered" >      execSync(`yarn add ${packages}`, {stdio:[0,1,2]})</span>
+    } else {
+<span class="cstat-no" title="statement not covered" >      execSync(`npm install --save ${packages}`, {stdio:[0,1,2]});</span>
+    }
+<span class="cstat-no" title="statement not covered" >    process.chdir('../')</span>
+<span class="cstat-no" title="statement not covered" >    return</span>
+  } catch(err) {
+<span class="cstat-no" title="statement not covered" >    process.chdir('../')</span>
+<span class="cstat-no" title="statement not covered" >    if (store.env === 'development') {</span>
+<span class="cstat-no" title="statement not covered" >      console.error(err)</span>
+    } else {
+<span class="cstat-no" title="statement not covered" >      console.log('Something went wrong installing the packages')</span>
+    }
+<span class="cstat-no" title="statement not covered" >    return</span>
+  }
+};
+&nbsp;
+exports.installDependencies = installDependencies
+&nbsp;
+const installDevDependencies = <span class="fstat-no" title="function not covered" >as</span>ync packages =&gt; {
+<span class="cstat-no" title="statement not covered" >  await checkIfNeedYarnAnswer()</span>
+<span class="cstat-no" title="statement not covered" >  try {</span>
+<span class="cstat-no" title="statement not covered" >    process.chdir(`./${name}`)</span>
+<span class="cstat-no" title="statement not covered" >    if (store.useYarn) {</span>
+<span class="cstat-no" title="statement not covered" >      execSync(`yarn add ${packages} --dev`, {stdio:[0,1,2]})</span>
+    } else {
+<span class="cstat-no" title="statement not covered" >      execSync(`npm install --save-dev ${packages}`, {stdio:[0,1,2]})</span>
+    }
+<span class="cstat-no" title="statement not covered" >    process.chdir('../')</span>
+<span class="cstat-no" title="statement not covered" >    return</span>
+  } catch(err) {
+<span class="cstat-no" title="statement not covered" >    process.chdir('../')</span>
+<span class="cstat-no" title="statement not covered" >    if (store.env === 'development') {</span>
+<span class="cstat-no" title="statement not covered" >      console.error(err)</span>
+    } else {
+<span class="cstat-no" title="statement not covered" >      console.log('Something went wrong installing the packages')</span>
+    }
+<span class="cstat-no" title="statement not covered" >    return</span>
+  }
+};
+&nbsp;
+exports.installDevDependencies = installDevDependencies
+&nbsp;
+const installKnexGlobal = <span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {
+<span class="cstat-no" title="statement not covered" >  await checkIfNeedYarnAnswer()</span>
+<span class="cstat-no" title="statement not covered" >  try {</span>
+<span class="cstat-no" title="statement not covered" >    process.chdir(`./${name}`)</span>
+<span class="cstat-no" title="statement not covered" >    if (store.useYarn) {</span>
+<span class="cstat-no" title="statement not covered" >      execSync(`yarn add knex global`, { stdio: [0, 1, 2] })</span>
+    } else {
+<span class="cstat-no" title="statement not covered" >      execSync(`npm install -g knex`, {stdio: [0, 1, 2]})</span>
+    }
+<span class="cstat-no" title="statement not covered" >    execSync(`createdb ${name}`, {stdio: [0, 1, 2]})</span>
+<span class="cstat-no" title="statement not covered" >    process.chdir('../')</span>
+<span class="cstat-no" title="statement not covered" >    return</span>
+  } catch(err) {
+<span class="cstat-no" title="statement not covered" >    console.error(chalk.red`Error creating db: make sure postgres is installed and running and try again by entering: createdb ${name}`)</span>
+<span class="cstat-no" title="statement not covered" >    process.chdir('../')</span>
+<span class="cstat-no" title="statement not covered" >    return</span>
+  }
+};
+&nbsp;
+exports.installKnexGlobal = installKnexGlobal
+&nbsp;
+exports.addScript = <span class="fstat-no" title="function not covered" >(c</span>ommand, script) =&gt; {
+<span class="cstat-no" title="statement not covered" >  try {</span>
+    let buffer = <span class="cstat-no" title="statement not covered" >fs.readFileSync("package.json");</span>
+    let json = <span class="cstat-no" title="statement not covered" >JSON.parse(buffer);</span>
+<span class="cstat-no" title="statement not covered" >    json.scripts[command] = script;</span>
+    let newPackage = <span class="cstat-no" title="statement not covered" >JSON.stringify(json, null, 2);</span>
+<span class="cstat-no" title="statement not covered" >    fs.writeFileSync("package.json", newPackage);</span>
+<span class="cstat-no" title="statement not covered" >    log(chalk`{cyan insert} ${command} script into package.json`)</span>
+  } catch (err) {
+<span class="cstat-no" title="statement not covered" >    console.error("Failed to add script to package.json: ", err)</span>
+  }
+};
+&nbsp;
+exports.modifyKnex = <span class="fstat-no" title="function not covered" >()</span> =&gt; {
+  let newKnex = <span class="cstat-no" title="statement not covered" >`module.exports = {\n\n\tdevelopment: {\n\t\tclient: 'pg',\n\t\tconnection: 'postgres://localhost/${name}',\n\t\tmigrations: {\n\t\t\tdirectory: './db/migrations'\n\t\t},\n\t\tseeds: {\n\t\t\tdirectory: 'db/seeds/dev'\n\t\t},\n\t\tuseNullAsDefault: true\n\t},\n\n\tproduction: {\n\t\tclient: 'pg',\n\t\tconnection: process.env.DATABASE_URL + '?ssl=true',\n\t\tmigrations: {\n\t\t\tdirectory: 'db/migrations'\n\t\t},\n\t\tseeds: {\n\t\t\tdirectory: 'db/seeds/dev'\n\t\t},\n\t\tuseNullAsDefault: true\n\t}\n\n};`;</span>
+<span class="cstat-no" title="statement not covered" >  if (fs.existsSync(`./${name}/knexfile.js`)) {</span>
+<span class="cstat-no" title="statement not covered" >    fs.truncateSync(`./${name}/knexfile.js`, 0)</span>
+<span class="cstat-no" title="statement not covered" >    this.appendFile(`./${name}/knexfile.js`, newKnex)</span>
+  } else {
+<span class="cstat-no" title="statement not covered" >    this.writeFile(`./${name}/knexfile.js`, newKnex)</span>
+  }
+<span class="cstat-no" title="statement not covered" >  this.mkdirSync(`./${name}/db`);</span>
+<span class="cstat-no" title="statement not covered" >  this.mkdirSync(`./${name}/db/migrations`);</span>
+};
+&nbsp;
+exports.addScriptToNewPackageJSON = <span class="fstat-no" title="function not covered" >(c</span>ommand, script) =&gt; {
+  let buffer = <span class="cstat-no" title="statement not covered" >fs.readFileSync(`./${name}/package.json`);</span>
+  let json = <span class="cstat-no" title="statement not covered" >JSON.parse(buffer);</span>
+<span class="cstat-no" title="statement not covered" >  json.scripts[command] = script;</span>
+  let newPackage = <span class="cstat-no" title="statement not covered" >JSON.stringify(json, null, 2);</span>
+<span class="cstat-no" title="statement not covered" >  fs.writeFileSync(`./${name}/package.json`, newPackage);</span>
+};
+&nbsp;
+exports.writeFile = <span class="fstat-no" title="function not covered" >(f</span>ilePath, file, message) =&gt; {
+<span class="cstat-no" title="statement not covered" >  try {</span>
+    let filePathLog = <span class="cstat-no" title="statement not covered" >filePath.slice(2)</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    if (fs.existsSync(filePath)) {</span>
+<span class="cstat-no" title="statement not covered" >        fs.writeFileSync(filePath, file)</span>
+<span class="cstat-no" title="statement not covered" >        message ? log(message) : log(chalk`{yellow mutate} ${filePathLog}`);</span>
+    } else {
+<span class="cstat-no" title="statement not covered" >      fs.writeFileSync(filePath, file)</span>
+<span class="cstat-no" title="statement not covered" >      message ? log(message) : log(chalk`{green create} ${filePathLog}`);</span>
+    }
+  } catch (err) {
+<span class="cstat-no" title="statement not covered" >    console.error("Couldn't create file", err)</span>
+  }
+}
+&nbsp;
+exports.mkdirSync = <span class="fstat-no" title="function not covered" >(f</span>olderPath, message) =&gt; {
+<span class="cstat-no" title="statement not covered" >  try {</span>
+<span class="cstat-no" title="statement not covered" >    fs.mkdirSync(folderPath)</span>
+<span class="cstat-no" title="statement not covered" >    folderPath = folderPath.slice(2)</span>
+<span class="cstat-no" title="statement not covered" >    message ? log(message) : log(chalk`{green create} ${folderPath}`)</span>
+  } catch (err) {
+<span class="cstat-no" title="statement not covered" >    log(chalk`\t{red Error Making Directory ${folderPath} }`)</span>
+  }
+}
+&nbsp;
+exports.rename = <span class="fstat-no" title="function not covered" >(o</span>ldName, newName) =&gt; {
+<span class="cstat-no" title="statement not covered" >  try {</span>
+<span class="cstat-no" title="statement not covered" >    fs.renameSync(oldName, newName)</span>
+<span class="cstat-no" title="statement not covered" >    oldName = oldName.slice(2)</span>
+<span class="cstat-no" title="statement not covered" >    newName = newName.slice(2)</span>
+<span class="cstat-no" title="statement not covered" >    log(chalk`{yellow move}   ${oldName} into ${newName}`)</span>
+  } catch (err) {
+<span class="cstat-no" title="statement not covered" >    store.env === 'development' ? log(err) : log()</span>
+  }
+};
+&nbsp;
+exports.addKeytoPackageJSON = <span class="fstat-no" title="function not covered" >(k</span>ey, value) =&gt; {
+  const buffer = <span class="cstat-no" title="statement not covered" >fs.readFileSync(`./${name}/package.json`);</span>
+  const json = <span class="cstat-no" title="statement not covered" >JSON.parse(buffer);</span>
+<span class="cstat-no" title="statement not covered" >  json[key] = value;</span>
+  const newPackageJSON = <span class="cstat-no" title="statement not covered" >JSON.stringify(json, null, 2);</span>
+<span class="cstat-no" title="statement not covered" >  fs.writeFileSync(`./${name}/package.json`, newPackageJSON);</span>
+};
+&nbsp;
+const installDependenciesToExistingProject = <span class="fstat-no" title="function not covered" >as</span>ync packages =&gt; {
+<span class="cstat-no" title="statement not covered" >  await checkIfNeedYarnAnswer()</span>
+<span class="cstat-no" title="statement not covered" >  checkIfPackageJSONExists(packages)</span>
+<span class="cstat-no" title="statement not covered" >  try {</span>
+<span class="cstat-no" title="statement not covered" >    if (store.useYarn) {</span>
+<span class="cstat-no" title="statement not covered" >      execSync(`yarn add ${packages}`, { stdio: [0, 1, 2] })</span>
+    } else {
+<span class="cstat-no" title="statement not covered" >      execSync(`npm install --save ${packages}`, { stdio: [0, 1, 2] })</span>
+    }
+<span class="cstat-no" title="statement not covered" >    return</span>
+  } catch (err) {
+<span class="cstat-no" title="statement not covered" >    store.env === 'development' ? log(chalk.red`${err}`) : ""</span>
+<span class="cstat-no" title="statement not covered" >    return</span>
+  }
+}
+&nbsp;
+exports.installDependenciesToExistingProject = installDependenciesToExistingProject
+&nbsp;
+&nbsp;
+const installDevDependenciesToExistingProject = <span class="fstat-no" title="function not covered" >as</span>ync packages =&gt; {
+<span class="cstat-no" title="statement not covered" >  checkIfPackageJSONExists(packages)</span>
+<span class="cstat-no" title="statement not covered" >  await checkIfNeedYarnAnswer()</span>
+<span class="cstat-no" title="statement not covered" >  try {</span>
+<span class="cstat-no" title="statement not covered" >    if (store.useYarn) {</span>
+<span class="cstat-no" title="statement not covered" >      execSync(`yarn add ${packages} --dev`, { stdio: [0, 1, 2] })</span>
+    } else {
+<span class="cstat-no" title="statement not covered" >      execSync(`npm install --save-dev ${packages}`, { stdio: [0, 1, 2] })</span>
+    }
+<span class="cstat-no" title="statement not covered" >    return</span>
+  } catch (err) {
+<span class="cstat-no" title="statement not covered" >    store.env === 'development' ? log(chalk.red`${err}`) : ""</span>
+<span class="cstat-no" title="statement not covered" >    return</span>
+  }
+}
+&nbsp;
+exports.installDevDependenciesToExistingProject = installDevDependenciesToExistingProject
+&nbsp;
+&nbsp;
+exports.checkScriptsFolderExist = <span class="fstat-no" title="function not covered" >()</span> =&gt; {
+<span class="cstat-no" title="statement not covered" >  if (!fs.existsSync('./scripts')) {</span>
+<span class="cstat-no" title="statement not covered" >    this.mkdirSync('./scripts')</span>
+<span class="cstat-no" title="statement not covered" >    this.mkdirSync('./scripts/templates')</span>
+  } else <span class="cstat-no" title="statement not covered" >if (!fs.existsSync('./scripts/templates')) {</span>
+<span class="cstat-no" title="statement not covered" >    this.mkdirSync('./scripts/templates')</span>
+  }
+}
+&nbsp;
+exports.getCWDName = <span class="fstat-no" title="function not covered" >()</span> =&gt; {
+  let name = <span class="cstat-no" title="statement not covered" >process.cwd()</span>
+<span class="cstat-no" title="statement not covered" >  name = name.split('/')</span>
+<span class="cstat-no" title="statement not covered" >  name = name.pop()</span>
+<span class="cstat-no" title="statement not covered" >  return name</span>
+}
+&nbsp;
+exports.modifyKnexExistingProject = <span class="fstat-no" title="function not covered" >(c</span>wd) =&gt; {
+  let newKnex = <span class="cstat-no" title="statement not covered" >`module.exports = {\n\n\tdevelopment: {\n\t\tclient: 'pg',\n\t\tconnection: 'postgres://localhost/${cwd}',\n\t\tmigrations: {\n\t\t\tdirectory: './db/migrations'\n\t\t},\n\t\tseeds: {\n\t\t\tdirectory: 'db/seeds/dev'\n\t\t},\n\t\tuseNullAsDefault: true\n\t},\n\n\tproduction: {\n\t\tclient: 'pg',\n\t\tconnection: process.env.DATABASE_URL + '?ssl=true',\n\t\tmigrations: {\n\t\t\tdirectory: 'db/migrations'\n\t\t},\n\t\tseeds: {\n\t\t\tdirectory: 'db/seeds/dev'\n\t\t},\n\t\tuseNullAsDefault: true\n\t}\n\n};`</span>
+<span class="cstat-no" title="statement not covered" >  if (fs.existsSync(`./knexfile.js`)) {</span>
+<span class="cstat-no" title="statement not covered" >    fs.truncateSync(`./knexfile.js`, 0)</span>
+<span class="cstat-no" title="statement not covered" >    this.appendFile(`./knexfile.js`, newKnex)</span>
+  } else {
+<span class="cstat-no" title="statement not covered" >    this.writeFile(`./knexfile.js`, newKnex)</span>
+  }
+<span class="cstat-no" title="statement not covered" >  this.mkdirSync(`./db`)</span>
+<span class="cstat-no" title="statement not covered" >  this.mkdirSync(`./db/migrations`)</span>
+}
+&nbsp;
+exports.appendFile = <span class="fstat-no" title="function not covered" >(f</span>ile, stringToAppend) =&gt; {
+<span class="cstat-no" title="statement not covered" >  try {</span>
+<span class="cstat-no" title="statement not covered" >    fs.appendFileSync(file, stringToAppend)</span>
+<span class="cstat-no" title="statement not covered" >    log(chalk`{cyan append} ${file}`)</span>
+  } catch (err) {
+<span class="cstat-no" title="statement not covered" >    store.env === 'development' ? log(err) : log(chalk.red`Failed to append ${file}`)</span>
+  }
+}
+&nbsp;
+exports.checkIfScriptIsTaken = <span class="fstat-no" title="function not covered" >(s</span>criptName) =&gt; {
+<span class="cstat-no" title="statement not covered" >  try {</span>
+    let buffer = <span class="cstat-no" title="statement not covered" >fs.readFileSync('./package.json')</span>
+    let packageJson = <span class="cstat-no" title="statement not covered" >JSON.parse(buffer)</span>
+<span class="cstat-no" title="statement not covered" >    return scriptName in packageJson['scripts']</span>
+  } catch (err) {
+<span class="cstat-no" title="statement not covered" >    return false</span>
+  }
+}
+&nbsp;
+exports.moveAllFilesInDir = <span class="fstat-no" title="function not covered" >(d</span>irToSearch, dirToMoveTo) =&gt; {
+<span class="cstat-no" title="statement not covered" >  fs.readdirSync(dirToSearch).forEach(<span class="fstat-no" title="function not covered" >fi</span>le =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    if (file === 'actions' || file === 'components' || file === 'store' || file === 'services') {</span>
+<span class="cstat-no" title="statement not covered" >      return</span>
+    }
+<span class="cstat-no" title="statement not covered" >    try {</span>
+<span class="cstat-no" title="statement not covered" >      this.rename(dirToSearch + '/' + file, dirToMoveTo + '/' + file)</span>
+    } catch(err) {
+<span class="cstat-no" title="statement not covered" >      console.error(chalk.red`Error: Couldn't move ${file} from ${dirToSearch} into ${dirToMoveTo}`, err)</span>
+    }
+  })
+}
+&nbsp;
+exports.addDependenciesToStore = <span class="fstat-no" title="function not covered" >de</span>ps =&gt; {
+<span class="cstat-no" title="statement not covered" >  if (!store.dependencies) {</span>
+<span class="cstat-no" title="statement not covered" >    store.dependencies = deps</span>
+  } else {
+<span class="cstat-no" title="statement not covered" >    store.dependencies += ' ' + deps</span>
+  }
+}
+&nbsp;
+exports.addDevDependenciesToStore = <span class="fstat-no" title="function not covered" >de</span>ps =&gt; {
+<span class="cstat-no" title="statement not covered" >  if (!store.devDependencies) {</span>
+<span class="cstat-no" title="statement not covered" >    store.devDependencies = deps</span>
+  } else {
+<span class="cstat-no" title="statement not covered" >    store.devDependencies += ' ' + deps</span>
+  }
+}
+&nbsp;
+const installAllPackages = <span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {
+<span class="cstat-no" title="statement not covered" >  if (store.dependencies) {</span>
+<span class="cstat-no" title="statement not covered" >    await this.installDependencies(store.dependencies)</span>
+  }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  if (store.devDependencies) {</span>
+<span class="cstat-no" title="statement not covered" >    await this.installDevDependencies(store.devDependencies)</span>
+  }
+&nbsp;
+}
+&nbsp;
+exports.installAllPackages = installAllPackages
+&nbsp;
+const installAllPackagesToExistingProject = <span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {
+<span class="cstat-no" title="statement not covered" >  if (store.dependencies) {</span>
+<span class="cstat-no" title="statement not covered" >    await this.installDependenciesToExistingProject(store.dependencies)</span>
+  }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  if (store.devDependencies) {</span>
+<span class="cstat-no" title="statement not covered" >    await this.installDevDependenciesToExistingProject(store.devDependencies)</span>
+  }
+}
+&nbsp;
+exports.installAllPackagesToExistingProject = installAllPackagesToExistingProject
+&nbsp;
+// local helpers 
+&nbsp;
+const checkIfPackageJSONExists = <span class="fstat-no" title="function not covered" >pa</span>ckages =&gt; {
+<span class="cstat-no" title="statement not covered" >  if (!fs.existsSync('package.json')) {</span>
+<span class="cstat-no" title="statement not covered" >    console.error('package.json not found. Unable to install packages')</span>
+<span class="cstat-no" title="statement not covered" >    console.error(`You will need to install ${packages} yourself`)</span>
+<span class="cstat-no" title="statement not covered" >    return </span>
+  }
+}
+&nbsp;
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Sat Sep 29 2018 16:02:04 GMT-0700 (Pacific Daylight Time)
+</div>
+</div>
+<script src="../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../sorter.js"></script>
+</body>
+</html>
