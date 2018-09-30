@@ -278,6 +278,13 @@ exports.moveAllFilesInDir = (dirToSearch, dirToMoveTo) => {
       console.error(chalk.red`Error: Couldn't move ${file} from ${dirToSearch} into ${dirToMoveTo}`, err)
     }
   })
+  try {
+    fs.rmdirSync(dirToSearch)
+    dirToSearch = dirToSearch.slice(2)
+    console.log(chalk`{red delete} ${dirToSearch}`)
+  } catch (err) {
+    store.env === 'development' ? log(err) : log(`Failed to delete ${dirToSearch}`)
+  }
 }
 
 exports.addDependenciesToStore = deps => {
