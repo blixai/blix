@@ -83,7 +83,7 @@ const consoleFormatter = () => {
 }
 
 const newProjectInstructions = () => {
-  // console.clear()
+  console.clear()
   log("")
   log(`Success! Created new project ${name} at ${process.cwd() + '/' + name}`);
   log();

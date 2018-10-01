@@ -1,5 +1,5 @@
 module.exports = {
-    "extends": ["prettier"],
+    "extends": "plugin:prettier/recommended",
     "env": {
         "browser": true,
         "node": true
@@ -11,21 +11,4 @@ module.exports = {
             "jsx": true
         }
     },
-    "settings": {
-        "react": {
-          "createClass": "createReactClass",
-          "pragma": "React", 
-          "version": "latest"
-        },
-      },
-      "plugins": [
-          "react"
-      ],
-      "rules": {
-        "react/jsx-uses-react": "error",
-        "react/jsx-uses-vars": "error",
-        "indent": ["error", 2],
-        "quotes": ["error", "single"],
-        "comma-dangle": ["error", "always"]
-      }
 }

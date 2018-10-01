@@ -113,7 +113,8 @@ const linterPrompt = {
   choices: [
     { name: 'Prettier', value: 'prettier' },
     { name: 'ESLint', value: 'eslint' },
-    { name: 'ESLint + Prettier', value: 'eslint_prettier' }
+    { name: 'ESLint + Prettier', value: 'eslint_prettier' },
+    { name: 'None' }
   ]
 }
 
