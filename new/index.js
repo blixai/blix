@@ -19,7 +19,8 @@ const {
   e2e,
   reactTesting,
   vueTesting,
-  reactCSS
+  reactCSS,
+  linterPrompt
 } = require("./prompts");
 
 const promptPreset = async () => {
@@ -74,6 +75,8 @@ const reactProject = async reactType => {
   store.reactType = reactType
   let cssOption = await prompt([reactCSS])
   store.reactCSS = cssOption.css
+  let linter = await prompt([linterPrompt])
+  store.linter = linter.linter
   store.reactTesting = await prompt([reactTesting]);
   store.e2e = await prompt([e2e]);
   store.backend = await prompt([backend]);
@@ -123,6 +126,8 @@ const vanillaJSProject = async () => {
 };
 
 const backendOnly = async () => {
+  let linter = await prompt([linterPrompt])
+  store.linter = linter.linter
   store.serverTesting = await prompt([serverTesting]);
   store.database = await prompt([database]);
   store.backendType = "api" 
