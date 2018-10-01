@@ -20,6 +20,7 @@ const postcssConfig = loadFile("./files/frontend/postcss.config.js");
 
 // load html file for projects without backends
 const htmlFile = loadFile("./files/frontend/other/index.html");
+const cssFile = loadFile("./files/frontend/other/App.css");
 
 // load react files
 const index = loadFile("./files/frontend/react/index.js");
@@ -110,7 +111,7 @@ const reactOnly = () => {
   helpers.mkdirSync(`./${name}/src/App`);
   helpers.writeFile(`./${name}/src/index.js`, index);
   helpers.writeFile(`./${name}/src/App/App.js`, app);
-  helpers.writeFile(`./${name}/src/App/App.css`, "");
+  helpers.writeFile(`./${name}/src/App/App.css`, cssFile);
 };
 
 const reactRouter = () => {
@@ -135,7 +136,7 @@ const redux = () => {
   helpers.mkdirSync(`./${name}/src/App`)
   helpers.writeFile(`./${name}/src/App/App.js`, app)
   helpers.writeFile(`./${name}/src/App/AppContainer.js`, reduxAppContainer)
-  helpers.writeFile(`./${name}/src/App/App.css`, "")
+  helpers.writeFile(`./${name}/src/App/App.css`, cssFile)
 
   helpers.mkdirSync(`./${name}/src/actions`)
   helpers.writeFile(`./${name}/src/actions/index.js`, "")
