@@ -106,6 +106,12 @@ const reactCSS = {
   ]
 }
 
+const yarnPrompt = {
+  type: 'confirm',
+  message: 'Do you want to use Yarn to install packages',
+  name: "yarn"
+}
+
 module.exports = {
   defaultOrCustom,
   frontendOptions,
@@ -116,5 +122,6 @@ module.exports = {
   e2e,
   reactTesting,
   vueTesting,
-  reactCSS
+  reactCSS,
+  yarnPrompt
 };
