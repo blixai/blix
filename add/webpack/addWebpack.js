@@ -90,11 +90,11 @@ let createConfig = async (input, output, react) => {
   webpack = webpack.replace(/OUTPUT/g, output)
 
   let postcss = loadFile('../../new/files/frontend/postcss.config.js')
-  helpers.writeFile('./postcss.config.js', postcss, 'Created postcss.config.js')
+  helpers.writeFile('postcss.config.js', postcss, 'Created postcss.config.js')
 
-  helpers.writeFile('./webpack.config.js', webpack, 'Created webpack.config.js')
+  helpers.writeFile('webpack.config.js', webpack, 'Created webpack.config.js')
   if (!fs.existsSync('./.babelrc')) {
-    helpers.writeFile('./.babelrc', babel, 'Created .babelrc')
+    helpers.writeFile('.babelrc', babel, 'Created .babelrc')
   }
 
 

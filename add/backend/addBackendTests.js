@@ -9,7 +9,7 @@ const loadFile = filePath => {
 
 const checkOrCreateServerTestFolder = () => {
   if (!fs.existsSync(`./test/server`)) {
-    helpers.mkdirSync(`./test/server`)
+    helpers.mkdirSync(`test/server`)
   }
 }
 
@@ -18,7 +18,7 @@ const mochaTestBackend = () => {
   helpers.addScript('mocha', 'mocha test/server')
   checkOrCreateServerTestFolder()
   helpers.writeFile(
-    `./test/server/test.spec.js`,
+    `test/server/test.spec.js`,
     loadFile('testing/backend/mocha.js')
   )
   let json = JSON.parse(fs.readFileSync(`./package.json`, 'utf8'))
@@ -30,14 +30,14 @@ const mochaTestBackend = () => {
     ]
   }
   let newPackage = JSON.stringify(json, null, 2)
-  fs.writeFileSync(`./package.json`, newPackage)
+  fs.writeFileSync(`package.json`, newPackage)
 }
 
 const testJestBackend = () => {
   helpers.addDevDependenciesToStore('jest supertest')
   checkOrCreateServerTestFolder()
   helpers.writeFile(
-    `./test/server/test.spec.js`,
+    `test/server/test.spec.js`,
     loadFile('testing/backend/jest.js')
   )
   let json = JSON.parse(fs.readFileSync(`./package.json`, 'utf8'))
@@ -53,7 +53,7 @@ const testJestBackend = () => {
     json['jest'] = jest
   }
   let newPackage = JSON.stringify(json, null, 2)
-  fs.writeFileSync(`./package.json`, newPackage)
+  fs.writeFileSync(`package.json`, newPackage)
   helpers.addScript('jest', 'jest')
 }
 

@@ -20,11 +20,11 @@ const addBookshelfToScripts = async () => {
   const bookshelfModel = loadFile('backend/models/bookshelf.js')
 
   // write loaded files to new project
-  helpers.writeFile(`./server/models/bookshelf.js`, bookshelfModel)
+  helpers.writeFile(`server/models/bookshelf.js`, bookshelfModel)
   // the following files are loaded into the scripts folder
-  helpers.writeFile(`./scripts/model.js`, bookshelf)
-  helpers.writeFile(`./scripts/templates/migration.js`, migration)
-  helpers.writeFile(`./scripts/templates/bookshelf.js`, model)
+  helpers.writeFile(`scripts/model.js`, bookshelf)
+  helpers.writeFile(`scripts/templates/migration.js`, migration)
+  helpers.writeFile(`scripts/templates/bookshelf.js`, model)
 
   helpers.addScript('model', 'node scripts/model.js')
   installKnexGlobal()

@@ -28,24 +28,24 @@ const routes = loadFile('backend/common/routes.js')
 
 const createBackend = async (mode, serverTestingSelection, databaseSelection) => {
   try {
-    helpers.mkdirSync('./server')
+    helpers.mkdirSync('server')
   } catch (err) {
     console.error('Server folder already exists')
     process.exit(1)
   }
-  helpers.mkdirSync('./server/models')
-  helpers.mkdirSync('./server/controllers')
-  helpers.mkdirSync('./server/helpers')
+  helpers.mkdirSync('server/models')
+  helpers.mkdirSync('server/controllers')
+  helpers.mkdirSync('server/helpers')
   if (mode !== 'api') {
     try {
-      helpers.mkdirSync('./assets')
+      helpers.mkdirSync('assets')
     } catch (err) {
       console.error('Tried to create assets folder but one already exists')
     }
   }
 
-  helpers.writeFile('./server/routes.js', routes)
-  helpers.writeFile('./server/cluster.js', cluster)
+  helpers.writeFile('server/routes.js', routes)
+  helpers.writeFile('server/cluster.js', cluster)
 
   mode.mode === 'standard' ? standard() : mode.mode === 'mvc' ? mvc() : api()
 
@@ -61,11 +61,11 @@ const standard = () => {
   const server = loadFile('backend/standard/server.js')
   const controller = loadFile('backend/standard/home.js')
 
-  helpers.writeFile('./server/server.js', server)
-  helpers.writeFile('./server/controllers/home.js', controller)
-  helpers.mkdirSync('./server/views')
-  helpers.mkdirSync('./server/views/home')
-  helpers.writeFile('./server/views/home/index.html', html)
+  helpers.writeFile('server/server.js', server)
+  helpers.writeFile('server/controllers/home.js', controller)
+  helpers.mkdirSync('server/views')
+  helpers.mkdirSync('server/views/home')
+  helpers.writeFile('server/views/home/index.html', html)
 }
 
 const mvc = () => {
@@ -75,23 +75,23 @@ const mvc = () => {
   const pug = loadFile('backend/mvc/index.pug')
   const controller = loadFile('backend/mvc/home.js')
 
-  helpers.writeFile('./server/server.js', server)
+  helpers.writeFile('server/server.js', server)
 
-  helpers.mkdirSync('./server/views')
-  helpers.writeFile('./server/views/error.pug', error)
-  helpers.writeFile('./server/views/layout.pug', layout)
-  helpers.mkdirSync('./server/views/home')
-  helpers.writeFile('./server/views/home/index.pug', pug)
+  helpers.mkdirSync('server/views')
+  helpers.writeFile('server/views/error.pug', error)
+  helpers.writeFile('server/views/layout.pug', layout)
+  helpers.mkdirSync('server/views/home')
+  helpers.writeFile('server/views/home/index.pug', pug)
 
-  helpers.writeFile('./server/controllers/home.js', controller)
+  helpers.writeFile('server/controllers/home.js', controller)
 }
 
 const api = () => {
   const server = loadFile('backend/api/server.js')
   const homeController = loadFile('backend/api/home.js')
 
-  helpers.writeFile('./server/server.js', server)
-  helpers.writeFile('./server/controllers/home.js', homeController)
+  helpers.writeFile('server/server.js', server)
+  helpers.writeFile('server/controllers/home.js', homeController)
 }
 
 const packages = mode => {
@@ -128,9 +128,9 @@ const scripts = mode => {
   helpers.addScript('server', 'nodemon server/cluster.js')
   // controller script
   helpers.addScript('controller', 'node scripts/controller.js')
-  helpers.writeFile('./scripts/controller.js', controller)
-  helpers.writeFile('./scripts/templates/controller.js', controllerTemplate)
-  helpers.writeFile('./scripts/templates/routes.js', routesTemplate)
+  helpers.writeFile('scripts/controller.js', controller)
+  helpers.writeFile('scripts/templates/controller.js', controllerTemplate)
+  helpers.writeFile('scripts/templates/routes.js', routesTemplate)
 
   if (mode === 'mvc') {
     pugScript()
@@ -145,12 +145,12 @@ const pageScript = () => {
 
   if (helpers.checkIfScriptIsTaken('view')) {
    helpers.addScript('server:view', 'node scripts/page') 
-   helpers.writeFile('./scripts/page.js', script)
+   helpers.writeFile('scripts/page.js', script)
   } else {
     helpers.addScript('view', 'node scripts/view.js')
-    helpers.writeFile('./scripts/view.js', script)
+    helpers.writeFile('scripts/view.js', script)
   }
-  helpers.writeFile('./scripts/templates/index.html', htmlTemplate)
+  helpers.writeFile('scripts/templates/index.html', htmlTemplate)
 }
 
 const pugScript = () => {
@@ -160,12 +160,12 @@ const pugScript = () => {
   if (helpers.checkIfScriptIsTaken('view')) {
     // view script is taken
     helpers.addScript('server:view', 'node scripts/pug.js')
-    helpers.writeFile('./scripts/pug.js', script)
+    helpers.writeFile('scripts/pug.js', script)
   } else {
     helpers.addScript('view', 'node scripts/view.js')
-    helpers.writeFile('./scripts/view.js', script)
+    helpers.writeFile('scripts/view.js', script)
   }
-  helpers.writeFile('./scripts/templates/pugTemplate.pug', pugTemplate)
+  helpers.writeFile('scripts/templates/pugTemplate.pug', pugTemplate)
 }
 
 module.exports = addBackend

@@ -119,9 +119,9 @@ const addAction = () => {
   let actionTemplate = loadFile("frontend/redux/templates/action.js");
   let reducerTemplate = loadFile("frontend/redux/templates/reducer.js");
 
-  helpers.writeFile("./scripts/action.js", action, "Created action.js script file in scripts folder");
-  helpers.writeFile("./scripts/templates/action.js", actionTemplate, "Created action template in script/templates");
-  helpers.writeFile("./scripts/templates/reducer.js", reducerTemplate, "Created reducer template in  script/templates");
+  helpers.writeFile("scripts/action.js", action, "Created action.js script file in scripts folder");
+  helpers.writeFile("scripts/templates/action.js", actionTemplate, "Created action template in script/templates");
+  helpers.writeFile("scripts/templates/reducer.js", reducerTemplate, "Created reducer template in  script/templates");
   log("")
   log("Added script to project, to run: npm run action")
   log("This will prompt for the actions name, and the reducers name")
@@ -140,9 +140,9 @@ const addModel = () => {
       let model = loadFile("backend/mongoose.js");
       let schemaTemplate = loadFile("backend/templates/mongoose.js");
 
-      helpers.writeFile("./scripts/model.js", model, "Created model.js script file in scripts folder");
+      helpers.writeFile("scripts/model.js", model, "Created model.js script file in scripts folder");
       helpers.writeFile(
-        "./scripts/templates/schemaTemplate.js",
+        "scripts/templates/schemaTemplate.js",
         schemaTemplate,
         "Created Mongoose schema template in scripts/templates"
       );
@@ -163,20 +163,20 @@ const addModel = () => {
         "backend/bookshelf.js"
       );
       // create files 
-      helpers.writeFile("./scripts/model.js", model, "Created model.js script in scripts folder");
+      helpers.writeFile("scripts/model.js", model, "Created model.js script in scripts folder");
       helpers.writeFile(
-        "./scripts/templates/migration.js",
+        "scripts/templates/migration.js",
         migration,
         "Created knex migration template file in scripts/templates folder"
       );
       helpers.writeFile(
-        "./scripts/templates/bookshelf.js",
+        "scripts/templates/bookshelf.js",
         bookshelf,
         "Created Bookshelf template file in scripts/templates folder"
       );
       // bookshelf required file needs to be placed inside the project, preferably the models folder
       try {
-        helpers.writeFile("./server/models/bookshelf.js", bookshelfRequiredFile);
+        helpers.writeFile("server/models/bookshelf.js", bookshelfRequiredFile);
         log("Created Bookshelf file in server/models/bookshelf.js");
       } catch (e) {
         log(
@@ -197,7 +197,7 @@ let addReact = () => {
   helpers.addScript("component", "node scripts/component.js");
   let react = loadFile("frontend/react/component.js");
   checkScriptsFolderExists();
-  helpers.writeFile("./scripts/component.js", react, "Created component.js script file in scripts folder");
+  helpers.writeFile("scripts/component.js", react, "Created component.js script file in scripts folder");
   checkReactTemplatesExist()
   log("")
   log("Added script to project, to run: npm run component <name>")
@@ -215,9 +215,9 @@ let addRedux = () => {
     "frontend/redux/templates/container.js"
   );
   // write files
-  helpers.writeFile("./scripts/component.js", redux, "Created component.js script file in scripts folder");
+  helpers.writeFile("scripts/component.js", redux, "Created component.js script file in scripts folder");
   helpers.writeFile(
-    "./scripts/templates/container.js",
+    "scripts/templates/container.js",
     container 
   );
   log("")
@@ -232,7 +232,7 @@ let addClientView = () => {
     // if true project uses redux
     if (answer.view) {
       let reduxViewScript = loadFile("frontend/redux/view.js")
-      helpers.writeFile("./scripts/view.js", reduxViewScript, "Created view.js script file in scripts folder")
+      helpers.writeFile("scripts/view.js", reduxViewScript, "Created view.js script file in scripts folder")
       checkReactTemplatesExist()
       log("")
       log("Added script to project, to run: npm run view <name>")
@@ -240,7 +240,7 @@ let addClientView = () => {
       log("If view already exists it will just ask what containers/components from src/components to import into that view.")
     } else {
       let reactRouterViewScript = loadFile("frontend/react-router/view.js")
-      helpers.writeFile("./scripts/view.js", reactRouterViewScript, "Created view.js script file in scripts folder")
+      helpers.writeFile("scripts/view.js", reactRouterViewScript, "Created view.js script file in scripts folder")
       checkReactTemplatesExist()
       log("")
       log("Added script to project, to run: npm run view <name>")
@@ -258,8 +258,8 @@ let checkReactTemplatesExist = () => {
   } catch (err) {
     let statefulComponent = loadFile("frontend/react/templates/statefulComponent.js")
     let statelessComponent = loadFile("frontend/react/templates/statelessComponent.js")
-    helpers.writeFile("./scripts/templates/statefulComponent.js", statefulComponent, "Created statefulComponent template in scripts/templates/")
-    helpers.writeFile("./scripts/templates/statelessComponent.js", statelessComponent, "Created statelessComponent template in scripts/templates/")
+    helpers.writeFile("scripts/templates/statefulComponent.js", statefulComponent, "Created statefulComponent template in scripts/templates/")
+    helpers.writeFile("scripts/templates/statelessComponent.js", statelessComponent, "Created statelessComponent template in scripts/templates/")
   }
 }
 
@@ -272,14 +272,14 @@ let addController = () => {
 
   checkScriptsFolderExists();
 
-  helpers.writeFile("./scripts/controller.js", controller, "Created controller.js script file in scripts folder");
+  helpers.writeFile("scripts/controller.js", controller, "Created controller.js script file in scripts folder");
   helpers.writeFile(
-    "./scripts/templates/controller.js",
+    "scripts/templates/controller.js",
     controllerTemplate,
     "Created controller.js template in scripts/templates"
   );
   helpers.writeFile(
-    "./scripts/templates/routes.js",
+    "scripts/templates/routes.js",
     routes,
     "Created routes.js template in scripts/templates"
   );
@@ -291,7 +291,7 @@ let addController = () => {
 let createNewScript = name => {
   helpers.addScript(name, `node scripts/${name}.js`);
   checkScriptsFolderExists();
-  helpers.writeFile(`./scripts/${name}.js`, "");
+  helpers.writeFile(`scripts/${name}.js`, "");
   prompt([template]).then(a => {
     a = a.template;
     if (a) {
@@ -300,7 +300,7 @@ let createNewScript = name => {
         let importTemplate = fs.readFileSync(path.resolve(__dirname, './templates/customScript.js'), 'utf8');
         importTemplate = importTemplate.replace(/Name/g, ans)
         helpers.appendFile(`./scripts/${name}.js`, importTemplate)
-        helpers.writeFile(`./scripts/templates/${ans}.js`, "");
+        helpers.writeFile(`scripts/templates/${ans}.js`, "");
         log("");
         log(`Added script to project, to run npm run ${name}`)
         log(`Created template ${ans} in scripts/templates`)
@@ -320,11 +320,11 @@ let checkScriptsFolderExists = () => {
   try {
     if (fs.existsSync("./scripts")) {
       if (!fs.existsSync("./scripts/templates")) {
-        helpers.mkdirSync("./scripts/templates");
+        helpers.mkdirSync("scripts/templates");
       }
     } else {
-      helpers.mkdirSync("./scripts");
-      helpers.mkdirSync("./scripts/templates");
+      helpers.mkdirSync("scripts");
+      helpers.mkdirSync("scripts/templates");
     }
   } catch (err) {
     console.error("Could not create scripts and scripts/templates folder. Here is the error: ", err)

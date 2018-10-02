@@ -1,6 +1,5 @@
 const fs = require("fs");
 const execSync = require("child_process").execSync;
-const name = process.argv[3];
 const log = console.log;
 const chalk = require('chalk');
 const store = require('./new/store')
@@ -38,7 +37,7 @@ exports.checkIfNeedYarnAnswer = checkIfNeedYarnAnswer
 const installDependencies = async packages => {
   await checkIfNeedYarnAnswer()
   try {
-    process.chdir(`./${name}`)
+    process.chdir(`./${store.name}`)
     if (store.useYarn) {
       execSync(`yarn add ${packages}`, {stdio:[0,1,2]})
     } else {
@@ -62,7 +61,7 @@ exports.installDependencies = installDependencies
 const installDevDependencies = async packages => {
   await checkIfNeedYarnAnswer()
   try {
-    process.chdir(`./${name}`)
+    process.chdir(`./${store.name}`)
     if (store.useYarn) {
       execSync(`yarn add ${packages} --dev`, {stdio:[0,1,2]})
     } else {
@@ -84,6 +83,7 @@ const installDevDependencies = async packages => {
 exports.installDevDependencies = installDevDependencies
 
 const installKnexGlobal = async () => {
+  let name = store.name
   await checkIfNeedYarnAnswer()
   try {
     process.chdir(`./${name}`)
@@ -118,29 +118,30 @@ exports.addScript = (command, script) => {
 };
 
 exports.modifyKnex = () => {
+  let name = store.name
   let newKnex = `module.exports = {\n\n\tdevelopment: {\n\t\tclient: 'pg',\n\t\tconnection: 'postgres://localhost/${name}',\n\t\tmigrations: {\n\t\t\tdirectory: './db/migrations'\n\t\t},\n\t\tseeds: {\n\t\t\tdirectory: 'db/seeds/dev'\n\t\t},\n\t\tuseNullAsDefault: true\n\t},\n\n\tproduction: {\n\t\tclient: 'pg',\n\t\tconnection: process.env.DATABASE_URL + '?ssl=true',\n\t\tmigrations: {\n\t\t\tdirectory: 'db/migrations'\n\t\t},\n\t\tseeds: {\n\t\t\tdirectory: 'db/seeds/dev'\n\t\t},\n\t\tuseNullAsDefault: true\n\t}\n\n};`;
   if (fs.existsSync(`./${name}/knexfile.js`)) {
     fs.truncateSync(`./${name}/knexfile.js`, 0)
     this.appendFile(`./${name}/knexfile.js`, newKnex)
   } else {
-    this.writeFile(`./${name}/knexfile.js`, newKnex)
+    this.writeFile(`knexfile.js`, newKnex)
   }
-  this.mkdirSync(`./${name}/db`);
-  this.mkdirSync(`./${name}/db/migrations`);
+  this.mkdirSync(`db`);
+  this.mkdirSync(`db/migrations`);
 };
 
 exports.addScriptToNewPackageJSON = (command, script) => {
-  let buffer = fs.readFileSync(`./${name}/package.json`);
+  let buffer = fs.readFileSync(`${store.name}/package.json`);
   let json = JSON.parse(buffer);
   json.scripts[command] = script;
   let newPackage = JSON.stringify(json, null, 2);
-  fs.writeFileSync(`./${name}/package.json`, newPackage);
+  fs.writeFileSync(`./${store.name}/package.json`, newPackage);
 };
 
 exports.writeFile = (filePath, file, message) => {
   try {
+    filePath = store.name ? `./${store.name}/` + filePath : './' + filePath
     let filePathLog = filePath.slice(2)
-
     if (fs.existsSync(filePath)) {
         fs.writeFileSync(filePath, file)
         message ? log(message) : log(chalk`{yellow mutate} ${filePathLog}`);
@@ -155,8 +156,9 @@ exports.writeFile = (filePath, file, message) => {
 
 exports.mkdirSync = (folderPath, message) => {
   try {
-    fs.mkdirSync(folderPath)
+    folderPath = store.name ? `./${store.name}/` + folderPath : './' + folderPath
     folderPath = folderPath.slice(2)
+    fs.mkdirSync(folderPath)
     message ? log(message) : log(chalk`{green create} ${folderPath}`)
   } catch (err) {
     log(chalk`\t{red Error Making Directory ${folderPath} }`)
@@ -174,13 +176,13 @@ exports.rename = (oldName, newName) => {
   }
 };
 
-exports.addKeytoPackageJSON = (key, value) => {
-  const buffer = fs.readFileSync(`./${name}/package.json`);
-  const json = JSON.parse(buffer);
-  json[key] = value;
-  const newPackageJSON = JSON.stringify(json, null, 2);
-  fs.writeFileSync(`./${name}/package.json`, newPackageJSON);
-};
+// exports.addKeytoPackageJSON = (key, value) => {
+//   const buffer = fs.readFileSync(`./${name}/package.json`);
+//   const json = JSON.parse(buffer);
+//   json[key] = value;
+//   const newPackageJSON = JSON.stringify(json, null, 2);
+//   fs.writeFileSync(`./${name}/package.json`, newPackageJSON);
+// };
 
 const installDependenciesToExistingProject = async packages => {
   await checkIfNeedYarnAnswer()
@@ -222,10 +224,10 @@ exports.installDevDependenciesToExistingProject = installDevDependenciesToExisti
 
 exports.checkScriptsFolderExist = () => {
   if (!fs.existsSync('./scripts')) {
-    this.mkdirSync('./scripts')
-    this.mkdirSync('./scripts/templates')
+    this.mkdirSync('scripts')
+    this.mkdirSync('scripts/templates')
   } else if (!fs.existsSync('./scripts/templates')) {
-    this.mkdirSync('./scripts/templates')
+    this.mkdirSync('scripts/templates')
   }
 }
 
@@ -242,10 +244,10 @@ exports.modifyKnexExistingProject = (cwd) => {
     fs.truncateSync(`./knexfile.js`, 0)
     this.appendFile(`./knexfile.js`, newKnex)
   } else {
-    this.writeFile(`./knexfile.js`, newKnex)
+    this.writeFile(`knexfile.js`, newKnex)
   }
-  this.mkdirSync(`./db`)
-  this.mkdirSync(`./db/migrations`)
+  this.mkdirSync(`db`)
+  this.mkdirSync(`db/migrations`)
 }
 
 exports.appendFile = (file, stringToAppend) => {

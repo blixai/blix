@@ -1,4 +1,5 @@
 let store = {
+  name: '',
   frontend: '',
   backend: '',
   backendType: '',

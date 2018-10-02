@@ -2,7 +2,7 @@ const fs = require("fs");
 const path = require("path");
 const helpers = require("../../helpers");
 const execSync = require('child_process').execSync;
-const name = process.argv[3];
+// const name = process.argv[3];
 const store = require('../store')
 const chalk = require('chalk')
 
@@ -16,9 +16,9 @@ const createCommonFilesAndFolders = () => {
     "Creating the project and downloading packages, this may take a moment"
   );
   // creates new project folder first, this is important for all new projects
-  helpers.mkdirSync(`./${name}`);
+  helpers.mkdirSync(``);
   try {
-    process.chdir(`./${name}`)
+    process.chdir(`./${store.name}`)
     execSync('git init')
     process.chdir('../')
   } catch (err) {
@@ -28,25 +28,22 @@ const createCommonFilesAndFolders = () => {
     process.chdir('../')
   }
   helpers.writeFile(
-    `./${name}/.gitignore`,
+    `.gitignore`,
     loadFile("../files/common/gitIgnore.txt")
   );
   helpers.writeFile(
-    `./${name}/README.md`,
+    `README.md`,
     loadFile("../files/common/README.md")
   );
   helpers.writeFile(
-    `./${name}/package.json`,
+    `package.json`,
     loadFile("../files/common/package.json")
   );
 
-  helpers.writeFile(`./${name}/.env`, "");
-  helpers.mkdirSync(`./${name}/scripts`);
-  helpers.mkdirSync(`./${name}/scripts/templates`);
-  helpers.mkdirSync(`./${name}/test`);
-
-  // synchronously adds key value pair of the project name in the name field to package.json
-  // helpers.addKeytoPackageJSON("name", name, name)
+  helpers.writeFile(`.env`, "");
+  helpers.mkdirSync(`scripts`);
+  helpers.mkdirSync(`scripts/templates`);
+  helpers.mkdirSync(`test`);
 };
 
 module.exports = { createCommonFilesAndFolders };

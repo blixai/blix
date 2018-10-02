@@ -7,10 +7,11 @@ const { react } = require("./react");
 const { vanillaJS } = require("./vanillaJS");
 let store = require('./store')
 
-const name = process.argv[3];
+store.name = process.argv[3] || '';
 
 // console prompts
 const {
+  namePrompt,
   defaultOrCustom,
   frontendOptions,
   backend,
@@ -130,18 +131,24 @@ const backendOnly = async () => {
   createBackend();
 };
 
+const promptForName = async () => {
+  let answer = await prompt([namePrompt])
+  store.name = answer.name
+  createProject()
+}
+
 // create project ensures there shouldn't be errors before starting the prompts
 const createProject = () => {
-  if (!name) {
-    console.log('No name provided for new project.')
-    console.log('Try again with: blix new my-project')
-    process.exit(1)
+  if (!store.name) {
+    console.clear()
+    promptForName()
+    return
   }
-  if (fs.existsSync(`./${name}`)) {
-    console.error(`A project named ${name} already exists!`);
-    process.exit(1)
+  if (fs.existsSync(`./${store.name}`)) {
+    console.error(`A project named ${store.name} already exists!`);
+    promptForName()
+    return
   }
-  console.clear()
   promptPreset()
 };
 

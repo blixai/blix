@@ -1,12 +1,7 @@
-// need to create a reusable console log of instructions: ie run npm start
-// also need to add the instructions to the README (should be easy)
 const log = console.log;
 const fs = require('fs')
 const store = require('../store')
-const name = process.argv[3];
 const chalk = require('chalk')
-const helpers = require('../../helpers')
-
 const link = 'blixjs.com'
 
 const options = {
@@ -65,7 +60,7 @@ const readmeFormatter = () => {
 
   let readmeOutputString = ('\n' + '## Project Scripts' + '\n\n' + outputString)
   try {
-    fs.appendFileSync(`./${name}/README.md`, readmeOutputString)
+    fs.appendFileSync(`./${store.name}/README.md`, readmeOutputString)
   } catch (err) {
     store.env === 'development' ? log(err) : ""
   }
@@ -82,6 +77,7 @@ const consoleFormatter = () => {
 }
 
 const newProjectInstructions = () => {
+  let name = store.name
   console.clear()
   log("")
   log(`Success! Created new project ${name} at ${process.cwd() + '/' + name}`);
