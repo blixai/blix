@@ -12,7 +12,8 @@ let store = {
   dependencies: '',
   devDependencies: '',
   useYarn: '',
-  reactCSS: ''
+  reactCSS: '',
+  linter: ''
 }
 
 module.exports = store

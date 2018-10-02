@@ -3,6 +3,7 @@ const helpers = require('../helpers')
 const path = require('path')
 const { createCommonFilesAndFolders } = require('./utils/createCommonFiles')
 const { testBackend } = require('./utils/addBackendTests')
+const { addLinter } = require('./utils/addLinter')
 const { addMongooseToScripts } = require('./utils/addMongoDB')
 const { addBookshelfToScripts } = require('./utils/addBookshelf')
 const { newProjectInstructions } = require('./utils/newProjectInstructions')
@@ -98,6 +99,8 @@ const apiType = () => {
 
   helpers.writeFile(`server/server.js`, server)
   helpers.writeFile(`server/controllers/home.js`, controller)
+  // only the api type needs the linter, otherwise the frontend will have already asked and added it
+  addLinter()
 }
 
 const addDatabase = databaseSelection => {

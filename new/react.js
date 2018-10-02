@@ -2,6 +2,7 @@ const helpers = require("../helpers");
 const fs = require("fs");
 const path = require("path");
 const { createCommonFilesAndFolders } = require("./utils/createCommonFiles");
+const { addLinter } = require('./utils/addLinter')
 const { installReactTesting } = require("./utils/addReactTesting");
 const { e2eSetup } = require("./utils/addEndToEndTesting");
 const { newProjectInstructions } = require('./utils/newProjectInstructions')
@@ -60,6 +61,9 @@ const react = async () => {
   helpers.writeFile(`.babelrc`, babel);
   helpers.writeFile(`webpack.config.js`, webpack);
 
+  // add config file and install linter
+  addLinter()
+  // install css lib for react 
   cssLibrary()
   // react testing setup
   installReactTesting();

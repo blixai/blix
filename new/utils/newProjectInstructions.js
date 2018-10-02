@@ -86,7 +86,7 @@ const newProjectInstructions = () => {
   logCustomScriptInstructions()
   log(`\nWe suggest you begin by typing:`)
   log(chalk`\n  {cyan cd} ${name}`)
-  log(chalk.cyan`  npm start`)
+  log(chalk`{cyan   ${store.useYarn ? 'yarn start': 'npm start'}}`)
   log(`\nFor examples and other information visit ${link}`)
   log('Happy hacking!')
   log('')
