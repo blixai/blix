@@ -106,6 +106,18 @@ const reactCSS = {
   ]
 }
 
+const linterPrompt = {
+  type: "list",
+  message: 'Select a linter',
+  name: 'linter',
+  choices: [
+    { name: 'Prettier', value: 'prettier' },
+    { name: 'ESLint', value: 'eslint' },
+    { name: 'ESLint + Prettier', value: 'eslint_prettier' },
+    { name: 'None' }
+  ]
+}
+
 module.exports = {
   defaultOrCustom,
   frontendOptions,
@@ -116,5 +128,6 @@ module.exports = {
   e2e,
   reactTesting,
   vueTesting,
-  reactCSS
+  reactCSS,
+  linterPrompt
 };
