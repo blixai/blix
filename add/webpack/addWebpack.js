@@ -70,6 +70,7 @@ let installWebpack = async () => {
 let reactQuestion = async (ans, output) => {
   let react = await prompt([addReact])
   react = react.react
+  await helpers.yarn()
   createConfig(ans, output, react)
 }
 

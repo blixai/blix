@@ -5,11 +5,15 @@ const chalk = require('chalk');
 const store = require('./new/store')
 const inquirer = require('inquirer')
 const prompt   = inquirer.prompt
+const { yarnPrompt } = require('./new/prompts')
 
 const canUseYarn = () => {
   if (fs.existsSync('yarn.lock')) {
-    store.useYarn = { yarn: true }
+    store.useYarn = true
     return true
+  } else if (fs.existsSync('package-lock.json')) {
+    store.useYarn = false
+    return false
   }
   try {
     execSync("yarnpkg --version", { stdio: "ignore" });
@@ -19,23 +23,16 @@ const canUseYarn = () => {
   }
 };
 
-const yarnPrompt = {
-  type: 'confirm',
-  message: 'Do you want to use Yarn to install packages',
-  name: "yarn"
-}
-
-const checkIfNeedYarnAnswer = async () => {
+const yarn = async () => {
   if (canUseYarn() && store.useYarn === '') {
     let yarnAnswer = await prompt([yarnPrompt])
     store.useYarn = yarnAnswer.yarn
   }
 }
 
-exports.checkIfNeedYarnAnswer = checkIfNeedYarnAnswer
+exports.yarn = yarn
 
-const installDependencies = async packages => {
-  await checkIfNeedYarnAnswer()
+exports.installDependencies = packages => {
   try {
     process.chdir(`./${store.name}`)
     if (store.useYarn) {
@@ -44,7 +41,6 @@ const installDependencies = async packages => {
       execSync(`npm install --save ${packages}`, {stdio:[0,1,2]});
     }
     process.chdir('../')
-    return
   } catch(err) {
     process.chdir('../')
     if (store.env === 'development') {
@@ -52,14 +48,10 @@ const installDependencies = async packages => {
     } else {
       console.log('Something went wrong installing the packages')
     }
-    return
   }
 };
 
-exports.installDependencies = installDependencies
-
-const installDevDependencies = async packages => {
-  await checkIfNeedYarnAnswer()
+exports.installDevDependencies = packages => {
   try {
     process.chdir(`./${store.name}`)
     if (store.useYarn) {
@@ -68,7 +60,6 @@ const installDevDependencies = async packages => {
       execSync(`npm install --save-dev ${packages}`, {stdio:[0,1,2]})
     }
     process.chdir('../')
-    return
   } catch(err) {
     process.chdir('../')
     if (store.env === 'development') {
@@ -76,15 +67,11 @@ const installDevDependencies = async packages => {
     } else {
       console.log('Something went wrong installing the packages')
     }
-    return
   }
 };
 
-exports.installDevDependencies = installDevDependencies
-
-const installKnexGlobal = async () => {
+exports.installKnexGlobal = () => {
   let name = store.name
-  await checkIfNeedYarnAnswer()
   try {
     process.chdir(`./${name}`)
     if (store.useYarn) {
@@ -94,15 +81,12 @@ const installKnexGlobal = async () => {
     }
     execSync(`createdb ${name}`, {stdio: [0, 1, 2]})
     process.chdir('../')
-    return
   } catch(err) {
     console.error(chalk.red`Error creating db: make sure postgres is installed and running and try again by entering: createdb ${name}`)
     process.chdir('../')
-    return
   }
 };
 
-exports.installKnexGlobal = installKnexGlobal
 
 exports.addScript = (command, script) => {
   try {
@@ -184,8 +168,7 @@ exports.rename = (oldName, newName) => {
 //   fs.writeFileSync(`./${name}/package.json`, newPackageJSON);
 // };
 
-const installDependenciesToExistingProject = async packages => {
-  await checkIfNeedYarnAnswer()
+exports.installDependenciesToExistingProject = packages => {
   checkIfPackageJSONExists(packages)
   try {
     if (store.useYarn) {
@@ -193,33 +176,26 @@ const installDependenciesToExistingProject = async packages => {
     } else {
       execSync(`npm install --save ${packages}`, { stdio: [0, 1, 2] })
     }
-    return
   } catch (err) {
     store.env === 'development' ? log(chalk.red`${err}`) : ""
-    return
   }
 }
 
-exports.installDependenciesToExistingProject = installDependenciesToExistingProject
 
 
-const installDevDependenciesToExistingProject = async packages => {
+exports.installDevDependenciesToExistingProject = packages => {
   checkIfPackageJSONExists(packages)
-  await checkIfNeedYarnAnswer()
   try {
     if (store.useYarn) {
       execSync(`yarn add ${packages} --dev`, { stdio: [0, 1, 2] })
     } else {
       execSync(`npm install --save-dev ${packages}`, { stdio: [0, 1, 2] })
     }
-    return
   } catch (err) {
     store.env === 'development' ? log(chalk.red`${err}`) : ""
-    return
   }
 }
 
-exports.installDevDependenciesToExistingProject = installDevDependenciesToExistingProject
 
 
 exports.checkScriptsFolderExist = () => {
@@ -305,31 +281,27 @@ exports.addDevDependenciesToStore = deps => {
   }
 }
 
-const installAllPackages = async () => {
+exports.installAllPackages = () => {
   if (store.dependencies) {
-    await this.installDependencies(store.dependencies)
+    this.installDependencies(store.dependencies)
   }
 
   if (store.devDependencies) {
-    await this.installDevDependencies(store.devDependencies)
+    this.installDevDependencies(store.devDependencies)
   }
 
 }
 
-exports.installAllPackages = installAllPackages
 
-const installAllPackagesToExistingProject = async () => {
+exports.installAllPackagesToExistingProject =  () => {
   if (store.dependencies) {
-    await this.installDependenciesToExistingProject(store.dependencies)
+    this.installDependenciesToExistingProject(store.dependencies)
   }
 
   if (store.devDependencies) {
-    await this.installDevDependenciesToExistingProject(store.devDependencies)
+    this.installDevDependenciesToExistingProject(store.devDependencies)
   }
 }
-
-exports.installAllPackagesToExistingProject = installAllPackagesToExistingProject
-
 
 const insert = async (fileToInsertInto, whatToInsert, lineToInsertAt) => {
   let filePrompt = { type: 'list', name: 'lineNumber', message: 'Select a line to insert below', choices: [] }

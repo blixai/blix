@@ -146,6 +146,8 @@ let createdByBlix = () => {
 
 // advanced redux setup
 let createFilesWithRouter = async () => {
+  await helpers.yarn()
+  
   redux()
 
   if (fs.existsSync('./src/App.js') && !fs.existsSync('./src/components')) {
@@ -162,6 +164,8 @@ let createFilesWithRouter = async () => {
 
 // for a basic redux setup without a router
 let dontAddReactRouter = async () => {
+  await helpers.yarn()
+
   redux()
   if (fs.existsSync('./src/components') && fs.existsSync('./src/views')) {
     // react-router type blix project
@@ -183,7 +187,7 @@ let dontAddReactRouter = async () => {
     fs.truncateSync('./src/index.js', 0)
     helpers.writeFile('src/index.js', index)
   }
-  await helpers.installDependenciesToExistingProject('react-redux redux')
+  helpers.installDependenciesToExistingProject('react-redux redux')
 }
 
 let reactRouter = {
