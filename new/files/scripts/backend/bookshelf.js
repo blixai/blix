@@ -63,6 +63,9 @@ tableColumns.map(field => {
       let newLine = `t.${check[1]}('${check[0]}')`;
       fields.push(newLine);
     }
+  } else {
+    let newLine = `t.string('${field}')`
+    fields.push(newLine)
   }
 });
 
