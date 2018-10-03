@@ -1,12 +1,12 @@
 let fs = require("fs");
 let path = require("path");
 let name = process.argv[2];
-let schemaFields = process.argv.splice(3, process.argv.length);
+let schemaFields = process.argv.slice(3);
 
 if (!name) {
   console.log("You need give your model a name!");
-  console.log("Try: npm run model <name>");
-  process.exit();
+  console.log("Try: npm run model <name> [fieldName]:[Type]");
+  return
 }
 
 schemaFields = schemaFields.map(field => {
@@ -17,6 +17,8 @@ schemaFields = schemaFields.map(field => {
     field.splice(index + 1, 1, upperCaseLetter);
     field = field.join("");
     return field;
+  } else {
+    return field
   }
 });
 
@@ -42,10 +44,15 @@ let validSchemas = [
 
 let fields = [];
 schemaFields.map(field => {
-  let check = field.split(":");
-  if (validSchemas.includes(check[1])) {
-    let newLine = `${check[0]}: ${check[1]}`;
-    fields.push(newLine);
+  if (field.includes(':')) {
+    let check = field.split(":");
+    if (validSchemas.includes(check[1])) {
+      let newLine = `${check[0]}: ${check[1]}`;
+      fields.push(newLine);
+    }
+  } else {
+    let newLine = `${field}: String`
+    fields.push(newLine)
   }
 });
 
@@ -61,6 +68,12 @@ for (let i = fields.length - 1; i >= 0; --i) {
 
 schemaTemplate = body.join("\n");
 
+if (fs.existsSync(`./server/models/${name}.js`)) {
+  console.error(`Model ${name} already exists`)
+  return
+}
+
 fs.writeFile(`./server/models/${name}.js`, schemaTemplate, err => {
   if (err) throw err;
+  console.log(`Created model ${name}!`)
 });
