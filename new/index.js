@@ -6,6 +6,7 @@ const { vue } = require("./vue");
 const { react } = require("./react");
 const { vanillaJS } = require("./vanillaJS");
 let store = require('./store')
+const helpers = require('../helpers')
 
 const name = process.argv[3];
 
@@ -32,7 +33,7 @@ const promptPreset = async () => {
     store.backend = { backend: true }
     store.serverTesting = 'jest'
     store.database = 'mongo'
-
+    await helpers.yarn()
     react()
   } else {
     promptFrontend()
@@ -85,6 +86,7 @@ const reactProject = async reactType => {
     store.serverTesting = await prompt([serverTesting]);
     store.database = await prompt([database]);
   }
+  await helpers.yarn()
   react();
 };
 
@@ -131,7 +133,8 @@ const backendOnly = async () => {
   store.serverTesting = await prompt([serverTesting]);
   store.database = await prompt([database]);
   store.backendType = "api" 
-  store.backend = { backend: true } 
+  store.backend = { backend: true }
+  await helpers.yarn()
   createBackend();
 };
 
