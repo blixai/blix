@@ -28,11 +28,11 @@ let view   = loadFile('scripts/frontend/reactRouter-redux/view.js')
 
 let redux = () => {
   if (fs.existsSync('./src') && !fs.existsSync('./src/actions')) {
-    helpers.mkdirSync('./src/actions')
-    helpers.writeFile('./src/actions/index.js', '')
-    helpers.mkdirSync('./src/reducers')
-    helpers.writeFile('./src/reducers/rootReducer.js', rootReducer)
-    helpers.writeFile('./src/configStore.js', configStore)
+    helpers.mkdirSync('src/actions')
+    helpers.writeFile('src/actions/index.js', '')
+    helpers.mkdirSync('src/reducers')
+    helpers.writeFile('src/reducers/rootReducer.js', rootReducer)
+    helpers.writeFile('src/configStore.js', configStore)
   } else {
     console.log('No src folder found or src/actions folder already exists.')
     process.exit()
@@ -42,7 +42,7 @@ let redux = () => {
 // creates an index.js file that imports the App.js router and creates store provider
 let createIndex = () => {
   fs.truncateSync('./src/index.js', 0)
-  helpers.writeFile('./src/index.js', index)
+  helpers.writeFile('src/index.js', index)
 }
 
 let createContainer = (name) => {
@@ -59,30 +59,30 @@ let createScripts = () => {
   helpers.addScript('view', 'node scripts/view.js')
   // write scripts and templates
   let file = loadFile('scripts/frontend/redux/component.js')
-  helpers.writeFile('./scripts/component.js', file)
-  helpers.writeFile('./scripts/templates/statelessComponent.js', statelessComponent)
-  helpers.writeFile('./scripts/templates/container.js', container)
-  helpers.writeFile('./scripts/templates/statefulComponent.js', statefulComponent)
-  helpers.writeFile('./scripts/templates/reducer.js', reducerTemplate)
-  helpers.writeFile('./scripts/templates/action.js', actionTemplate)
-  helpers.writeFile('./scripts/action.js', action)
-  helpers.writeFile('./scripts/view.js', view)
+  helpers.writeFile('scripts/component.js', file)
+  helpers.writeFile('scripts/templates/statelessComponent.js', statelessComponent)
+  helpers.writeFile('scripts/templates/container.js', container)
+  helpers.writeFile('scripts/templates/statefulComponent.js', statefulComponent)
+  helpers.writeFile('scripts/templates/reducer.js', reducerTemplate)
+  helpers.writeFile('scripts/templates/action.js', actionTemplate)
+  helpers.writeFile('scripts/action.js', action)
+  helpers.writeFile('scripts/view.js', view)
 }
 
 // option add router selected, and was created with create-react-app
 let createReactApp = () => {
   createIndex()
-  helpers.mkdirSync('./src/components')
-  helpers.mkdirSync('./src/components/App')
-  helpers.mkdirSync('./src/views')
+  helpers.mkdirSync('src/components')
+  helpers.mkdirSync('src/components/App')
+  helpers.mkdirSync('src/views')
   
   helpers.rename('./src/App.js', './src/components/App/App.js')
 
   let router = loadFile('frontend/react-router/Router.js')
-  helpers.writeFile('./src/Router.js', router)
+  helpers.writeFile('src/Router.js', router)
   
   let AppContainer = createContainer('App')
-  helpers.writeFile(`./src/components/App/AppContainer.js`, AppContainer)
+  helpers.writeFile(`src/components/App/AppContainer.js`, AppContainer)
   if (fs.existsSync('./src/App.css')) {
     helpers.rename('./src/App.css', './src/components/App/App.css')
   }
@@ -92,21 +92,21 @@ let createReactApp = () => {
   if (fs.existsSync('./src/App.test.js')) {
     helpers.rename('./src/App.test.js', './src/components/App/App.test.js')
   }
-  helpers.writeFile('./src/views/Home.js', homeView) 
+  helpers.writeFile('src/views/Home.js', homeView) 
   createScripts()
 }
 
 // add router option selected and created by blix
 let basicReactCreatedByBlix = () => {
   let router = loadFile('frontend/react-router/Router.js')
-  helpers.writeFile('./src/Router.js', router)
+  helpers.writeFile('src/Router.js', router)
 
   helpers.rename('./src/App/App.js', './src/components/App/App.js')
   let AppContainer = createContainer('App')
-  helpers.writeFile(`./src/components/App/AppContainer.js`, AppContainer)
+  helpers.writeFile(`src/components/App/AppContainer.js`, AppContainer)
   helpers.rename('./src/App/App.css', './src/components/App/App.css')
 
-  helpers.writeFile('./src/views/Home.js', homeView)
+  helpers.writeFile('src/views/Home.js', homeView)
   try {
     fs.rmdirSync('./src/App')
   } catch (err) {
@@ -120,7 +120,7 @@ let reactRouterCreatedByBlix = () => {
   filesInComponents.forEach(file => {
     if (fs.lstatSync(`./src/components/${file}`).isDirectory()) {
       let container = createContainer(file)
-      helpers.writeFile(`./src/components/${file}/${file}Container.js`, container)
+      helpers.writeFile(`src/components/${file}/${file}Container.js`, container)
     }
   })
   createIndex()
@@ -135,9 +135,9 @@ let createdByBlix = () => {
   } else {
     // blix basic react style
     createIndex()
-    helpers.mkdirSync('./src/components')
-    helpers.mkdirSync('./src/components/App')
-    helpers.mkdirSync('./src/views')
+    helpers.mkdirSync('src/components')
+    helpers.mkdirSync('src/components/App')
+    helpers.mkdirSync('src/views')
     basicReactCreatedByBlix()
   }
 
@@ -174,18 +174,18 @@ let dontAddReactRouter = async () => {
   } else if (fs.existsSync('./src/App/App.js')) {
     // basic react type blix project
     let AppContainer = createContainer('App')
-    helpers.writeFile('./src/App/AppContainer.js', AppContainer)
+    helpers.writeFile('src/App/AppContainer.js', AppContainer)
     let index = `import React from 'react'\nimport ReactDOM from 'react-dom'\nimport AppContainer from './App/AppContainer'\nimport { configureStore } from './configStore'\nimport { Provider } from 'react-redux'\n\n\nconst store = configureStore()\n\n\nReactDOM.render(\n\t<Provider store={store}>\n\t\t<AppContainer/>\n\t</Provider>\n, document.getElementById('root'))`
 
     fs.truncateSync('./src/index.js', 0)
-    helpers.writeFile('./src/index.js', index)
+    helpers.writeFile('src/index.js', index)
   } else if (fs.existsSync('./src/App.js')) {
     // create-react-app
     let AppContainer = createContainer('App')
-    helpers.writeFile('./src/AppContainer.js', AppContainer)
+    helpers.writeFile('src/AppContainer.js', AppContainer)
     let index = `import React from 'react'\nimport ReactDOM from 'react-dom'\nimport AppContainer from './AppContainer'\nimport { configureStore } from './configStore'\nimport { Provider } from 'react-redux'\n\n\nconst store = configureStore()\n\n\nReactDOM.render(\n\t<Provider store={store}>\n\t\t<AppContainer/>\n\t</Provider>\n, document.getElementById('root'))`
     fs.truncateSync('./src/index.js', 0)
-    helpers.writeFile('./src/index.js', index)
+    helpers.writeFile('src/index.js', index)
   }
   helpers.installDependenciesToExistingProject('react-redux redux')
 }

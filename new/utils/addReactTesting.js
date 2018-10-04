@@ -1,7 +1,6 @@
 const helpers = require("../../helpers");
 const fs = require("fs");
 const path = require("path");
-const name = process.argv[3];
 const store = require('../store')
 
 const loadFile = filePath => {
@@ -9,6 +8,7 @@ const loadFile = filePath => {
 };
 
 let installReactTesting = () => {
+  let name = store.name
   let file
   if (!store.reactTesting['enzyme']) {
     return;
@@ -20,7 +20,7 @@ let installReactTesting = () => {
   }
   helpers.addDevDependenciesToStore("jest enzyme enzyme-adapter-react-16 identity-obj-proxy")
   helpers.writeFile(
-    `./${name}/test/${file}`,
+    `test/${file}`,
     loadFile(`../files/frontend/enzyme/${file}`)
   );
 
@@ -34,7 +34,7 @@ let installReactTesting = () => {
   let json = JSON.parse(fs.readFileSync(`./${name}/package.json`, "utf8"));
   json["jest"] = jest;
   let newPackage = JSON.stringify(json, null, 2);
-  fs.writeFileSync(`./${name}/package.json`, newPackage);
+  fs.writeFileSync(`package.json`, newPackage);
   helpers.addScriptToNewPackageJSON("test", "jest");
 };
 

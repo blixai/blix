@@ -1,7 +1,6 @@
 const fs = require("fs");
 const helpers = require("../../helpers");
 const path = require("path");
-const name = process.argv[3];
 const store = require('../store')
 
 const loadFile = filePath => {
@@ -19,10 +18,10 @@ let e2eSetup = () => {
 const installCypress = () => {
   helpers.addScriptToNewPackageJSON("e2e", "cypress open");
   helpers.addDevDependenciesToStore("cypress");
-  helpers.mkdirSync(`./${name}/cypress`);
-  helpers.mkdirSync(`./${name}/cypress/integration`);
+  helpers.mkdirSync(`cypress`);
+  helpers.mkdirSync(`cypress/integration`);
   helpers.writeFile(
-    `./${name}/cypress/integration/test.js`,
+    `cypress/integration/test.js`,
     loadFile("../files/frontend/e2e/cypress.js")
   );
   // let ignore = {
@@ -36,7 +35,7 @@ const installCypress = () => {
       "\\.(css|less)$": "identity-obj-proxy"
     }
   };
-  let json = JSON.parse(fs.readFileSync(`./${name}/package.json`, "utf8"));
+  let json = JSON.parse(fs.readFileSync(`./${store.name}/package.json`, "utf8"));
   if (!json.hasOwnProperty("jest")) {
     json["jest"] = jest;
   } else {
@@ -46,15 +45,15 @@ const installCypress = () => {
     ];
   }
   let newPackage = JSON.stringify(json, null, 2);
-  fs.writeFileSync(`./${name}/package.json`, newPackage);
+  fs.writeFileSync(`package.json`, newPackage);
 };
 
 const installTestCafe = () => {
   helpers.addScriptToNewPackageJSON("e2e", "testcafe chrome test/e2e");
   helpers.addDevDependenciesToStore("testcafe");
-  helpers.mkdirSync(`./${name}/test/e2e`);
+  helpers.mkdirSync(`test/e2e`);
   helpers.writeFile(
-    `./${name}/test/e2e/test.js`,
+    `test/e2e/test.js`,
     loadFile("../files/frontend/e2e/testcafe.js")
   );
   let jest = {
@@ -65,7 +64,7 @@ const installTestCafe = () => {
       "\\.(css|less)$": "identity-obj-proxy"
     }
   };
-  let json = JSON.parse(fs.readFileSync(`./${name}/package.json`, "utf8"));
+  let json = JSON.parse(fs.readFileSync(`./${store.name}/package.json`, "utf8"));
   if (!json.hasOwnProperty("jest")) {
     json["jest"] = jest;
   } else {
@@ -75,7 +74,7 @@ const installTestCafe = () => {
     ];
   }
   let newPackage = JSON.stringify(json, null, 2);
-  fs.writeFileSync(`./${name}/package.json`, newPackage);
+  fs.writeFileSync(`package.json`, newPackage);
 };
 
 module.exports = {

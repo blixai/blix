@@ -1,5 +1,11 @@
 const chalk = require('chalk')
 
+const namePrompt = {
+  type: 'input',
+  message: 'Please provide a name for your project: ',
+  name: 'name'
+}
+
 const defaultOrCustom = {
   type: "list",
   message: "Please select a preset: ",
@@ -125,6 +131,7 @@ const linterPrompt = {
 }
 
 module.exports = {
+  namePrompt,
   defaultOrCustom,
   frontendOptions,
   backend,

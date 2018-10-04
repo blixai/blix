@@ -1,7 +1,6 @@
 const fs = require('fs')
 const helpers = require('../helpers')
 const path = require('path')
-const name = process.argv[3]
 const { createCommonFilesAndFolders } = require('./utils/createCommonFiles')
 const { testBackend } = require('./utils/addBackendTests')
 const { addLinter } = require('./utils/addLinter')
@@ -24,17 +23,17 @@ const createBackend = () => {
     createCommonFilesAndFolders()
   }
   // create folders
-  helpers.mkdirSync(`./${name}/server`)
-  helpers.mkdirSync(`./${name}/server/models`)
-  helpers.mkdirSync(`./${name}/server/controllers`)
-  helpers.mkdirSync(`./${name}/server/helpers`)
+  helpers.mkdirSync(`server`)
+  helpers.mkdirSync(`server/models`)
+  helpers.mkdirSync(`server/controllers`)
+  helpers.mkdirSync(`server/helpers`)
   if (store.backendType !== 'api') {
-    helpers.mkdirSync(`./${name}/assets`)
+    helpers.mkdirSync(`assets`)
   }
 
   // create files: routes.js cluster.js
-  helpers.writeFile(`./${name}/server/routes.js`, routes)
-  helpers.writeFile(`./${name}/server/cluster.js`, cluster)
+  helpers.writeFile(`server/routes.js`, routes)
+  helpers.writeFile(`server/cluster.js`, cluster)
 
   if (store.backendType === 'standard') {
     // type when there is a frontend framework and for the most part the backend is a soa but serves some assets and files
@@ -71,11 +70,11 @@ const standard = () => {
   let controller = loadFile('./files/backend/standard/home.js')
 
   // mode for when there is a frontend framework
-  helpers.mkdirSync(`./${name}/server/views`)
-  helpers.mkdirSync(`./${name}/server/views/home`)
-  helpers.writeFile(`./${name}/server/views/home/index.html`, html)
-  helpers.writeFile(`./${name}/server/server.js`, server)
-  helpers.writeFile(`./${name}/server/controllers/home.js`, controller)
+  helpers.mkdirSync(`server/views`)
+  helpers.mkdirSync(`server/views/home`)
+  helpers.writeFile(`server/views/home/index.html`, html)
+  helpers.writeFile(`server/server.js`, server)
+  helpers.writeFile(`server/controllers/home.js`, controller)
 }
 
 const mvcType = () => {
@@ -84,22 +83,22 @@ const mvcType = () => {
   const layout = loadFile('./files/backend/mvc/layout.pug')
   const pug = loadFile('./files/backend/mvc/index.pug')
 
-  helpers.mkdirSync(`./${name}/server/views`)
+  helpers.mkdirSync(`server/views`)
 
-  helpers.writeFile(`./${name}/server/views/error.pug`, error)
-  helpers.writeFile(`./${name}/server/views/layout.pug`, layout)
-  helpers.mkdirSync(`./${name}/server/views/home`)
-  helpers.writeFile(`./${name}/server/views/home/index.pug`, pug)
+  helpers.writeFile(`server/views/error.pug`, error)
+  helpers.writeFile(`server/views/layout.pug`, layout)
+  helpers.mkdirSync(`server/views/home`)
+  helpers.writeFile(`server/views/home/index.pug`, pug)
 
-  helpers.writeFile(`./${name}/server/server.js`, server)
+  helpers.writeFile(`server/server.js`, server)
 }
 
 const apiType = () => {
   let server = loadFile('./files/backend/api/server.js')
   let controller = loadFile('./files/backend/api/home.js')
 
-  helpers.writeFile(`./${name}/server/server.js`, server)
-  helpers.writeFile(`./${name}/server/controllers/home.js`, controller)
+  helpers.writeFile(`server/server.js`, server)
+  helpers.writeFile(`server/controllers/home.js`, controller)
   // only the api type needs the linter, otherwise the frontend will have already asked and added it
   addLinter()
 }
@@ -121,9 +120,9 @@ const scripts = mode => {
   // controller script
   helpers.addScriptToNewPackageJSON('controller', 'node scripts/controller.js')
   // create files
-  helpers.writeFile(`./${name}/scripts/controller.js`, controller)
-  helpers.writeFile(`./${name}/scripts/templates/controller.js`, controllerTemplate)
-  helpers.writeFile(`./${name}/scripts/templates/routes.js`, routesTemplate)
+  helpers.writeFile(`scripts/controller.js`, controller)
+  helpers.writeFile(`scripts/templates/controller.js`, controllerTemplate)
+  helpers.writeFile(`scripts/templates/routes.js`, routesTemplate)
 }
 
 const packages = mode => {
@@ -143,7 +142,11 @@ const packages = mode => {
 }
 
 const envSetup = () => {
-  helpers.appendFile(`./${name}/.env`, '\nWORKERS=1')
+  if (store.name) {
+    helpers.appendFile(`./${store.name}/.env`, '\nWORKERS=1')
+  } else {
+    helpers.appendFile(`./.env`, '\nWORKERS=1')
+  }
 }
 
 module.exports = {

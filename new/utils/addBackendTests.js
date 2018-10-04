@@ -2,15 +2,14 @@ const helpers = require("../../helpers");
 const fs = require("fs");
 const path = require("path");
 const store = require('../store')
-const name = process.argv[3];
 
 const loadFile = filePath => {
   return fs.readFileSync(path.resolve(__dirname, filePath), "utf8");
 };
 
 const checkOrCreateServerTestFolder = () => {
-  if (!fs.existsSync(`./${name}/test/server`)) {
-    helpers.mkdirSync(`./${name}/test/server`);
+  if (!fs.existsSync(`./${store.name}/test/server`)) {
+    helpers.mkdirSync(`test/server`);
   }
 };
 
@@ -18,11 +17,9 @@ const mochaTestBackend = () => {
   helpers.addDevDependenciesToStore("mocha chai chai-http");
   helpers.addScriptToNewPackageJSON("mocha", "mocha test/server");
   checkOrCreateServerTestFolder();
-  helpers.writeFile(
-    `./${name}/test/server/test.spec.js`,
-    loadFile("../files/testing/backend/mocha.js")
-  );
-  let json = JSON.parse(fs.readFileSync(`./${name}/package.json`, "utf8"));
+  helpers.writeFile(`test/server/test.spec.js`, loadFile("../files/testing/backend/mocha.js"))
+
+  let json = JSON.parse(fs.readFileSync(`./${store.name}/package.json`, "utf8"));
   if (json.hasOwnProperty("jest")) {
     json.jest["modulePathIgnorePatterns"] = [
       "<rootDir>/test/e2e/",
@@ -31,17 +28,17 @@ const mochaTestBackend = () => {
     ];
   }
   let newPackage = JSON.stringify(json, null, 2);
-  fs.writeFileSync(`./${name}/package.json`, newPackage);
+  fs.writeFileSync(`package.json`, newPackage);
 };
 
 const testJestBackend = () => {
   helpers.addDevDependenciesToStore("jest supertest");
   checkOrCreateServerTestFolder();
   helpers.writeFile(
-    `./${name}/test/server/test.spec.js`,
+    `test/server/test.spec.js`,
     loadFile("../files/testing/backend/jest.js")
   );
-  let json = JSON.parse(fs.readFileSync(`./${name}/package.json`, "utf8"));
+  let json = JSON.parse(fs.readFileSync(`./${store.name}/package.json`, "utf8"));
   if (!json.hasOwnProperty("jest")) {
     let jest = {
       modulePathIgnorePatterns: ["<rootDir>/test/e2e/", "<rootDir>/cypress"],
@@ -54,7 +51,7 @@ const testJestBackend = () => {
     json["jest"] = jest;
   }
   let newPackage = JSON.stringify(json, null, 2);
-  fs.writeFileSync(`./${name}/package.json`, newPackage);
+  fs.writeFileSync(`package.json`, newPackage);
   helpers.addScriptToNewPackageJSON("jest", "jest");
 };
 
