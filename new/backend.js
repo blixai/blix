@@ -117,7 +117,7 @@ const scripts = mode => {
   let routesTemplate = loadFile('./files/scripts/backend/templates/routes.js')
 
   if (mode === 'standard') {
-    helpers.addScriptToNewPackageJSON('start', `node server/cluster.js --mode='development'`)
+    helpers.addScriptToNewPackageJSON('start', `nodemon --watch server server/cluster.js --mode='development'`)
   } else {
     helpers.addScriptToNewPackageJSON('start', 'nodemon server/cluster.js')
   }

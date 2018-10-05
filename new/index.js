@@ -6,6 +6,7 @@ const { vue } = require("./vue");
 const { react } = require("./react");
 const { vanillaJS } = require("./vanillaJS");
 let store = require('./store')
+const chalk = require('chalk')
 const helpers = require('../helpers')
 
 store.name = process.argv[3] || '';
@@ -153,7 +154,7 @@ const createProject = () => {
     return
   }
   if (fs.existsSync(`./${store.name}`)) {
-    console.error(`A project named ${store.name} already exists!`);
+    console.error(chalk`{red A project named ${store.name} already exists!}`);
     promptForName()
     return
   }
