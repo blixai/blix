@@ -3,6 +3,8 @@ let path = require('path')
 let helpers = require('../../helpers')
 let inquirer = require('inquirer')
 let prompt = inquirer.prompt
+let addProjectInstructions = require('../addProjectInstructions')
+let store = require('../../new/store')
 
 let loadFile = filePath => {
     let root = '../../new/files/'
@@ -126,6 +128,13 @@ let createView = type => {
         let newActionScript = loadFile('scripts/frontend/reactRouter-redux/action.js')
         helpers.writeFile('scripts/action.js', newActionScript)
     }
+
+    if (type === 'redux') {
+        store.reactType = 'reactRouter-redux'
+    } else if (type !== 'unknown') {
+        store.reactType = 'react-router'
+    }
+    addProjectInstructions()
 }
 
 let blixRedux = () => {
