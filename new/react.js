@@ -1,12 +1,12 @@
 const helpers = require("../helpers");
 const fs = require("fs");
 const path = require("path");
-const { createCommonFilesAndFolders } = require("./utils/createCommonFiles");
-const { addLinter } = require('./utils/addLinter')
-const { installReactTesting } = require("./utils/addReactTesting");
-const { e2eSetup } = require("./utils/addEndToEndTesting");
-const { newProjectInstructions } = require('./utils/newProjectInstructions')
-const { createBackend } = require("./backend");
+const {createCommonFilesAndFolders} = require("./utils/createCommonFiles");
+const {addLinter} = require('./utils/addLinter')
+const {installReactTesting} = require("./utils/addReactTesting");
+const {e2eSetup} = require("./utils/addEndToEndTesting");
+const {newProjectInstructions} = require('./utils/newProjectInstructions')
+const {createBackend} = require("./backend");
 const store = require('./store')
 
 const loadFile = filePath => {
@@ -248,7 +248,7 @@ const reduxScripts = () => {
   helpers.writeFile(`scripts/templates/action.js`, actionTemplate)
   helpers.writeFile(`scripts/templates/reducer.js`, reducerTemplate)
   // component script and templates
-  helpers.writeFile(`scripts/component.js`, component) 
+  helpers.writeFile(`scripts/component.js`, component)
   helpers.writeFile(`scripts/templates/statelessComponent.js`, statelessComponentTemplate)
   helpers.writeFile(`scripts/templates/container.js`, containerTemplate)
   helpers.writeFile(`scripts/templates/statefulComponent.js`, statefulComponentTemplate)
@@ -289,7 +289,7 @@ const packages = () => {
   if (!store.backend.backend) {
     helpers.addDevDependenciesToStore("webpack-dev-server")
   }
-  helpers.addDevDependenciesToStore("react react-dom webpack webpack-cli babel-loader css-loader @babel/core @babel/preset-env @babel/preset-react style-loader sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-preset-env postcss-import postcss-loader")
+  helpers.addDevDependenciesToStore("react react-dom webpack webpack-cli babel-loader css-loader @babel/core babel-jest 'babel-core@^7.0.0-0' @babel/preset-env @babel/preset-react style-loader sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-preset-env postcss-import postcss-loader")
 };
 
 const createWebpack = () => {
@@ -302,4 +302,4 @@ const createWebpack = () => {
   }
 }
 
-module.exports = { react };
+module.exports = {react};
