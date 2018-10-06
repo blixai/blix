@@ -1,12 +1,12 @@
 const helpers = require("../helpers");
 const fs = require("fs");
 const path = require("path");
-const { createCommonFilesAndFolders } = require("./utils/createCommonFiles");
-const { addLinter } = require('./utils/addLinter')
-const { installReactTesting } = require("./utils/addReactTesting");
-const { e2eSetup } = require("./utils/addEndToEndTesting");
-const { newProjectInstructions } = require('./utils/newProjectInstructions')
-const { createBackend } = require("./backend");
+const {createCommonFilesAndFolders} = require("./utils/createCommonFiles");
+const {addLinter} = require('./utils/addLinter')
+const {installReactTesting} = require("./utils/addReactTesting");
+const {e2eSetup} = require("./utils/addEndToEndTesting");
+const {newProjectInstructions} = require('./utils/newProjectInstructions')
+const {createBackend} = require("./backend");
 const store = require('./store')
 
 const loadFile = filePath => {
@@ -248,7 +248,7 @@ const reduxScripts = () => {
   helpers.writeFile(`scripts/templates/action.js`, actionTemplate)
   helpers.writeFile(`scripts/templates/reducer.js`, reducerTemplate)
   // component script and templates
-  helpers.writeFile(`scripts/component.js`, component) 
+  helpers.writeFile(`scripts/component.js`, component)
   helpers.writeFile(`scripts/templates/statelessComponent.js`, statelessComponentTemplate)
   helpers.writeFile(`scripts/templates/container.js`, containerTemplate)
   helpers.writeFile(`scripts/templates/statefulComponent.js`, statefulComponentTemplate)
@@ -302,4 +302,4 @@ const createWebpack = () => {
   }
 }
 
-module.exports = { react };
+module.exports = {react};
