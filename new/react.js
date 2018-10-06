@@ -289,7 +289,7 @@ const packages = () => {
   if (!store.backend.backend) {
     helpers.addDevDependenciesToStore("webpack-dev-server")
   }
-  helpers.addDevDependenciesToStore("react react-dom webpack webpack-cli babel-loader css-loader @babel/core babel-jest 'babel-core@^7.0.0-0' @babel/preset-env @babel/preset-react style-loader sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-preset-env postcss-import postcss-loader")
+  helpers.addDevDependenciesToStore("react react-dom webpack webpack-cli babel-loader css-loader @babel/core @babel/preset-env @babel/preset-react style-loader sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-preset-env postcss-import postcss-loader")
 };
 
 const createWebpack = () => {
