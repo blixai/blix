@@ -16,6 +16,7 @@ const loadFile = filePath => {
 // load common files
 const babel = loadFile("./files/frontend/babel/reactBabel");
 const webpack = loadFile("./files/frontend/webpack/react.js");
+const webpackWithHotReloading = loadFile('./files/frontend/webpack/reactWithHotReloading.js');
 const postcssConfig = loadFile("./files/frontend/postcss.config.js");
 
 // load html file for projects without backends
@@ -59,7 +60,8 @@ const react = () => {
   // create webpack postcssConfig and babelrc files
   helpers.writeFile(`postcss.config.js`, postcssConfig);
   helpers.writeFile(`.babelrc`, babel);
-  helpers.writeFile(`webpack.config.js`, webpack);
+
+  createWebpack()
 
   // add config file and install linter
   addLinter()
@@ -289,5 +291,15 @@ const packages = () => {
   }
   helpers.addDevDependenciesToStore("react react-dom webpack webpack-cli babel-loader css-loader @babel/core @babel/preset-env @babel/preset-react style-loader sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-preset-env postcss-import postcss-loader")
 };
+
+const createWebpack = () => {
+  if (store.backend.backend) {
+    helpers.writeFile(`webpack.config.js`, webpackWithHotReloading);
+    let hotReloadIndex = `\nif (module.hot) {\n\tconsole.clear()\n\tmodule.hot.accept();\n}`
+    helpers.appendFile(`./${store.name}/src/index.js`, hotReloadIndex)
+  } else {
+    helpers.writeFile(`webpack.config.js`, webpack);
+  }
+}
 
 module.exports = { react };

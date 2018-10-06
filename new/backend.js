@@ -66,7 +66,7 @@ const createBackend = () => {
 
 const standard = () => {
   let html = loadFile('./files/frontend/other/index.html')
-  let server = loadFile('./files/backend/standard/server.js')
+  let server = loadFile('./files/backend/standard/serverWithHotReloading.js')
   let controller = loadFile('./files/backend/standard/home.js')
 
   // mode for when there is a frontend framework
@@ -116,7 +116,11 @@ const scripts = mode => {
   let controllerTemplate = loadFile('./files/scripts/backend/templates/controller.js')
   let routesTemplate = loadFile('./files/scripts/backend/templates/routes.js')
 
-  helpers.addScriptToNewPackageJSON('start', 'nodemon server/cluster.js')
+  if (mode === 'standard') {
+    helpers.addScriptToNewPackageJSON('start', `nodemon --watch server server/cluster.js`)
+  } else {
+    helpers.addScriptToNewPackageJSON('start', 'nodemon server/cluster.js')
+  }
   // controller script
   helpers.addScriptToNewPackageJSON('controller', 'node scripts/controller.js')
   // create files
@@ -130,6 +134,7 @@ const packages = mode => {
     helpers.addDependenciesToStore(
       'express nodemon body-parser compression helmet dotenv morgan cookie-parser'
     )
+    helpers.addDevDependenciesToStore('webpack-dev-middleware webpack-hot-middleware')
   } else if (mode === 'mvc') {
     helpers.addDependenciesToStore(
       'express nodemon body-parser compression helmet dotenv morgan cookie-parser pug'
