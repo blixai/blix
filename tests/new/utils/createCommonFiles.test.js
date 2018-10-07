@@ -1,19 +1,58 @@
-// import store
+const store = require('../../../new/store') 
+const fs = require('fs')
+const exists = fs.existsSync
+const helpers = require("../../../helpers")
+const execSync = require('child_process').execSync
+const {createCommonFilesAndFolders} = require('../../../new/utils/createCommonFiles')
 
-//before all 
-  // set store.name
+beforeAll(() => {
+  try {
+    // sets store.name
+    store.name = "TestApp"
+    store.env = "development"
+    process.chdir('./tests/new/utils')
+  } catch (err) {
+    console.error(err)
+  }
+})
   
-// createCommonFilesAndFolders
-  // does source dir match store.name
+describe('Utils: createCommonFiles', () => {
+  beforeAll(() => {
+    try {
+      createCommonFilesAndFolders();
+    } catch (err) {
+      console.log(err)
+    }
+  })
 
-  // check if git init
-    // use sinon.js to check if execSync was called
+  afterAll(() => {
+    try { 
+      execSync(`rm -rf ${store.name}`)
+    } catch (err) {
+      console.log(err)
+    }
+  });
 
-  // do these files/folders exist?
-    // .gitignore
-    // README.md
-    // package.json
-    // .env
-    // scripts
-    // scripts/templates
-    //test
+  it('creates source directory that matches the store name', () => {
+    expect(exists(store.name)).toBe(true);
+  });
+
+  it('Initalizes a new Git Repository', () => {
+    expect(exists(`${store.name}/.git`)).toBe(true);
+  });
+
+  it('Contains common files', () => {
+    const commonFiles = [
+      ".gitignore",
+      "README.md",
+      "package.json",
+      ".env",
+      "scripts",
+      "scripts/templates",
+      "test"
+    ]
+    commonFiles.forEach(file => {
+      expect(exists(`${store.name}/${file}`)).toBe(true)
+    })
+  })
+});
