@@ -22,7 +22,7 @@ beforeAll(() => {
     store.env = "development"
     fs.mkdirSync(store.name)
     let pkgJson = loadFile('../../../new/files/common/package.json')
-    helpers.writeFile(`package.json`, pkgJson)
+    helpers.writeFile('package.json', pkgJson)
     const files = [
       "server/server.js",
       ".env"

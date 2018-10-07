@@ -832,9 +832,9 @@ const addAction = <span class="cstat-no" title="statement not covered" ><span cl
   let actionTemplate = <span class="cstat-no" title="statement not covered" >loadFile("frontend/redux/templates/action.js");</span>
   let reducerTemplate = <span class="cstat-no" title="statement not covered" >loadFile("frontend/redux/templates/reducer.js");</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  helpers.writeFile("./scripts/action.js", action, "Created action.js script file in scripts folder");</span>
-<span class="cstat-no" title="statement not covered" >  helpers.writeFile("./scripts/templates/action.js", actionTemplate, "Created action template in script/templates");</span>
-<span class="cstat-no" title="statement not covered" >  helpers.writeFile("./scripts/templates/reducer.js", reducerTemplate, "Created reducer template in  script/templates");</span>
+<span class="cstat-no" title="statement not covered" >  helpers.writeFile("scripts/action.js", action, "Created action.js script file in scripts folder");</span>
+<span class="cstat-no" title="statement not covered" >  helpers.writeFile("scripts/templates/action.js", actionTemplate, "Created action template in script/templates");</span>
+<span class="cstat-no" title="statement not covered" >  helpers.writeFile("scripts/templates/reducer.js", reducerTemplate, "Created reducer template in  script/templates");</span>
 <span class="cstat-no" title="statement not covered" >  log("")</span>
 <span class="cstat-no" title="statement not covered" >  log("Added script to project, to run: npm run action")</span>
 <span class="cstat-no" title="statement not covered" >  log("This will prompt for the actions name, and the reducers name")</span>
@@ -853,9 +853,9 @@ const addModel = <span class="cstat-no" title="statement not covered" ><span cla
       let model = <span class="cstat-no" title="statement not covered" >loadFile("backend/mongoose.js");</span>
       let schemaTemplate = <span class="cstat-no" title="statement not covered" >loadFile("backend/templates/mongoose.js");</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >      helpers.writeFile("./scripts/model.js", model, "Created model.js script file in scripts folder");</span>
+<span class="cstat-no" title="statement not covered" >      helpers.writeFile("scripts/model.js", model, "Created model.js script file in scripts folder");</span>
 <span class="cstat-no" title="statement not covered" >      helpers.writeFile(</span>
-        "./scripts/templates/schemaTemplate.js",
+        "scripts/templates/schemaTemplate.js",
         schemaTemplate,
         "Created Mongoose schema template in scripts/templates"
       );
@@ -876,20 +876,20 @@ const addModel = <span class="cstat-no" title="statement not covered" ><span cla
         "backend/bookshelf.js"
       );
       // create files 
-<span class="cstat-no" title="statement not covered" >      helpers.writeFile("./scripts/model.js", model, "Created model.js script in scripts folder");</span>
+<span class="cstat-no" title="statement not covered" >      helpers.writeFile("scripts/model.js", model, "Created model.js script in scripts folder");</span>
 <span class="cstat-no" title="statement not covered" >      helpers.writeFile(</span>
-        "./scripts/templates/migration.js",
+        "scripts/templates/migration.js",
         migration,
         "Created knex migration template file in scripts/templates folder"
       );
 <span class="cstat-no" title="statement not covered" >      helpers.writeFile(</span>
-        "./scripts/templates/bookshelf.js",
+        "scripts/templates/bookshelf.js",
         bookshelf,
         "Created Bookshelf template file in scripts/templates folder"
       );
       // bookshelf required file needs to be placed inside the project, preferably the models folder
 <span class="cstat-no" title="statement not covered" >      try {</span>
-<span class="cstat-no" title="statement not covered" >        helpers.writeFile("./server/models/bookshelf.js", bookshelfRequiredFile);</span>
+<span class="cstat-no" title="statement not covered" >        helpers.writeFile("server/models/bookshelf.js", bookshelfRequiredFile);</span>
 <span class="cstat-no" title="statement not covered" >        log("Created Bookshelf file in server/models/bookshelf.js");</span>
       } catch (e) {
 <span class="cstat-no" title="statement not covered" >        log(</span>
@@ -910,7 +910,7 @@ let addReact = <span class="cstat-no" title="statement not covered" ><span class
 <span class="cstat-no" title="statement not covered" >  helpers.addScript("component", "node scripts/component.js");</span>
   let react = <span class="cstat-no" title="statement not covered" >loadFile("frontend/react/component.js");</span>
 <span class="cstat-no" title="statement not covered" >  checkScriptsFolderExists();</span>
-<span class="cstat-no" title="statement not covered" >  helpers.writeFile("./scripts/component.js", react, "Created component.js script file in scripts folder");</span>
+<span class="cstat-no" title="statement not covered" >  helpers.writeFile("scripts/component.js", react, "Created component.js script file in scripts folder");</span>
 <span class="cstat-no" title="statement not covered" >  checkReactTemplatesExist()</span>
 <span class="cstat-no" title="statement not covered" >  log("")</span>
 <span class="cstat-no" title="statement not covered" >  log("Added script to project, to run: npm run component &lt;name&gt;")</span>
@@ -928,9 +928,9 @@ let addRedux = <span class="cstat-no" title="statement not covered" ><span class
     "frontend/redux/templates/container.js"
   );
   // write files
-<span class="cstat-no" title="statement not covered" >  helpers.writeFile("./scripts/component.js", redux, "Created component.js script file in scripts folder");</span>
+<span class="cstat-no" title="statement not covered" >  helpers.writeFile("scripts/component.js", redux, "Created component.js script file in scripts folder");</span>
 <span class="cstat-no" title="statement not covered" >  helpers.writeFile(</span>
-    "./scripts/templates/container.js",
+    "scripts/templates/container.js",
     container 
   );
 <span class="cstat-no" title="statement not covered" >  log("")</span>
@@ -945,7 +945,7 @@ let addClientView = <span class="cstat-no" title="statement not covered" ><span 
     // if true project uses redux
 <span class="cstat-no" title="statement not covered" >    if (answer.view) {</span>
       let reduxViewScript = <span class="cstat-no" title="statement not covered" >loadFile("frontend/redux/view.js")</span>
-<span class="cstat-no" title="statement not covered" >      helpers.writeFile("./scripts/view.js", reduxViewScript, "Created view.js script file in scripts folder")</span>
+<span class="cstat-no" title="statement not covered" >      helpers.writeFile("scripts/view.js", reduxViewScript, "Created view.js script file in scripts folder")</span>
 <span class="cstat-no" title="statement not covered" >      checkReactTemplatesExist()</span>
 <span class="cstat-no" title="statement not covered" >      log("")</span>
 <span class="cstat-no" title="statement not covered" >      log("Added script to project, to run: npm run view &lt;name&gt;")</span>
@@ -953,7 +953,7 @@ let addClientView = <span class="cstat-no" title="statement not covered" ><span 
 <span class="cstat-no" title="statement not covered" >      log("If view already exists it will just ask what containers/components from src/components to import into that view.")</span>
     } else {
       let reactRouterViewScript = <span class="cstat-no" title="statement not covered" >loadFile("frontend/react-router/view.js")</span>
-<span class="cstat-no" title="statement not covered" >      helpers.writeFile("./scripts/view.js", reactRouterViewScript, "Created view.js script file in scripts folder")</span>
+<span class="cstat-no" title="statement not covered" >      helpers.writeFile("scripts/view.js", reactRouterViewScript, "Created view.js script file in scripts folder")</span>
 <span class="cstat-no" title="statement not covered" >      checkReactTemplatesExist()</span>
 <span class="cstat-no" title="statement not covered" >      log("")</span>
 <span class="cstat-no" title="statement not covered" >      log("Added script to project, to run: npm run view &lt;name&gt;")</span>
@@ -971,8 +971,8 @@ let checkReactTemplatesExist = <span class="cstat-no" title="statement not cover
   } catch (err) {
     let statefulComponent = <span class="cstat-no" title="statement not covered" >loadFile("frontend/react/templates/statefulComponent.js")</span>
     let statelessComponent = <span class="cstat-no" title="statement not covered" >loadFile("frontend/react/templates/statelessComponent.js")</span>
-<span class="cstat-no" title="statement not covered" >    helpers.writeFile("./scripts/templates/statefulComponent.js", statefulComponent, "Created statefulComponent template in scripts/templates/")</span>
-<span class="cstat-no" title="statement not covered" >    helpers.writeFile("./scripts/templates/statelessComponent.js", statelessComponent, "Created statelessComponent template in scripts/templates/")</span>
+<span class="cstat-no" title="statement not covered" >    helpers.writeFile("scripts/templates/statefulComponent.js", statefulComponent, "Created statefulComponent template in scripts/templates/")</span>
+<span class="cstat-no" title="statement not covered" >    helpers.writeFile("scripts/templates/statelessComponent.js", statelessComponent, "Created statelessComponent template in scripts/templates/")</span>
   }
 }
 &nbsp;
@@ -985,14 +985,14 @@ let addController = <span class="cstat-no" title="statement not covered" ><span 
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  checkScriptsFolderExists();</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  helpers.writeFile("./scripts/controller.js", controller, "Created controller.js script file in scripts folder");</span>
+<span class="cstat-no" title="statement not covered" >  helpers.writeFile("scripts/controller.js", controller, "Created controller.js script file in scripts folder");</span>
 <span class="cstat-no" title="statement not covered" >  helpers.writeFile(</span>
-    "./scripts/templates/controller.js",
+    "scripts/templates/controller.js",
     controllerTemplate,
     "Created controller.js template in scripts/templates"
   );
 <span class="cstat-no" title="statement not covered" >  helpers.writeFile(</span>
-    "./scripts/templates/routes.js",
+    "scripts/templates/routes.js",
     routes,
     "Created routes.js template in scripts/templates"
   );
@@ -1004,7 +1004,7 @@ let addController = <span class="cstat-no" title="statement not covered" ><span 
 let createNewScript = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >name =&gt; </span>{</span>
 <span class="cstat-no" title="statement not covered" >  helpers.addScript(name, `node scripts/${name}.js`);</span>
 <span class="cstat-no" title="statement not covered" >  checkScriptsFolderExists();</span>
-<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`./scripts/${name}.js`, "");</span>
+<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`scripts/${name}.js`, "");</span>
 <span class="cstat-no" title="statement not covered" >  prompt([template]).then(<span class="fstat-no" title="function not covered" >a =&gt; </span>{</span>
 <span class="cstat-no" title="statement not covered" >    a = a.template;</span>
 <span class="cstat-no" title="statement not covered" >    if (a) {</span>
@@ -1013,7 +1013,7 @@ let createNewScript = <span class="cstat-no" title="statement not covered" ><spa
         let importTemplate = <span class="cstat-no" title="statement not covered" >fs.readFileSync(path.resolve(__dirname, './templates/customScript.js'), 'utf8');</span>
 <span class="cstat-no" title="statement not covered" >        importTemplate = importTemplate.replace(/Name/g, ans)</span>
 <span class="cstat-no" title="statement not covered" >        helpers.appendFile(`./scripts/${name}.js`, importTemplate)</span>
-<span class="cstat-no" title="statement not covered" >        helpers.writeFile(`./scripts/templates/${ans}.js`, "");</span>
+<span class="cstat-no" title="statement not covered" >        helpers.writeFile(`scripts/templates/${ans}.js`, "");</span>
 <span class="cstat-no" title="statement not covered" >        log("");</span>
 <span class="cstat-no" title="statement not covered" >        log(`Added script to project, to run npm run ${name}`)</span>
 <span class="cstat-no" title="statement not covered" >        log(`Created template ${ans} in scripts/templates`)</span>
@@ -1033,11 +1033,11 @@ let checkScriptsFolderExists = <span class="cstat-no" title="statement not cover
 <span class="cstat-no" title="statement not covered" >  try {</span>
 <span class="cstat-no" title="statement not covered" >    if (fs.existsSync("./scripts")) {</span>
 <span class="cstat-no" title="statement not covered" >      if (!fs.existsSync("./scripts/templates")) {</span>
-<span class="cstat-no" title="statement not covered" >        helpers.mkdirSync("./scripts/templates");</span>
+<span class="cstat-no" title="statement not covered" >        helpers.mkdirSync("scripts/templates");</span>
       }
     } else {
-<span class="cstat-no" title="statement not covered" >      helpers.mkdirSync("./scripts");</span>
-<span class="cstat-no" title="statement not covered" >      helpers.mkdirSync("./scripts/templates");</span>
+<span class="cstat-no" title="statement not covered" >      helpers.mkdirSync("scripts");</span>
+<span class="cstat-no" title="statement not covered" >      helpers.mkdirSync("scripts/templates");</span>
     }
   } catch (err) {
 <span class="cstat-no" title="statement not covered" >    console.error("Could not create scripts and scripts/templates folder. Here is the error: ", err)</span>
@@ -1051,7 +1051,7 @@ let checkScriptsFolderExists = <span class="cstat-no" title="statement not cover
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Sat Sep 29 2018 16:01:48 GMT-0700 (Pacific Daylight Time)
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Sun Oct 07 2018 03:05:50 GMT-0700 (PDT)
 </div>
 </div>
 <script src="../../prettify.js"></script>

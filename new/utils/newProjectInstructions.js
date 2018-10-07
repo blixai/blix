@@ -92,4 +92,9 @@ const newProjectInstructions = () => {
   log('')
 };
 
-module.exports = { newProjectInstructions };
+module.exports = { 
+  logCustomScriptInstructions,
+  readmeFormatter,
+  consoleFormatter,
+  newProjectInstructions
+ };

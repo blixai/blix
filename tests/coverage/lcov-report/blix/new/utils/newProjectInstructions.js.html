@@ -22,12 +22,12 @@
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>0/60</span>
+        <span class='fraction'>0/58</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>0/36</span>
+        <span class='fraction'>0/38</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
@@ -37,7 +37,7 @@
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>0/60</span>
+        <span class='fraction'>0/58</span>
       </div>
     </div>
   </div>
@@ -138,21 +138,10 @@
 93
 94
 95
-96
-97
-98
-99
-100
-101</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+96</td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -240,23 +229,18 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// need to create a reusable console log of instructions: ie run npm start
-// also need to add the instructions to the README (should be easy)
-const log = <span class="cstat-no" title="statement not covered" >console.log;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">const log = <span class="cstat-no" title="statement not covered" >console.log;</span>
 const fs = <span class="cstat-no" title="statement not covered" >require('fs')</span>
-const boxen = <span class="cstat-no" title="statement not covered" >require("boxen");</span>
 const store = <span class="cstat-no" title="statement not covered" >require('../store')</span>
-const name = <span class="cstat-no" title="statement not covered" >process.argv[3];</span>
 const chalk = <span class="cstat-no" title="statement not covered" >require('chalk')</span>
-const helpers = <span class="cstat-no" title="statement not covered" >require('../../helpers')</span>
-&nbsp;
 const link = <span class="cstat-no" title="statement not covered" >'blixjs.com'</span>
 &nbsp;
 const options = <span class="cstat-no" title="statement not covered" >{</span>
-  mongooseModel: { command: "model", example: "blix generate model &lt;ModelName&gt; [fieldName]:[Type] [fileName]:[Type]", use: "Creates Mongoose model" },
+  mongooseModel: { command: "model", example: "blix generate model &lt;ModelName&gt; [fieldName]:[Type] [fieldName]:[Type]", use: "Creates Mongoose model" },
   postgresModel: { command: "model", example: "blix generate model &lt;ModelName&gt; [fieldName]:[type] [fieldName]:[type]", use: "Creates Bookself model" },
   reactComponent: { command: "component", example: "blix generate component &lt;name&gt;", use: "Creates a stateful or stateless React component and CSS file in a folder within src/" },
   reactRouterComponent: { command: "component", example: "blix generate component &lt;name&gt;", use: "Creates a stateful or stateless React component and CSS file in a folder within src/components/"},
@@ -311,7 +295,7 @@ const readmeFormatter = <span class="cstat-no" title="statement not covered" ><s
 &nbsp;
   let readmeOutputString = (<span class="cstat-no" title="statement not covered" >'\n' + '## Project Scripts' + '\n\n' + outputString)</span>
 <span class="cstat-no" title="statement not covered" >  try {</span>
-<span class="cstat-no" title="statement not covered" >    fs.appendFileSync(`./${name}/README.md`, readmeOutputString)</span>
+<span class="cstat-no" title="statement not covered" >    fs.appendFileSync(`./${store.name}/README.md`, readmeOutputString)</span>
   } catch (err) {
 <span class="cstat-no" title="statement not covered" >    store.env === 'development' ? log(err) : ""</span>
   }
@@ -328,6 +312,7 @@ const consoleFormatter = <span class="cstat-no" title="statement not covered" ><
 }
 &nbsp;
 const newProjectInstructions = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >() =&gt; </span>{</span>
+  let name = <span class="cstat-no" title="statement not covered" >store.name</span>
 <span class="cstat-no" title="statement not covered" >  console.clear()</span>
 <span class="cstat-no" title="statement not covered" >  log("")</span>
 <span class="cstat-no" title="statement not covered" >  log(`Success! Created new project ${name} at ${process.cwd() + '/' + name}`);</span>
@@ -336,20 +321,20 @@ const newProjectInstructions = <span class="cstat-no" title="statement not cover
 <span class="cstat-no" title="statement not covered" >  logCustomScriptInstructions()</span>
 <span class="cstat-no" title="statement not covered" >  log(`\nWe suggest you begin by typing:`)</span>
 <span class="cstat-no" title="statement not covered" >  log(chalk`\n  {cyan cd} ${name}`)</span>
-<span class="cstat-no" title="statement not covered" >  log(chalk.cyan`  npm start`)</span>
+<span class="cstat-no" title="statement not covered" >  log(chalk`{cyan   ${store.useYarn ? 'yarn start': 'npm start'}}`)</span>
 <span class="cstat-no" title="statement not covered" >  log(`\nFor examples and other information visit ${link}`)</span>
 <span class="cstat-no" title="statement not covered" >  log('Happy hacking!')</span>
 <span class="cstat-no" title="statement not covered" >  log('')</span>
 };
 &nbsp;
-<span class="cstat-no" title="statement not covered" >module.exports = { newProjectInstructions };</span>
+<span class="cstat-no" title="statement not covered" >module.exports = { newProjectInstructions, options };</span>
 &nbsp;</pre></td></tr>
 </table></pre>
 <div class='push'></div><!-- for sticky footer -->
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Sat Sep 29 2018 16:01:48 GMT-0700 (Pacific Daylight Time)
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Sun Oct 07 2018 03:05:50 GMT-0700 (PDT)
 </div>
 </div>
 <script src="../../../prettify.js"></script>

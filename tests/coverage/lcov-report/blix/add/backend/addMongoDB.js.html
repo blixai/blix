@@ -22,7 +22,7 @@
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>0/29</span>
+        <span class='fraction'>0/28</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
@@ -37,7 +37,7 @@
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>0/29</span>
+        <span class='fraction'>0/28</span>
       </div>
     </div>
   </div>
@@ -89,18 +89,10 @@
 44
 45
 46
-47
-48
-49
-50
-51
-52
-53
-54
-55</td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+47</td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -111,26 +103,18 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -154,7 +138,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">const path = <span class="cstat-no" title="statement not covered" >require('path')</span>
 const fs = <span class="cstat-no" title="statement not covered" >require('fs')</span>
 const helpers = <span class="cstat-no" title="statement not covered" >require('../../helpers')</span>
-&nbsp;
+const store = <span class="cstat-no" title="statement not covered" >require('../../new/store')</span>
 const loadFile = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >filePath =&gt; </span>{</span>
   let root = <span class="cstat-no" title="statement not covered" >'../../new/files/'</span>
 <span class="cstat-no" title="statement not covered" >  return fs.readFileSync(path.resolve(__dirname, root + filePath), 'utf8')</span>
@@ -165,26 +149,18 @@ const addMongooseToScripts = <span class="cstat-no" title="statement not covered
 <span class="cstat-no" title="statement not covered" >  helpers.checkScriptsFolderExist()</span>
   let model = <span class="cstat-no" title="statement not covered" >loadFile('scripts/backend/mongoose.js')</span>
   let schemaTemplate = <span class="cstat-no" title="statement not covered" >loadFile('scripts/backend/templates/mongoose.js')</span>
-<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`./scripts/model.js`, model)</span>
-<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`./scripts/templates/schemaTemplate.js`, schemaTemplate)</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`scripts/model.js`, model)</span>
+<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`scripts/templates/schemaTemplate.js`, schemaTemplate)</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  helpers.addScript('model', 'node scripts/model.js')</span>
 <span class="cstat-no" title="statement not covered" >  addMongoDBToProject()</span>
 }
 &nbsp;
 const addMongoDBToProject = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >() =&gt; </span>{</span>
-  let server = <span class="cstat-no" title="statement not covered" >fs</span>
-    .readFileSync(`./server/server.js`, 'utf8')
-    .toString()
-    .split('\n')
-<span class="cstat-no" title="statement not covered" >  server.splice(</span>
-    0,
-    0,
-    `const mongoose = require('mongoose')\nmongoose.connect(process.env.MONGO, { useNewUrlParser: true })\n`
-  )
-  let mongoAddedServer = <span class="cstat-no" title="statement not covered" >server.join('\n')</span>
+  let connectionString = `<span class="cstat-no" title="statement not covered" >const mongoose = require('mongoose')\nmongoose.connect(process.env.MONGO, { useNewUrlParser: true })\n`</span>
+<span class="cstat-no" title="statement not covered" >  helpers.insert(`./server/server.js`, connectionString, 0)</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`./server/server.js`, mongoAddedServer)</span>
 <span class="cstat-no" title="statement not covered" >  envFileExists()</span>
 <span class="cstat-no" title="statement not covered" >  helpers.addDependenciesToStore('mongo mongoose')</span>
 }
@@ -195,7 +171,7 @@ const envFileExists = <span class="cstat-no" title="statement not covered" ><spa
 <span class="cstat-no" title="statement not covered" >    if (fs.existsSync('./.env')) {</span>
 <span class="cstat-no" title="statement not covered" >      helpers.appendFile('./.env', `\nMONGO=${`mongodb://localhost:27017/${name}`}`)</span>
     } else {
-<span class="cstat-no" title="statement not covered" >      helpers.writeFile('./.env', `MONGO=${`mongodb://localhost:27017/${name}`}`)</span>
+<span class="cstat-no" title="statement not covered" >      helpers.writeFile('.env', `MONGO=${`mongodb://localhost:27017/${name}`}`)</span>
     }
   } catch (err) {
 <span class="cstat-no" title="statement not covered" >    console.error('Failed to find, create or append .env file')</span>
@@ -211,7 +187,7 @@ const envFileExists = <span class="cstat-no" title="statement not covered" ><spa
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Sat Sep 29 2018 16:01:48 GMT-0700 (Pacific Daylight Time)
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Sun Oct 07 2018 03:05:50 GMT-0700 (PDT)
 </div>
 </div>
 <script src="../../../prettify.js"></script>

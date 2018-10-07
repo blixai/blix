@@ -22,7 +22,7 @@
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>0/111</span>
+        <span class='fraction'>0/115</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
@@ -37,7 +37,7 @@
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>0/111</span>
+        <span class='fraction'>0/115</span>
       </div>
     </div>
   </div>
@@ -214,31 +214,15 @@
 169
 170
 171
-172</td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+172
+173
+174
+175
+176</td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -248,6 +232,29 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -265,6 +272,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -390,6 +398,8 @@ let prompt = <span class="cstat-no" title="statement not covered" >inquirer.prom
 const helpers = <span class="cstat-no" title="statement not covered" >require('../../helpers')</span>
 const fs = <span class="cstat-no" title="statement not covered" >require('fs')</span>
 const path = <span class="cstat-no" title="statement not covered" >require('path')</span>
+const store = <span class="cstat-no" title="statement not covered" >require('../../new/store')</span>
+const addProjectInstructions = <span class="cstat-no" title="statement not covered" >require('../addProjectInstructions')</span>
 &nbsp;
 const { testBackend } = <span class="cstat-no" title="statement not covered" >require('./addBackendTests')</span>
 const { addMongooseToScripts } = <span class="cstat-no" title="statement not covered" >require('./addMongoDB')</span>
@@ -403,36 +413,37 @@ const loadFile = <span class="cstat-no" title="statement not covered" ><span cla
 const { serverTesting, database, backendType } = <span class="cstat-no" title="statement not covered" >require('../../new/prompts')</span>
 &nbsp;
 let addBackend = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >async () =&gt; </span>{</span>
-  let mode = <span class="cstat-no" title="statement not covered" >await prompt([backendType])</span>
+<span class="cstat-no" title="statement not covered" >  store.backendType = await prompt([backendType])</span>
   let serverTestingSelection = <span class="cstat-no" title="statement not covered" >await prompt([serverTesting])</span>
-  let databaseSelection = <span class="cstat-no" title="statement not covered" >await prompt([database])</span>
-<span class="cstat-no" title="statement not covered" >  createBackend(mode, serverTestingSelection, databaseSelection)</span>
+<span class="cstat-no" title="statement not covered" >  store.database = await prompt([database])</span>
+<span class="cstat-no" title="statement not covered" >  await helpers.yarn()</span>
+<span class="cstat-no" title="statement not covered" >  createBackend(store.backendType, serverTestingSelection, store.database)</span>
 }
 &nbsp;
 // load files
 const cluster = <span class="cstat-no" title="statement not covered" >loadFile('backend/common/cluster.js')</span>
 const routes = <span class="cstat-no" title="statement not covered" >loadFile('backend/common/routes.js')</span>
 &nbsp;
-const createBackend = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >async (</span>mode, serverTestingSelection, databaseSelection) =&gt; {</span>
+const createBackend = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(m</span>ode, serverTestingSelection, databaseSelection) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >  try {</span>
-<span class="cstat-no" title="statement not covered" >    helpers.mkdirSync('./server')</span>
+<span class="cstat-no" title="statement not covered" >    helpers.mkdirSync('server')</span>
   } catch (err) {
 <span class="cstat-no" title="statement not covered" >    console.error('Server folder already exists')</span>
 <span class="cstat-no" title="statement not covered" >    process.exit(1)</span>
   }
-<span class="cstat-no" title="statement not covered" >  helpers.mkdirSync('./server/models')</span>
-<span class="cstat-no" title="statement not covered" >  helpers.mkdirSync('./server/controllers')</span>
-<span class="cstat-no" title="statement not covered" >  helpers.mkdirSync('./server/helpers')</span>
+<span class="cstat-no" title="statement not covered" >  helpers.mkdirSync('server/models')</span>
+<span class="cstat-no" title="statement not covered" >  helpers.mkdirSync('server/controllers')</span>
+<span class="cstat-no" title="statement not covered" >  helpers.mkdirSync('server/helpers')</span>
 <span class="cstat-no" title="statement not covered" >  if (mode !== 'api') {</span>
 <span class="cstat-no" title="statement not covered" >    try {</span>
-<span class="cstat-no" title="statement not covered" >      helpers.mkdirSync('./assets')</span>
+<span class="cstat-no" title="statement not covered" >      helpers.mkdirSync('assets')</span>
     } catch (err) {
 <span class="cstat-no" title="statement not covered" >      console.error('Tried to create assets folder but one already exists')</span>
     }
   }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  helpers.writeFile('./server/routes.js', routes)</span>
-<span class="cstat-no" title="statement not covered" >  helpers.writeFile('./server/cluster.js', cluster)</span>
+<span class="cstat-no" title="statement not covered" >  helpers.writeFile('server/routes.js', routes)</span>
+<span class="cstat-no" title="statement not covered" >  helpers.writeFile('server/cluster.js', cluster)</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  mode.mode === 'standard' ? standard() : mode.mode === 'mvc' ? mvc() : api()</span>
 &nbsp;
@@ -440,7 +451,8 @@ const createBackend = <span class="cstat-no" title="statement not covered" ><spa
 <span class="cstat-no" title="statement not covered" >  scripts(mode.mode)</span>
 <span class="cstat-no" title="statement not covered" >  packages(mode)</span>
 <span class="cstat-no" title="statement not covered" >  testBackend(serverTestingSelection)</span>
-<span class="cstat-no" title="statement not covered" >  await helpers.installAllPackagesToExistingProject()</span>
+<span class="cstat-no" title="statement not covered" >  helpers.installAllPackagesToExistingProject()</span>
+<span class="cstat-no" title="statement not covered" >  addProjectInstructions()</span>
 }
 &nbsp;
 const standard = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >() =&gt; </span>{</span>
@@ -448,11 +460,11 @@ const standard = <span class="cstat-no" title="statement not covered" ><span cla
   const server = <span class="cstat-no" title="statement not covered" >loadFile('backend/standard/server.js')</span>
   const controller = <span class="cstat-no" title="statement not covered" >loadFile('backend/standard/home.js')</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  helpers.writeFile('./server/server.js', server)</span>
-<span class="cstat-no" title="statement not covered" >  helpers.writeFile('./server/controllers/home.js', controller)</span>
-<span class="cstat-no" title="statement not covered" >  helpers.mkdirSync('./server/views')</span>
-<span class="cstat-no" title="statement not covered" >  helpers.mkdirSync('./server/views/home')</span>
-<span class="cstat-no" title="statement not covered" >  helpers.writeFile('./server/views/home/index.html', html)</span>
+<span class="cstat-no" title="statement not covered" >  helpers.writeFile('server/server.js', server)</span>
+<span class="cstat-no" title="statement not covered" >  helpers.writeFile('server/controllers/home.js', controller)</span>
+<span class="cstat-no" title="statement not covered" >  helpers.mkdirSync('server/views')</span>
+<span class="cstat-no" title="statement not covered" >  helpers.mkdirSync('server/views/home')</span>
+<span class="cstat-no" title="statement not covered" >  helpers.writeFile('server/views/home/index.html', html)</span>
 }
 &nbsp;
 const mvc = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >() =&gt; </span>{</span>
@@ -462,23 +474,23 @@ const mvc = <span class="cstat-no" title="statement not covered" ><span class="f
   const pug = <span class="cstat-no" title="statement not covered" >loadFile('backend/mvc/index.pug')</span>
   const controller = <span class="cstat-no" title="statement not covered" >loadFile('backend/mvc/home.js')</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  helpers.writeFile('./server/server.js', server)</span>
+<span class="cstat-no" title="statement not covered" >  helpers.writeFile('server/server.js', server)</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  helpers.mkdirSync('./server/views')</span>
-<span class="cstat-no" title="statement not covered" >  helpers.writeFile('./server/views/error.pug', error)</span>
-<span class="cstat-no" title="statement not covered" >  helpers.writeFile('./server/views/layout.pug', layout)</span>
-<span class="cstat-no" title="statement not covered" >  helpers.mkdirSync('./server/views/home')</span>
-<span class="cstat-no" title="statement not covered" >  helpers.writeFile('./server/views/home/index.pug', pug)</span>
+<span class="cstat-no" title="statement not covered" >  helpers.mkdirSync('server/views')</span>
+<span class="cstat-no" title="statement not covered" >  helpers.writeFile('server/views/error.pug', error)</span>
+<span class="cstat-no" title="statement not covered" >  helpers.writeFile('server/views/layout.pug', layout)</span>
+<span class="cstat-no" title="statement not covered" >  helpers.mkdirSync('server/views/home')</span>
+<span class="cstat-no" title="statement not covered" >  helpers.writeFile('server/views/home/index.pug', pug)</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  helpers.writeFile('./server/controllers/home.js', controller)</span>
+<span class="cstat-no" title="statement not covered" >  helpers.writeFile('server/controllers/home.js', controller)</span>
 }
 &nbsp;
 const api = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >() =&gt; </span>{</span>
   const server = <span class="cstat-no" title="statement not covered" >loadFile('backend/api/server.js')</span>
   const homeController = <span class="cstat-no" title="statement not covered" >loadFile('backend/api/home.js')</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  helpers.writeFile('./server/server.js', server)</span>
-<span class="cstat-no" title="statement not covered" >  helpers.writeFile('./server/controllers/home.js', homeController)</span>
+<span class="cstat-no" title="statement not covered" >  helpers.writeFile('server/server.js', server)</span>
+<span class="cstat-no" title="statement not covered" >  helpers.writeFile('server/controllers/home.js', homeController)</span>
 }
 &nbsp;
 const packages = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >mode =&gt; </span>{</span>
@@ -515,9 +527,9 @@ const scripts = <span class="cstat-no" title="statement not covered" ><span clas
 <span class="cstat-no" title="statement not covered" >  helpers.addScript('server', 'nodemon server/cluster.js')</span>
   // controller script
 <span class="cstat-no" title="statement not covered" >  helpers.addScript('controller', 'node scripts/controller.js')</span>
-<span class="cstat-no" title="statement not covered" >  helpers.writeFile('./scripts/controller.js', controller)</span>
-<span class="cstat-no" title="statement not covered" >  helpers.writeFile('./scripts/templates/controller.js', controllerTemplate)</span>
-<span class="cstat-no" title="statement not covered" >  helpers.writeFile('./scripts/templates/routes.js', routesTemplate)</span>
+<span class="cstat-no" title="statement not covered" >  helpers.writeFile('scripts/controller.js', controller)</span>
+<span class="cstat-no" title="statement not covered" >  helpers.writeFile('scripts/templates/controller.js', controllerTemplate)</span>
+<span class="cstat-no" title="statement not covered" >  helpers.writeFile('scripts/templates/routes.js', routesTemplate)</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  if (mode === 'mvc') {</span>
 <span class="cstat-no" title="statement not covered" >    pugScript()</span>
@@ -532,12 +544,12 @@ const pageScript = <span class="cstat-no" title="statement not covered" ><span c
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  if (helpers.checkIfScriptIsTaken('view')) {</span>
 <span class="cstat-no" title="statement not covered" >   helpers.addScript('server:view', 'node scripts/page') </span>
-<span class="cstat-no" title="statement not covered" >   helpers.writeFile('./scripts/page.js', script)</span>
+<span class="cstat-no" title="statement not covered" >   helpers.writeFile('scripts/page.js', script)</span>
   } else {
 <span class="cstat-no" title="statement not covered" >    helpers.addScript('view', 'node scripts/view.js')</span>
-<span class="cstat-no" title="statement not covered" >    helpers.writeFile('./scripts/view.js', script)</span>
+<span class="cstat-no" title="statement not covered" >    helpers.writeFile('scripts/view.js', script)</span>
   }
-<span class="cstat-no" title="statement not covered" >  helpers.writeFile('./scripts/templates/index.html', htmlTemplate)</span>
+<span class="cstat-no" title="statement not covered" >  helpers.writeFile('scripts/templates/index.html', htmlTemplate)</span>
 }
 &nbsp;
 const pugScript = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >() =&gt; </span>{</span>
@@ -547,12 +559,12 @@ const pugScript = <span class="cstat-no" title="statement not covered" ><span cl
 <span class="cstat-no" title="statement not covered" >  if (helpers.checkIfScriptIsTaken('view')) {</span>
     // view script is taken
 <span class="cstat-no" title="statement not covered" >    helpers.addScript('server:view', 'node scripts/pug.js')</span>
-<span class="cstat-no" title="statement not covered" >    helpers.writeFile('./scripts/pug.js', script)</span>
+<span class="cstat-no" title="statement not covered" >    helpers.writeFile('scripts/pug.js', script)</span>
   } else {
 <span class="cstat-no" title="statement not covered" >    helpers.addScript('view', 'node scripts/view.js')</span>
-<span class="cstat-no" title="statement not covered" >    helpers.writeFile('./scripts/view.js', script)</span>
+<span class="cstat-no" title="statement not covered" >    helpers.writeFile('scripts/view.js', script)</span>
   }
-<span class="cstat-no" title="statement not covered" >  helpers.writeFile('./scripts/templates/pugTemplate.pug', pugTemplate)</span>
+<span class="cstat-no" title="statement not covered" >  helpers.writeFile('scripts/templates/pugTemplate.pug', pugTemplate)</span>
 }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >module.exports = addBackend</span>
@@ -562,7 +574,7 @@ const pugScript = <span class="cstat-no" title="statement not covered" ><span cl
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Sat Sep 29 2018 16:01:48 GMT-0700 (Pacific Daylight Time)
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Sun Oct 07 2018 03:05:50 GMT-0700 (PDT)
 </div>
 </div>
 <script src="../../../prettify.js"></script>

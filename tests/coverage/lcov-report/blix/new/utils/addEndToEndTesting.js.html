@@ -22,7 +22,7 @@
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>0/38</span>
+        <span class='fraction'>0/37</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
@@ -37,7 +37,7 @@
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>0/38</span>
+        <span class='fraction'>0/37</span>
       </div>
     </div>
   </div>
@@ -127,9 +127,7 @@
 82
 83
 84
-85
-86</td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+85</td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -216,7 +214,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">const fs = <span class="cstat-no" title="statement not covered" >require("fs");</span>
 const helpers = <span class="cstat-no" title="statement not covered" >require("../../helpers");</span>
 const path = <span class="cstat-no" title="statement not covered" >require("path");</span>
-const name = <span class="cstat-no" title="statement not covered" >process.argv[3];</span>
 const store = <span class="cstat-no" title="statement not covered" >require('../store')</span>
 &nbsp;
 const loadFile = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >filePath =&gt; </span>{</span>
@@ -234,10 +231,10 @@ let e2eSetup = <span class="cstat-no" title="statement not covered" ><span class
 const installCypress = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >() =&gt; </span>{</span>
 <span class="cstat-no" title="statement not covered" >  helpers.addScriptToNewPackageJSON("e2e", "cypress open");</span>
 <span class="cstat-no" title="statement not covered" >  helpers.addDevDependenciesToStore("cypress");</span>
-<span class="cstat-no" title="statement not covered" >  helpers.mkdirSync(`./${name}/cypress`);</span>
-<span class="cstat-no" title="statement not covered" >  helpers.mkdirSync(`./${name}/cypress/integration`);</span>
+<span class="cstat-no" title="statement not covered" >  helpers.mkdirSync(`cypress`);</span>
+<span class="cstat-no" title="statement not covered" >  helpers.mkdirSync(`cypress/integration`);</span>
 <span class="cstat-no" title="statement not covered" >  helpers.writeFile(</span>
-    `./${name}/cypress/integration/test.js`,
+    `cypress/integration/test.js`,
     loadFile("../files/frontend/e2e/cypress.js")
   );
   // let ignore = {
@@ -251,7 +248,7 @@ const installCypress = <span class="cstat-no" title="statement not covered" ><sp
       "\\.(css|less)$": "identity-obj-proxy"
     }
   };
-  let json = <span class="cstat-no" title="statement not covered" >JSON.parse(fs.readFileSync(`./${name}/package.json`, "utf8"));</span>
+  let json = <span class="cstat-no" title="statement not covered" >JSON.parse(fs.readFileSync(`./${store.name}/package.json`, "utf8"));</span>
 <span class="cstat-no" title="statement not covered" >  if (!json.hasOwnProperty("jest")) {</span>
 <span class="cstat-no" title="statement not covered" >    json["jest"] = jest;</span>
   } else {
@@ -261,15 +258,15 @@ const installCypress = <span class="cstat-no" title="statement not covered" ><sp
     ];
   }
   let newPackage = <span class="cstat-no" title="statement not covered" >JSON.stringify(json, null, 2);</span>
-<span class="cstat-no" title="statement not covered" >  fs.writeFileSync(`./${name}/package.json`, newPackage);</span>
+<span class="cstat-no" title="statement not covered" >  fs.writeFileSync(`package.json`, newPackage);</span>
 };
 &nbsp;
 const installTestCafe = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >() =&gt; </span>{</span>
 <span class="cstat-no" title="statement not covered" >  helpers.addScriptToNewPackageJSON("e2e", "testcafe chrome test/e2e");</span>
 <span class="cstat-no" title="statement not covered" >  helpers.addDevDependenciesToStore("testcafe");</span>
-<span class="cstat-no" title="statement not covered" >  helpers.mkdirSync(`./${name}/test/e2e`);</span>
+<span class="cstat-no" title="statement not covered" >  helpers.mkdirSync(`test/e2e`);</span>
 <span class="cstat-no" title="statement not covered" >  helpers.writeFile(</span>
-    `./${name}/test/e2e/test.js`,
+    `test/e2e/test.js`,
     loadFile("../files/frontend/e2e/testcafe.js")
   );
   let jest = <span class="cstat-no" title="statement not covered" >{</span>
@@ -280,7 +277,7 @@ const installTestCafe = <span class="cstat-no" title="statement not covered" ><s
       "\\.(css|less)$": "identity-obj-proxy"
     }
   };
-  let json = <span class="cstat-no" title="statement not covered" >JSON.parse(fs.readFileSync(`./${name}/package.json`, "utf8"));</span>
+  let json = <span class="cstat-no" title="statement not covered" >JSON.parse(fs.readFileSync(`./${store.name}/package.json`, "utf8"));</span>
 <span class="cstat-no" title="statement not covered" >  if (!json.hasOwnProperty("jest")) {</span>
 <span class="cstat-no" title="statement not covered" >    json["jest"] = jest;</span>
   } else {
@@ -290,7 +287,7 @@ const installTestCafe = <span class="cstat-no" title="statement not covered" ><s
     ];
   }
   let newPackage = <span class="cstat-no" title="statement not covered" >JSON.stringify(json, null, 2);</span>
-<span class="cstat-no" title="statement not covered" >  fs.writeFileSync(`./${name}/package.json`, newPackage);</span>
+<span class="cstat-no" title="statement not covered" >  fs.writeFileSync(`package.json`, newPackage);</span>
 };
 &nbsp;
 <span class="cstat-no" title="statement not covered" >module.exports = {</span>
@@ -304,7 +301,7 @@ const installTestCafe = <span class="cstat-no" title="statement not covered" ><s
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Sat Sep 29 2018 16:01:48 GMT-0700 (Pacific Daylight Time)
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Sun Oct 07 2018 03:05:50 GMT-0700 (PDT)
 </div>
 </div>
 <script src="../../../prettify.js"></script>

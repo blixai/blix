@@ -22,7 +22,7 @@
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>0/34</span>
+        <span class='fraction'>0/33</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
@@ -37,7 +37,7 @@
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>0/34</span>
+        <span class='fraction'>0/33</span>
       </div>
     </div>
   </div>
@@ -113,11 +113,7 @@
 68
 69
 70
-71
-72
-73
-74</td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+71</td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -137,8 +133,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -193,15 +187,14 @@
 const fs = <span class="cstat-no" title="statement not covered" >require("fs");</span>
 const path = <span class="cstat-no" title="statement not covered" >require("path");</span>
 const store = <span class="cstat-no" title="statement not covered" >require('../store')</span>
-const name = <span class="cstat-no" title="statement not covered" >process.argv[3];</span>
 &nbsp;
 const loadFile = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >filePath =&gt; </span>{</span>
 <span class="cstat-no" title="statement not covered" >  return fs.readFileSync(path.resolve(__dirname, filePath), "utf8");</span>
 };
 &nbsp;
 const checkOrCreateServerTestFolder = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >() =&gt; </span>{</span>
-<span class="cstat-no" title="statement not covered" >  if (!fs.existsSync(`./${name}/test/server`)) {</span>
-<span class="cstat-no" title="statement not covered" >    helpers.mkdirSync(`./${name}/test/server`);</span>
+<span class="cstat-no" title="statement not covered" >  if (!fs.existsSync(`./${store.name}/test/server`)) {</span>
+<span class="cstat-no" title="statement not covered" >    helpers.mkdirSync(`test/server`);</span>
   }
 };
 &nbsp;
@@ -209,11 +202,9 @@ const mochaTestBackend = <span class="cstat-no" title="statement not covered" ><
 <span class="cstat-no" title="statement not covered" >  helpers.addDevDependenciesToStore("mocha chai chai-http");</span>
 <span class="cstat-no" title="statement not covered" >  helpers.addScriptToNewPackageJSON("mocha", "mocha test/server");</span>
 <span class="cstat-no" title="statement not covered" >  checkOrCreateServerTestFolder();</span>
-<span class="cstat-no" title="statement not covered" >  helpers.writeFile(</span>
-    `./${name}/test/server/test.spec.js`,
-    loadFile("../files/testing/backend/mocha.js")
-  );
-  let json = <span class="cstat-no" title="statement not covered" >JSON.parse(fs.readFileSync(`./${name}/package.json`, "utf8"));</span>
+<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`test/server/test.spec.js`, loadFile("../files/testing/backend/mocha.js"))</span>
+&nbsp;
+  let json = <span class="cstat-no" title="statement not covered" >JSON.parse(fs.readFileSync(`./${store.name}/package.json`, "utf8"));</span>
 <span class="cstat-no" title="statement not covered" >  if (json.hasOwnProperty("jest")) {</span>
 <span class="cstat-no" title="statement not covered" >    json.jest["modulePathIgnorePatterns"] = [</span>
       "&lt;rootDir&gt;/test/e2e/",
@@ -222,17 +213,17 @@ const mochaTestBackend = <span class="cstat-no" title="statement not covered" ><
     ];
   }
   let newPackage = <span class="cstat-no" title="statement not covered" >JSON.stringify(json, null, 2);</span>
-<span class="cstat-no" title="statement not covered" >  fs.writeFileSync(`./${name}/package.json`, newPackage);</span>
+<span class="cstat-no" title="statement not covered" >  fs.writeFileSync(`package.json`, newPackage);</span>
 };
 &nbsp;
 const testJestBackend = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >() =&gt; </span>{</span>
 <span class="cstat-no" title="statement not covered" >  helpers.addDevDependenciesToStore("jest supertest");</span>
 <span class="cstat-no" title="statement not covered" >  checkOrCreateServerTestFolder();</span>
 <span class="cstat-no" title="statement not covered" >  helpers.writeFile(</span>
-    `./${name}/test/server/test.spec.js`,
+    `test/server/test.spec.js`,
     loadFile("../files/testing/backend/jest.js")
   );
-  let json = <span class="cstat-no" title="statement not covered" >JSON.parse(fs.readFileSync(`./${name}/package.json`, "utf8"));</span>
+  let json = <span class="cstat-no" title="statement not covered" >JSON.parse(fs.readFileSync(`./${store.name}/package.json`, "utf8"));</span>
 <span class="cstat-no" title="statement not covered" >  if (!json.hasOwnProperty("jest")) {</span>
     let jest = <span class="cstat-no" title="statement not covered" >{</span>
       modulePathIgnorePatterns: ["&lt;rootDir&gt;/test/e2e/", "&lt;rootDir&gt;/cypress"],
@@ -245,7 +236,7 @@ const testJestBackend = <span class="cstat-no" title="statement not covered" ><s
 <span class="cstat-no" title="statement not covered" >    json["jest"] = jest;</span>
   }
   let newPackage = <span class="cstat-no" title="statement not covered" >JSON.stringify(json, null, 2);</span>
-<span class="cstat-no" title="statement not covered" >  fs.writeFileSync(`./${name}/package.json`, newPackage);</span>
+<span class="cstat-no" title="statement not covered" >  fs.writeFileSync(`package.json`, newPackage);</span>
 <span class="cstat-no" title="statement not covered" >  helpers.addScriptToNewPackageJSON("jest", "jest");</span>
 };
 &nbsp;
@@ -268,7 +259,7 @@ let testBackend = <span class="cstat-no" title="statement not covered" ><span cl
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Sat Sep 29 2018 16:01:48 GMT-0700 (Pacific Daylight Time)
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Sun Oct 07 2018 03:05:50 GMT-0700 (PDT)
 </div>
 </div>
 <script src="../../../prettify.js"></script>

@@ -183,7 +183,7 @@ module.exports = {
   // verbose: null,
 
   // An array of regexp patterns that are matched against all source file paths before re-running tests in watch mode
-  // watchPathIgnorePatterns: [],
+  // watchPathIgnorePatterns: ["<rootDir>/jest.json"],
 
   // Whether to use watchman for file crawling
   // watchman: true,
