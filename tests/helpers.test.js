@@ -1,6 +1,7 @@
 const fs = require('fs')
 const sinon = require('sinon')
 const child_process = require('child_process')
+const inquirer = require('inquirer')
 
 
 const { 
@@ -37,6 +38,7 @@ const execSync = require("child_process").execSync;
 beforeAll(() => {
     try {
         fs.mkdirSync('./tmpTests')
+        process.chdir('./tmpTests')
     } catch (err) {
         console.log(err)
     }
@@ -44,7 +46,8 @@ beforeAll(() => {
 
 afterAll(() => {
     try {
-        execSync('rm -rf tmpTests')
+        process.chdir('../')
+        execSync('rm -rf ./tmpTests')
     } catch (err){
         console.log(err)
     }
@@ -96,17 +99,48 @@ describe('Helper Tests', () => {
     })
 
     describe('yarn', () => {
-        it('expect a prompt if yarn is installed', () => {
+        beforeEach(() => {
+            store.useYarn = ''
+        })
+
+        afterEach(() => {
+            this.sandbox.restore()
+        })
+
+        it('will prompt if canUseYarn is true and no selection has been made previously', () => {
             this.sandbox.stub(fs, 'existsSync').returns(false)
             this.sandbox.stub(helpers, 'canUseYarn').returns(true)
+            this.sandbox.stub(inquirer, 'prompt').resolves({ yarn: true })
 
-            this.sandbox.replace(helpers, 'yarn', function () {
-                if (helpers.canUseYarn && store.useYarn === '') {
-                    store.useYarn = true 
-                }
+            helpers.yarn().then(() => {
+                expect(store.useYarn).toBe(true)
+                expect(this.sandbox.assert.calledOnce(inquirer.prompt)).toBe(true)
             })
+        })
+
+        it('will not prompt if canUseYarn returns false', () => {
+            this.sandbox.stub(helpers, 'canUseYarn').returns(false)
+            // it didn't prompt and we can tell because we dont need to handle the normal promise (no .then)
             helpers.yarn()
-            expect(store.useYarn).toBe(true)
+            expect(store.useYarn).toBe('')
+        })
+
+        it('will not prompt if user has already selected npm', () => {
+            this.sandbox.stub(inquirer, 'prompt').resolves({ yarn: false })
+            this.sandbox.stub(helpers, 'canUseYarn').returns(true) 
+            helpers.yarn().then(() => {
+                expect(store.useYarn).toBe(false)
+                expect(this.sandbox.assert.notCalled(inquirer.prompt)).toBe(true)
+            })
+        })
+
+        it('will not prompt if user has already selected yarn', () => {
+            this.sandbox.stub(inquirer, 'prompt').resolves({ yarn: true })
+            this.sandbox.stub(helpers, 'canUseYarn').returns(true) 
+            helpers.yarn().then(() => {
+                expect(store.useYarn).toBe(true)
+                expect(this.sandbox.assert.notCalled(inquirer.prompt)).toBe(true)
+            }) 
         })
     })
     
