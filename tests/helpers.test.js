@@ -1,7 +1,8 @@
 const fs = require('fs')
+const sinon = require('sinon')
+
 
 const { 
-    checkIfNeedYarnAnswer,
     installDependencies,
     installDevDependencies,
     installKnexGlobal,
@@ -26,6 +27,9 @@ const {
     installAllPackagesToExistingProject
 } = require('../helpers')
 
+
+const helpers = require('../helpers')
+
 const store = require('../new/store')
 const execSync = require("child_process").execSync;
 
@@ -40,51 +44,65 @@ beforeAll(() => {
 
 afterAll(() => {
     try {
-        fs.rmdirSync('./tmpTests');
+        execSync('rm -rf tmpTests')
     } catch (err){
         console.log(err)
     }
 });
 
-describe('helper test: checkIfNeedYarnAnswer', () => {
-    it.skip('expect a prompt if yarn is installed', (done) => {
-        expect.assertions(1)
-        checkIfNeedYarnAnswer()
-        setTimeout(() => {
-            execSync('y')
-            expect(store.useYarn.yarn).toBe(true)
-            done()
-        }, 300)
-    })
-})
-
-describe('helper test: installDependencies', () => {
-
+describe('Helper Tests', () => {
     beforeEach(() => {
-        try{
-            process.chdir('./tmpTests')
-            process.argv.push('new')
-            process.argv.push('installTests')
-            console.log(process.argv)
-            fs.mkdirSync('./installTests')
-        } catch (err) {
-            console.log(err)
-            process.exit(1);
-        }
+        this.sandbox = sinon.createSandbox();
     })
 
     afterEach(() => {
-        try{
-            fs.rmdirSync('./installTests');
-            process.chdir('../');
-        } catch (err) {
-            console.log(err)
-        }
+        this.sandbox.restore();
     })
 
-    it('installs a dependencies to a new project', () => {
-        store.useYarn = { yarn : true }
-        console.log(store, process.cwd())
-        installDependencies('react')
+    describe('yarn', () => {
+        it('expect a prompt if yarn is installed', () => {
+            this.sandbox.stub(fs, 'existsSync').returns(false)
+            this.sandbox.stub(helpers, 'canUseYarn').returns(true)
+
+            this.sandbox.replace(helpers, 'yarn', function () {
+                if (helpers.canUseYarn && store.useYarn === '') {
+                    store.useYarn = true 
+                }
+            })
+            helpers.yarn()
+            expect(store.useYarn).toBe(true)
+        })
+    })
+    
+    describe.skip('installDependencies', () => {
+    
+        beforeEach(() => {
+            try{
+                process.chdir('./tmpTests')
+                process.argv.push('new')
+                process.argv.push('installTests')
+                console.log(process.argv)
+                fs.mkdirSync('./installTests')
+            } catch (err) {
+                console.log(err)
+                process.exit(1);
+            }
+        })
+    
+        afterEach(() => {
+            try{
+                fs.rmdirSync('./installTests');
+                process.chdir('../');
+            } catch (err) {
+                console.log(err)
+            }
+        })
+    
+        it('installs a dependencies to a new project', () => {
+            store.useYarn = { yarn : true }
+            console.log(store, process.cwd())
+            installDependencies('react')
+        })
     })
 })
+
