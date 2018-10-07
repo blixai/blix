@@ -2,6 +2,7 @@ const fs = require('fs');
 const exists = fs.existsSync;
 const store = require('../../../new/store');
 const helpers = require('../../../helpers')
+const { writeFile, mkdirSync } = helpers
 const path = require("path");
 const readFile = fs.readFileSync;
 const {
@@ -20,9 +21,24 @@ beforeAll(() => {
     store.name = "tmpTest"
     store.env = "development"
     fs.mkdirSync(store.name)
-    let file = loadFile('../../../new/files/common/package.json')
-    helpers.writeFile(`package.json`, file)
-    execSync(`mkdir ${store.name}/scripts ${store.name}/scripts/templates ${store.name}/server && touch ${store.name}/server/server.js ${store.name}/.env`)
+    let pkgJson = loadFile('../../../new/files/common/package.json')
+    helpers.writeFile(`package.json`, pkgJson)
+    const files = [
+      "server/server.js",
+      ".env"
+    ]
+    const folders = [
+      "scripts",
+      "scripts/templates",
+      "server"
+    ]
+
+    folders.forEach(folder => {
+      mkdirSync(`${folder}`)
+    })
+    files.forEach(file => {
+      writeFile(`${file}`)
+    })
   } catch(err){
     console.error(err)
   }
