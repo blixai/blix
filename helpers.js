@@ -266,6 +266,23 @@ exports.moveAllFilesInDir = (dirToSearch, dirToMoveTo) => {
   }
 }
 
+exports.deleteAllFilesInDir = (dirToSearch) => {
+  // delete all files in a directory
+  fs.readdirSync(dirToSearch).forEach(file => {
+    try {
+      fs.unlinkSync(file)
+    } catch(err) {
+      console.error(chalk.red`Error: Couldn't delete ${file}`, err)
+    }
+  })
+  // once all files deleted, try to delete the directory
+  try {
+    fs.rmdirSync(dirToSearch)
+  } catch (err) {
+    console.error(chalk.red`Error: Couldn't delete ${dirToSearch}`, err)
+  }
+}
+
 exports.addDependenciesToStore = deps => {
   if (!store.dependencies) {
     store.dependencies = deps
