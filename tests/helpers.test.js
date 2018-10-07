@@ -46,7 +46,7 @@ afterAll(() => {
     }
 });
 
-describe('helper test: checkIfNeedYarnAnswer', () => {
+describe.skip('helper test: checkIfNeedYarnAnswer', () => {
     it.skip('expect a prompt if yarn is installed', (done) => {
         expect.assertions(1)
         checkIfNeedYarnAnswer()
@@ -58,7 +58,7 @@ describe('helper test: checkIfNeedYarnAnswer', () => {
     })
 })
 
-describe('helper test: installDependencies', () => {
+describe.skip('helper test: installDependencies', () => {
 
     beforeEach(() => {
         try{
