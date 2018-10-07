@@ -52,7 +52,6 @@ describe('Utils: createCommonFiles', () => {
       "test"
     ]
     commonFiles.forEach(file => {
-      console.log(file)
       expect(exists(`${store.name}/${file}`)).toBe(true)
     })
   })
