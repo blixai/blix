@@ -3,6 +3,8 @@ let prompt = inquirer.prompt
 const helpers = require('../../helpers')
 const fs = require('fs')
 const path = require('path')
+const store = require('../../new/store')
+const addProjectInstructions = require('../addProjectInstructions')
 
 const { testBackend } = require('./addBackendTests')
 const { addMongooseToScripts } = require('./addMongoDB')
@@ -16,11 +18,11 @@ const loadFile = filePath => {
 const { serverTesting, database, backendType } = require('../../new/prompts')
 
 let addBackend = async () => {
-  let mode = await prompt([backendType])
+  store.backendType = await prompt([backendType])
   let serverTestingSelection = await prompt([serverTesting])
-  let databaseSelection = await prompt([database])
+  store.database = await prompt([database])
   await helpers.yarn()
-  createBackend(mode, serverTestingSelection, databaseSelection)
+  createBackend(store.backendType, serverTestingSelection, store.database)
 }
 
 // load files
@@ -55,6 +57,7 @@ const createBackend = (mode, serverTestingSelection, databaseSelection) => {
   packages(mode)
   testBackend(serverTestingSelection)
   helpers.installAllPackagesToExistingProject()
+  addProjectInstructions()
 }
 
 const standard = () => {
