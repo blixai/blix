@@ -1,5 +1,6 @@
 const fs = require('fs')
 const sinon = require('sinon')
+const child_process = require('child_process')
 
 
 const { 
@@ -35,7 +36,6 @@ const execSync = require("child_process").execSync;
 
 beforeAll(() => {
     try {
-        process.chdir('./tests')
         fs.mkdirSync('./tmpTests')
     } catch (err) {
         console.log(err)
@@ -57,6 +57,42 @@ describe('Helper Tests', () => {
 
     afterEach(() => {
         this.sandbox.restore();
+    })
+
+    describe('canUseYarn', () => {
+        afterEach(() => {
+            if (fs.existsSync('yarn.lock')) fs.unlinkSync('yarn.lock')
+            if (fs.existsSync('package-lock.json')) fs.unlinkSync('package-lock.json')
+            store.useYarn = ''
+        })
+
+        it('should set store.useYarn to true if yarn.lock file exists', () => {
+            fs.writeFileSync('yarn.lock')
+            expect(store.useYarn).toBe('')
+
+            helpers.canUseYarn()
+            expect(store.useYarn).toBe(true)
+        })
+
+        it('should set store.useYarn to false if package-lock.json exists', () => {
+            fs.writeFileSync('package-lock.json', '')
+            expect(store.useYarn).toBe('')
+
+            helpers.canUseYarn()
+            expect(store.useYarn).toBe(false)
+        })
+
+        it('should return true if yarnpkg exists', () => {
+            let returnBool = helpers.canUseYarn()
+            expect(returnBool).toBe(true)
+        }) 
+
+        it('should return false if yarnpkg doesn\'t exist', () => {
+            this.sandbox.stub(helpers, 'canUseYarn').returns(false)
+
+            let returnBool = helpers.canUseYarn()
+            expect(returnBool).toBe(false)
+        })
     })
 
     describe('yarn', () => {
