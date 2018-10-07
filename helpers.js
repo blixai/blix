@@ -7,7 +7,7 @@ const inquirer = require('inquirer')
 const prompt   = inquirer.prompt
 const { yarnPrompt } = require('./new/prompts')
 
-const canUseYarn = () => {
+exports.canUseYarn = () => {
   if (fs.existsSync('yarn.lock')) {
     store.useYarn = true
     return true
@@ -24,7 +24,7 @@ const canUseYarn = () => {
 };
 
 const yarn = async () => {
-  if (canUseYarn() && store.useYarn === '') {
+  if (this.canUseYarn() && store.useYarn === '') {
     let yarnAnswer = await prompt([yarnPrompt])
     store.useYarn = yarnAnswer.yarn
   }
