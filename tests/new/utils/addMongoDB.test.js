@@ -1,21 +1,66 @@
-// import store
+const fs = require('fs');
+const exists = fs.existsSync;
+const store = require('../../../new/store');
+const helpers = require('../../../helpers')
+const path = require("path");
+const readFile = fs.readFileSync;
+const {
+  addMongooseToScripts,
+  addMongoDBToProject,
+} = require('../../../new/utils/addMongoDB');
+const execSync = require("child_process").execSync;
 
-// beforeAll
-  // create store.name/server folder
-  // create package.json 
+const loadFile = filePath => {
+  return fs.readFileSync(path.resolve(__dirname, filePath), "utf8")
+}
 
-// addMongooseToScripts
-  // before 
-    // create scripts
-    // create scripts/templates
-  // does scripts/model.js exist
-  // does scripts/templates/schemaTemplate.js exist
-  // use sinon - is addMongoDBToProject called
+beforeAll(() => {
+  try{
+    process.chdir('./tests/new/utils')
+    store.name = "tmpTest"
+    store.env = "development"
+    fs.mkdirSync(store.name)
+    let file = loadFile('../../../new/files/common/package.json')
+    helpers.writeFile(`package.json`, file)
+    execSync(`mkdir ${store.name}/scripts ${store.name}/scripts/templates ${store.name}/server && touch ${store.name}/server/server.js ${store.name}/.env`)
+  } catch(err){
+    console.error(err)
+  }
+})
 
-// addMongoDBToProject
-  // before
-    // create store.name/.env file (can be blank)
-    // create store.name/server/server.js file
-  // check if store.name/server/server.js contains const mongoose = require('mongoose')
-  // check if store.name/.env contains the MONGO connection string
-  // check if store.devDependencies contains mongo and mongoose
+afterAll(() => {
+  execSync(`rm -rf ${store.name}`)
+})
+
+describe("Utils: addMongooseToScripts", () => {
+  beforeAll(() => {
+    addMongooseToScripts();
+  })
+
+  it("Contains model.js", () => {
+    expect(exists(`${store.name}/scripts/model.js`)).toBe(true);
+  });
+
+  it("Contains schemaTemplate.js", () => {
+    expect(exists(`${store.name}/scripts/templates/schemaTemplate.js`)).toBe(true);
+  });
+})
+  
+
+describe("Utils: addMongoDBToProject", () => {
+  beforeAll(() => {
+    addMongoDBToProject();
+  })
+
+  it("Adds mongoose to server.js", () => {
+    expect(readFile(`${store.name}/server/server.js`, "utf8")).toContain("require('mongoose')")
+  })
+
+  it("Adds the Mongo connection string to .env", () => {
+    expect(readFile(`${store.name}/.env`, "utf8")).toContain(`mongodb://localhost:27017/${store.name}`)
+  })
+
+  it("Adds mongo and mongoose to the store devDependencies", () => {
+    expect(store.dependencies).toContain("mongo mongoose")
+  })
+})
