@@ -1,6 +1,39 @@
-// import store
+const fs =require('fs')
+const store = require('../../../new/store')
+const helpers = require('../../../helpers')
+const sinon = require('sinon')
+const execSync = require("child_process").execSync;
+
+const { writeFile, mkdirSync } = helpers
+
+const {
+  eslintPackageJsonScripts,
+  addLinter
+} = require('../../../new/utils/addLinter')
 
 // before all 
+beforeAll(() => {
+  try {
+    process.chdir('../')
+    mkdirSync('tmpTests')
+    process.chdir('tmpTests')
+  } catch(err) {
+    console.error('Before all Error: ', err)
+  }
+})
+
+afterAll(() => {
+  try {
+    process.chdir('../')
+    execSync('rm -rf tmpTests')
+  } catch(err) {
+    console.error(err)
+  }
+})
+
+describe('Utils: addLinter', () => {
+  
+})
   // create package.json
 
 // eslintPackageJsonScripts
