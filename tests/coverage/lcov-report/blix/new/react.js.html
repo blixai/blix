@@ -22,22 +22,22 @@
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>0/188</span>
+        <span class='fraction'>0/197</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>0/30</span>
+        <span class='fraction'>0/32</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>0/14</span>
+        <span class='fraction'>0/15</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>0/188</span>
+        <span class='fraction'>0/197</span>
       </div>
     </div>
   </div>
@@ -332,7 +332,23 @@
 287
 288
 289
-290</td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+290
+291
+292
+293
+294
+295
+296
+297
+298
+299
+300
+301
+302
+303
+304
+305
+306</td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -351,8 +367,10 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -391,7 +409,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -603,33 +625,43 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">const helpers = <span class="cstat-no" title="statement not covered" >require("../helpers");</span>
 const fs = <span class="cstat-no" title="statement not covered" >require("fs");</span>
 const path = <span class="cstat-no" title="statement not covered" >require("path");</span>
-const { createCommonFilesAndFolders } = <span class="cstat-no" title="statement not covered" >require("./utils/createCommonFiles");</span>
-const { installReactTesting } = <span class="cstat-no" title="statement not covered" >require("./utils/addReactTesting");</span>
-const { e2eSetup } = <span class="cstat-no" title="statement not covered" >require("./utils/addEndToEndTesting");</span>
-const { newProjectInstructions } = <span class="cstat-no" title="statement not covered" >require('./utils/newProjectInstructions')</span>
-const { createBackend } = <span class="cstat-no" title="statement not covered" >require("./backend");</span>
-const name = <span class="cstat-no" title="statement not covered" >process.argv[3];</span>
+const {createCommonFilesAndFolders} = <span class="cstat-no" title="statement not covered" >require("./utils/createCommonFiles");</span>
+const {addLinter} = <span class="cstat-no" title="statement not covered" >require('./utils/addLinter')</span>
+const {installReactTesting} = <span class="cstat-no" title="statement not covered" >require("./utils/addReactTesting");</span>
+const {e2eSetup} = <span class="cstat-no" title="statement not covered" >require("./utils/addEndToEndTesting");</span>
+const {newProjectInstructions} = <span class="cstat-no" title="statement not covered" >require('./utils/newProjectInstructions')</span>
+const {createBackend} = <span class="cstat-no" title="statement not covered" >require("./backend");</span>
 const store = <span class="cstat-no" title="statement not covered" >require('./store')</span>
 &nbsp;
 const loadFile = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >filePath =&gt; </span>{</span>
@@ -639,10 +671,12 @@ const loadFile = <span class="cstat-no" title="statement not covered" ><span cla
 // load common files
 const babel = <span class="cstat-no" title="statement not covered" >loadFile("./files/frontend/babel/reactBabel");</span>
 const webpack = <span class="cstat-no" title="statement not covered" >loadFile("./files/frontend/webpack/react.js");</span>
+const webpackWithHotReloading = <span class="cstat-no" title="statement not covered" >loadFile('./files/frontend/webpack/reactWithHotReloading.js');</span>
 const postcssConfig = <span class="cstat-no" title="statement not covered" >loadFile("./files/frontend/postcss.config.js");</span>
 &nbsp;
 // load html file for projects without backends
 const htmlFile = <span class="cstat-no" title="statement not covered" >loadFile("./files/frontend/other/index.html");</span>
+const cssFile = <span class="cstat-no" title="statement not covered" >loadFile("./files/frontend/other/App.css");</span>
 &nbsp;
 // load react files
 const index = <span class="cstat-no" title="statement not covered" >loadFile("./files/frontend/react/index.js");</span>
@@ -666,23 +700,27 @@ const ReduxHomeView = <span class="cstat-no" title="statement not covered" >load
 &nbsp;
 const NavbarContainer = <span class="cstat-no" title="statement not covered" >loadFile("./files/frontend/redux/NavbarContainer.js");</span>
 &nbsp;
-const react = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >async () =&gt; </span>{</span>
+const react = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >() =&gt; </span>{</span>
 <span class="cstat-no" title="statement not covered" >  createCommonFilesAndFolders();</span>
 &nbsp;
   // create react files
-<span class="cstat-no" title="statement not covered" >  helpers.mkdirSync(`./${name}/dist`);</span>
-<span class="cstat-no" title="statement not covered" >  helpers.mkdirSync(`./${name}/src`);</span>
+<span class="cstat-no" title="statement not covered" >  helpers.mkdirSync(`dist`);</span>
+<span class="cstat-no" title="statement not covered" >  helpers.mkdirSync(`src`);</span>
   // A FOLDER TO HOLD FILES WITH RESOURCE FETCH CALLS TO ONE RESOURCE PER FILE (similar to controllers server side)
-<span class="cstat-no" title="statement not covered" >  helpers.mkdirSync(`./${name}/src/services`);</span>
+<span class="cstat-no" title="statement not covered" >  helpers.mkdirSync(`src/services`);</span>
 &nbsp;
   // build project specific contents based on type supplied from new/index.js
 <span class="cstat-no" title="statement not covered" >  createSrcContents();</span>
 &nbsp;
   // create webpack postcssConfig and babelrc files
-<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`./${name}/postcss.config.js`, postcssConfig);</span>
-<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`./${name}/.babelrc`, babel);</span>
-<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`./${name}/webpack.config.js`, webpack);</span>
+<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`postcss.config.js`, postcssConfig);</span>
+<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`.babelrc`, babel);</span>
 &nbsp;
+<span class="cstat-no" title="statement not covered" >  createWebpack()</span>
+&nbsp;
+  // add config file and install linter
+<span class="cstat-no" title="statement not covered" >  addLinter()</span>
+  // install css lib for react 
 <span class="cstat-no" title="statement not covered" >  cssLibrary()</span>
   // react testing setup
 <span class="cstat-no" title="statement not covered" >  installReactTesting();</span>
@@ -702,7 +740,7 @@ const react = <span class="cstat-no" title="statement not covered" ><span class=
 <span class="cstat-no" title="statement not covered" >    createBackend()</span>
     // createBackend("backend", store.serverTesting, store.database);
   } else {
-<span class="cstat-no" title="statement not covered" >    await helpers.installAllPackages()</span>
+<span class="cstat-no" title="statement not covered" >    helpers.installAllPackages()</span>
 <span class="cstat-no" title="statement not covered" >    newProjectInstructions()</span>
   }
 };
@@ -730,72 +768,72 @@ const createSrcContents = <span class="cstat-no" title="statement not covered" >
 };
 &nbsp;
 const reactOnly = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >() =&gt; </span>{</span>
-<span class="cstat-no" title="statement not covered" >  helpers.mkdirSync(`./${name}/src/App`);</span>
-<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`./${name}/src/index.js`, index);</span>
-<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`./${name}/src/App/App.js`, app);</span>
-<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`./${name}/src/App/App.css`, "");</span>
+<span class="cstat-no" title="statement not covered" >  helpers.mkdirSync(`src/App`);</span>
+<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`src/index.js`, index);</span>
+<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`src/App/App.js`, app);</span>
+<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`src/App/App.css`, cssFile);</span>
 };
 &nbsp;
 const reactRouter = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >() =&gt; </span>{</span>
-<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`./${name}/src/index.js`, reactRouterIndex);</span>
-<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`./${name}/src/Router.js`, appRouter);</span>
+<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`src/index.js`, reactRouterIndex);</span>
+<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`src/Router.js`, appRouter);</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  helpers.mkdirSync(`./${name}/src/components`);</span>
-<span class="cstat-no" title="statement not covered" >  helpers.mkdirSync(`./${name}/src/components/Navbar`);</span>
-<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`./${name}/src/components/Navbar/Navbar.js`, Navbar);</span>
-<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`./${name}/src/components/Navbar/Navbar.css`, NavbarCSS);</span>
-<span class="cstat-no" title="statement not covered" >  helpers.mkdirSync(`./${name}/src/views`);</span>
-<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`./${name}/src/views/Home.js`, HomeView);</span>
+<span class="cstat-no" title="statement not covered" >  helpers.mkdirSync(`src/components`);</span>
+<span class="cstat-no" title="statement not covered" >  helpers.mkdirSync(`src/components/Navbar`);</span>
+<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`src/components/Navbar/Navbar.js`, Navbar);</span>
+<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`src/components/Navbar/Navbar.css`, NavbarCSS);</span>
+<span class="cstat-no" title="statement not covered" >  helpers.mkdirSync(`src/views`);</span>
+<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`src/views/Home.js`, HomeView);</span>
   // styles folder
-<span class="cstat-no" title="statement not covered" >  helpers.mkdirSync(`./${name}/src/styles`);</span>
-<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`./${name}/src/styles/global.css`, globalStyle);</span>
+<span class="cstat-no" title="statement not covered" >  helpers.mkdirSync(`src/styles`);</span>
+<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`src/styles/global.css`, globalStyle);</span>
   // install react-router-dom for src/index.js file
 <span class="cstat-no" title="statement not covered" >  helpers.addDevDependenciesToStore("react-router-dom");</span>
 };
 &nbsp;
 const redux = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >() =&gt; </span>{</span>
-<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`./${name}/src/index.js`, reduxIndex)</span>
-<span class="cstat-no" title="statement not covered" >  helpers.mkdirSync(`./${name}/src/App`)</span>
-<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`./${name}/src/App/App.js`, app)</span>
-<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`./${name}/src/App/AppContainer.js`, reduxAppContainer)</span>
-<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`./${name}/src/App/App.css`, "")</span>
+<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`src/index.js`, reduxIndex)</span>
+<span class="cstat-no" title="statement not covered" >  helpers.mkdirSync(`src/App`)</span>
+<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`src/App/App.js`, app)</span>
+<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`src/App/AppContainer.js`, reduxAppContainer)</span>
+<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`src/App/App.css`, cssFile)</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  helpers.mkdirSync(`./${name}/src/actions`)</span>
-<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`./${name}/src/actions/index.js`, "")</span>
+<span class="cstat-no" title="statement not covered" >  helpers.mkdirSync(`src/actions`)</span>
+<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`src/actions/index.js`, "")</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  helpers.mkdirSync(`./${name}/src/reducers`)</span>
-<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`./${name}/src/reducers/rootReducer.js`, rootReducer);</span>
-<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`./${name}/src/configStore.js`, configStore);</span>
+<span class="cstat-no" title="statement not covered" >  helpers.mkdirSync(`src/reducers`)</span>
+<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`src/reducers/rootReducer.js`, rootReducer);</span>
+<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`src/configStore.js`, configStore);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  helpers.addDevDependenciesToStore("redux react-redux")</span>
 &nbsp;
 }
 &nbsp;
 const reactRouterRedux = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >() =&gt; </span>{</span>
-<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`./${name}/src/index.js`, reactRouterReduxIndex);</span>
-<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`./${name}/src/Router.js`, appRouter);</span>
+<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`src/index.js`, reactRouterReduxIndex);</span>
+<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`src/Router.js`, appRouter);</span>
   // components folder, every component will have a folder with associated css, tests, and/or container for that component
-<span class="cstat-no" title="statement not covered" >  helpers.mkdirSync(`./${name}/src/components`);</span>
-<span class="cstat-no" title="statement not covered" >  helpers.mkdirSync(`./${name}/src/components/Navbar`);</span>
-<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`./${name}/src/components/Navbar/Navbar.js`, Navbar);</span>
+<span class="cstat-no" title="statement not covered" >  helpers.mkdirSync(`src/components`);</span>
+<span class="cstat-no" title="statement not covered" >  helpers.mkdirSync(`src/components/Navbar`);</span>
+<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`src/components/Navbar/Navbar.js`, Navbar);</span>
 <span class="cstat-no" title="statement not covered" >  helpers.writeFile(</span>
-    `./${name}/src/components/Navbar/NavbarContainer.js`,
+    `src/components/Navbar/NavbarContainer.js`,
     NavbarContainer
   );
-<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`./${name}/src/components/Navbar/Navbar.css`, NavbarCSS);</span>
+<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`src/components/Navbar/Navbar.css`, NavbarCSS);</span>
   // views folder
-<span class="cstat-no" title="statement not covered" >  helpers.mkdirSync(`./${name}/src/views`);</span>
-<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`./${name}/src/views/Home.js`, ReduxHomeView);</span>
+<span class="cstat-no" title="statement not covered" >  helpers.mkdirSync(`src/views`);</span>
+<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`src/views/Home.js`, ReduxHomeView);</span>
   // styles folder for views
-<span class="cstat-no" title="statement not covered" >  helpers.mkdirSync(`./${name}/src/styles`);</span>
-<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`./${name}/src/styles/global.css`, globalStyle);</span>
+<span class="cstat-no" title="statement not covered" >  helpers.mkdirSync(`src/styles`);</span>
+<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`src/styles/global.css`, globalStyle);</span>
 &nbsp;
   // need to make actions folder and store file and configure store and reducers folder with rootReducer.js
-<span class="cstat-no" title="statement not covered" >  helpers.mkdirSync(`./${name}/src/actions`);</span>
-<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`./${name}/src/actions/index.js`, "");</span>
-<span class="cstat-no" title="statement not covered" >  helpers.mkdirSync(`./${name}/src/reducers`);</span>
-<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`./${name}/src/reducers/rootReducer.js`, rootReducer);</span>
-<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`./${name}/src/configStore.js`, configStore);</span>
+<span class="cstat-no" title="statement not covered" >  helpers.mkdirSync(`src/actions`);</span>
+<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`src/actions/index.js`, "");</span>
+<span class="cstat-no" title="statement not covered" >  helpers.mkdirSync(`src/reducers`);</span>
+<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`src/reducers/rootReducer.js`, rootReducer);</span>
+<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`src/configStore.js`, configStore);</span>
   //install react-router-dom and other redux specific libs
 <span class="cstat-no" title="statement not covered" >  helpers.addDevDependenciesToStore("redux react-redux react-router-dom");</span>
 };
@@ -806,7 +844,7 @@ const scripts = <span class="cstat-no" title="statement not covered" ><span clas
       "start",
       "webpack-dev-server --output-public-path=/dist/ --inline --hot --open --port 3000 --mode='development'"
     );
-<span class="cstat-no" title="statement not covered" >    helpers.writeFile(`./${name}/index.html`, htmlFile);</span>
+<span class="cstat-no" title="statement not covered" >    helpers.writeFile(`index.html`, htmlFile);</span>
   }
 <span class="cstat-no" title="statement not covered" >  helpers.addScriptToNewPackageJSON(</span>
     "dev",
@@ -830,9 +868,9 @@ const reactScripts = <span class="cstat-no" title="statement not covered" ><span
   let statefulComponentTemplate = <span class="cstat-no" title="statement not covered" >loadFile('./files/scripts/frontend/react/templates/statefulComponent.js')</span>
   let statelessComponentTemplate = <span class="cstat-no" title="statement not covered" >loadFile("./files/scripts/frontend/react/templates/statelessComponent.js")</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`./${name}/scripts/component.js`, component);</span>
-<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`./${name}/scripts/templates/statefulComponent.js`, statefulComponentTemplate);</span>
-<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`./${name}/scripts/templates/statelessComponent.js`, statelessComponentTemplate);</span>
+<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`scripts/component.js`, component);</span>
+<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`scripts/templates/statefulComponent.js`, statefulComponentTemplate);</span>
+<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`scripts/templates/statelessComponent.js`, statelessComponentTemplate);</span>
 <span class="cstat-no" title="statement not covered" >  helpers.addScriptToNewPackageJSON("component", "node scripts/component.js");</span>
 };
 &nbsp;
@@ -842,10 +880,10 @@ const reactRouterScripts = <span class="cstat-no" title="statement not covered" 
   let statelessComponentTemplate = <span class="cstat-no" title="statement not covered" >loadFile("./files/scripts/frontend/react/templates/statelessComponent.js")</span>
   let view = <span class="cstat-no" title="statement not covered" >loadFile('./files/scripts/frontend/react-router/view.js')</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`./${name}/scripts/component.js`, component);</span>
-<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`./${name}/scripts/templates/statefulComponent.js`, statefulComponentTemplate);</span>
-<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`./${name}/scripts/templates/statelessComponent.js`, statelessComponentTemplate);</span>
-<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`./${name}/scripts/view.js`, view);</span>
+<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`scripts/component.js`, component);</span>
+<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`scripts/templates/statefulComponent.js`, statefulComponentTemplate);</span>
+<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`scripts/templates/statelessComponent.js`, statelessComponentTemplate);</span>
+<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`scripts/view.js`, view);</span>
   // add scripts to package.json
 <span class="cstat-no" title="statement not covered" >  helpers.addScriptToNewPackageJSON("component", "node scripts/component.js");</span>
 <span class="cstat-no" title="statement not covered" >  helpers.addScriptToNewPackageJSON("view", "node scripts/view.js");</span>
@@ -861,14 +899,14 @@ const reduxScripts = <span class="cstat-no" title="statement not covered" ><span
   let statefulComponentTemplate = <span class="cstat-no" title="statement not covered" >loadFile("./files/scripts/frontend/react/templates/statefulComponent.js")</span>
 &nbsp;
   // action script and templates
-<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`./${name}/scripts/action.js`, action)</span>
-<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`./${name}/scripts/templates/action.js`, actionTemplate)</span>
-<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`./${name}/scripts/templates/reducer.js`, reducerTemplate)</span>
+<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`scripts/action.js`, action)</span>
+<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`scripts/templates/action.js`, actionTemplate)</span>
+<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`scripts/templates/reducer.js`, reducerTemplate)</span>
   // component script and templates
-<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`./${name}/scripts/component.js`, component) </span>
-<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`./${name}/scripts/templates/statelessComponent.js`, statelessComponentTemplate)</span>
-<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`./${name}/scripts/templates/container.js`, containerTemplate)</span>
-<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`./${name}/scripts/templates/statefulComponent.js`, statefulComponentTemplate)</span>
+<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`scripts/component.js`, component)</span>
+<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`scripts/templates/statelessComponent.js`, statelessComponentTemplate)</span>
+<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`scripts/templates/container.js`, containerTemplate)</span>
+<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`scripts/templates/statefulComponent.js`, statefulComponentTemplate)</span>
 &nbsp;
   // add scripts for action and component to package.json
 <span class="cstat-no" title="statement not covered" >  helpers.addScriptToNewPackageJSON('component', 'node scripts/component.js')</span>
@@ -885,16 +923,16 @@ const reactRouterReduxScripts = <span class="cstat-no" title="statement not cove
   let statefulComponentTemplate = <span class="cstat-no" title="statement not covered" >loadFile("./files/scripts/frontend/react/templates/statefulComponent.js")</span>
   let view = <span class="cstat-no" title="statement not covered" >loadFile('./files/scripts/frontend/reactRouter-redux/view.js')</span>
   // action script and templates
-<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`./${name}/scripts/action.js`, action)</span>
-<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`./${name}/scripts/templates/action.js`, actionTemplate);</span>
-<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`./${name}/scripts/templates/reducer.js`, reducerTemplate);</span>
+<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`scripts/action.js`, action)</span>
+<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`scripts/templates/action.js`, actionTemplate);</span>
+<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`scripts/templates/reducer.js`, reducerTemplate);</span>
   // component script and templates
-<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`./${name}/scripts/component.js`, component);</span>
-<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`./${name}/scripts/templates/statelessComponent.js`, statelessComponentTemplate);</span>
-<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`./${name}/scripts/templates/container.js`, containerTemplate);</span>
-<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`./${name}/scripts/templates/statefulComponent.js`, statefulComponentTemplate);</span>
+<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`scripts/component.js`, component);</span>
+<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`scripts/templates/statelessComponent.js`, statelessComponentTemplate);</span>
+<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`scripts/templates/container.js`, containerTemplate);</span>
+<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`scripts/templates/statefulComponent.js`, statefulComponentTemplate);</span>
   // view script
-<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`./${name}/scripts/view.js`, view);</span>
+<span class="cstat-no" title="statement not covered" >  helpers.writeFile(`scripts/view.js`, view);</span>
 &nbsp;
   // add scripts for action and component to package.json
 <span class="cstat-no" title="statement not covered" >  helpers.addScriptToNewPackageJSON("component", "node scripts/component.js");</span>
@@ -909,14 +947,24 @@ const packages = <span class="cstat-no" title="statement not covered" ><span cla
 <span class="cstat-no" title="statement not covered" >  helpers.addDevDependenciesToStore("react react-dom webpack webpack-cli babel-loader css-loader @babel/core @babel/preset-env @babel/preset-react style-loader sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-preset-env postcss-import postcss-loader")</span>
 };
 &nbsp;
-<span class="cstat-no" title="statement not covered" >module.exports = { react };</span>
+const createWebpack = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >() =&gt; </span>{</span>
+<span class="cstat-no" title="statement not covered" >  if (store.backend.backend) {</span>
+<span class="cstat-no" title="statement not covered" >    helpers.writeFile(`webpack.config.js`, webpackWithHotReloading);</span>
+    let hotReloadIndex = `<span class="cstat-no" title="statement not covered" >\nif (module.hot) {\n\tconsole.clear()\n\tmodule.hot.accept();\n}`</span>
+<span class="cstat-no" title="statement not covered" >    helpers.appendFile(`./${store.name}/src/index.js`, hotReloadIndex)</span>
+  } else {
+<span class="cstat-no" title="statement not covered" >    helpers.writeFile(`webpack.config.js`, webpack);</span>
+  }
+}
+&nbsp;
+<span class="cstat-no" title="statement not covered" >module.exports = {react};</span>
 &nbsp;</pre></td></tr>
 </table></pre>
 <div class='push'></div><!-- for sticky footer -->
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Sat Sep 29 2018 16:01:48 GMT-0700 (Pacific Daylight Time)
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Sun Oct 07 2018 03:05:50 GMT-0700 (PDT)
 </div>
 </div>
 <script src="../../prettify.js"></script>

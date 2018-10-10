@@ -53,6 +53,7 @@ afterAll(() => {
     }
 });
 
+
 describe('Helper Tests', () => {
     beforeEach(() => {
         this.sandbox = sinon.createSandbox();

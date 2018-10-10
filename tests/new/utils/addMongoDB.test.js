@@ -22,7 +22,7 @@ beforeAll(() => {
     store.env = "development"
     fs.mkdirSync(store.name)
     let pkgJson = loadFile('../../../new/files/common/package.json')
-    helpers.writeFile(`package.json`, pkgJson)
+    helpers.writeFile('package.json', pkgJson)
     const files = [
       "server/server.js",
       ".env"
@@ -48,35 +48,38 @@ afterAll(() => {
   execSync(`rm -rf ${store.name}`)
 })
 
-describe("Utils: addMongooseToScripts", () => {
-  beforeAll(() => {
-    addMongooseToScripts();
-  })
-
-  it("Contains model.js", () => {
-    expect(exists(`${store.name}/scripts/model.js`)).toBe(true);
-  });
-
-  it("Contains schemaTemplate.js", () => {
-    expect(exists(`${store.name}/scripts/templates/schemaTemplate.js`)).toBe(true);
-  });
-})
+describe('Add Mongo DB', () => {
   
+  describe("addMongooseToScripts", () => {
+    beforeAll(() => {
+      addMongooseToScripts();
+    })
 
-describe("Utils: addMongoDBToProject", () => {
-  beforeAll(() => {
-    addMongoDBToProject();
+    it("Contains model.js", () => {
+      expect(exists(`${store.name}/scripts/model.js`)).toBe(true);
+    });
+
+    it("Contains schemaTemplate.js", () => {
+      expect(exists(`${store.name}/scripts/templates/schemaTemplate.js`)).toBe(true);
+    });
   })
+    
 
-  it("Adds mongoose to server.js", () => {
-    expect(readFile(`${store.name}/server/server.js`, "utf8")).toContain("require('mongoose')")
-  })
+  describe("addMongoDBToProject", () => {
+    beforeAll(() => {
+      addMongoDBToProject();
+    })
 
-  it("Adds the Mongo connection string to .env", () => {
-    expect(readFile(`${store.name}/.env`, "utf8")).toContain(`mongodb://localhost:27017/${store.name}`)
-  })
+    it("Adds mongoose to server.js", () => {
+      expect(readFile(`${store.name}/server/server.js`, "utf8")).toContain("require('mongoose')")
+    })
 
-  it("Adds mongo and mongoose to the store devDependencies", () => {
-    expect(store.dependencies).toContain("mongo mongoose")
+    it("Adds the Mongo connection string to .env", () => {
+      expect(readFile(`${store.name}/.env`, "utf8")).toContain(`mongodb://localhost:27017/${store.name}`)
+    })
+
+    it("Adds mongo and mongoose to the store devDependencies", () => {
+      expect(store.dependencies).toContain("mongo mongoose")
+    })
   })
 })

@@ -22,7 +22,7 @@
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>0/42</span>
+        <span class='fraction'>0/44</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
@@ -37,7 +37,7 @@
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>0/42</span>
+        <span class='fraction'>0/44</span>
       </div>
     </div>
   </div>
@@ -123,7 +123,9 @@
 78
 79
 80
-81</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+81
+82
+83</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -132,13 +134,8 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -162,6 +159,12 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -176,6 +179,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -212,6 +216,7 @@ const add = <span class="cstat-no" title="statement not covered" >require("./add
 const <span class="cstat-no" title="statement not covered" >generate = require('</span>./generate')
 const command = <span class="cstat-no" title="statement not covered" >process.argv[2];</span>
 const store = <span class="cstat-no" title="statement not covered" >require('</span>./new/store')
+const log = <span class="cstat-no" title="statement not covered" >console.log</span>
 &nbsp;
 const checkCommand = command =&gt; {
 <span class="cstat-no" title="statement not covered" >  switch (command) {</span>
@@ -251,20 +256,21 @@ if (process.argv.includes('--verbose')) {
 &nbsp;
 <span class="cstat-no" title="statement not covered" >const checkVersion = () =&gt; {</span>
   var pjson = require("./package.json");
-  console.log(<span class="cstat-no" title="statement not covered" >pjson.version);</span>
+  log(pjson.<span class="cstat-no" title="statement not covered" >version);</span>
 }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >const noCommand = () =&gt; {</span>
-  console.log('No command entered')
-<span class="cstat-no" title="statement not covered" >  console.log('')</span>
-<span class="cstat-no" title="statement not covered" >  console.log('</span>Here is a list of blix commands:')
-<span class="cstat-no" title="statement not covered" >  console.log('new')</span>
-<span class="cstat-no" title="statement not covered" >  console.log('add')</span>
-<span class="cstat-no" title="statement not covered" >  console.log('</span>scripts')
-<span class="cstat-no" title="statement not covered" >  console.log('</span>version | -v')
-<span class="cstat-no" title="statement not covered" >  console.log('help')</span>
-<span class="cstat-no" title="statement not covered" >  console.log('')</span>
-<span class="cstat-no" title="statement not covered" >  console.log('</span>Run: "blix help" to learn more about a command')
+  log('No command entered')
+<span class="cstat-no" title="statement not covered" >  log('')</span>
+<span class="cstat-no" title="statement not covered" >  log('</span>Here is a list of blix commands:')
+<span class="cstat-no" title="statement not covered" >  log('new')</span>
+<span class="cstat-no" title="statement not covered" >  log('add')</span>
+<span class="cstat-no" title="statement not covered" >  log('</span>scripts')
+<span class="cstat-no" title="statement not covered" >  log('</span>generate | g')
+<span class="cstat-no" title="statement not covered" >  log('version | -v')</span>
+<span class="cstat-no" title="statement not covered" >  log('help')</span>
+<span class="cstat-no" title="statement not covered" >  log('')</span>
+<span class="cstat-no" title="statement not covered" >  log('</span>Run: "blix help" to learn more about a command')
 }
 &nbsp;
 let currentNodeVersion = process.versions.node;
@@ -289,7 +295,7 @@ checkCommand(command);
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Sat Sep 29 2018 16:01:48 GMT-0700 (Pacific Daylight Time)
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Sun Oct 07 2018 03:05:50 GMT-0700 (PDT)
 </div>
 </div>
 <script src="../prettify.js"></script>
