@@ -5,7 +5,7 @@ const chalk = require('chalk')
 const link = 'blixjs.com'
 
 const options = {
-  mongooseModel: { command: "model", example: "blix generate model <ModelName> [fieldName]:[Type] [fileName]:[Type]", use: "Creates Mongoose model" },
+  mongooseModel: { command: "model", example: "blix generate model <ModelName> [fieldName]:[Type] [fieldName]:[Type]", use: "Creates Mongoose model" },
   postgresModel: { command: "model", example: "blix generate model <ModelName> [fieldName]:[type] [fieldName]:[type]", use: "Creates Bookself model" },
   reactComponent: { command: "component", example: "blix generate component <name>", use: "Creates a stateful or stateless React component and CSS file in a folder within src/" },
   reactRouterComponent: { command: "component", example: "blix generate component <name>", use: "Creates a stateful or stateless React component and CSS file in a folder within src/components/"},
@@ -96,5 +96,6 @@ module.exports = {
   logCustomScriptInstructions,
   readmeFormatter,
   consoleFormatter,
-  newProjectInstructions
+  newProjectInstructions,
+  options
  };
