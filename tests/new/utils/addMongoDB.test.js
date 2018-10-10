@@ -48,7 +48,7 @@ afterAll(() => {
   execSync(`rm -rf ${store.name}`)
 })
 
-describe.skip("Add Mongo DB", () => {
+describe("Add Mongo DB", () => {
 
   describe("Utils: addMongooseToScripts", () => {
     beforeAll(() => {

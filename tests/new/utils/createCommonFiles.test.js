@@ -16,7 +16,7 @@ beforeAll(() => {
   }
 })
   
-describe.skip("Create Common Files", () => {
+describe("Create Common Files", () => {
 
 
   describe('Utils: createCommonFiles', () => {
