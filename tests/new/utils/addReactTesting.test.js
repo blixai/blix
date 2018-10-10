@@ -16,21 +16,23 @@ const loadFile = filePath => {
 
 beforeAll(() => {
   try{
-    store.name = "tmpTest";
+    store.name = "testApp";
     store.env = "development";
     fs.mkdirSync(store.name);
-    process.chdir(store.name)
     let pkgJson = loadFile('../../../new/files/common/package.json')
     writeFile(`package.json`, pkgJson)
-    fs.mkdirSync(`./test`);
+    fs.mkdirSync(`${store.name}/test`);
   } catch(err){
     console.error(err)
   }
 })
 
 afterAll(() => {
-  process.chdir('../')
-  execSync(`rm -rf ${store.name}`)
+  try{
+    execSync(`rm -rf ${store.name}`)
+  } catch(err){
+    console.error(err)
+  }
 })
 
 describe("Add React Testing", () => { 
@@ -38,10 +40,8 @@ describe("Add React Testing", () => {
   describe("Check if user selects React Testing", () => {
 
     it("Does not create testing files if enzyme is not selected", () => {
-      // if enzyme not selected, no files made
       installReactTesting()
-      console.log(fs.readdir(`${store.name}/test`))
-      expect(fs.readdir(`${store.name}/test`)).toBe("Someting")
+      expect(fs.readdirSync(`${store.name}/test`)).toHaveLength(0)
     })
 
     it("Creates testging files if enzyme is selected", () => {
