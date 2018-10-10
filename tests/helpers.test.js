@@ -47,7 +47,7 @@ afterAll(() => {
 });
 
 describe.skip('helper test: checkIfNeedYarnAnswer', () => {
-    it.skip('expect a prompt if yarn is installed', (done) => {
+    it('expect a prompt if yarn is installed', (done) => {
         expect.assertions(1)
         checkIfNeedYarnAnswer()
         setTimeout(() => {

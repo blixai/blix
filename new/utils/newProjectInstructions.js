@@ -79,16 +79,16 @@ const consoleFormatter = () => {
 const newProjectInstructions = () => {
   let name = store.name
   console.clear()
-  log("")
-  log(`Success! Created new project ${name} at ${process.cwd() + '/' + name}`);
-  log();
-  log('Inside that directory you can run these custom scripts:')
+  console.log("")
+  console.log(`Success! Created new project ${name} at ${process.cwd() + '/' + name}`);
+  console.log();
+  console.log('Inside that directory you can run these custom scripts:')
   logCustomScriptInstructions()
-  log(`\nWe suggest you begin by typing:`)
-  log(chalk`\n  {cyan cd} ${name}`)
-  log(chalk`{cyan   ${store.useYarn ? 'yarn start': 'npm start'}}`)
-  log(`\nFor examples and other information visit ${link}`)
-  log('Happy hacking!')
+  console.log(`\nWe suggest you begin by typing:`)
+  console.log(chalk`\n  {cyan cd} ${name}`)
+  console.log(chalk`{cyan   ${store.useYarn ? 'yarn start': 'npm start'}}`)
+  console.log(`\nFor examples and other information visit ${link}`)
+  console.log('Happy hacking!')
   log('')
 };
 
