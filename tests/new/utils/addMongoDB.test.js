@@ -48,35 +48,38 @@ afterAll(() => {
   execSync(`rm -rf ${store.name}`)
 })
 
-describe("Utils: addMongooseToScripts", () => {
-  beforeAll(() => {
-    addMongooseToScripts();
+describe.skip("Add Mongo DB", () => {
+
+  describe("Utils: addMongooseToScripts", () => {
+    beforeAll(() => {
+      addMongooseToScripts();
+    })
+
+    it("Contains model.js", () => {
+      expect(exists(`${store.name}/scripts/model.js`)).toBe(true);
+    });
+
+    it("Contains schemaTemplate.js", () => {
+      expect(exists(`${store.name}/scripts/templates/schemaTemplate.js`)).toBe(true);
+    });
   })
+    
 
-  it("Contains model.js", () => {
-    expect(exists(`${store.name}/scripts/model.js`)).toBe(true);
-  });
+  describe("Utils: addMongoDBToProject", () => {
+    beforeAll(() => {
+      addMongoDBToProject();
+    })
 
-  it("Contains schemaTemplate.js", () => {
-    expect(exists(`${store.name}/scripts/templates/schemaTemplate.js`)).toBe(true);
-  });
-})
-  
+    it("Adds mongoose to server.js", () => {
+      expect(readFile(`${store.name}/server/server.js`, "utf8")).toContain("require('mongoose')")
+    })
 
-describe("Utils: addMongoDBToProject", () => {
-  beforeAll(() => {
-    addMongoDBToProject();
+    it("Adds the Mongo connection string to .env", () => {
+      expect(readFile(`${store.name}/.env`, "utf8")).toContain(`mongodb://localhost:27017/${store.name}`)
+    })
+
+    it("Adds mongo and mongoose to the store devDependencies", () => {
+      expect(store.dependencies).toContain("mongo mongoose")
+    })
   })
-
-  it("Adds mongoose to server.js", () => {
-    expect(readFile(`${store.name}/server/server.js`, "utf8")).toContain("require('mongoose')")
-  })
-
-  it("Adds the Mongo connection string to .env", () => {
-    expect(readFile(`${store.name}/.env`, "utf8")).toContain(`mongodb://localhost:27017/${store.name}`)
-  })
-
-  it("Adds mongo and mongoose to the store devDependencies", () => {
-    expect(store.dependencies).toContain("mongo mongoose")
-  })
-})
+});

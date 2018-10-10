@@ -2,7 +2,7 @@ const fs = require('fs');
 const exists = fs.existsSync;
 const store = require('../../../new/store');
 const helpers = require('../../../helpers')
-const { writeFile, mkdirSync } = helpers
+const { writeFile} = helpers
 const path = require("path");
 const readFile = fs.readFileSync;
 const {
@@ -16,19 +16,20 @@ const loadFile = filePath => {
 
 beforeAll(() => {
   try{
-    process.chdir('./tests/new/utils');
     store.name = "tmpTest";
     store.env = "development";
-    mkdirSync(store.name);
-    mkdirSync(`${store.name}/test`);
+    fs.mkdirSync(store.name);
+    process.chdir(store.name)
     let pkgJson = loadFile('../../../new/files/common/package.json')
     writeFile(`package.json`, pkgJson)
+    fs.mkdirSync(`./test`);
   } catch(err){
     console.error(err)
   }
 })
 
 afterAll(() => {
+  process.chdir('../')
   execSync(`rm -rf ${store.name}`)
 })
 
@@ -39,12 +40,8 @@ describe("Add React Testing", () => {
     it("Does not create testing files if enzyme is not selected", () => {
       // if enzyme not selected, no files made
       installReactTesting()
-      fs.readdir(path, function(err, items) {
-        console.log(items);
-        for (var i=0; i<items.length; i++) {
-            console.log(items[i]);
-        }
-      expect().toBe()
+      console.log(fs.readdir(`${store.name}/test`))
+      expect(fs.readdir(`${store.name}/test`)).toBe("Someting")
     })
 
     it("Creates testging files if enzyme is selected", () => {
@@ -67,5 +64,5 @@ describe("Add React Testing", () => {
     // check package.json
       // does jest include moduleNameMapper
       // does scripts.test === jest
-    });
-});
+    })
+})
