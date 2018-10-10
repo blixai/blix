@@ -7,7 +7,7 @@ const inquirer = require('inquirer')
 const prompt   = inquirer.prompt
 const { yarnPrompt } = require('./new/prompts')
 
-const canUseYarn = () => {
+exports.canUseYarn = () => {
   if (fs.existsSync('yarn.lock')) {
     store.useYarn = true
     return true
@@ -24,7 +24,7 @@ const canUseYarn = () => {
 };
 
 const yarn = async () => {
-  if (canUseYarn() && store.useYarn === '') {
+  if (this.canUseYarn() && store.useYarn === '') {
     let yarnAnswer = await prompt([yarnPrompt])
     store.useYarn = yarnAnswer.yarn
   }
@@ -233,6 +233,7 @@ exports.modifyKnexExistingProject = (cwd) => {
 exports.appendFile = (file, stringToAppend) => {
   try {
     fs.appendFileSync(file, stringToAppend)
+    file = file.slice(2)
     log(chalk`{cyan append} ${file}`)
   } catch (err) {
     store.env === 'development' ? log(err) : log(chalk.red`Failed to append ${file}`)
@@ -322,13 +323,14 @@ const insert = async (fileToInsertInto, whatToInsert, lineToInsertAt) => {
       if (indexToFind !== -1) {
         lineToInsertAt = indexToFind + 1
       } else {
-        lineToInsertAt = 0
+        lineToInsertAt = file.length - 1
       }
     }
     // insert at lineToInsertAt
     file.splice(lineToInsertAt, 0, whatToInsert)
     file = file.join('\n')
     fs.writeFileSync(fileToInsertInto, file)
+    fileToInsertInto = fileToInsertInto.slice(2)
     log(chalk`{cyan insert} ${fileToInsertInto}`)
   } catch (err) {
     store.env === 'development' ? log(chalk.red`${console.error(err)}`) : log(chalk.red`Failed to insert into ${fileToInsertInto.slice(2)}`)

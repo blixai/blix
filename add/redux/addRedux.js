@@ -3,6 +3,9 @@ let path       = require('path')
 let inquirer   = require('inquirer')
 let prompt     = inquirer.prompt
 let helpers    = require('../../helpers')
+let store      = require('../../new/store')
+let addProjectInstructions = require('../addProjectInstructions')
+
 
 let loadFile = filePath => {
   let root = '../../new/files/'
@@ -160,6 +163,7 @@ let createFilesWithRouter = async () => {
   }
 
   await helpers.installDependenciesToExistingProject('redux react-redux react-router-dom')
+  return
 }
 
 // for a basic redux setup without a router
@@ -188,6 +192,7 @@ let dontAddReactRouter = async () => {
     helpers.writeFile('src/index.js', index)
   }
   helpers.installDependenciesToExistingProject('react-redux redux')
+  return
 }
 
 let reactRouter = {
@@ -217,10 +222,13 @@ let addRedux = async () => {
   }
 
   if (answer) {
-    createFilesWithRouter()
+    await createFilesWithRouter()
+    store.reactType = 'reactRouter-redux'
   } else {
-    dontAddReactRouter()
+    await dontAddReactRouter()
+    store.reactType = 'redux'
   }
+  addProjectInstructions()
 }
 
 module.exports = addRedux

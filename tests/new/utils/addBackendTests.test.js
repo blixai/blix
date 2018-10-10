@@ -1,4 +1,4 @@
-const store = require('../../../new/store')
+// const store = require('../../../new/store')
 // Import all methods from addBackendTests
 // import addScriptToNewPackageJSON
 

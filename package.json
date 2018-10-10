@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node index.js",
     "lint": "prettier --single-quote --no-semi --write '**/*.js'",
-    "test": "jest"
+    "test": "jest --watch",
+    "test:coverage": "jest --collectCoverage"
   },
   "keywords": [
     "express",
