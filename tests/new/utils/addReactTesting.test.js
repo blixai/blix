@@ -2,7 +2,7 @@ const fs = require('fs');
 const exists = fs.existsSync;
 const store = require('../../../new/store');
 const helpers = require('../../../helpers')
-const { writeFile, mkdirSync } = helpers
+const { writeFile} = helpers
 const path = require("path");
 const readFile = fs.readFileSync;
 const {
@@ -16,56 +16,76 @@ const loadFile = filePath => {
 
 beforeAll(() => {
   try{
-    process.chdir('./tests/new/utils');
-    store.name = "tmpTest";
+    store.name = "testApp";
     store.env = "development";
-    mkdirSync(store.name);
-    mkdirSync(`${store.name}/test`);
+    fs.mkdirSync(store.name);
     let pkgJson = loadFile('../../../new/files/common/package.json')
     writeFile(`package.json`, pkgJson)
+    fs.mkdirSync(`${store.name}/test`);
   } catch(err){
     console.error(err)
   }
 })
 
 afterAll(() => {
-  execSync(`rm -rf ${store.name}`)
+  try{
+    execSync(`rm -rf ${store.name}`)
+  } catch(err){
+    console.error(err)
+  }
 })
 
 describe("Add React Testing", () => { 
 
-  describe("Check if user selects React Testing", () => {
+  it("Does not create testing files if enzyme is not selected", () => {
+    installReactTesting()
+    expect(fs.readdirSync(`${store.name}/test`)).toHaveLength(0)
+  })
+  it("Creates a spec file if testing is selected", () => {
+    store.reactTesting = { enzyme: true }
+    store.reactType === "react-router"
+    installReactTesting()
+    expect(fs.readdirSync(`${store.name}/test`)).toHaveLength(1)
+  })
 
-    it("Does not create testing files if enzyme is not selected", () => {
-      // if enzyme not selected, no files made
+  describe("Dynamically creates and sets up Testing files", () => {
+    beforeAll(() => {
+      try {
+        store.reactTesting = { enzyme: true }
+      } catch(err){
+        console.error(err)
+      }
+    })
+    afterEach(() => {
+      store.reactType = ""
+      store.devDependencies = ""
+    })
+
+    it("Creates a Router file if react-router", () => {
+      store.reactType = "react-router"
       installReactTesting()
-      fs.readdir(path, function(err, items) {
-        console.log(items);
-        for (var i=0; i<items.length; i++) {
-            console.log(items[i]);
-        }
-      expect().toBe()
+      expect(exists(`${store.name}/test/Router.spec.js`)).toBe(true)
     })
-
-    it("Creates testging files if enzyme is selected", () => {
-      // store.reactTesting = { enzyme: true } 
-
+    it("Creates a Router file if reactRouterRedux", () => {
+      store.reactType = "reactRouterRedux"
+      installReactTesting()
+      expect(exists(`${store.name}/test/Router.spec.js`)).toBe(true)
     })
-
-    // check store.reactType
-      // if react-router
-        // store.name/test/Router.spec.js exist?
-      // if reactRouter-redux
-        // store.name/test/Router.spec.js exist?
-      // if store.reactType !== 'react-router' && store.reactType !== 'reactRouter-redux'
-        // store.name/test/App.spec.js exist?
+    it("Creates App.spec.js if no react Type Selected", () => {
+      installReactTesting()
+      expect(exists(`${store.name}/test/App.spec.js`)).toBe(true)
+    })
     
     // check store.devDependencies
-      // does it include jest enzyme enzyme-adapter-react-16 identity-obj-proxy
-    
+    it("Adds dev dependencies to the store", () => {
+      installReactTesting()
+      expect(store.devDependencies).toContain("jest enzyme enzyme-adapter-react-16 identity-obj-proxy babel-jest 'babel-core@^7.0.0-0'")
+    })
 
-    // check package.json
-      // does jest include moduleNameMapper
-      // does scripts.test === jest
-    });
-});
+  
+    it("Adds Jest to package.json", () => {
+      let json = JSON.parse(fs.readFileSync(`./${store.name}/package.json`, "utf8"));
+      expect(json.scripts.test).toContain("jest")
+    })
+  })
+})
