@@ -2,3 +2,5 @@
 node_modules
 src
 .vscode
+tests/tmpTests
+tests/coverage
