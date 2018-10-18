@@ -3,7 +3,6 @@ const path = require('path')
 const helpers = require('../../helpers')
 const store = require('../store')
 
-
 const loadFile = filePath => {
     let root = '../files/'
     return fs.readFileSync(path.resolve(__dirname, root + filePath), "utf8");
