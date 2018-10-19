@@ -1,3 +1,10 @@
+![https://img.shields.io/npm/dt/blix.svg](https://img.shields.io/npm/dt/blix.svg) ![GitHub package version](https://img.shields.io/github/package-json/v/badges/shields.svg) 
+![GitHub](https://img.shields.io/github/license/mashape/apistatus.svg) 
+![GitHub contributors](https://img.shields.io/github/contributors/blixjs/blix.svg) ![node](https://img.shields.io/node/v/blix.svg)
+
+
+
+
 # What is [blix.js](https://blixjs.com)?
 
 blix is a **command line tool** for Javascript applications. It can be used to create projects from scratch or integrate new features and tools into existing applications. blix works to provide a pleasant, rapid development experience by leveraging **convention + configuration**. 
