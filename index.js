@@ -1,12 +1,19 @@
 #!/usr/bin/env node
 
+const store = require('./new/store')
+// if this isn't here modules will run and load the cli args potentially creating bugs
+if (process.argv.includes('--verbose')) {
+  store.env = 'development'
+  let index = process.argv.indexOf('--verbose')
+  process.argv.splice(index, 1)
+}
+
 const createProject = require("./new");
 const help = require("./help/help.js");
 const scripts = require("./scripts/script.js");
 const add = require("./add/add");
 const generate = require('./generate')
 const command = process.argv[2];
-const store = require('./new/store')
 const log = console.log
 
 const checkCommand = command => {
@@ -40,10 +47,6 @@ const checkCommand = command => {
       break;
   }
 };
-
-if (process.argv.includes('--verbose')) {
-  store.env = 'development'
-}
 
 const checkVersion = () => {
   var pjson = require("./package.json");

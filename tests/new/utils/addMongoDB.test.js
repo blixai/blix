@@ -82,4 +82,4 @@ describe('Add Mongo DB', () => {
       expect(store.dependencies).toContain("mongo mongoose")
     })
   })
-})
+});

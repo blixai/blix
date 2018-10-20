@@ -42,5 +42,7 @@ const envFileExists = () => {
 }
 
 module.exports = {
-  addMongooseToScripts
+  addMongooseToScripts,
+  addMongoDBToProject,
+  envFileExists
 }
