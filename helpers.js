@@ -138,7 +138,7 @@ exports.writeFile = (filePath, file, message) => {
       message ? log(message) : log(chalk`{green create} ${filePathLog}`);
     }
   } catch (err) {
-    console.error("Couldn't create file", err)
+    store.env === 'development' ? console.error(chalk`{red Couldn't create file ${filePath}. ERROR: ${err} }`) : console.error(chalk`{red Couldn't create file ${filePath}}`)
   }
 }
 
