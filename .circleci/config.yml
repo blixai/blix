@@ -38,5 +38,8 @@ jobs:
           name: Install CodeCov
           command: npm install --save-dev codecov
       - run:
-          name: Run tests with CodeCov reports
+          name: Run tests
           command: npm run test:ci
+      - run:
+          name: send coverage
+          command: npm run send-coverage
