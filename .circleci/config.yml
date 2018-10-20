@@ -35,12 +35,8 @@ jobs:
         
       # run tests!
       - run:
-          name: Install JUnit coverage reporter
-          command: npm install --save-dev jest-junit
+          name: Install CodeCov
+          command: npm install --save-dev codecov
       - run:
-          name: Run tests with JUnit as reporter
+          name: Run tests with CodeCov reports
           command: npm run test:ci
-          environment:
-              JEST_JUNIT_OUTPUT: "reports/junit/js-test-results.xml"
-
-
