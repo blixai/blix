@@ -22,7 +22,7 @@ beforeAll(() => {
     store.env = "development"
     fs.mkdirSync(store.name)
     let pkgJson = loadFile('../../../new/files/common/package.json')
-    helpers.writeFile(`package.json`, pkgJson)
+    helpers.writeFile('package.json', pkgJson)
     const files = [
       "server/server.js",
       ".env"
@@ -48,9 +48,9 @@ afterAll(() => {
   execSync(`rm -rf ${store.name}`)
 })
 
-describe("Add Mongo DB", () => {
-
-  describe("Utils: addMongooseToScripts", () => {
+describe('Add Mongo DB', () => {
+  
+  describe("addMongooseToScripts", () => {
     beforeAll(() => {
       addMongooseToScripts();
     })
@@ -65,7 +65,7 @@ describe("Add Mongo DB", () => {
   })
     
 
-  describe("Utils: addMongoDBToProject", () => {
+  describe("addMongoDBToProject", () => {
     beforeAll(() => {
       addMongoDBToProject();
     })
