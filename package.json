@@ -7,7 +7,9 @@
     "start": "node index.js",
     "lint": "prettier --single-quote --no-semi --write '**/*.js'",
     "test": "jest",
-    "test:coverage": "jest --collectCoverage"
+    "test:coverage": "jest --collectCoverage",
+    "test:ci": "jest --coverage",
+    "send-coverage": "./node_modules/.bin/codecov"
   },
   "keywords": [
     "express",

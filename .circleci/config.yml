@@ -34,6 +34,12 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
         
       # run tests!
-      - run: npm test
-
-
+      - run:
+          name: Install CodeCov
+          command: npm install --save-dev codecov
+      - run:
+          name: Run tests
+          command: npm run test:ci
+      - run:
+          name: send coverage
+          command: npm run send-coverage
