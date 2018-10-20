@@ -38,4 +38,4 @@ const addLinter = () => {
     }
 }
 
-module.exports = { addLinter }
+module.exports = { addLinter, eslintPackageJsonScripts }

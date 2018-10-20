@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "lint": "prettier --single-quote --no-semi --write '**/*.js'"
+    "lint": "prettier --single-quote --no-semi --write '**/*.js'",
+    "test": "jest",
+    "test:coverage": "jest --collectCoverage"
   },
   "keywords": [
     "express",
@@ -29,7 +31,9 @@
     "inquirer": "^4.0.1"
   },
   "devDependencies": {
-    "prettier": "^1.14.2"
+    "jest": "^23.6.0",
+    "prettier": "^1.14.2",
+    "sinon": "^7.0.0"
   },
   "homepage": "https://github.com/blixjs/blix"
 }

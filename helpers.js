@@ -7,7 +7,7 @@ const inquirer = require('inquirer')
 const prompt   = inquirer.prompt
 const { yarnPrompt } = require('./new/prompts')
 
-const canUseYarn = () => {
+exports.canUseYarn = () => {
   if (fs.existsSync('yarn.lock')) {
     store.useYarn = true
     return true
@@ -24,7 +24,7 @@ const canUseYarn = () => {
 };
 
 const yarn = async () => {
-  if (canUseYarn() && store.useYarn === '') {
+  if (this.canUseYarn() && store.useYarn === '') {
     let yarnAnswer = await prompt([yarnPrompt])
     store.useYarn = yarnAnswer.yarn
   }
@@ -115,11 +115,15 @@ exports.modifyKnex = () => {
 };
 
 exports.addScriptToNewPackageJSON = (command, script) => {
-  let buffer = fs.readFileSync(`${store.name}/package.json`);
-  let json = JSON.parse(buffer);
-  json.scripts[command] = script;
-  let newPackage = JSON.stringify(json, null, 2);
-  fs.writeFileSync(`./${store.name}/package.json`, newPackage);
+  try {
+    let buffer = fs.readFileSync(`${store.name}/package.json`);
+    let json = JSON.parse(buffer);
+    json.scripts[command] = script;
+    let newPackage = JSON.stringify(json, null, 2);
+    fs.writeFileSync(`./${store.name}/package.json`, newPackage);
+  } catch (err) {
+    console.error(err)
+  }
 };
 
 exports.writeFile = (filePath, file, message) => {
@@ -329,7 +333,7 @@ const insert = async (fileToInsertInto, whatToInsert, lineToInsertAt) => {
     fileToInsertInto = fileToInsertInto.slice(2)
     log(chalk`{cyan insert} ${fileToInsertInto}`)
   } catch (err) {
-    store.env === 'development' ? log(chalk.red`err`) : log(chalk.red`Failed to insert into ${fileToInsertInto.slice(2)}`)
+    store.env === 'development' ? log(chalk.red`${console.error(err)}`) : log(chalk.red`Failed to insert into ${fileToInsertInto.slice(2)}`)
   }
 }
 

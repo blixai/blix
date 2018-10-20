@@ -15,7 +15,6 @@ const addMongooseToScripts = () => {
   );
   helpers.writeFile(`scripts/model.js`, model);
   helpers.writeFile(`scripts/templates/schemaTemplate.js`, schemaTemplate);
-
   helpers.addScriptToNewPackageJSON("model", "node scripts/model.js");
   addMongoDBToProject();
 };
@@ -23,7 +22,6 @@ const addMongooseToScripts = () => {
 const addMongoDBToProject = () => {
   let connectionString = `const mongoose = require('mongoose')\nmongoose.connect(process.env.MONGO, { useNewUrlParser: true })\n`
   helpers.insert(`./${store.name}/server/server.js`, connectionString, 0)
-
   helpers.appendFile(
     `./${store.name}/.env`,
     `MONGO=${`mongodb://localhost:27017/${store.name}`}`
@@ -32,5 +30,6 @@ const addMongoDBToProject = () => {
 };
 
 module.exports = {
-  addMongooseToScripts
+  addMongooseToScripts,
+  addMongoDBToProject
 };
