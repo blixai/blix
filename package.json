@@ -8,7 +8,7 @@
     "lint": "prettier --single-quote --no-semi --write '**/*.js'",
     "test": "jest",
     "test:coverage": "jest --collectCoverage",
-    "test:ci": "jest && codecov"
+    "test:ci": "jest --coverage && ./node_modules/.bin/codecov"
   },
   "keywords": [
     "express",
