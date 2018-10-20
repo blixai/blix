@@ -1,6 +1,8 @@
 ![https://img.shields.io/npm/dt/blix.svg](https://img.shields.io/npm/dt/blix.svg) ![GitHub package version](https://img.shields.io/github/package-json/v/badges/shields.svg) 
 ![GitHub](https://img.shields.io/github/license/mashape/apistatus.svg) 
-![GitHub contributors](https://img.shields.io/github/contributors/blixjs/blix.svg) ![node](https://img.shields.io/node/v/blix.svg) ![CircleCI branch](https://img.shields.io/circleci/project/github/blixjs/blix/v_2.0.0.svg) [![Coverage Status](https://coveralls.io/repos/github/blixjs/blix/badge.svg?branch=v_2.0.0)](https://coveralls.io/github/blixjs/blix?branch=v_2.0.0)
+![GitHub contributors](https://img.shields.io/github/contributors/blixjs/blix.svg) ![node](https://img.shields.io/node/v/blix.svg) ![CircleCI branch](https://img.shields.io/circleci/project/github/blixjs/blix/v_2.0.0.svg) 
+![Codecov branch](https://img.shields.io/codecov/c/github/blixjs/blix/v_2.0.0.svg)
+
 
 
 
