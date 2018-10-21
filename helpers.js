@@ -208,7 +208,11 @@ exports.installDevDependenciesToExistingProject = packages => {
       execSync(`npm install --save-dev ${packages}`, { stdio: [0, 1, 2] })
     }
   } catch (err) {
-    store.env === 'development' ? log(chalk.red`${err}`) : ""
+    if (store.env === 'development') {
+      console.error(err)
+    } else {
+      console.error(chalk`\t{red Error installing ${packages} }`)
+    }
   }
 }
 

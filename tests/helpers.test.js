@@ -282,8 +282,48 @@ describe('Helper Tests', () => {
         expect(console.error.mock.calls[0][0]).toContain(packages)
       })
     })
-    describe.skip('installDevDependenciesToExistingProject', () => {
+    describe('installDevDependenciesToExistingProject', () => {
+      afterEach(() => {
+        store.env = ''
+      })
 
+      it('Calls checkIfPackageJSONExists', () =>{
+        fs.existsSync.mockReturnValue(true)
+        installDevDependenciesToExistingProject()
+        expect(fs.existsSync).toBeCalledWith('package.json')
+      })
+      it('if yarn selected and installed uses yarn to install packages', () => {
+        child_process.execSync.mockReturnValue(true)
+        store.useYarn = true
+        installDevDependenciesToExistingProject('react')
+        expect(child_process.execSync.mock.calls[0][0]).toEqual('yarn add react --dev')
+      })
+      it('if npm selected and installed uses npm to install packages', () => {
+          child_process.execSync.mockReturnValue(true)
+          store.useYarn = false
+          installDevDependenciesToExistingProject('react')
+          expect(child_process.execSync.mock.calls[0][0]).toEqual('npm install --save-dev react')                
+      })
+      it('Throws an error if there is an error installing packages while in development', () => {
+        child_process.execSync.mockImplementation(() => {throw 'Error' })
+        fs.existsSync.mockReturnValue(true)
+        let packages = 'react'
+        store.env = 'development'
+        console.error = jest.fn()
+        installDevDependenciesToExistingProject(packages)
+        expect(console.error).toBeCalled()
+        expect(console.error.mock.calls[0][0]).not.toContain(packages)
+      })
+      it('Throws an error to the console containing the packages if there is an error installing', () => {
+        child_process.execSync.mockImplementation(() => {throw 'Error' })
+        fs.existsSync.mockReturnValue(true)
+        let packages = 'react'
+        store.env = 'prod'
+        console.error = jest.fn()
+        installDevDependenciesToExistingProject(packages)
+        expect(console.error).toBeCalled()
+        expect(console.error.mock.calls[0][0]).toContain(packages)
+      })
     })
     describe.skip('checkScriptsFolderExist', () => {
 
