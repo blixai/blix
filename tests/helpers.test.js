@@ -1,7 +1,10 @@
 jest.mock('fs', () => ({
     readFileSync: jest.fn(),
     existsSync: jest.fn(),
-    writeFileSync: jest.fn()
+    writeFileSync: jest.fn(),
+    truncateSync: jest.fn(),
+    appendFileSync: jest.fn(),
+    mkdirSync: jest.fn()
 }))
 
 jest.mock('child_process', () => ({
@@ -174,12 +177,39 @@ describe('Helper Tests', () => {
         })
         it('throws an error if no package.json', () => {
             fs.readFileSync.mockReturnValue(null)
+
             addScript('test', 'node')
             expect(console.error).toBeCalled()
         })
     })
-    describe.skip('modifyKnex', () => {
 
+    describe('modifyKnex', () => {
+        beforeEach(() => {
+            store.name = 'tests'
+        })
+
+        it('truncates knexfile if it already exists', () => {
+            fs.existsSync.mockReturnValue(true)
+
+            modifyKnex()
+
+            expect(fs.existsSync).toBeCalledWith(`./tests/knexfile.js`)
+            expect(fs.truncateSync).toBeCalledWith('./tests/knexfile.js', 0)
+            expect(fs.appendFileSync).toBeCalled()
+            expect(fs.mkdirSync.mock.calls[0][0]).toEqual('tests/db')
+            expect(fs.mkdirSync.mock.calls[1][0]).toEqual('tests/db/migrations')
+        })
+
+        it('creates a knexfile if none exists', () => {
+            fs.existsSync.mockReturnValue(false)
+
+            modifyKnex()
+
+            expect(fs.existsSync).toBeCalledWith(`./tests/knexfile.js`)
+            expect(fs.writeFileSync.mock.calls[0][0]).toEqual('./tests/knexfile.js')
+            expect(fs.mkdirSync.mock.calls[0][0]).toEqual('tests/db')
+            expect(fs.mkdirSync.mock.calls[1][0]).toEqual('tests/db/migrations') 
+        })
     })
     describe.skip('addScriptToNewPackageJSON', () => {
 
