@@ -211,8 +211,21 @@ describe('Helper Tests', () => {
             expect(fs.mkdirSync.mock.calls[1][0]).toEqual('tests/db/migrations') 
         })
     })
-    describe.skip('addScriptToNewPackageJSON', () => {
-
+    describe('addScriptToNewPackageJSON', () => {
+      let command = 'test'
+      let script = 'node'
+      it('should add script to new package.json if package.json exits', () => {
+        fs.readFileSync.mockReturnValue(`{"scripts": {} }`)
+        console.error = jest.fn()
+        addScriptToNewPackageJSON(command, script)
+        expect(console.error).not.toBeCalled()
+        expect(fs.writeFileSync.mock.calls[0][1]).toContain(command, script)
+      })
+      it('throws an error if no package.json', () => {
+          fs.readFileSync.mockReturnValue(null)
+          addScriptToNewPackageJSON(command, script)
+          expect(console.error).toBeCalled()
+      })
     })
     describe.skip('writeFile', () => {
 
