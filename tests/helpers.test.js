@@ -105,12 +105,32 @@ describe('Helper Tests', () => {
         })
     })
     
-    describe.skip('installDependencies', () => {
-        it('installs a dependencies to a new project', () => {
+    describe('installDependencies', () => {
+        it('uses yarn installs dependencies to a new project if yarn selected', () => {
             child_process.execSync.mockReturnValue(true)
-            store.useYarn = { yarn : true }
+            store.useYarn = true
             installDependencies('react')
-            expect(child_process.execSync).toBeCalledWi()
+            expect(child_process.execSync.mock.calls[0][0]).toEqual('yarn add react')
+        })
+        it('uses npm to installs dependencies to a new project if npm selected', () => {
+            child_process.execSync.mockReturnValue(true)
+            store.useYarn = false
+            installDependencies('react')
+            expect(child_process.execSync.mock.calls[0][0]).toEqual('npm install --save react')
+        })
+    })
+    describe('installDevDependencies', () => {
+        it('uses yarn installs dev dependencies to a new project if yarn selected', () => {
+            child_process.execSync.mockReturnValue(true)
+            store.useYarn = true
+            installDevDependencies('react')
+            expect(child_process.execSync.mock.calls[0][0]).toEqual('yarn add react --dev')
+        })
+        it('uses npm to installs dev dependencies to a new project if npm selected', () => {
+            child_process.execSync.mockReturnValue(true)
+            store.useYarn = false
+            installDevDependencies('react')
+            expect(child_process.execSync.mock.calls[0][0]).toEqual('npm install --save-dev react')
         })
     })
 })
