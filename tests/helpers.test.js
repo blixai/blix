@@ -263,17 +263,54 @@ describe('Helper Tests', () => {
     describe.skip('moveAllFilesInDir', () => {
 
     })
-    describe.skip('addDependenciesToStore', () => {
+    describe('addDependenciesToStore', () => {
 
+        beforeEach(() => {
+            store.dependencies = ''
+        })
+
+        it('sets store.dependencies equal to argument if store.dependencies is empty string', () => {
+                         
+            addDependenciesToStore('react express')
+
+            expect(store.dependencies).toEqual('react express') 
+        })
+
+        it('adds a space before combining it\'s arguments with store.dependencies if store.dependencies is not an empty string', () => {
+            store.dependencies = 'react express'
+
+            addDependenciesToStore('vue')
+
+            expect(store.dependencies).toEqual('react express vue')
+        })
     })
-    describe.skip('addDevDependenciesToStore', () => {
+    describe('addDevDependenciesToStore', () => {
+        beforeEach(() => {
+            store.devDependencies = ''
+        })
 
+        it('sets store.devDependencies equal to argument if store.devDependencies is empty string', () => {
+            addDevDependenciesToStore('webpack')
+
+            expect(store.devDependencies).toEqual('webpack')
+        })
+
+        it('adds a space before combining it\'s argument with store.devDependencies if store.devDependencies is not an empty string', () => {
+            store.devDependencies = 'webpack'
+            addDevDependenciesToStore('webpack-dev-server')
+
+            expect(store.devDependencies).toEqual('webpack webpack-dev-server')
+        })
     })
     describe.skip('installAllPackages', () => {
 
     })
     describe.skip('installAllPackagesToExistingProject', () =>  {
 
-    })    
+    })
+
+    describe.skip('insert', () => {
+
+    })
 })
 
