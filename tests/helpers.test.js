@@ -7,7 +7,9 @@ jest.mock('fs', () => ({
 jest.mock('child_process', () => ({
     execSync: jest.fn()
 }))
-jest.mock('inquirer')
+jest.mock('inquirer', () => ({
+  prompt: jest.fn()
+}))
 
 const fs = require('fs')
 const child_process = require('child_process')
@@ -16,6 +18,7 @@ const store = require('../new/store')
 
 const {
     canUseYarn,
+    yarn,
     installDependencies,
     installDevDependencies,
     installKnexGlobal,
@@ -69,57 +72,45 @@ describe('Helper Tests', () => {
         }) 
     })
 
-    describe.skip('yarn', () => {
+    describe('yarn', () => {
         beforeEach(() => {
-            store.useYarn = ''
+          store.useYarn = ''
         })
 
-        afterEach(() => {
-            this.sandbox.restore()
-        })
-
-        it('will prompt if canUseYarn is true and no selection has been made previously', () => {
-            this.sandbox.stub(fs, 'existsSync').returns(false)
-            this.sandbox.stub(helpers, 'canUseYarn').returns(true)
-            this.sandbox.stub(inquirer, 'prompt').resolves({ yarn: true })
-
-            helpers.yarn().then(() => {
-                expect(store.useYarn).toBe(true)
-                expect(this.sandbox.assert.calledOnce(inquirer.prompt)).toBe(true)
-            })
+        it('will prompt if canUseYarn is true and no selection has been made previously', async () => {
+          fs.existsSync.mockReturnValue(true)
+          inquirer.prompt.mockReturnValue(() => {
+              return new Promise((resolve) => {resolve({ yarn: true })})
+          })
+          await yarn()
+          expect(store.useYarn).toBe(true)
         })
 
         it('will not prompt if canUseYarn returns false', () => {
-            this.sandbox.stub(helpers, 'canUseYarn').returns(false)
-            // it didn't prompt and we can tell because we dont need to handle the normal promise (no .then)
-            helpers.yarn()
-            expect(store.useYarn).toBe('')
+          fs.existsSync.mockReturnValue(false)
+          yarn()
+          expect(store.useYarn).toBe('')
         })
 
-        it('will not prompt if user has already selected npm', () => {
-            this.sandbox.stub(inquirer, 'prompt').resolves({ yarn: false })
-            this.sandbox.stub(helpers, 'canUseYarn').returns(true) 
-            helpers.yarn().then(() => {
-                expect(store.useYarn).toBe(false)
-                expect(this.sandbox.assert.notCalled(inquirer.prompt)).toBe(true)
-            })
+        it('will not prompt if user has already selected npm', async () => {
+          fs.existsSync.mockReturnValueOnce(false).mockReturnValueOnce(true)
+          await yarn()
+          expect(store.useYarn).toBe(false)
         })
 
-        it('will not prompt if user has already selected yarn', () => {
-            this.sandbox.stub(inquirer, 'prompt').resolves({ yarn: true })
-            this.sandbox.stub(helpers, 'canUseYarn').returns(true) 
-            helpers.yarn().then(() => {
-                expect(store.useYarn).toBe(true)
-                expect(this.sandbox.assert.notCalled(inquirer.prompt)).toBe(true)
-            }) 
+        it('will not prompt if user has already selected yarn', async () => {
+          store.useYarn = true
+          await yarn()
+          expect(inquirer.prompt).not.toBeCalled()
         })
     })
     
     describe.skip('installDependencies', () => {
         it('installs a dependencies to a new project', () => {
+            child_process.execSync.mockReturnValue(true)
             store.useYarn = { yarn : true }
-            console.log(store, process.cwd())
             installDependencies('react')
+            expect(child_process.execSync).toBeCalledWi()
         })
     })
 })
