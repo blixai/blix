@@ -105,12 +105,18 @@ describe('Helper Tests', () => {
         })
     })
     
-    describe.skip('installDependencies', () => {
-        it('installs a dependencies to a new project', () => {
+    describe('installDependencies', () => {
+        it('uses yarn installs a dependencies to a new project if yarn selected', () => {
             child_process.execSync.mockReturnValue(true)
-            store.useYarn = { yarn : true }
+            store.useYarn = true
             installDependencies('react')
-            expect(child_process.execSync).toBeCalledWi()
+            expect(child_process.execSync.mock.calls[0][0]).toEqual('yarn add react')
+        })
+        it('uses npm to installs a dependencies to a new project if npm selected', () => {
+            child_process.execSync.mockReturnValue(true)
+            store.useYarn = false
+            installDependencies('react')
+            expect(child_process.execSync.mock.calls[0][0]).toEqual('npm install --save react')
         })
     })
 })
