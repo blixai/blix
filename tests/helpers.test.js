@@ -197,8 +197,8 @@ describe('Helper Tests', () => {
             expect(fs.existsSync).toBeCalledWith(`./tests/knexfile.js`)
             expect(fs.truncateSync).toBeCalledWith('./tests/knexfile.js', 0)
             expect(fs.appendFileSync).toBeCalled()
-            expect(fs.mkdirSync.mock.calls[0][0]).toEqual('tests/db')
-            expect(fs.mkdirSync.mock.calls[1][0]).toEqual('tests/db/migrations')
+            expect(fs.mkdirSync.mock.calls[0][0]).toEqual('./tests/db')
+            expect(fs.mkdirSync.mock.calls[1][0]).toEqual('./tests/db/migrations')
         })
 
         it('creates a knexfile if none exists', () => {
@@ -208,8 +208,8 @@ describe('Helper Tests', () => {
 
             expect(fs.existsSync).toBeCalledWith(`./tests/knexfile.js`)
             expect(fs.writeFileSync.mock.calls[0][0]).toEqual('./tests/knexfile.js')
-            expect(fs.mkdirSync.mock.calls[0][0]).toEqual('tests/db')
-            expect(fs.mkdirSync.mock.calls[1][0]).toEqual('tests/db/migrations') 
+            expect(fs.mkdirSync.mock.calls[0][0]).toEqual('./tests/db')
+            expect(fs.mkdirSync.mock.calls[1][0]).toEqual('./tests/db/migrations') 
         })
     })
     describe('addScriptToNewPackageJSON', () => {
@@ -308,8 +308,64 @@ describe('Helper Tests', () => {
             expect(console.error).toBeCalledWith(chalk`{red Couldn't create file ./test.js. ERROR: Error }`)
         })
     })
-    describe.skip('mkdirSync', () => {
+    describe('mkdirSync', () => {
 
+        beforeEach(() => {
+            store.name = ''
+            store.env = ''
+        })
+
+        it('creates a folder in current directory if no store.name', () => {
+            mkdirSync('test')
+
+            expect(fs.mkdirSync).toBeCalledWith('./test')
+        })
+
+        it('creates a folder in directory if store.name', () => {
+            store.name = 'someName'   
+            mkdirSync('test')
+
+            expect(fs.mkdirSync).toBeCalledWith('./someName/test')
+        })
+
+        it('it logs an error and returns if no store.name and no folderPath are provided', () => {
+            console.error = jest.fn()
+            mkdirSync() 
+
+            expect(console.error).toBeCalledWith(chalk`{red Unable to create folder}`)
+            expect(fs.mkdirSync).not.toBeCalled()
+        })
+
+        it('creates a new folder if store.name exists but no folderPath is provided', () => {
+            store.name = 'someName'
+            mkdirSync()
+
+            expect(fs.mkdirSync).toBeCalledWith('./someName/')
+        })
+
+        it('logs a clean folder path if successful', () => {
+            console.log = jest.fn()
+            mkdirSync('test')
+
+            expect(console.log).toBeCalledWith(chalk`{green create} ${'test'}`)
+        })
+
+        it('throws a basic error if something goes wrong', () => {
+            console.error = jest.fn()
+            fs.mkdirSync.mockImplementation(() => { throw 'Error' }) 
+            mkdirSync('test')
+
+            expect(console.error).toBeCalledWith(chalk`\t{red Error making directory ${'./test'} }`)
+        })
+
+        it('throws a verbose error if something goes wrong and env is development', () => {
+            store.env = 'development'
+            console.error = jest.fn()
+            fs.mkdirSync.mockImplementation(() => { throw 'Error' }) 
+            mkdirSync('test')
+
+            expect(console.error).toBeCalledWith(chalk`{red Error making directory ${'./test'}. ERROR: Error }`)
+        })
     })
     describe.skip('rename', () => {
 

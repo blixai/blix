@@ -156,13 +156,23 @@ exports.writeFile = (filePath, file, message) => {
 }
 
 exports.mkdirSync = (folderPath, message) => {
+  if (!folderPath && !store.name) {
+    return console.error(chalk`{red Unable to create folder}`)
+  } else if (!folderPath) {
+    folderPath = ''
+  }
+
   try {
     folderPath = store.name ? `./${store.name}/` + folderPath : './' + folderPath
-    folderPath = folderPath.slice(2)
+    let folderPathLog = folderPath.slice(2)
     fs.mkdirSync(folderPath)
-    message ? log(message) : log(chalk`{green create} ${folderPath}`)
+    message ? console.log(message) : console.log(chalk`{green create} ${folderPathLog}`)
   } catch (err) {
-    log(chalk`\t{red Error Making Directory ${folderPath} }`)
+    if (store.env === 'development') {
+      console.error(chalk`{red Error making directory ${folderPath}. ERROR: ${err} }`) 
+    } else {
+      console.error(chalk`\t{red Error making directory ${folderPath} }`)
+    }
   }
 }
 
