@@ -135,15 +135,20 @@ exports.addScriptToNewPackageJSON = (command, script) => {
 };
 
 exports.writeFile = (filePath, file, message) => {
+  if (!filePath) {
+    return console.error(chalk`{red No filePath specified.}`)
+  } else if (!file) {
+    file = ''
+  }
   try {
     filePath = store.name ? `./${store.name}/` + filePath : './' + filePath
     let filePathLog = filePath.slice(2)
     if (fs.existsSync(filePath)) {
         fs.writeFileSync(filePath, file)
-        message ? log(message) : log(chalk`{yellow mutate} ${filePathLog}`);
+        message ? console.log(message) : console.log(chalk`{yellow mutate} ${filePathLog}`);
     } else {
       fs.writeFileSync(filePath, file)
-      message ? log(message) : log(chalk`{green create} ${filePathLog}`);
+      message ? console.log(message) : console.log(chalk`{green create} ${filePathLog}`);
     }
   } catch (err) {
     store.env === 'development' ? console.error(chalk`{red Couldn't create file ${filePath}. ERROR: ${err} }`) : console.error(chalk`{red Couldn't create file ${filePath}}`)
