@@ -82,7 +82,11 @@ exports.installKnexGlobal = () => {
     execSync(`createdb ${name}`, {stdio: [0, 1, 2]})
     process.chdir('../')
   } catch(err) {
-    console.error(chalk.red`Error creating db: make sure postgres is installed and running and try again by entering: createdb ${name}`)
+    if (store.env === 'development') {
+      console.error(err) 
+    } else {
+      console.error(chalk.red`Error creating db: make sure postgres is installed and running and try again by entering: createdb ${name}`)
+    }
     process.chdir('../')
   }
 };
@@ -95,9 +99,13 @@ exports.addScript = (command, script) => {
     json.scripts[command] = script;
     let newPackage = JSON.stringify(json, null, 2);
     fs.writeFileSync("package.json", newPackage);
-    log(chalk`{cyan insert} ${command} script into package.json`)
+    console.log(chalk`{cyan insert} ${command} script into package.json`)
   } catch (err) {
-    console.error("Failed to add script to package.json: ", err)
+    if (store.env === 'development') {
+      console.error(err)
+    } else {
+      console.error(chalk.red`Failed to add script ${command} to package.json`)
+    }
   }
 };
 

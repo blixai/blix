@@ -133,5 +133,104 @@ describe('Helper Tests', () => {
             expect(child_process.execSync.mock.calls[0][0]).toEqual('npm install --save-dev react')
         })
     })
+
+    describe('installKnexGlobal', () => { 
+        beforeEach(() => {
+            let name = 'tests'            
+        })           
+        afterEach(() => {
+            store.name = ''                                                                                                                                                                                                                                                                                                                                    
+        })
+        it('attempts to install a postgres db', () => {
+            child_process.execSync.mockReturnValue(true)
+            store.env = 'development'          
+            installKnexGlobal()
+            expect(child_process.execSync.mock.calls[0][0]).toContain('')                                                            
+            expect(child_process.execSync).toBeCalledTimes(2)                        
+        })
+
+        it('if yarn selected and installed uses yarn to install knex globally', () => {
+            child_process.execSync.mockReturnValue(true)
+            store.useYarn = true
+            installKnexGlobal()
+            expect(child_process.execSync.mock.calls[0][0]).toEqual('yarn add knex global')
+        })
+        it('if npm selected and installed uses npm to install knex globally', () => {
+            child_process.execSync.mockReturnValue(true)
+            store.useYarn = false
+            installKnexGlobal()
+            expect(child_process.execSync.mock.calls[0][0]).toEqual('npm install -g knex')                
+        })
+    })
+
+    describe('addScript', () => {
+        it('should add script to package.json if package.json exits', () => {
+            fs.readFileSync.mockReturnValue(`{"scripts": {} }`)
+            console.error = jest.fn()
+            console.log = jest.fn()
+            addScript('test', 'node')
+            expect(console.error).not.toBeCalled()
+            expect(console.log.mock.calls[0][0]).toContain('test script into package.json')
+        })
+        it('throws an error if no package.json', () => {
+            fs.readFileSync.mockReturnValue(null)
+            addScript('test', 'node')
+            expect(console.error).toBeCalled()
+        })
+    })
+    describe.skip('modifyKnex', () => {
+
+    })
+    describe.skip('addScriptToNewPackageJSON', () => {
+
+    })
+    describe.skip('writeFile', () => {
+
+    })
+    describe.skip('mkdirSync', () => {
+
+    })
+    describe.skip('rename', () => {
+
+    })
+    describe.skip('addKeytoPackageJSON', () => {
+
+    })
+    describe.skip('installDependenciesToExistingProject', () => {
+
+    })
+    describe.skip('installDevDependenciesToExistingProject', () => {
+
+    })
+    describe.skip('checkScriptsFolderExist', () => {
+
+    })
+    describe.skip('getCWDName', () => {
+
+    })
+    describe.skip('modifyKnexExistingProject', () => {
+
+    })
+    describe.skip('appendFile', () => {
+
+    })
+    describe.skip('checkIfScriptIsTaken', () => {
+
+    })
+    describe.skip('moveAllFilesInDir', () => {
+
+    })
+    describe.skip('addDependenciesToStore', () => {
+
+    })
+    describe.skip('addDevDependenciesToStore', () => {
+
+    })
+    describe.skip('installAllPackages', () => {
+
+    })
+    describe.skip('installAllPackagesToExistingProject', () =>  {
+
+    })    
 })
 
