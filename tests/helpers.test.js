@@ -17,6 +17,7 @@ jest.mock('inquirer', () => ({
 const fs = require('fs')
 const child_process = require('child_process')
 const inquirer = require('inquirer')
+const chalk = require('chalk')
 const store = require('../new/store')
 
 const {
@@ -227,8 +228,85 @@ describe('Helper Tests', () => {
           expect(console.error).toBeCalled()
       })
     })
-    describe.skip('writeFile', () => {
 
+    describe('writeFile', () => {
+
+        beforeEach(() => {
+            store.name = ''
+        })
+        it('logs an error if no filePath is specified', () => {
+            console.error = jest.fn() 
+            writeFile()
+
+            expect(console.error.mock.calls[0][0]).toEqual(chalk`{red No filePath specified.}`)
+            expect(fs.writeFileSync).not.toBeCalled()
+        })
+
+        it('writes an empty file if filePath is defined but no file arg passed', () => {
+            writeFile('tests/test.js')
+            expect(fs.writeFileSync).toBeCalledWith('./tests/test.js', '')
+        })
+
+        it('writes a file if store.name selected', () => {
+            let fileData = 'import { Component } from "react"'
+            writeFile('test.js', fileData)
+
+            expect(fs.writeFileSync).toBeCalledWith('./test.js', fileData)
+        })
+
+        it('writes a file to new directory if store.name selected', () => {
+            store.name = 'someName'
+            let fileData = 'import { Component } from "react"'
+            writeFile('test.js', fileData)
+
+            expect(fs.writeFileSync).toBeCalledWith('./someName/test.js', fileData)
+        })
+
+        it('writes a file to the current directory if no store.name provided', () => {
+            writeFile('test.js')
+
+            expect(fs.writeFileSync).toBeCalledWith('./test.js', '')
+        })
+
+        it('logs the filePath if successful', () => {
+            console.log = jest.fn()
+            writeFile('test.js')
+
+            expect(console.log.mock.calls[0][0]).toEqual(chalk`{green create} test.js`)
+        })
+
+        it('will log a mutation to the console if the file already existed', () => {
+            fs.existsSync.mockReturnValue(true)
+            console.log = jest.fn()
+            writeFile('test.js')
+
+            expect(console.log.mock.calls[0][0]).toEqual(chalk`{yellow mutate} test.js`)
+        })
+
+        it('will log a custom message if message arg is passed', () => {
+            console.log = jest.fn()
+            writeFile('test.js', '', 'hey there')
+
+            expect(console.log).toBeCalledWith('hey there')
+        })
+
+        it('will log an error if something goes wrong', () => {
+            store.env = ''
+            fs.writeFileSync.mockImplementation(() => {throw 'Error' })
+            console.error = jest.fn()
+            writeFile('test.js')
+
+            expect(console.error).toBeCalledWith(chalk`{red Couldn't create file ./test.js}`)
+        })
+
+        it('will log a full error if something goes wrong and mode is development', () => {
+            store.env = 'development'
+            fs.writeFileSync.mockImplementation(() => {throw 'Error'})
+            console.error = jest.fn()
+            writeFile('test.js')
+
+            expect(console.error).toBeCalledWith(chalk`{red Couldn't create file ./test.js. ERROR: Error }`)
+        })
     })
     describe.skip('mkdirSync', () => {
 
