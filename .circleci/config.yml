@@ -39,7 +39,7 @@ jobs:
           command: npm install --save-dev codecov
       - run:
           name: Run tests
-          command: npm run test:ci
+          command: npm run test:ci --coverage
       - run:
           name: send coverage
           command: npm run send-coverage
