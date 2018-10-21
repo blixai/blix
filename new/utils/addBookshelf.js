@@ -1,7 +1,6 @@
 const fs = require("fs");
 const helpers = require("../../helpers");
 const path = require("path");
-const name = process.argv[3];
 
 const loadFile = filePath => {
   return fs.readFileSync(path.resolve(__dirname, filePath), "utf8");
