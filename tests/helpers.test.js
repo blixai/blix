@@ -316,9 +316,6 @@ describe('Helper Tests', () => {
     describe.skip('rename', () => {
 
     })
-    describe.skip('addKeytoPackageJSON', () => {
-
-    })
     describe('installDependenciesToExistingProject', () => {
       afterEach(() => {
         store.env = ''
