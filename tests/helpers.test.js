@@ -50,7 +50,7 @@ const {
     insert
 } = require('../helpers')
 
-let helpers = require('../helpers')
+const helpers = require('../helpers')
 
 
 describe('Helper Tests', () => {
@@ -687,8 +687,27 @@ describe('Helper Tests', () => {
             expect(store.devDependencies).toEqual('webpack webpack-dev-server')
         })
     })
-    describe.skip('installAllPackages', () => {
-
+    describe('installAllPackages', () => {
+      beforeEach(() => {
+        store.dependencies = ''
+        store.devDependencies = ''
+      })
+      it("Calls installDependencies if store contains dependencies", () => {
+        helpers.installDependencies = jest.fn()
+        store.dependencies = 'react'
+        installAllPackages()
+        expect(helpers.installDependencies).toBeCalled()
+        expect(helpers.installDependencies).toHaveBeenCalledWith('react')
+        expect(helpers.installDependencies.mock.calls[0][0]).not.toEqual('')
+      })
+      it("Calls installDevDependencies if store contains dev dependencies", () => {
+        helpers.installDevDependencies = jest.fn()
+        store.devDependencies = 'react'
+        installAllPackages()
+        expect(helpers.installDevDependencies).toBeCalled()
+        expect(helpers.installDevDependencies).toHaveBeenCalledWith('react')
+        expect(helpers.installDevDependencies.mock.calls[0][0]).not.toEqual('')
+      })
     })
     describe.skip('installAllPackagesToExistingProject', () =>  {
 
@@ -783,6 +802,5 @@ describe('Helper Tests', () => {
 
             expect(console.error).toBeCalledWith(chalk`{red Failed to insert into test. ERROR: Error}`)       
         })
-    })
 })
 
