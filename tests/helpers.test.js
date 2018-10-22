@@ -405,8 +405,22 @@ describe('Helper Tests', () => {
         expect(console.error.mock.calls[0][0]).toContain(packages)
       })
     })
-    describe.skip('checkScriptsFolderExist', () => {
-
+    describe('checkScriptsFolderExist', () => {
+      it("Creates scripts and scripts/templates dir if scripts dir doesn't exist", () => { 
+        fs.existsSync.mockReturnValueOnce(false)
+        helpers.mkdirSync = jest.fn()
+        checkScriptsFolderExist()
+        expect(helpers.mkdirSync).toBeCalledTimes(2)
+        expect(helpers.mkdirSync.mock.calls[0][0]).toEqual('scripts')
+        expect(helpers.mkdirSync.mock.calls[1][0]).toEqual('scripts/templates')
+      })
+      it("Creates scripts/templates dir if scripts/templates does not exist", () => {
+        fs.existsSync.mockReturnValueOnce(true).mockReturnValueOnce(false)
+        helpers.mkdirSync = jest.fn()
+        checkScriptsFolderExist()
+        expect(helpers.mkdirSync).toBeCalledTimes(1)
+        expect(helpers.mkdirSync.mock.calls[0][0]).toEqual('scripts/templates')
+      })
     })
     describe('getCWDName', () => {
       it("gets the current working directory", () => {
@@ -425,7 +439,6 @@ describe('Helper Tests', () => {
 
     })
     describe.skip('checkIfScriptIsTaken', () => {
-
     })
     describe.skip('moveAllFilesInDir', () => {
 
