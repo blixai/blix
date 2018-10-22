@@ -289,22 +289,34 @@ exports.checkIfScriptIsTaken = (scriptName) => {
 }
 
 exports.moveAllFilesInDir = (dirToSearch, dirToMoveTo) => {
-  fs.readdirSync(dirToSearch).forEach(file => {
-    if (file === 'actions' || file === 'components' || file === 'store' || file === 'services') {
-      return
-    }
-    try {
-      this.rename(dirToSearch + '/' + file, dirToMoveTo + '/' + file)
-    } catch(err) {
-      console.error(chalk.red`Error: Couldn't move ${file} from ${dirToSearch} into ${dirToMoveTo}`, err)
-    }
-  })
+  if (!dirToSearch) {
+    return console.error(chalk`{red No directory to search specified.}`)
+  } else if (!dirToMoveTo) {
+    return console.error(chalk`{red No directory to move files to specified.}`)
+  }
+
+  try {
+    fs.readdirSync(dirToSearch).forEach(file => {
+      if (file === 'actions' || file === 'components' || file === 'store' || file === 'services') {
+        return
+      }
+      try {
+        this.rename(dirToSearch + '/' + file, dirToMoveTo + '/' + file)
+      } catch(err) {
+        console.error(chalk.red`Error: Couldn't move ${file} from ${dirToSearch} into ${dirToMoveTo}`, err)
+      }
+    })
+  } catch(err) {
+    store.env === 'development' ? console.error(chalk`{red Failed to read directory. ERROR: ${err}}`) : console.error(chalk`{red Failed to read directory.}`)
+    return 
+  }
+
   try {
     fs.rmdirSync(dirToSearch)
     dirToSearch = dirToSearch.slice(2)
     console.log(chalk`{red delete} ${dirToSearch}`)
   } catch (err) {
-    store.env === 'development' ? console.log(err) : console.log(`Failed to delete ${dirToSearch}`)
+    store.env === 'development' ? console.error(chalk`{red Failed to delete ${dirToSearch}. ERROR: ${err}}`) : console.error(chalk`{red Failed to delete ${dirToSearch}}`)
   }
 }
 

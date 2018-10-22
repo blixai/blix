@@ -4,7 +4,9 @@ jest.mock('fs', () => ({
     writeFileSync: jest.fn(),
     truncateSync: jest.fn(),
     appendFileSync: jest.fn(),
-    mkdirSync: jest.fn()
+    mkdirSync: jest.fn(),
+    readdirSync: jest.fn(),
+    rmdirSync: jest.fn()
 }))
 
 jest.mock('child_process', () => ({
@@ -47,6 +49,8 @@ const {
     installAllPackagesToExistingProject,
     insert
 } = require('../helpers')
+
+let helpers = require('../helpers')
 
 
 describe('Helper Tests', () => {
@@ -517,8 +521,132 @@ describe('Helper Tests', () => {
     describe.skip('checkIfScriptIsTaken', () => {
 
     })
-    describe.skip('moveAllFilesInDir', () => {
+    describe('moveAllFilesInDir', () => {
 
+        beforeEach(() => {
+            store.env = ''
+        })
+
+        it('moves all files in a specified directory into another specified directory', () => {
+            fs.readdirSync.mockReturnValue(['test.js', 'test1.js', 'test2.css'])
+            
+            let mock = helpers.rename = jest.fn() 
+
+            moveAllFilesInDir('test', 'testing')
+
+            expect(mock).toBeCalledTimes(3)
+            expect(mock.mock.calls[0][0]).toEqual('test/test.js')
+            expect(mock.mock.calls[0][1]).toEqual('testing/test.js')
+        })
+
+        it('returns with an error if the directory to search for files isn\'t specified', () => {
+            console.error = jest.fn()
+
+            moveAllFilesInDir()
+
+            expect(console.error).toBeCalledWith(chalk`{red No directory to search specified.}`)
+        })
+
+        it('returns with an error if the directory to move to isn\'t specified', () => {
+            console.error = jest.fn()
+
+            moveAllFilesInDir('test')
+
+            expect(console.error).toBeCalledWith(chalk`{red No directory to move files to specified.}`)
+        })
+
+        it('doesn\'t move directories named actions, components, store, or services', () => {
+            fs.readdirSync.mockReturnValue(['actions', 'components', 'store', 'services'])
+            
+            let mock = helpers.rename = jest.fn() 
+
+            moveAllFilesInDir('test', 'testing')
+
+            expect(mock).not.toBeCalled()
+        })
+
+        it('logs a simple error if something goes wrong reading the directory', () => {
+          console.error = jest.fn()
+          fs.readdirSync.mockImplementation(() => {throw 'Error' })  
+
+          moveAllFilesInDir('test', 'testing')
+
+          expect(console.error).toBeCalledWith(chalk`{red Failed to read directory.}`)
+        })
+        
+        it('logs a verbose error if something goes wrong when reading the directory', () => {
+            store.env = 'development'
+            console.error = jest.fn()
+            fs.readdirSync.mockImplementation(() => {throw 'Error' })  
+  
+            moveAllFilesInDir('test', 'testing')
+  
+            expect(console.error).toBeCalledWith(chalk`{red Failed to read directory. ERROR: Error}`) 
+        })
+
+        it('deletes the old directory', () => {
+            fs.readdirSync.mockReturnValue(['test.js', 'test1.js', 'test2.css'])
+            fs.rmdirSync.mockReturnValue(true)
+            
+            let mock = helpers.rename = jest.fn() 
+
+            moveAllFilesInDir('test', 'testing')
+            
+            expect(fs.rmdirSync).toBeCalled()
+        })
+
+        it('doesn\'t delete the old directory if its not empty', () => {
+            fs.readdirSync.mockReturnValue(['test.js', 'test1.js', 'test2.css'])
+            fs.rmdirSync.mockImplementation(() => {throw 'Error'})
+            console.error = jest.fn()
+            
+            let mock = helpers.rename = jest.fn() 
+
+            moveAllFilesInDir('test', 'testing')
+
+            expect(fs.rmdirSync).toBeCalled() 
+            expect(console.error).toBeCalled()
+        })
+
+        it('logs if successful', () => {
+            fs.readdirSync.mockReturnValue(['test.js', 'test1.js', 'test2.css'])
+            fs.rmdirSync.mockReturnValue(true)
+            console.log = jest.fn()
+            
+            let mock = helpers.rename = jest.fn() 
+
+            moveAllFilesInDir('./test', 'testing')
+
+            expect(fs.rmdirSync).toBeCalled() 
+            expect(console.log).toBeCalledWith(chalk`{red delete} test`)
+        })
+
+        it('logs a simple error if something goes wrong when deleteing the old directory', () => {
+            fs.readdirSync.mockReturnValue(['test.js', 'test1.js', 'test2.css'])
+            fs.rmdirSync.mockImplementation(() => {throw 'Error'})
+            console.error = jest.fn()
+            
+            let mock = helpers.rename = jest.fn() 
+
+            moveAllFilesInDir('test', 'testing')
+
+            expect(fs.rmdirSync).toBeCalled() 
+            expect(console.error).toBeCalledWith(chalk`{red Failed to delete test}`) 
+        })
+
+        it('logs a verbose error if something goes wrong when deleting the old directory and store.env is development', () => {
+            store.env = 'development'
+            fs.readdirSync.mockReturnValue(['test.js', 'test1.js', 'test2.css'])
+            fs.rmdirSync.mockImplementation(() => {throw 'Error'})
+            console.error = jest.fn()
+            
+            let mock = helpers.rename = jest.fn() 
+
+            moveAllFilesInDir('test', 'testing')
+
+            expect(fs.rmdirSync).toBeCalled() 
+            expect(console.error).toBeCalledWith(chalk`{red Failed to delete test. ERROR: Error}`)   
+        })
     })
     describe('addDependenciesToStore', () => {
 
