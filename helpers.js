@@ -1,6 +1,5 @@
 const fs = require("fs");
 const execSync = require("child_process").execSync;
-const log = console.log;
 const chalk = require('chalk');
 const store = require('./new/store')
 const inquirer = require('inquirer')
@@ -114,7 +113,7 @@ exports.modifyKnex = () => {
   let newKnex = `module.exports = {\n\n\tdevelopment: {\n\t\tclient: 'pg',\n\t\tconnection: 'postgres://localhost/${name}',\n\t\tmigrations: {\n\t\t\tdirectory: './db/migrations'\n\t\t},\n\t\tseeds: {\n\t\t\tdirectory: 'db/seeds/dev'\n\t\t},\n\t\tuseNullAsDefault: true\n\t},\n\n\tproduction: {\n\t\tclient: 'pg',\n\t\tconnection: process.env.DATABASE_URL + '?ssl=true',\n\t\tmigrations: {\n\t\t\tdirectory: 'db/migrations'\n\t\t},\n\t\tseeds: {\n\t\t\tdirectory: 'db/seeds/dev'\n\t\t},\n\t\tuseNullAsDefault: true\n\t}\n\n};`;
   if (fs.existsSync(`./${name}/knexfile.js`)) {
     fs.truncateSync(`./${name}/knexfile.js`, 0)
-    this.appendFile(`./${name}/knexfile.js`, newKnex)
+    this.appendFile(`knexfile.js`, newKnex)
   } else {
     this.writeFile(`knexfile.js`, newKnex)
   }
@@ -156,13 +155,23 @@ exports.writeFile = (filePath, file, message) => {
 }
 
 exports.mkdirSync = (folderPath, message) => {
+  if (!folderPath && !store.name) {
+    return console.error(chalk`{red Unable to create folder}`)
+  } else if (!folderPath) {
+    folderPath = ''
+  }
+
   try {
     folderPath = store.name ? `./${store.name}/` + folderPath : './' + folderPath
-    folderPath = folderPath.slice(2)
+    let folderPathLog = folderPath.slice(2)
     fs.mkdirSync(folderPath)
-    message ? log(message) : log(chalk`{green create} ${folderPath}`)
+    message ? console.log(message) : console.log(chalk`{green create} ${folderPathLog}`)
   } catch (err) {
-    log(chalk`\t{red Error Making Directory ${folderPath} }`)
+    if (store.env === 'development') {
+      console.error(chalk`{red Error making directory ${folderPath}. ERROR: ${err} }`) 
+    } else {
+      console.error(chalk`\t{red Error making directory ${folderPath} }`)
+    }
   }
 }
 
@@ -260,13 +269,21 @@ exports.modifyKnexExistingProject = (cwd) => {
   this.mkdirSync(`db/migrations`)
 }
 
+// current implementation does not take into account store.name. Should that change? - Dev
 exports.appendFile = (file, stringToAppend) => {
+  if (!file) {
+    return console.error(chalk`{red File not provided.}`)
+  } else if (!stringToAppend) {
+    return console.error(chalk`{red No string to append provided.}`)
+  }
+
   try {
+    file = store.name ? `./${store.name}/` + file : './' + file
     fs.appendFileSync(file, stringToAppend)
     file = file.slice(2)
-    log(chalk`{cyan append} ${file}`)
+    console.log(chalk`{cyan append} ${file}`)
   } catch (err) {
-    store.env === 'development' ? log(err) : log(chalk.red`Failed to append ${file}`)
+    store.env === 'development' ? console.error(chalk`{red Failed to append ${file}. ERROR: ${err}}`) : console.error(chalk.red`Failed to append ${file}`)
   }
 }
 
@@ -287,22 +304,34 @@ exports.checkIfScriptIsTaken = (scriptName) => {
 }
 
 exports.moveAllFilesInDir = (dirToSearch, dirToMoveTo) => {
-  fs.readdirSync(dirToSearch).forEach(file => {
-    if (file === 'actions' || file === 'components' || file === 'store' || file === 'services') {
-      return
-    }
-    try {
-      this.rename(dirToSearch + '/' + file, dirToMoveTo + '/' + file)
-    } catch(err) {
-      console.error(chalk.red`Error: Couldn't move ${file} from ${dirToSearch} into ${dirToMoveTo}`, err)
-    }
-  })
+  if (!dirToSearch) {
+    return console.error(chalk`{red No directory to search specified.}`)
+  } else if (!dirToMoveTo) {
+    return console.error(chalk`{red No directory to move files to specified.}`)
+  }
+
+  try {
+    fs.readdirSync(dirToSearch).forEach(file => {
+      if (file === 'actions' || file === 'components' || file === 'store' || file === 'services') {
+        return
+      }
+      try {
+        this.rename(dirToSearch + '/' + file, dirToMoveTo + '/' + file)
+      } catch(err) {
+        console.error(chalk.red`Error: Couldn't move ${file} from ${dirToSearch} into ${dirToMoveTo}`, err)
+      }
+    })
+  } catch(err) {
+    store.env === 'development' ? console.error(chalk`{red Failed to read directory. ERROR: ${err}}`) : console.error(chalk`{red Failed to read directory.}`)
+    return 
+  }
+
   try {
     fs.rmdirSync(dirToSearch)
     dirToSearch = dirToSearch.slice(2)
     console.log(chalk`{red delete} ${dirToSearch}`)
   } catch (err) {
-    store.env === 'development' ? log(err) : log(`Failed to delete ${dirToSearch}`)
+    store.env === 'development' ? console.error(chalk`{red Failed to delete ${dirToSearch}. ERROR: ${err}}`) : console.error(chalk`{red Failed to delete ${dirToSearch}}`)
   }
 }
 
@@ -345,13 +374,26 @@ exports.installAllPackagesToExistingProject =  () => {
 }
 
 const insert = async (fileToInsertInto, whatToInsert, lineToInsertAt) => {
+  if (!fileToInsertInto) {
+    return console.error(chalk`{red No file specified.}`)
+  } else if (!whatToInsert) {
+    return console.error(chalk`{red No string to insert specified.}`) 
+  }
+  // this needs to get extracted into its own helper
+  let fileToInsertIntoLog
+  if (fileToInsertInto.slice(1, 2) === './') {
+    fileToInsertIntoLog = fileToInsertInto.slice(2)
+  } else {
+    fileToInsertIntoLog = fileToInsertInto
+  }
+
   let filePrompt = { type: 'list', name: 'lineNumber', message: 'Select a line to insert below', choices: [] }
   // if no lineToInsertAt then readfile and pass to inquirer prompt
   try {
     let file = fs.readFileSync(fileToInsertInto, 'utf8').toString().split('\n')
     if (lineToInsertAt === undefined) {
       filePrompt.choices = file
-      let lineToInsertAfter = prompt([filePrompt])
+      let lineToInsertAfter = await prompt([filePrompt])
       lineToInsertAt = file.indexOf(lineToInsertAfter) + 1
 
     } else if (isNaN(Number(lineToInsertAt))) {
@@ -359,17 +401,16 @@ const insert = async (fileToInsertInto, whatToInsert, lineToInsertAt) => {
       if (indexToFind !== -1) {
         lineToInsertAt = indexToFind + 1
       } else {
-        lineToInsertAt = file.length - 1
+        lineToInsertAt = file.length + 1
       }
     }
-    // insert at lineToInsertAt
     file.splice(lineToInsertAt, 0, whatToInsert)
     file = file.join('\n')
     fs.writeFileSync(fileToInsertInto, file)
-    fileToInsertInto = fileToInsertInto.slice(2)
-    log(chalk`{cyan insert} ${fileToInsertInto}`)
+
+    console.log(chalk`{cyan insert} ${fileToInsertIntoLog}`)
   } catch (err) {
-    store.env === 'development' ? log(chalk.red`${console.error(err)}`) : log(chalk.red`Failed to insert into ${fileToInsertInto.slice(2)}`)
+    store.env === 'development' ? console.error(chalk`{red Failed to insert into ${fileToInsertIntoLog}. ERROR: ${err}}`) : console.error(chalk`{red Failed to insert into ${fileToInsertIntoLog}}`)
   }
 }
 

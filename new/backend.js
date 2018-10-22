@@ -147,11 +147,7 @@ const packages = mode => {
 }
 
 const envSetup = () => {
-  if (store.name) {
-    helpers.appendFile(`./${store.name}/.env`, '\nWORKERS=1')
-  } else {
-    helpers.appendFile(`./.env`, '\nWORKERS=1')
-  }
+    helpers.appendFile(`.env`, '\nWORKERS=1')
 }
 
 module.exports = {

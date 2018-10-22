@@ -5,7 +5,9 @@ jest.mock('fs', () => ({
     truncateSync: jest.fn(),
     appendFileSync: jest.fn(),
     mkdirSync: jest.fn(),
-    renameSync: jest.fn()
+    renameSync: jest.fn(),
+    readdirSync: jest.fn(),
+    rmdirSync: jest.fn()
 }))
 
 jest.mock('child_process', () => ({
@@ -45,7 +47,8 @@ const {
     addDependenciesToStore,
     addDevDependenciesToStore,
     installAllPackages,
-    installAllPackagesToExistingProject
+    installAllPackagesToExistingProject,
+    insert
 } = require('../helpers')
 
 const helpers = require('../helpers')
@@ -200,8 +203,8 @@ describe('Helper Tests', () => {
             expect(fs.existsSync).toBeCalledWith(`./tests/knexfile.js`)
             expect(fs.truncateSync).toBeCalledWith('./tests/knexfile.js', 0)
             expect(fs.appendFileSync).toBeCalled()
-            expect(fs.mkdirSync.mock.calls[0][0]).toEqual('tests/db')
-            expect(fs.mkdirSync.mock.calls[1][0]).toEqual('tests/db/migrations')
+            expect(fs.mkdirSync.mock.calls[0][0]).toEqual('./tests/db')
+            expect(fs.mkdirSync.mock.calls[1][0]).toEqual('./tests/db/migrations')
         })
 
         it('creates a knexfile if none exists', () => {
@@ -211,8 +214,8 @@ describe('Helper Tests', () => {
 
             expect(fs.existsSync).toBeCalledWith(`./tests/knexfile.js`)
             expect(fs.writeFileSync.mock.calls[0][0]).toEqual('./tests/knexfile.js')
-            expect(fs.mkdirSync.mock.calls[0][0]).toEqual('tests/db')
-            expect(fs.mkdirSync.mock.calls[1][0]).toEqual('tests/db/migrations') 
+            expect(fs.mkdirSync.mock.calls[0][0]).toEqual('./tests/db')
+            expect(fs.mkdirSync.mock.calls[1][0]).toEqual('./tests/db/migrations') 
         })
     })
     describe('addScriptToNewPackageJSON', () => {
@@ -311,8 +314,64 @@ describe('Helper Tests', () => {
             expect(console.error).toBeCalledWith(chalk`{red Couldn't create file ./test.js. ERROR: Error }`)
         })
     })
-    describe.skip('mkdirSync', () => {
+    describe('mkdirSync', () => {
 
+        beforeEach(() => {
+            store.name = ''
+            store.env = ''
+        })
+
+        it('creates a folder in current directory if no store.name', () => {
+            mkdirSync('test')
+
+            expect(fs.mkdirSync).toBeCalledWith('./test')
+        })
+
+        it('creates a folder in directory if store.name', () => {
+            store.name = 'someName'   
+            mkdirSync('test')
+
+            expect(fs.mkdirSync).toBeCalledWith('./someName/test')
+        })
+
+        it('it logs an error and returns if no store.name and no folderPath are provided', () => {
+            console.error = jest.fn()
+            mkdirSync() 
+
+            expect(console.error).toBeCalledWith(chalk`{red Unable to create folder}`)
+            expect(fs.mkdirSync).not.toBeCalled()
+        })
+
+        it('creates a new folder if store.name exists but no folderPath is provided', () => {
+            store.name = 'someName'
+            mkdirSync()
+
+            expect(fs.mkdirSync).toBeCalledWith('./someName/')
+        })
+
+        it('logs a clean folder path if successful', () => {
+            console.log = jest.fn()
+            mkdirSync('test')
+
+            expect(console.log).toBeCalledWith(chalk`{green create} ${'test'}`)
+        })
+
+        it('throws a basic error if something goes wrong', () => {
+            console.error = jest.fn()
+            fs.mkdirSync.mockImplementation(() => { throw 'Error' }) 
+            mkdirSync('test')
+
+            expect(console.error).toBeCalledWith(chalk`\t{red Error making directory ${'./test'} }`)
+        })
+
+        it('throws a verbose error if something goes wrong and env is development', () => {
+            store.env = 'development'
+            console.error = jest.fn()
+            fs.mkdirSync.mockImplementation(() => { throw 'Error' }) 
+            mkdirSync('test')
+
+            expect(console.error).toBeCalledWith(chalk`{red Error making directory ${'./test'}. ERROR: Error }`)
+        })
     })
     describe('rename', () => {
       it("Throws an error if it does not receive first parameter oldName", () => {
@@ -485,8 +544,50 @@ describe('Helper Tests', () => {
     describe.skip('modifyKnexExistingProject', () => {
 
     })
-    describe.skip('appendFile', () => {
+    describe('appendFile', () => {
+        beforeEach(() => {
+            store.name = ''
+            store.env = ''
+        })
 
+        it('appends string to a file', () => {
+            appendFile('test', 'hello there')
+
+            expect(fs.appendFileSync).toBeCalledWith('./test', 'hello there')
+        })
+
+        it('logs a warning and returns if file isn\'t specified', () => {
+          console.error = jest.fn()
+          appendFile()  
+
+          expect(console.error).toBeCalledWith(chalk`{red File not provided.}`)
+          expect(fs.appendFileSync).not.toBeCalled()
+        })
+
+        it('logs a warning and returns if stringToAppend isn\'t specified', () => {
+               console.error = jest.fn()
+               appendFile('test.js')
+
+               expect(console.error).toBeCalledWith(chalk`{red No string to append provided.}`)
+               expect(fs.appendFileSync).not.toBeCalled()
+        })
+
+        it('logs a basic error if something went wrong', () => {
+            console.error = jest.fn()
+            fs.appendFileSync.mockImplementation(() => {throw 'Error'})
+            appendFile('test.js', 'hello there')
+
+            expect(console.error).toBeCalledWith(chalk.red`Failed to append ${'./test.js'}`)
+        })
+
+        it('logs a verbose error if something went wrong and store.env is development', () => {
+            store.env = 'development'
+            console.error = jest.fn()
+            fs.appendFileSync.mockImplementation(() => {throw 'Error'})
+            appendFile('test.js', 'hello there')
+
+            expect(console.error).toBeCalledWith(chalk.red`Failed to append ./test.js. ERROR: Error`)
+        })
     })
     describe('checkIfScriptIsTaken', () => {
       it("Checks if a script exists in the package.json", () => {
@@ -510,8 +611,132 @@ describe('Helper Tests', () => {
         expect(console.error.mock.calls[0][0]).not.toContain('Error finding test in package.json')
       })
     })
-    describe.skip('moveAllFilesInDir', () => {
+    describe('moveAllFilesInDir', () => {
 
+        beforeEach(() => {
+            store.env = ''
+        })
+
+        it('moves all files in a specified directory into another specified directory', () => {
+            fs.readdirSync.mockReturnValue(['test.js', 'test1.js', 'test2.css'])
+            
+            let mock = helpers.rename = jest.fn() 
+
+            moveAllFilesInDir('test', 'testing')
+
+            expect(mock).toBeCalledTimes(3)
+            expect(mock.mock.calls[0][0]).toEqual('test/test.js')
+            expect(mock.mock.calls[0][1]).toEqual('testing/test.js')
+        })
+
+        it('returns with an error if the directory to search for files isn\'t specified', () => {
+            console.error = jest.fn()
+
+            moveAllFilesInDir()
+
+            expect(console.error).toBeCalledWith(chalk`{red No directory to search specified.}`)
+        })
+
+        it('returns with an error if the directory to move to isn\'t specified', () => {
+            console.error = jest.fn()
+
+            moveAllFilesInDir('test')
+
+            expect(console.error).toBeCalledWith(chalk`{red No directory to move files to specified.}`)
+        })
+
+        it('doesn\'t move directories named actions, components, store, or services', () => {
+            fs.readdirSync.mockReturnValue(['actions', 'components', 'store', 'services'])
+            
+            let mock = helpers.rename = jest.fn() 
+
+            moveAllFilesInDir('test', 'testing')
+
+            expect(mock).not.toBeCalled()
+        })
+
+        it('logs a simple error if something goes wrong reading the directory', () => {
+          console.error = jest.fn()
+          fs.readdirSync.mockImplementation(() => {throw 'Error' })  
+
+          moveAllFilesInDir('test', 'testing')
+
+          expect(console.error).toBeCalledWith(chalk`{red Failed to read directory.}`)
+        })
+        
+        it('logs a verbose error if something goes wrong when reading the directory', () => {
+            store.env = 'development'
+            console.error = jest.fn()
+            fs.readdirSync.mockImplementation(() => {throw 'Error' })  
+  
+            moveAllFilesInDir('test', 'testing')
+  
+            expect(console.error).toBeCalledWith(chalk`{red Failed to read directory. ERROR: Error}`) 
+        })
+
+        it('deletes the old directory', () => {
+            fs.readdirSync.mockReturnValue(['test.js', 'test1.js', 'test2.css'])
+            fs.rmdirSync.mockReturnValue(true)
+            
+            let mock = helpers.rename = jest.fn() 
+
+            moveAllFilesInDir('test', 'testing')
+            
+            expect(fs.rmdirSync).toBeCalled()
+        })
+
+        it('doesn\'t delete the old directory if its not empty', () => {
+            fs.readdirSync.mockReturnValue(['test.js', 'test1.js', 'test2.css'])
+            fs.rmdirSync.mockImplementation(() => {throw 'Error'})
+            console.error = jest.fn()
+            
+            let mock = helpers.rename = jest.fn() 
+
+            moveAllFilesInDir('test', 'testing')
+
+            expect(fs.rmdirSync).toBeCalled() 
+            expect(console.error).toBeCalled()
+        })
+
+        it('logs if successful', () => {
+            fs.readdirSync.mockReturnValue(['test.js', 'test1.js', 'test2.css'])
+            fs.rmdirSync.mockReturnValue(true)
+            console.log = jest.fn()
+            
+            let mock = helpers.rename = jest.fn() 
+
+            moveAllFilesInDir('./test', 'testing')
+
+            expect(fs.rmdirSync).toBeCalled() 
+            expect(console.log).toBeCalledWith(chalk`{red delete} test`)
+        })
+
+        it('logs a simple error if something goes wrong when deleteing the old directory', () => {
+            fs.readdirSync.mockReturnValue(['test.js', 'test1.js', 'test2.css'])
+            fs.rmdirSync.mockImplementation(() => {throw 'Error'})
+            console.error = jest.fn()
+            
+            let mock = helpers.rename = jest.fn() 
+
+            moveAllFilesInDir('test', 'testing')
+
+            expect(fs.rmdirSync).toBeCalled() 
+            expect(console.error).toBeCalledWith(chalk`{red Failed to delete test}`) 
+        })
+
+        it('logs a verbose error if something goes wrong when deleting the old directory and store.env is development', () => {
+            store.env = 'development'
+            fs.readdirSync.mockReturnValue(['test.js', 'test1.js', 'test2.css'])
+            fs.rmdirSync.mockImplementation(() => {throw 'Error'})
+            console.error = jest.fn()
+            
+            let mock = helpers.rename = jest.fn() 
+
+            moveAllFilesInDir('test', 'testing')
+
+            expect(fs.rmdirSync).toBeCalled() 
+            expect(console.error).toBeCalledWith(chalk`{red Failed to delete test. ERROR: Error}`)   
+        })
     })
     describe('addDependenciesToStore', () => {
 
@@ -597,8 +822,94 @@ describe('Helper Tests', () => {
       })
     })
 
-    describe.skip('insert', () => {
+    describe('insert', () => {
 
-    })
+        beforeEach(() => {
+            store.name = ''
+            store.env = ''
+        })
+
+        it('inserts a string into a file at specified line number', () => {
+            fs.readFileSync.mockReturnValue("firstLine\nnextLine\nfinalLine") 
+            insert('test.js', 'hello there', 2)
+
+            expect(fs.writeFileSync).toBeCalledWith("test.js", "firstLine\nnextLine\nhello there\nfinalLine")
+        })
+
+        it('inserts a string into a file after specified string to insert after', () => {
+            fs.readFileSync.mockReturnValue("firstLine\nnextLine\nfinalLine") 
+            insert('test.js', 'hello there', 'nextLine')
+
+            expect(fs.writeFileSync).toBeCalledWith("test.js", "firstLine\nnextLine\nhello there\nfinalLine") 
+        })
+
+        it('appends a string into a file after specified string to insert after is not found and file has a newline at the end it creates a newline before and after itself', () => {
+            fs.readFileSync.mockReturnValue("firstLine\nnextLine\nfinalLine\n") 
+            insert('test.js', 'hello there', 'someLine')
+
+            expect(fs.writeFileSync).toBeCalledWith("test.js", "firstLine\nnextLine\nfinalLine\n\nhello there")  
+        })
+
+        it('appends a string into a file after specified string to insert after is not found and file doesn\'t have new line at the end of it', () => {
+            fs.readFileSync.mockReturnValue("firstLine\nnextLine\nfinalLine") 
+            insert('test.js', 'hello there', 'someLine')
+
+            expect(fs.writeFileSync).toBeCalledWith("test.js", "firstLine\nnextLine\nfinalLine\nhello there")  
+        })
+
+        it('if successful logs to console', () => {
+            fs.writeFileSync.mockReturnValue(true)
+            console.log = jest.fn()
+            fs.readFileSync.mockReturnValue("firstLine\nnextLine\nfinalLine") 
+           
+            insert('test.js', 'hello there', 'nextLine')
+
+            expect(console.log).toBeCalledWith(chalk`{cyan insert} test.js`) 
+        })
+
+        it('prompts for a place to insert after if no lineToInsertAt is used', async () => {
+            fs.writeFileSync.mockReturnValue(true)
+            fs.readFileSync.mockReturnValue("firstLine\nnextLine\nfinalLine") 
+           
+            inquirer.prompt.mockResolvedValue("nextLine")
+
+            await insert('test.js', 'hello there')
+
+            expect(inquirer.prompt).toBeCalled()
+            expect(fs.writeFileSync).toBeCalledWith('test.js', "firstLine\nnextLine\nhello there\nfinalLine")
+        })
+
+        it('returns with a warning if no file specified', () => {
+            console.error = jest.fn()
+            insert()
+
+            expect(console.error).toBeCalledWith(chalk`{red No file specified.}`)
+            expect(fs.readFileSync).not.toBeCalled()
+        })
+
+        it('returns with a warning if no string to insert is passed', () => {
+            console.error = jest.fn()
+            insert('test')
+
+            expect(console.error).toBeCalledWith(chalk`{red No string to insert specified.}`)
+            expect(fs.readFileSync).not.toBeCalled()
+        })
+
+        it('logs a basic error if something goes wrong', () => {
+            console.error = jest.fn()
+            fs.readFileSync.mockImplementation(() => { throw 'Error' })
+            insert('test', 'test')
+
+            expect(console.error).toBeCalledWith(chalk`{red Failed to insert into test}`)
+        })
+
+        it('logs a verbose error if something goes wrong and store.env is development', () => {
+            store.env = 'development'
+            console.error = jest.fn()
+            fs.readFileSync.mockImplementation(() => { throw 'Error' })
+            insert('test', 'test')
+
+            expect(console.error).toBeCalledWith(chalk`{red Failed to insert into test. ERROR: Error}`)       
+        })
 })
 
