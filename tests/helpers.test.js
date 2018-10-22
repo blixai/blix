@@ -468,8 +468,50 @@ describe('Helper Tests', () => {
     describe.skip('modifyKnexExistingProject', () => {
 
     })
-    describe.skip('appendFile', () => {
+    describe('appendFile', () => {
+        beforeEach(() => {
+            store.name = ''
+            store.env = ''
+        })
 
+        it('appends string to a file', () => {
+            appendFile('test', 'hello there')
+
+            expect(fs.appendFileSync).toBeCalledWith('./test', 'hello there')
+        })
+
+        it('logs a warning and returns if file isn\'t specified', () => {
+          console.error = jest.fn()
+          appendFile()  
+
+          expect(console.error).toBeCalledWith(chalk`{red File not provided.}`)
+          expect(fs.appendFileSync).not.toBeCalled()
+        })
+
+        it('logs a warning and returns if stringToAppend isn\'t specified', () => {
+               console.error = jest.fn()
+               appendFile('test.js')
+
+               expect(console.error).toBeCalledWith(chalk`{red No string to append provided.}`)
+               expect(fs.appendFileSync).not.toBeCalled()
+        })
+
+        it('logs a basic error if something went wrong', () => {
+            console.error = jest.fn()
+            fs.appendFileSync.mockImplementation(() => {throw 'Error'})
+            appendFile('test.js', 'hello there')
+
+            expect(console.error).toBeCalledWith(chalk.red`Failed to append ${'./test.js'}`)
+        })
+
+        it('logs a verbose error if something went wrong and store.env is development', () => {
+            store.env = 'development'
+            console.error = jest.fn()
+            fs.appendFileSync.mockImplementation(() => {throw 'Error'})
+            appendFile('test.js', 'hello there')
+
+            expect(console.error).toBeCalledWith(chalk.red`Failed to append ./test.js. ERROR: Error`)
+        })
     })
     describe.skip('checkIfScriptIsTaken', () => {
 

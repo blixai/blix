@@ -114,7 +114,7 @@ exports.modifyKnex = () => {
   let newKnex = `module.exports = {\n\n\tdevelopment: {\n\t\tclient: 'pg',\n\t\tconnection: 'postgres://localhost/${name}',\n\t\tmigrations: {\n\t\t\tdirectory: './db/migrations'\n\t\t},\n\t\tseeds: {\n\t\t\tdirectory: 'db/seeds/dev'\n\t\t},\n\t\tuseNullAsDefault: true\n\t},\n\n\tproduction: {\n\t\tclient: 'pg',\n\t\tconnection: process.env.DATABASE_URL + '?ssl=true',\n\t\tmigrations: {\n\t\t\tdirectory: 'db/migrations'\n\t\t},\n\t\tseeds: {\n\t\t\tdirectory: 'db/seeds/dev'\n\t\t},\n\t\tuseNullAsDefault: true\n\t}\n\n};`;
   if (fs.existsSync(`./${name}/knexfile.js`)) {
     fs.truncateSync(`./${name}/knexfile.js`, 0)
-    this.appendFile(`./${name}/knexfile.js`, newKnex)
+    this.appendFile(`knexfile.js`, newKnex)
   } else {
     this.writeFile(`knexfile.js`, newKnex)
   }
@@ -261,13 +261,21 @@ exports.modifyKnexExistingProject = (cwd) => {
   this.mkdirSync(`db/migrations`)
 }
 
+// current implementation does not take into account store.name. Should that change? - Dev
 exports.appendFile = (file, stringToAppend) => {
+  if (!file) {
+    return console.error(chalk`{red File not provided.}`)
+  } else if (!stringToAppend) {
+    return console.error(chalk`{red No string to append provided.}`)
+  }
+
   try {
+    file = store.name ? `./${store.name}/` + file : './' + file
     fs.appendFileSync(file, stringToAppend)
     file = file.slice(2)
     log(chalk`{cyan append} ${file}`)
   } catch (err) {
-    store.env === 'development' ? log(err) : log(chalk.red`Failed to append ${file}`)
+    store.env === 'development' ? console.error(chalk`{red Failed to append ${file}. ERROR: ${err}}`) : console.error(chalk.red`Failed to append ${file}`)
   }
 }
 
