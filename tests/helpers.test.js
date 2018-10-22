@@ -408,8 +408,15 @@ describe('Helper Tests', () => {
     describe.skip('checkScriptsFolderExist', () => {
 
     })
-    describe.skip('getCWDName', () => {
-
+    describe('getCWDName', () => {
+      it("gets the current working directory", () => {
+        const spy = jest.spyOn(process, 'cwd').mockImplementation(() => {
+          return 'usr/local/testApp'
+        })
+        getCWDName()
+        expect(spy).toBeCalled()
+        expect(getCWDName()).toEqual('testApp')
+      })
     })
     describe.skip('modifyKnexExistingProject', () => {
 
