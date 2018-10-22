@@ -296,7 +296,7 @@ const createWebpack = () => {
   if (store.backend.backend) {
     helpers.writeFile(`webpack.config.js`, webpackWithHotReloading);
     let hotReloadIndex = `\nif (module.hot) {\n\tconsole.clear()\n\tmodule.hot.accept();\n}`
-    helpers.appendFile(`./${store.name}/src/index.js`, hotReloadIndex)
+    helpers.appendFile(`src/index.js`, hotReloadIndex)
   } else {
     helpers.writeFile(`webpack.config.js`, webpack);
   }
