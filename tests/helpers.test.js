@@ -44,7 +44,8 @@ const {
     addDependenciesToStore,
     addDevDependenciesToStore,
     installAllPackages,
-    installAllPackagesToExistingProject
+    installAllPackagesToExistingProject,
+    insert
 } = require('../helpers')
 
 
@@ -565,8 +566,95 @@ describe('Helper Tests', () => {
 
     })
 
-    describe.skip('insert', () => {
+    describe('insert', () => {
 
+        beforeEach(() => {
+            store.name = ''
+            store.env = ''
+        })
+
+        it('inserts a string into a file at specified line number', () => {
+            fs.readFileSync.mockReturnValue("firstLine\nnextLine\nfinalLine") 
+            insert('test.js', 'hello there', 2)
+
+            expect(fs.writeFileSync).toBeCalledWith("test.js", "firstLine\nnextLine\nhello there\nfinalLine")
+        })
+
+        it('inserts a string into a file after specified string to insert after', () => {
+            fs.readFileSync.mockReturnValue("firstLine\nnextLine\nfinalLine") 
+            insert('test.js', 'hello there', 'nextLine')
+
+            expect(fs.writeFileSync).toBeCalledWith("test.js", "firstLine\nnextLine\nhello there\nfinalLine") 
+        })
+
+        it('appends a string into a file after specified string to insert after is not found and file has a newline at the end it creates a newline before and after itself', () => {
+            fs.readFileSync.mockReturnValue("firstLine\nnextLine\nfinalLine\n") 
+            insert('test.js', 'hello there', 'someLine')
+
+            expect(fs.writeFileSync).toBeCalledWith("test.js", "firstLine\nnextLine\nfinalLine\n\nhello there")  
+        })
+
+        it('appends a string into a file after specified string to insert after is not found and file doesn\'t have new line at the end of it', () => {
+            fs.readFileSync.mockReturnValue("firstLine\nnextLine\nfinalLine") 
+            insert('test.js', 'hello there', 'someLine')
+
+            expect(fs.writeFileSync).toBeCalledWith("test.js", "firstLine\nnextLine\nfinalLine\nhello there")  
+        })
+
+        it('if successful logs to console', () => {
+            fs.writeFileSync.mockReturnValue(true)
+            console.log = jest.fn()
+            fs.readFileSync.mockReturnValue("firstLine\nnextLine\nfinalLine") 
+           
+            insert('test.js', 'hello there', 'nextLine')
+
+            expect(console.log).toBeCalledWith(chalk`{cyan insert} test.js`) 
+        })
+
+        it('prompts for a place to insert after if no lineToInsertAt is used', async () => {
+            fs.writeFileSync.mockReturnValue(true)
+            fs.readFileSync.mockReturnValue("firstLine\nnextLine\nfinalLine") 
+           
+            inquirer.prompt.mockResolvedValue("nextLine")
+
+            await insert('test.js', 'hello there')
+
+            expect(inquirer.prompt).toBeCalled()
+            expect(fs.writeFileSync).toBeCalledWith('test.js', "firstLine\nnextLine\nhello there\nfinalLine")
+        })
+
+        it('returns with a warning if no file specified', () => {
+            console.error = jest.fn()
+            insert()
+
+            expect(console.error).toBeCalledWith(chalk`{red No file specified.}`)
+            expect(fs.readFileSync).not.toBeCalled()
+        })
+
+        it('returns with a warning if no string to insert is passed', () => {
+            console.error = jest.fn()
+            insert('test')
+
+            expect(console.error).toBeCalledWith(chalk`{red No string to insert specified.}`)
+            expect(fs.readFileSync).not.toBeCalled()
+        })
+
+        it('logs a basic error if something goes wrong', () => {
+            console.error = jest.fn()
+            fs.readFileSync.mockImplementation(() => { throw 'Error' })
+            insert('test', 'test')
+
+            expect(console.error).toBeCalledWith(chalk`{red Failed to insert into test}`)
+        })
+
+        it('logs a verbose error if something goes wrong and store.env is development', () => {
+            store.env = 'development'
+            console.error = jest.fn()
+            fs.readFileSync.mockImplementation(() => { throw 'Error' })
+            insert('test', 'test')
+
+            expect(console.error).toBeCalledWith(chalk`{red Failed to insert into test. ERROR: Error}`)       
+        })
     })
 })
 
