@@ -521,8 +521,27 @@ describe('Helper Tests', () => {
         expect(helpers.installDevDependencies.mock.calls[0][0]).not.toEqual('')
       })
     })
-    describe.skip('installAllPackagesToExistingProject', () =>  {
-
+    describe('installAllPackagesToExistingProject', () =>  {
+      beforeEach(() => {
+        store.dependencies = ''
+        store.devDependencies = ''
+      })
+      it("Calls installDependenciesToExistingProject if store contains dependencies", () => {
+        const mockFn = helpers.installDependenciesToExistingProject = jest.fn()
+        store.dependencies = 'react'
+        installAllPackagesToExistingProject()
+        expect(mockFn).toBeCalled()
+        expect(mockFn).toHaveBeenCalledWith('react')
+        expect(mockFn.mock.calls[0][0]).not.toEqual('')
+      })
+      it("Calls installDevDependenciesToExistingProject if store contains dev dependencies", () => {
+        const mockFn = helpers.installDevDependenciesToExistingProject = jest.fn()
+        store.devDependencies = 'react'
+        installAllPackagesToExistingProject()
+        expect(mockFn).toBeCalled()
+        expect(mockFn).toHaveBeenCalledWith('react')
+        expect(mockFn.mock.calls[0][0]).not.toEqual('')
+      })
     })
 
     describe.skip('insert', () => {
