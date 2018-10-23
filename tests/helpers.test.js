@@ -462,7 +462,6 @@ describe('Helper Tests', () => {
         console.error = jest.fn()
         installDependenciesToExistingProject(packages)
         expect(console.error).toBeCalled()
-        expect(console.error.mock.calls[0][0]).not.toContain(packages)
       })
       it('Throws an error to the console containing the packages if there is an error installing', () => {
         child_process.execSync.mockImplementation(() => {throw 'Error' })
@@ -506,7 +505,6 @@ describe('Helper Tests', () => {
         console.error = jest.fn()
         installDevDependenciesToExistingProject(packages)
         expect(console.error).toBeCalled()
-        expect(console.error.mock.calls[0][0]).not.toContain(packages)
       })
       it('Throws an error to the console containing the packages if there is an error installing', () => {
         child_process.execSync.mockImplementation(() => {throw 'Error' })
@@ -717,7 +715,6 @@ describe('Helper Tests', () => {
         store.env = 'development'
         checkIfScriptIsTaken("test")
         expect(console.error).toBeCalled()
-        expect(console.error.mock.calls[0][0]).not.toContain('Error finding test in package.json')
       })
     })
 
@@ -901,7 +898,6 @@ describe('Helper Tests', () => {
         installAllPackages()
         expect(helpers.installDependencies).toBeCalled()
         expect(helpers.installDependencies).toHaveBeenCalledWith('react')
-        expect(helpers.installDependencies.mock.calls[0][0]).not.toEqual('')
       })
       it("Calls installDevDependencies if store contains dev dependencies", () => {
         helpers.installDevDependencies = jest.fn()
@@ -909,7 +905,6 @@ describe('Helper Tests', () => {
         installAllPackages()
         expect(helpers.installDevDependencies).toBeCalled()
         expect(helpers.installDevDependencies).toHaveBeenCalledWith('react')
-        expect(helpers.installDevDependencies.mock.calls[0][0]).not.toEqual('')
       })
     })
 
@@ -924,7 +919,6 @@ describe('Helper Tests', () => {
         installAllPackagesToExistingProject()
         expect(mockFn).toBeCalled()
         expect(mockFn).toHaveBeenCalledWith('react')
-        expect(mockFn.mock.calls[0][0]).not.toEqual('')
       })
       it("Calls installDevDependenciesToExistingProject if store contains dev dependencies", () => {
         const mockFn = helpers.installDevDependenciesToExistingProject = jest.fn()
@@ -932,7 +926,6 @@ describe('Helper Tests', () => {
         installAllPackagesToExistingProject()
         expect(mockFn).toBeCalled()
         expect(mockFn).toHaveBeenCalledWith('react')
-        expect(mockFn.mock.calls[0][0]).not.toEqual('')
       })
     })
 
@@ -1025,5 +1018,6 @@ describe('Helper Tests', () => {
 
             expect(console.error).toBeCalledWith(chalk`{red Failed to insert into test. ERROR: Error}`)       
         })
+    })
 })
 
