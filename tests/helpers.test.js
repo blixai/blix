@@ -617,7 +617,9 @@ describe('Helper Tests', () => {
         console.error = jest.fn()
         store.env = 'development'
         checkIfScriptIsTaken("test")
-        expect(console.error).toBeCalled() 
+
+        
+        expect(console.error).toBeCalled()
       })
     })
 
