@@ -258,15 +258,26 @@ exports.getCWDName = () => {
 }
 
 exports.modifyKnexExistingProject = (cwd) => {
-  let newKnex = `module.exports = {\n\n\tdevelopment: {\n\t\tclient: 'pg',\n\t\tconnection: 'postgres://localhost/${cwd}',\n\t\tmigrations: {\n\t\t\tdirectory: './db/migrations'\n\t\t},\n\t\tseeds: {\n\t\t\tdirectory: 'db/seeds/dev'\n\t\t},\n\t\tuseNullAsDefault: true\n\t},\n\n\tproduction: {\n\t\tclient: 'pg',\n\t\tconnection: process.env.DATABASE_URL + '?ssl=true',\n\t\tmigrations: {\n\t\t\tdirectory: 'db/migrations'\n\t\t},\n\t\tseeds: {\n\t\t\tdirectory: 'db/seeds/dev'\n\t\t},\n\t\tuseNullAsDefault: true\n\t}\n\n};`
-  if (fs.existsSync(`./knexfile.js`)) {
-    fs.truncateSync(`./knexfile.js`, 0)
-    this.appendFile(`./knexfile.js`, newKnex)
-  } else {
-    this.writeFile(`knexfile.js`, newKnex)
+  if (!cwd) {
+    return console.error(chalk`\t{red Error cwd is undefined\nmodifyKnexExistingProject requires cwd to be passed as a parameter}`)
   }
-  this.mkdirSync(`db`)
-  this.mkdirSync(`db/migrations`)
+  try {
+    let newKnex = `module.exports = {\n\n\tdevelopment: {\n\t\tclient: 'pg',\n\t\tconnection: 'postgres://localhost/${cwd}',\n\t\tmigrations: {\n\t\t\tdirectory: './db/migrations'\n\t\t},\n\t\tseeds: {\n\t\t\tdirectory: 'db/seeds/dev'\n\t\t},\n\t\tuseNullAsDefault: true\n\t},\n\n\tproduction: {\n\t\tclient: 'pg',\n\t\tconnection: process.env.DATABASE_URL + '?ssl=true',\n\t\tmigrations: {\n\t\t\tdirectory: 'db/migrations'\n\t\t},\n\t\tseeds: {\n\t\t\tdirectory: 'db/seeds/dev'\n\t\t},\n\t\tuseNullAsDefault: true\n\t}\n\n};`
+    if (fs.existsSync(`./knexfile.js`)) {
+      fs.truncateSync(`./knexfile.js`, 0)
+      this.appendFile(`./knexfile.js`, newKnex)
+    } else {
+      this.writeFile(`knexfile.js`, newKnex)
+    }
+    this.mkdirSync(`db`)
+    this.mkdirSync(`db/migrations`)
+  } catch (err){
+    if (store.env === 'development') {
+      console.error(err)
+    } else {
+      console.error(chalk`\t{red Error modifying Knex}`)
+    }
+  }
 }
 
 // current implementation does not take into account store.name. Should that change? - Dev

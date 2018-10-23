@@ -35,7 +35,6 @@ const {
     writeFile,
     mkdirSync,
     rename,
-    addKeytoPackageJSON,
     installDependenciesToExistingProject,
     installDevDependenciesToExistingProject,
     checkScriptsFolderExist,
@@ -376,7 +375,7 @@ describe('Helper Tests', () => {
             expect(console.error).toBeCalledWith(chalk`{red Error making directory ${'./test'}. ERROR: Error }`)
         })
     })
-  
+
     describe('rename', () => {
       it("Throws an error if it does not receive first parameter oldName", () => {
         console.error = jest.fn()
@@ -432,7 +431,7 @@ describe('Helper Tests', () => {
         expect(console.error.mock.calls[0][0]).toContain('Error')
       })
     })
-  
+
     describe('installDependenciesToExistingProject', () => {
       afterEach(() => {
         store.env = ''
@@ -550,7 +549,107 @@ describe('Helper Tests', () => {
       })
     })
 
-    describe.skip('modifyKnexExistingProject', () => {
+    describe('modifyKnexExistingProject', () => {
+      it("Throws an error if cwd is not passed as a parameter", () => {
+        console.error = jest.fn()
+
+        modifyKnexExistingProject()
+
+        expect(console.error).toBeCalled()
+        expect(console.error).toHaveBeenCalledTimes(1)
+        expect(console.error.mock.calls[0][0]).toEqual(chalk`\t{red Error cwd is undefined\nmodifyKnexExistingProject requires cwd to be passed as a parameter}`)
+      })
+
+      it("Truncates ./knexFile.js if it exists", () => {
+        fs.existsSync.mockReturnValue(true)
+
+        modifyKnexExistingProject("test")
+
+        expect(fs.truncateSync).toBeCalled()
+        expect(fs.truncateSync).toHaveBeenCalledTimes(1)
+        expect(fs.truncateSync.mock.calls[0][0]).toEqual('./knexfile.js')
+        expect(fs.truncateSync.mock.calls[0][1]).toEqual(0)
+      })
+      it("Replaces ./knexFile.js if it exists", () => {
+        const cwd = 'testApp'
+        const mockAppend = helpers.appendFile = jest.fn()
+        const mockWrite = helpers.writeFile = jest.fn()
+        const newKnex = `module.exports = {\n\n\tdevelopment: {\n\t\tclient: 'pg',\n\t\tconnection: 'postgres://localhost/${cwd}',\n\t\tmigrations: {\n\t\t\tdirectory: './db/migrations'\n\t\t},\n\t\tseeds: {\n\t\t\tdirectory: 'db/seeds/dev'\n\t\t},\n\t\tuseNullAsDefault: true\n\t},\n\n\tproduction: {\n\t\tclient: 'pg',\n\t\tconnection: process.env.DATABASE_URL + '?ssl=true',\n\t\tmigrations: {\n\t\t\tdirectory: 'db/migrations'\n\t\t},\n\t\tseeds: {\n\t\t\tdirectory: 'db/seeds/dev'\n\t\t},\n\t\tuseNullAsDefault: true\n\t}\n\n};`
+        fs.existsSync.mockReturnValue(true)
+
+        modifyKnexExistingProject(cwd)
+
+        expect(fs.truncateSync).toBeCalled()
+        expect(mockWrite).not.toBeCalled()
+        expect(mockAppend).toBeCalled()
+        expect(mockAppend).toHaveBeenCalledTimes(1)
+        expect(mockAppend.mock.calls[0][0]).toEqual('./knexfile.js')
+        expect(mockAppend.mock.calls[0][1]).toEqual(newKnex)
+      })
+
+      it("Makes a new knexfile.js if it does not exist", () => {
+        const cwd = 'test'
+        const mockWrite = helpers.writeFile = jest.fn()
+        const mockAppend = helpers.appendFile = jest.fn()
+        const newKnex = `module.exports = {\n\n\tdevelopment: {\n\t\tclient: 'pg',\n\t\tconnection: 'postgres://localhost/${cwd}',\n\t\tmigrations: {\n\t\t\tdirectory: './db/migrations'\n\t\t},\n\t\tseeds: {\n\t\t\tdirectory: 'db/seeds/dev'\n\t\t},\n\t\tuseNullAsDefault: true\n\t},\n\n\tproduction: {\n\t\tclient: 'pg',\n\t\tconnection: process.env.DATABASE_URL + '?ssl=true',\n\t\tmigrations: {\n\t\t\tdirectory: 'db/migrations'\n\t\t},\n\t\tseeds: {\n\t\t\tdirectory: 'db/seeds/dev'\n\t\t},\n\t\tuseNullAsDefault: true\n\t}\n\n};`
+        fs.existsSync.mockReturnValueOnce(false)
+
+        modifyKnexExistingProject(cwd)
+
+        expect(fs.truncateSync).not.toBeCalled()
+        expect(mockAppend).not.toBeCalled()
+        expect(mockWrite).toBeCalled()
+        expect(mockWrite).toHaveBeenCalledTimes(1)
+        expect(mockWrite.mock.calls[0][1]).toEqual(newKnex)
+        expect(mockWrite.mock.calls[0][0]).toEqual('knexfile.js')
+      })
+
+      it("Creates two directories; db and db/migrations ", () => {
+        const cwd = 'test'
+        const createDb = 'db'
+        const createDbMigrations = 'db/migrations'
+        const mockMkdir = helpers.mkdirSync = jest.fn()
+        fs.existsSync.mockImplementation(() => {return true})
+
+        modifyKnexExistingProject(cwd)
+
+        expect(mockMkdir).toBeCalled()
+        expect(mockMkdir).toHaveBeenCalledTimes(2)
+        expect(mockMkdir.mock.calls[0][0]).toEqual(createDb)
+        expect(mockMkdir.mock.calls[1][0]).toEqual(createDbMigrations)
+      })
+
+      it("Throws an error if it fails", () => {
+        const cwd = 'test'
+        let err = chalk`\t{red Error modifying Knex}`
+        const mockWrite = helpers.writeFile = jest.fn()
+        fs.existsSync.mockReturnValue(false)
+        mockWrite.mockImplementation(() => {
+          throw 'error'
+        })
+        console.error = jest.fn()
+
+        modifyKnexExistingProject(cwd)
+
+        expect(console.error).toBeCalled()
+        expect(console.error.mock.calls[0][0]).toEqual(err)
+      })
+
+      it("Throws a verbose error if it fails in development", () => {
+        store.env = 'development'
+        const cwd = 'test'
+        const mockWrite = helpers.writeFile = jest.fn()
+        fs.existsSync.mockReturnValue(false)
+        mockWrite.mockImplementation(() => {
+          throw 'error'
+        })
+        console.error = jest.fn()
+
+        modifyKnexExistingProject(cwd)
+
+        expect(console.error).toBeCalled()
+        expect(console.error.mock.calls[0][0]).toEqual('error')
+      })
     })
 
     describe('appendFile', () => {
@@ -612,7 +711,7 @@ describe('Helper Tests', () => {
         checkIfScriptIsTaken("test")
         expect(console.error).toBeCalled()
       })
-      it("Throws an error with the err if package.json doesn't exist in development", () => {
+      it("Throws a verbose error if in development", () => {
         fs.readFileSync.mockReturnValue(false)
         console.error = jest.fn()
         store.env = 'development'
@@ -750,6 +849,7 @@ describe('Helper Tests', () => {
             expect(console.error).toBeCalledWith(chalk`{red Failed to delete test. ERROR: Error}`)   
         })
     })
+
     describe('addDependenciesToStore', () => {
 
         beforeEach(() => {
@@ -771,6 +871,7 @@ describe('Helper Tests', () => {
             expect(store.dependencies).toEqual('react express vue')
         })
     })
+
     describe('addDevDependenciesToStore', () => {
         beforeEach(() => {
             store.devDependencies = ''
@@ -789,6 +890,7 @@ describe('Helper Tests', () => {
             expect(store.devDependencies).toEqual('webpack webpack-dev-server')
         })
     })
+
     describe('installAllPackages', () => {
       beforeEach(() => {
         store.dependencies = ''
@@ -809,6 +911,7 @@ describe('Helper Tests', () => {
         expect(helpers.installDevDependencies).toHaveBeenCalledWith('react')
       })
     })
+
     describe('installAllPackagesToExistingProject', () =>  {
       beforeEach(() => {
         store.dependencies = ''
@@ -920,6 +1023,5 @@ describe('Helper Tests', () => {
             expect(console.error).toBeCalledWith(chalk`{red Failed to insert into test. ERROR: Error}`)       
         })
     })
-
 })
 
