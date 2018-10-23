@@ -1,50 +1,35 @@
-const store = require('../../../new/store') 
-const fs = require('fs')
-const exists = fs.existsSync
-const helpers = require("../../../helpers")
-const execSync = require('child_process').execSync
-const {createCommonFilesAndFolders} = require('../../../new/utils/createCommonFiles')
+jest.mock('fs', () => ({
+  existsSync: jest.fn(),
+}))
 
-beforeAll(() => {
-  try {
-    // sets store.name
-    store.name = "TestApp"
-    store.env = "development"
-    process.chdir('./tests/new/utils')
-  } catch (err) {
-    console.error(err)
-  }
+jest.mock('child_process', () => {
+  execSync: jest.fn()
 })
+
+const fs = require('fs')
+const child_process = require('child_process')
+const store = require('../../../new/store') 
+const helpers = require("../../../helpers")
+const {createCommonFilesAndFolders} = require('../../../new/utils/createCommonFiles')
   
 describe("Create Common Files", () => {
 
-
   describe('Utils: createCommonFiles', () => {
-    beforeAll(() => {
-      try {
-        createCommonFilesAndFolders();
-      } catch (err) {
-        console.log(err)
-      }
-    })
 
-    afterAll(() => {
-      try { 
-        execSync(`rm -rf ${store.name}`)
-      } catch (err) {
-        console.log(err)
-      }
+    it.skip('creates source directory that matches the store name', () => {
+      const mockMkDir = helpers.mkdirSync = jest.fn()
+      mockMkDir.mockReturnValue(true)
+      const spy = jest.spyOn(process, 'chdir').mockImplementation(() => {
+        return
+      })
+      expect().toBe(true);
     });
 
-    it('creates source directory that matches the store name', () => {
-      expect(exists(store.name)).toBe(true);
-    });
-
-    it('Initalizes a new Git Repository', () => {
+    it.skip('Initalizes a new Git Repository', () => {
       expect(exists(`${store.name}/.git`)).toBe(true);
     });
 
-    it('Contains common files', () => {
+    it.skip('Contains common files', () => {
       const commonFiles = [
         ".gitignore",
         "README.md",
