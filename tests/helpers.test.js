@@ -379,9 +379,6 @@ describe('Helper Tests', () => {
     describe.skip('rename', () => {
 
     })
-    describe.skip('addKeytoPackageJSON', () => {
-
-    })
     describe('installDependenciesToExistingProject', () => {
       afterEach(() => {
         store.env = ''
@@ -550,7 +547,27 @@ describe('Helper Tests', () => {
         })
     })
 
-    describe.skip('checkIfScriptIsTaken', () => {
+    describe('checkIfScriptIsTaken', () => {
+      it("Checks if a script exists in the package.json", () => {
+        fs.readFileSync.mockReturnValue(`{"scripts": {"test": "do something"} }`)
+        checkIfScriptIsTaken()
+        expect(checkIfScriptIsTaken("test")).toBe(true)
+        expect(checkIfScriptIsTaken("start")).toBe(false)
+      })
+      it("Throws an error if package.json doesn't exist", () => {
+        fs.readFileSync.mockReturnValue(false)
+        console.error = jest.fn()
+        checkIfScriptIsTaken("test")
+        expect(console.error).toBeCalled()
+      })
+      it("Throws an error with the err if package.json doesn't exist in development", () => {
+        fs.readFileSync.mockReturnValue(false)
+        console.error = jest.fn()
+        store.env = 'development'
+        checkIfScriptIsTaken("test")
+        expect(console.error).toBeCalled()
+        expect(console.error.mock.calls[0][0]).not.toContain('Error finding test in package.json')
+      })
     })
 
     describe('moveAllFilesInDir', () => {
