@@ -405,7 +405,6 @@ describe('Helper Tests', () => {
         console.error = jest.fn()
         installDependenciesToExistingProject(packages)
         expect(console.error).toBeCalled()
-        expect(console.error.mock.calls[0][0]).not.toContain(packages)
       })
       it('Throws an error to the console containing the packages if there is an error installing', () => {
         child_process.execSync.mockImplementation(() => {throw 'Error' })
@@ -448,7 +447,6 @@ describe('Helper Tests', () => {
         console.error = jest.fn()
         installDevDependenciesToExistingProject(packages)
         expect(console.error).toBeCalled()
-        expect(console.error.mock.calls[0][0]).not.toContain(packages)
       })
       it('Throws an error to the console containing the packages if there is an error installing', () => {
         child_process.execSync.mockImplementation(() => {throw 'Error' })
@@ -555,7 +553,6 @@ describe('Helper Tests', () => {
         store.env = 'development'
         checkIfScriptIsTaken("test")
         expect(console.error).toBeCalled()
-        expect(console.error.mock.calls[0][0]).not.toContain('Error finding test in package.json')
       })
     })
     describe('moveAllFilesInDir', () => {
