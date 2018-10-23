@@ -5,6 +5,7 @@ jest.mock('fs', () => ({
     truncateSync: jest.fn(),
     appendFileSync: jest.fn(),
     mkdirSync: jest.fn(),
+    renameSync: jest.fn(),
     readdirSync: jest.fn(),
     rmdirSync: jest.fn()
 }))
@@ -372,8 +373,60 @@ describe('Helper Tests', () => {
             expect(console.error).toBeCalledWith(chalk`{red Error making directory ${'./test'}. ERROR: Error }`)
         })
     })
-    describe.skip('rename', () => {
-
+    describe('rename', () => {
+      it("Throws an error if it does not receive first parameter oldName", () => {
+        console.error = jest.fn()
+        const errorMessage = chalk`{red Error: First Parameter oldName is Undefined\n\tFunction rename() requires oldName and Newname to be passed as parameters}`
+        rename()
+        expect(console.error).toBeCalled()
+        expect(console.error.mock.calls[0][0]).toEqual(errorMessage)
+      })
+      it("Throws an error if it does not receive second parameter newName", () => {
+        console.error = jest.fn()
+        const errorMessage = chalk`{red Error: Second Parameter newName is Undefined\n\tFunction rename() requires oldName and Newname to be passed as parameters}`
+        rename('oldName')
+        expect(console.error).toBeCalled()
+        expect(console.error.mock.calls[0][0]).toEqual(errorMessage)
+      })
+      it("Calls renameSync with oldName and newName", () => {
+        rename('oldName', 'newName')
+        expect(fs.renameSync).toBeCalled()
+        expect(fs.renameSync).toHaveBeenCalledTimes(1)
+        expect(fs.renameSync.mock.calls[0][0]).toEqual('oldName')
+        expect(fs.renameSync.mock.calls[0][1]).toEqual('newName')
+      })
+      it("Console.logs oldName and newName on success", () => {
+        fs.renameSync.mockReturnValue(true)
+        console.log = jest.fn()
+        const oldName = './oldName', newName = './newName'
+        rename(oldName, newName)
+        expect(console.log).toBeCalled()
+        expect(console.log).toHaveBeenCalledTimes(1)
+        expect(console.log.mock.calls[0][0]).toEqual(chalk`{yellow move}   oldName into newName`)
+      })
+      it("Throws a simple error if fs.renameSync fails", () => {
+        fs.renameSync.mockImplementation(() => {
+          throw chalk`\t{red Error renaming ${oldName}}`
+        })
+        const oldName = './oldName', newName = './newName'
+        console.error = jest.fn()
+        rename(oldName, newName)
+        expect(console.error).toBeCalled()
+        expect(console.error).toHaveBeenCalledTimes(1)
+        expect(console.error.mock.calls[0][0]).toEqual(chalk`\t{red Error renaming ${oldName}}`)
+      })
+      it("Throws a verbose error if fs.renameSync fails while in development env", () => {
+        fs.renameSync.mockImplementation(() => {
+          throw 'Error'
+        })
+        const oldName = './oldName', newName = './newName'
+        store.env = 'development'
+        console.error = jest.fn()
+        rename(oldName, newName)
+        expect(console.error).toBeCalled()
+        expect(console.error).toHaveBeenCalledTimes(1)
+        expect(console.error.mock.calls[0][0]).toContain('Error')
+      })
     })
     describe('installDependenciesToExistingProject', () => {
       afterEach(() => {
@@ -746,8 +799,27 @@ describe('Helper Tests', () => {
         expect(helpers.installDevDependencies.mock.calls[0][0]).not.toEqual('')
       })
     })
-    describe.skip('installAllPackagesToExistingProject', () =>  {
-
+    describe('installAllPackagesToExistingProject', () =>  {
+      beforeEach(() => {
+        store.dependencies = ''
+        store.devDependencies = ''
+      })
+      it("Calls installDependenciesToExistingProject if store contains dependencies", () => {
+        const mockFn = helpers.installDependenciesToExistingProject = jest.fn()
+        store.dependencies = 'react'
+        installAllPackagesToExistingProject()
+        expect(mockFn).toBeCalled()
+        expect(mockFn).toHaveBeenCalledWith('react')
+        expect(mockFn.mock.calls[0][0]).not.toEqual('')
+      })
+      it("Calls installDevDependenciesToExistingProject if store contains dev dependencies", () => {
+        const mockFn = helpers.installDevDependenciesToExistingProject = jest.fn()
+        store.devDependencies = 'react'
+        installAllPackagesToExistingProject()
+        expect(mockFn).toBeCalled()
+        expect(mockFn).toHaveBeenCalledWith('react')
+        expect(mockFn.mock.calls[0][0]).not.toEqual('')
+      })
     })
 
     describe('insert', () => {
