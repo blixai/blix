@@ -735,7 +735,6 @@ describe('Helper Tests', () => {
         installAllPackages()
         expect(helpers.installDependencies).toBeCalled()
         expect(helpers.installDependencies).toHaveBeenCalledWith('react')
-        expect(helpers.installDependencies.mock.calls[0][0]).not.toEqual('')
       })
       it("Calls installDevDependencies if store contains dev dependencies", () => {
         helpers.installDevDependencies = jest.fn()
@@ -743,7 +742,6 @@ describe('Helper Tests', () => {
         installAllPackages()
         expect(helpers.installDevDependencies).toBeCalled()
         expect(helpers.installDevDependencies).toHaveBeenCalledWith('react')
-        expect(helpers.installDevDependencies.mock.calls[0][0]).not.toEqual('')
       })
     })
     describe('installAllPackagesToExistingProject', () =>  {
@@ -757,7 +755,6 @@ describe('Helper Tests', () => {
         installAllPackagesToExistingProject()
         expect(mockFn).toBeCalled()
         expect(mockFn).toHaveBeenCalledWith('react')
-        expect(mockFn.mock.calls[0][0]).not.toEqual('')
       })
       it("Calls installDevDependenciesToExistingProject if store contains dev dependencies", () => {
         const mockFn = helpers.installDevDependenciesToExistingProject = jest.fn()
@@ -765,7 +762,6 @@ describe('Helper Tests', () => {
         installAllPackagesToExistingProject()
         expect(mockFn).toBeCalled()
         expect(mockFn).toHaveBeenCalledWith('react')
-        expect(mockFn.mock.calls[0][0]).not.toEqual('')
       })
     })
 
@@ -858,5 +854,6 @@ describe('Helper Tests', () => {
 
             expect(console.error).toBeCalledWith(chalk`{red Failed to insert into test. ERROR: Error}`)       
         })
+      })
 })
 
