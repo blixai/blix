@@ -176,13 +176,22 @@ exports.mkdirSync = (folderPath, message) => {
 }
 
 exports.rename = (oldName, newName) => {
+  if (!oldName) {
+    return console.error(chalk`{red Error: First Parameter oldName is Undefined\n\tFunction rename() requires oldName and Newname to be passed as parameters}`)
+  } else if (!newName) {
+    return console.error(chalk`{red Error: Second Parameter newName is Undefined\n\tFunction rename() requires oldName and Newname to be passed as parameters}`)
+  }
   try {
     fs.renameSync(oldName, newName)
     oldName = oldName.slice(2)
     newName = newName.slice(2)
     console.log(chalk`{yellow move}   ${oldName} into ${newName}`)
   } catch (err) {
-    store.env === 'development' ? log(err) : log()
+    if (store.env === 'development') {
+      console.error(err)
+    } else {
+      console.error(chalk`{red Error renaming ${oldName}}`)
+    }
   }
 };
 
