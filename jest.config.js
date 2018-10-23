@@ -27,7 +27,9 @@ module.exports = {
     "!**/new/files/**",
     "!**/add/redux/files/**",
     "!**/add/react-router/HomeViewBasic.js",
-    "!**/vendor/**"
+    "!**/vendor/**",
+    "!jest.config.js",
+    "!**/tests/coverage/lcov-report/**"
   ],
 
   // The directory where Jest should output its coverage files

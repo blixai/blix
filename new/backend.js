@@ -151,5 +151,12 @@ const envSetup = () => {
 }
 
 module.exports = {
-  createBackend
+  createBackend,
+  standard,
+  mvcType,
+  apiType,
+  addDatabase,
+  scripts,
+  packages,
+  envSetup
 }
