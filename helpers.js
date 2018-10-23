@@ -284,7 +284,13 @@ exports.checkIfScriptIsTaken = (scriptName) => {
     let packageJson = JSON.parse(buffer)
     return scriptName in packageJson['scripts']
   } catch (err) {
-    return false
+    if (store.env === 'development') {
+      console.error(err)
+      return false
+    } else {
+      console.error(chalk`\t{red Error finding ${scriptName} in package.json}`)
+      return false
+    }
   }
 }
 
