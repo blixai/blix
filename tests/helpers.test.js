@@ -527,6 +527,7 @@ describe('Helper Tests', () => {
         expect(helpers.mkdirSync.mock.calls[0][0]).toEqual('scripts')
         expect(helpers.mkdirSync.mock.calls[1][0]).toEqual('scripts/templates')
       })
+
       it("Creates scripts/templates dir if scripts/templates does not exist", () => {
         fs.existsSync.mockReturnValueOnce(true).mockReturnValueOnce(false)
         helpers.mkdirSync = jest.fn()
@@ -534,6 +535,7 @@ describe('Helper Tests', () => {
         expect(helpers.mkdirSync).toBeCalledTimes(1)
         expect(helpers.mkdirSync.mock.calls[0][0]).toEqual('scripts/templates')
       })
+
     })
 
     describe('getCWDName', () => {
@@ -714,6 +716,8 @@ describe('Helper Tests', () => {
         console.error = jest.fn()
         store.env = 'development'
         checkIfScriptIsTaken("test")
+
+        
         expect(console.error).toBeCalled()
       })
     })
