@@ -128,6 +128,7 @@ describe('Helper Tests', () => {
             expect(child_process.execSync.mock.calls[0][0]).toEqual('npm install --save react')
         })
     })
+
     describe('installDevDependencies', () => {
         it('uses yarn installs dev dependencies to a new project if yarn selected', () => {
             child_process.execSync.mockReturnValue(true)
@@ -217,6 +218,7 @@ describe('Helper Tests', () => {
             expect(fs.mkdirSync.mock.calls[1][0]).toEqual('./tests/db/migrations') 
         })
     })
+
     describe('addScriptToNewPackageJSON', () => {
       let command = 'test'
       let script = 'node'
@@ -313,6 +315,7 @@ describe('Helper Tests', () => {
             expect(console.error).toBeCalledWith(chalk`{red Couldn't create file ./test.js. ERROR: Error }`)
         })
     })
+
     describe('mkdirSync', () => {
 
         beforeEach(() => {
@@ -372,6 +375,7 @@ describe('Helper Tests', () => {
             expect(console.error).toBeCalledWith(chalk`{red Error making directory ${'./test'}. ERROR: Error }`)
         })
     })
+
     describe.skip('rename', () => {
 
     })
@@ -421,6 +425,7 @@ describe('Helper Tests', () => {
         expect(console.error.mock.calls[0][0]).toContain(packages)
       })
     })
+
     describe('installDevDependenciesToExistingProject', () => {
       afterEach(() => {
         store.env = ''
@@ -464,6 +469,7 @@ describe('Helper Tests', () => {
         expect(console.error.mock.calls[0][0]).toContain(packages)
       })
     })
+
     describe('checkScriptsFolderExist', () => {
       it("Creates scripts and scripts/templates dir if scripts dir doesn't exist", () => { 
         fs.existsSync.mockReturnValueOnce(false)
@@ -473,6 +479,7 @@ describe('Helper Tests', () => {
         expect(helpers.mkdirSync.mock.calls[0][0]).toEqual('scripts')
         expect(helpers.mkdirSync.mock.calls[1][0]).toEqual('scripts/templates')
       })
+
       it("Creates scripts/templates dir if scripts/templates does not exist", () => {
         fs.existsSync.mockReturnValueOnce(true).mockReturnValueOnce(false)
         helpers.mkdirSync = jest.fn()
@@ -480,7 +487,9 @@ describe('Helper Tests', () => {
         expect(helpers.mkdirSync).toBeCalledTimes(1)
         expect(helpers.mkdirSync.mock.calls[0][0]).toEqual('scripts/templates')
       })
+
     })
+
     describe('getCWDName', () => {
       it("gets the current working directory", () => {
         const spy = jest.spyOn(process, 'cwd').mockImplementation(() => {
@@ -491,9 +500,10 @@ describe('Helper Tests', () => {
         expect(getCWDName()).toEqual('testApp')
       })
     })
-    describe.skip('modifyKnexExistingProject', () => {
 
+    describe.skip('modifyKnexExistingProject', () => {
     })
+
     describe('appendFile', () => {
         beforeEach(() => {
             store.name = ''
@@ -539,8 +549,10 @@ describe('Helper Tests', () => {
             expect(console.error).toBeCalledWith(chalk.red`Failed to append ./test.js. ERROR: Error`)
         })
     })
+
     describe.skip('checkIfScriptIsTaken', () => {
     })
+
     describe('moveAllFilesInDir', () => {
 
         beforeEach(() => {
@@ -822,5 +834,6 @@ describe('Helper Tests', () => {
 
             expect(console.error).toBeCalledWith(chalk`{red Failed to insert into test. ERROR: Error}`)       
         })
+      })
 })
 
