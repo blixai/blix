@@ -56,7 +56,9 @@ describe('new/react', () => {
 
     })
 
-    it('creates a .babelrc file')
+    it('creates a .babelrc file', () => {
+      
+    })
 
     it('calls createWebpack', () => {
 
