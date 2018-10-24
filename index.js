@@ -8,7 +8,7 @@ if (process.argv.includes('--verbose')) {
   process.argv.splice(index, 1)
 }
 
-const createProject = require("./new");
+const { createProject } = require("./new");
 const help = require("./help/help.js");
 const scripts = require("./scripts/script.js");
 const add = require("./add/add");
