@@ -161,4 +161,13 @@ const createProject = () => {
   promptPreset()
 };
 
-module.exports = createProject;
+module.exports = {
+  createProject,
+  promptForName,
+  backendOnly,
+  vanillaJSProject,
+  vueProject,
+  reactProject,
+  promptFrontend,
+  promptPreset
+};
