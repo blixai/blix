@@ -2,7 +2,6 @@ const fs = require("fs");
 const path = require("path");
 const helpers = require("../../helpers");
 const execSync = require('child_process').execSync;
-// const name = process.argv[3];
 const store = require('../store')
 const chalk = require('chalk')
 
@@ -15,35 +14,44 @@ const createCommonFilesAndFolders = () => {
   console.log(
     "Creating the project and downloading packages, this may take a moment"
   );
-  // creates new project folder first, this is important for all new projects
-  helpers.mkdirSync(``);
-  try {
-    process.chdir(`./${store.name}`)
-    execSync('git init')
-    process.chdir('../')
-  } catch (err) {
-    if (store.env === 'development') {
-      console.error(chalk.red`${err}`)
+  try{
+    // creates new project folder first, this is important for all new projects
+    helpers.mkdirSync(``)
+    try {
+      process.chdir(`./${store.name}`)
+      execSync('git init')
+      process.chdir('../')
+    } catch (err) {
+      if (store.env === 'development') {
+        console.error(err)
+      } else {
+        console.error(chalk.red`Error: createCommonFiles failed to initalize a git repository`)
+      }
     }
-    process.chdir('../')
-  }
-  helpers.writeFile(
-    `.gitignore`,
-    loadFile("../files/common/gitIgnore.txt")
-  );
-  helpers.writeFile(
-    `README.md`,
-    loadFile("../files/common/README.md")
-  );
-  helpers.writeFile(
-    `package.json`,
-    loadFile("../files/common/package.json")
-  );
+    helpers.writeFile(
+      `.gitignore`,
+      loadFile("../files/common/gitIgnore.txt")
+    );
+    helpers.writeFile(
+      `README.md`,
+      loadFile("../files/common/README.md")
+    );
+    helpers.writeFile(
+      `package.json`,
+      loadFile("../files/common/package.json")
+    );
 
-  helpers.writeFile(`.env`, "");
-  helpers.mkdirSync(`scripts`);
-  helpers.mkdirSync(`scripts/templates`);
-  helpers.mkdirSync(`test`);
+    helpers.writeFile(`.env`, "");
+    helpers.mkdirSync(`scripts`);
+    helpers.mkdirSync(`scripts/templates`);
+    helpers.mkdirSync(`test`);
+  } catch(err){
+    if (store.env === 'development') {
+      console.error(err)
+    } else {
+      console.error(chalk.red`Error Creating Common Files`)
+    }
+  }
 };
 
 module.exports = { createCommonFilesAndFolders };
