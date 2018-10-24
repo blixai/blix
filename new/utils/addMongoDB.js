@@ -22,10 +22,7 @@ const addMongooseToScripts = () => {
 const addMongoDBToProject = () => {
   let connectionString = `const mongoose = require('mongoose')\nmongoose.connect(process.env.MONGO, { useNewUrlParser: true })\n`
   helpers.insert(`./${store.name}/server/server.js`, connectionString, 0)
-  helpers.appendFile(
-    `./${store.name}/.env`,
-    `MONGO=${`mongodb://localhost:27017/${store.name}`}`
-  );
+  helpers.appendFile(`.env`,`MONGO=${`mongodb://localhost:27017/${store.name}`}`);
   helpers.addDependenciesToStore("mongo mongoose")
 };
 

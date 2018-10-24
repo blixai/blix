@@ -32,7 +32,7 @@ const envFileExists = () => {
   let name = helpers.getCWDName()
   try {
     if (fs.existsSync('./.env')) {
-      helpers.appendFile('./.env', `\nMONGO=${`mongodb://localhost:27017/${name}`}`)
+      helpers.appendFile('.env', `\nMONGO=${`mongodb://localhost:27017/${name}`}`)
     } else {
       helpers.writeFile('.env', `MONGO=${`mongodb://localhost:27017/${name}`}`)
     }
