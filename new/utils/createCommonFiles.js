@@ -25,8 +25,9 @@ const createCommonFilesAndFolders = () => {
       if (store.env === 'development') {
         console.error(err)
       } else {
-        console.error(chalk.red`Error: createCommonFiles failed to initalize a git repository`)
+        console.error(chalk.red`Error: failed to initialize a git repository`)
       }
+      process.chdir('../')
     }
     helpers.writeFile(
       `.gitignore`,
