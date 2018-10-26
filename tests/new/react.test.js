@@ -25,18 +25,18 @@ const {
   createWebpack
 } = require('../../new/react')
 
-jest.mock('../../new/utils/createCommonFiles')
-jest.mock('../../helpers')
-jest.mock('../../new/react')
-jest.mock('../../new/utils/addEndToEndTesting')
-jest.mock('../../new/utils/newProjectInstructions')
-jest.mock('../../new/backend')
-jest.mock('../../new/utils/addLinter')
-jest.mock('fs', () => ({
-  readFileSync: jest.fn()
-}))
+// jest.mock('../../new/utils/createCommonFiles')
+// jest.mock('../../helpers')
+// jest.mock('../../new/react')
+// jest.mock('../../new/utils/addEndToEndTesting')
+// jest.mock('../../new/utils/newProjectInstructions')
+// jest.mock('../../new/backend')
+// jest.mock('../../new/utils/addLinter')
+// jest.mock('fs', () => ({
+//   readFileSync: jest.fn()
+// }))
 
-describe('new/react', () => {
+describe.skip('new/react', () => {
 
   describe('react', () => {
 
@@ -57,7 +57,7 @@ describe('new/react', () => {
     })
 
     it('creates a .babelrc file', () => {
-      
+
     })
 
     it('calls createWebpack', () => {
