@@ -347,8 +347,55 @@ describe('new/react', () => {
     })
   })
 
-  describe.skip('reactRouterRedux', () => {
+  describe('reactRouterRedux', () => {
+    it('creates reactRouterRedux folders', () => {
+      const mockMkdirSync = helpers.mkdirSync = jest.fn()
+      helpers.writeFile = jest.fn().mockReturnValue(true)
+      helpers.addDevDependenciesToStore = jest.fn().mockReturnValue(true)
 
+      reactRouterRedux()
+
+      expect(mockMkdirSync).toBeCalled()
+      expect(mockMkdirSync).toBeCalledTimes(6)
+      expect(mockMkdirSync.mock.calls[0][0]).toEqual('src/components')
+      expect(mockMkdirSync.mock.calls[1][0]).toEqual('src/components/Navbar')
+      expect(mockMkdirSync.mock.calls[2][0]).toEqual('src/views')
+      expect(mockMkdirSync.mock.calls[3][0]).toEqual('src/styles')
+      expect(mockMkdirSync.mock.calls[4][0]).toEqual('src/actions')
+      expect(mockMkdirSync.mock.calls[5][0]).toEqual('src/reducers')
+    })
+
+    it('creates reactRouterRedux files', () => {
+      const mockWriteFile = helpers.writeFile = jest.fn()
+      helpers.mkdirSync = jest.fn().mockReturnValue(true)
+      helpers.addDevDependenciesToStore = jest.fn().mockReturnValue(true)
+
+      reactRouterRedux()
+
+      expect(mockWriteFile).toBeCalled()
+      expect(mockWriteFile).toBeCalledTimes(10)
+      expect(mockWriteFile.mock.calls[0][0]).toEqual('src/index.js')
+      expect(mockWriteFile.mock.calls[1][0]).toEqual('src/Router.js')
+      expect(mockWriteFile.mock.calls[2][0]).toEqual('src/components/Navbar/Navbar.js')
+      expect(mockWriteFile.mock.calls[3][0]).toEqual('src/components/Navbar/NavbarContainer.js')
+      expect(mockWriteFile.mock.calls[4][0]).toEqual('src/components/Navbar/Navbar.css')
+      expect(mockWriteFile.mock.calls[5][0]).toEqual('src/views/Home.js')
+      expect(mockWriteFile.mock.calls[6][0]).toEqual('src/styles/global.css')
+      expect(mockWriteFile.mock.calls[7][0]).toEqual('src/actions/index.js')
+      expect(mockWriteFile.mock.calls[8][0]).toEqual('src/reducers/rootReducer.js')
+      expect(mockWriteFile.mock.calls[9][0]).toEqual('src/configStore.js')
+    })
+
+    it('adds devDependencies to the store', () => {
+      helpers.writeFile = jest.fn().mockReturnValue(true)
+      helpers.mkdirSync = jest.fn().mockReturnValue(true)
+      const mockAddDev = helpers.addDevDependenciesToStore = jest.fn()
+
+      reactRouterRedux()
+
+      expect(mockAddDev).toBeCalled()
+      expect(mockAddDev.mock.calls[0][0]).toEqual('redux react-redux react-router-dom')
+    })
   })
 
   describe.skip('scripts', () => {
