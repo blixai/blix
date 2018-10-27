@@ -186,8 +186,7 @@ describe('new/react', () => {
     })
 
     it('calls reactOnly if react is selected', () => {
-      const mockReactOnly = reactMod.reactOnly = jest.fn()
-      mockReactOnly.mockReturnValue(true)
+      const mockReactOnly = reactMod.reactOnly = jest.fn().mockReturnValue(true)
       store.reactType = 'react'
 
       createSrcContents()
@@ -196,8 +195,7 @@ describe('new/react', () => {
     })
 
     it('calls reactRouter if react-router is selected', () => {
-      const mockreactRouter = reactMod.reactRouter = jest.fn()
-      mockreactRouter.mockReturnValue(true)
+      const mockreactRouter = reactMod.reactRouter = jest.fn().mockReturnValue(true)
       store.reactType = 'react-router'
 
       createSrcContents()
@@ -216,8 +214,7 @@ describe('new/react', () => {
     })
 
     it('calls reactRouterRedux if reactRouter-redux is selected', () => {
-      const mockReactRouterRedux = reactMod.reactRouterRedux = jest.fn()
-      mockReactRouterRedux.mockReturnValue(true)
+      const mockReactRouterRedux = reactMod.reactRouterRedux = jest.fn().mockReturnValue(true)
       store.reactType = 'reactRouter-redux'
 
       createSrcContents()
@@ -226,8 +223,30 @@ describe('new/react', () => {
     })
   })
 
-  describe.skip('reactOnly', () => {
+  describe('reactOnly', () => {
 
+    it('creates a src/App directory', () => {
+      const mockMkdirSync = helpers.mkdirSync = jest.fn()
+      helpers.writeFile = jest.fn().mockReturnValue(true)
+
+      reactOnly()
+
+      expect(mockMkdirSync).toBeCalled()
+      expect(mockMkdirSync.mock.calls[0][0]).toEqual('src/App')
+    })
+
+    it('creates index.js, App.js and App.css', () => {
+      const mockWriteFile = helpers.writeFile = jest.fn()
+      helpers.mkdirSync = jest.fn().mockReturnValue(true)
+
+      reactOnly()
+
+      expect(mockWriteFile).toBeCalled()
+      expect(mockWriteFile).toBeCalledTimes(3)
+      expect(mockWriteFile.mock.calls[0][0]).toEqual('src/index.js')
+      expect(mockWriteFile.mock.calls[1][0]).toEqual('src/App/App.js')
+      expect(mockWriteFile.mock.calls[2][0]).toEqual('src/App/App.css')
+    })
   })
 
   describe.skip('reactRouter', () => {
