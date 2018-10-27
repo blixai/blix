@@ -598,11 +598,32 @@ describe('new/react', () => {
     })
   })
 
-  describe.skip('packages', () => {
+  describe('packages', () => {
+    it('adds webpack-dev-server as a devDependency if backend is not selected', () => {
+      const mockAddDev = helpers.addDevDependenciesToStore = jest.fn()
+      store.backend = {backend: false}
 
+      packages()
+
+      expect(mockAddDev).toBeCalled()
+      expect(mockAddDev).toBeCalledTimes(2)
+      expect(mockAddDev.mock.calls[0][0]).toEqual('webpack-dev-server')
+      expect(mockAddDev.mock.calls[1][0]).toEqual('react react-dom webpack webpack-cli babel-loader css-loader @babel/core @babel/preset-env @babel/preset-react style-loader sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-preset-env postcss-import postcss-loader')
+    })
+
+    it('only adds devDependencies to the store if backend is selected', () => {
+      const mockAddDev = helpers.addDevDependenciesToStore = jest.fn()
+      store.backend = {backend: true}
+
+      packages()
+
+      expect(mockAddDev).toBeCalled()
+      expect(mockAddDev).toBeCalledTimes(1)
+      expect(mockAddDev.mock.calls[0][0]).toEqual('react react-dom webpack webpack-cli babel-loader css-loader @babel/core @babel/preset-env @babel/preset-react style-loader sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-preset-env postcss-import postcss-loader')
+    })
   })
 
-  describe.skip('createWebpac', () => {
+  describe.skip('createWebpack', () => {
 
   })
 
