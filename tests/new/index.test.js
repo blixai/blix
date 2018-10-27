@@ -5,28 +5,33 @@ jest.mock('fs', () => ({
 
 jest.mock('inquirer', () => ({
     prompt: jest.fn()
-  }))
+}))
 
 jest.mock('../../new/backend.js', () => ({
     createBackend: jest.fn()
 }))
 
 
-jest.mock('../../new/react.js')
+jest.mock('../../new/react.js', () => ({
+    react: jest.fn()
+}))
+
+const { react } = require('../../new/react')
+
 jest.mock('../../new/backend.js')
 
 jest.mock('../../helpers')
 
-let {
+const {
     promptPreset,
     promptFrontend,
     reactProject,
-    vueProject,
-    vanillaJSProject,
     backendOnly,
     promptForName,
     createProject
 } = require('../../new')
+
+let newModule = require('../../new')
 
 let fs = require('fs')
 
@@ -73,57 +78,57 @@ let resetStore = () => {
 describe('new/index.js', () => {
 
     describe('promptPreset', () => {
-        beforeEach(() => {
-            // resetStore()
-        })
 
         it('prompts for a preset', async () => {
-            inquirer.prompt.mockResolvedValue({preset: ''})
+            jest.spyOn(newModule, 'promptFrontend')
+            inquirer.prompt.mockResolvedValue({preset: ''}).mockResolvedValueOnce({ frontend: '' })
 
             await promptPreset()
 
             expect(inquirer.prompt).toBeCalled()
+            expect(newModule.promptFrontend).toBeCalled()
         })
 
         it('if preset is react-default set store values to react, redux, react router, with express and mongoose/mongo project', async () => {
-            inquirer.prompt.mockResolvedValue({preset: 'react-default'})      
+            inquirer.prompt.mockResolvedValueOnce({preset: 'react-default'})      
+            helpers.yarn = jest.fn()
 
             await promptPreset()
 
             expect(inquirer.prompt).toBeCalled()
             expect(store.reactType).toEqual('reactRouter-redux')
-            expect(store.reactTesting).toEqual({ enzyme: true})
+            expect(store.reactTesting).toEqual({ enzyme: true })
             expect(store.e2e).toEqual('None')
             expect(store.backend).toEqual({ backend: true })
             expect(store.serverTesting).toEqual('jest')
             expect(store.database).toEqual('mongo')
+            expect(react).toBeCalled()
         })
 
         it('prompts for yarn if yarn available', async () => {
-            inquirer.prompt.mockResolvedValue({preset: 'react-default'})    
+            inquirer.prompt.mockResolvedValueOnce({preset: 'react-default'})    
             helpers.yarn = jest.fn()
-            helpers.canUseYarn.mockResolvedValue(true)
-            inquirer.prompt.mockResolvedValueOnce({preset: 'react-default'})
+            helpers.canUseYarn.mockResolvedValueOnce(true)
 
             await promptPreset()
 
             expect(helpers.yarn).toBeCalled()
+            expect(inquirer.prompt).toBeCalled()
         })
 
         it('if manual config option selected prompt for frontend option', async () => {
-            inquirer.prompt.mockResolvedValue({ preset: 'manual' })   
+            inquirer.prompt.mockResolvedValue({ preset: 'manual' })
+            const mock = newModule.promptFrontend = jest.fn()
 
             await promptPreset()
 
-            expect(inquirer.prompt.mock.calls[1][0]).toContain(frontendOptions)
+            expect(mock).toBeCalled()
         })
     })
 
     describe('promptFrontend', () => {
 
         it('prompts for a frontend type', async () => {
-            inquirer.prompt
-                .mockResolvedValueOnce({ frontend: '' })
 
             await promptFrontend()
 
@@ -134,12 +139,14 @@ describe('new/index.js', () => {
         it('calls reactProject if react frontend selected', async () => {
             inquirer.prompt
                 .mockResolvedValueOnce({ frontend: 'react' })
+            jest.spyOn(newModule, 'reactProject')
 
             await promptFrontend()
 
             expect(inquirer.prompt).toBeCalled()
             expect(inquirer.prompt).toBeCalledWith([frontendOptions])
             expect(store.reactType).toEqual('react')
+            expect(newModule.reactProject).toBeCalledTimes(1)
         })
         
 
@@ -152,7 +159,8 @@ describe('new/index.js', () => {
             expect(inquirer.prompt).toBeCalled()
             expect(inquirer.prompt).toBeCalledWith([frontendOptions])
             expect(store.reactType).toEqual('react-router') 
-            })
+            expect(newModule.reactProject).toBeCalledTimes(1)
+        })
         
 
         it('calls reactProject if redux frontend selected', async () => {
@@ -164,6 +172,7 @@ describe('new/index.js', () => {
             expect(inquirer.prompt).toBeCalled()
             expect(inquirer.prompt).toBeCalledWith([frontendOptions])
             expect(store.reactType).toEqual('redux')
+            expect(newModule.reactProject).toBeCalledTimes(1)
         })
 
         it('calls reactProject if reactRouter-redux frontend selected', async () => {
@@ -175,23 +184,23 @@ describe('new/index.js', () => {
             expect(inquirer.prompt).toBeCalled()
             expect(inquirer.prompt).toBeCalledWith([frontendOptions])
             expect(store.reactType).toEqual('reactRouter-redux')
+            expect(newModule.reactProject).toBeCalledTimes(1)
         })
 
         it('calls backendOnly if no frontend is selected', async () => {
             helpers.yarn.mockResolvedValueOnce({ yarn: true })
             inquirer.prompt
                 .mockResolvedValueOnce({ frontend: 'none' })
-                .mockResolvedValueOnce({ linter: 'eslint' })
-                .mockResolvedValueOnce({ server: 'mocha' })
-                .mockResolvedValueOnce({ database: 'mongo' })
+            jest.spyOn(newModule, 'backendOnly')
+            
 
             await promptFrontend()
 
             expect(inquirer.prompt).toBeCalled()
             expect(inquirer.prompt).toBeCalledWith([frontendOptions])
             expect(store.backendType).toEqual('api')
+            expect(newModule.backendOnly).toBeCalledTimes(1)
         })
-        
     })
 
     describe('reactProject', () => {
