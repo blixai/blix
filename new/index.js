@@ -98,43 +98,6 @@ const reactProject = async reactType => {
 
 exports.reactProject = reactProject
 
-const vueProject = async vueType => {
-  const vueTestingSelection = await prompt([vueTesting]);
-  const e2eSelection = await prompt([e2e]);
-  const backendSelection = await prompt([backend]);
-  if (backendSelection.backend) {
-    const serverTestingSelection = await prompt([serverTesting]);
-    const databaseSelection = await prompt([database]);
-    vue(
-      vueType,
-      vueTestingSelection,
-      e2eSelection,
-      backendSelection,
-      serverTestingSelection,
-      databaseSelection
-    );
-  } else {
-    vue(vueTestingSelection, e2e);
-  }
-};
-
-const vanillaJSProject = async () => {
-  const e2eSelection = await prompt([e2e]);
-  const backendSelection = await prompt([backend]);
-  if (backendSelection.backend) {
-    const serverTestingSelection = await prompt([serverTesting]);
-    const databaseSelection = await prompt([database]);
-    vanillaJS(
-      e2eSelection,
-      backendSelection.backend,
-      serverTestingSelection,
-      databaseSelection
-    );
-  } else {
-    vanillaJS(e2eSelection);
-  }
-};
-
 const backendOnly = async () => {
   let linter = await prompt([linterPrompt])
   store.linter = linter.linter
