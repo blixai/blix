@@ -9,6 +9,7 @@ const helpers = require('../../helpers')
 const reactMod = require('../../new/react')
 const {
   react,
+  cssLibrary
 } = require('../../new/react')
 
 jest.mock('../../new/utils/createCommonFiles')
@@ -143,17 +144,35 @@ describe('new/react', () => {
     })
   })
 
-  describe.skip('cssLibrary', () => {
+  describe('cssLibrary', () => {
     it('adds @material-ui/core to store.devDependencies if material is in the store', () => {
+      const mockAddDevDependencies = helpers.addDevDependenciesToStore.mockReturnValue(true)
+      store.reactCSS = 'material'
 
+      cssLibrary()
+
+      expect(mockAddDevDependencies).toBeCalled()
+      expect(mockAddDevDependencies.mock.calls[0][0]).toEqual('@material-ui/core')
     })
 
     it('adds react-bootstrap to store.devDependencies if bootstrap is in the store', () => {
+      const mockAddDevDependencies = helpers.addDevDependenciesToStore.mockReturnValue(true)
+      store.reactCSS = 'bootstrap'
 
+      cssLibrary()
+      
+      expect(mockAddDevDependencies).toBeCalled()
+      expect(mockAddDevDependencies.mock.calls[0][0]).toEqual('react-bootstrap')
     })
 
     it('adds styled-components to store.devDependencies if styled is in the store', () => {
+      const mockAddDevDependencies = helpers.addDevDependenciesToStore.mockReturnValue(true)
+      store.reactCSS = 'styled'
 
+      cssLibrary()
+      
+      expect(mockAddDevDependencies).toBeCalled()
+      expect(mockAddDevDependencies.mock.calls[0][0]).toEqual('styled-components')
     })
   })
 
