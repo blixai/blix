@@ -623,8 +623,32 @@ describe('new/react', () => {
     })
   })
 
-  describe.skip('createWebpack', () => {
+  describe('createWebpack', () => {
+    it('sets up webpack with hot reloading if backend is selected', () => {
+      const mockWrite = helpers.writeFile = jest.fn()
+      const mockAppend = helpers.appendFile = jest.fn()
+      store.backend = {backend: true}
 
+      createWebpack()
+
+      expect(mockWrite).toBeCalled()
+      expect(mockWrite.mock.calls[0][0]).toEqual('webpack.config.js')
+      expect(mockWrite.mock.calls[0][1]).toContain('webpack.HotModuleReplacementPlugin()')
+      expect(mockAppend.mock.calls[0][0]).toEqual('src/index.js')
+      expect(mockAppend.mock.calls[0][1]).toEqual('\nif (module.hot) {\n\tconsole.clear()\n\tmodule.hot.accept();\n}')
+    })
+
+    it('creates a default webpack config if backend is not selected', () => {
+      const mockWrite = helpers.writeFile = jest.fn() 
+      store.backend = {backend: false}
+
+      createWebpack()
+
+      expect(mockWrite).toBeCalled()
+      expect(mockWrite.mock.calls[0][0]).toEqual('webpack.config.js')
+      expect(mockWrite.mock.calls[0][1]).not.toContain('webpack.HotModuleReplacementPlugin()')
+
+    })
   })
 
 })
