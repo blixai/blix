@@ -60,15 +60,6 @@ const promptFrontend = async () => {
       break;
     case "reactRouter-redux":
       this.reactProject("reactRouter-redux")
-      break
-    case "vue":
-      vueProject("vue");
-      break;
-    case "vuex":
-      vueProject("vuex");
-      break;
-    case "js":
-      vanillaJSProject();
       break;
     default:
       this.backendOnly();
