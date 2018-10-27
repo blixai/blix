@@ -204,22 +204,120 @@ describe('new/index.js', () => {
     })
 
     describe('reactProject', () => {
-       it('', async () => {
+        it('sets the reactType in the store based on what argument it recieved', async () => {
+           await reactProject('react')
 
-       }) 
+           expect(store.reactType).toEqual('react') 
+        })
 
+        it('prompts for a react css library', async () => {
+            inquirer.prompt
+                .mockResolvedValueOnce({ css: 'material' })
 
-       it('', async () => {
-           
+            await reactProject('react')
+            expect(store.reactCSS).toEqual('material')
+            expect(inquirer.prompt).toBeCalledWith([reactCSS])
         }) 
 
-        it('', async () => {
+
+        it('prompts for a project linter', async () => {
+            inquirer.prompt
+                .mockResolvedValueOnce({ css: 'material' })
+                .mockResolvedValueOnce({ linter: 'prettier' })
+
+            await reactProject('react')
+            expect(store.linter).toEqual('prettier')
+            expect(inquirer.prompt).toBeCalledWith([linterPrompt]) 
+        }) 
+
+        it('prompts for a reactTesting option', async () => {
+            inquirer.prompt
+                .mockResolvedValueOnce({ css: 'material' })
+                .mockResolvedValueOnce({ linter: 'prettier' })
+                .mockResolvedValueOnce({ enzyme: true })
+
+            await reactProject('react')
+            expect(store.reactTesting).toEqual({ enzyme: true })
+            expect(inquirer.prompt).toBeCalledWith([reactTesting]) 
+        }) 
+
+        it('prompts for a e2e tool', async () => {
+            inquirer.prompt
+                .mockResolvedValueOnce({ css: 'material' })
+                .mockResolvedValueOnce({ linter: 'prettier' })
+                .mockResolvedValueOnce({ enzyme: true })
+                .mockResolvedValueOnce({ e2e: 'cypress' })
+
+            await reactProject('react')
+            expect(store.e2e).toEqual({ e2e: 'cypress' })
+            expect(inquirer.prompt).toBeCalledWith([e2e]) 
             
         }) 
 
-        it('', async () => {
-            
-        }) 
+        it('prompts if user wants an express backend', async () => {
+            inquirer.prompt
+                .mockResolvedValueOnce({ css: 'material' })
+                .mockResolvedValueOnce({ linter: 'prettier' })
+                .mockResolvedValueOnce({ enzyme: true })
+                .mockResolvedValueOnce({ e2e: 'cypress' })
+                .mockResolvedValueOnce({ backend: true })
+
+            await reactProject('react')
+            expect(store.backend).toEqual({ backend: true })
+            expect(inquirer.prompt).toBeCalledWith([backend]) 
+        })
+
+        it('if backend selected prompt for backend serverTesting and database options', async () => {
+            inquirer.prompt
+                .mockResolvedValueOnce({ css: 'material' })
+                .mockResolvedValueOnce({ linter: 'prettier' })
+                .mockResolvedValueOnce({ enzyme: true })
+                .mockResolvedValueOnce({ e2e: 'cypress' })
+                .mockResolvedValueOnce({ backend: true })
+                .mockResolvedValueOnce({ server: 'mocha' })
+                .mockResolvedValueOnce({ database: 'mongo' })
+
+            await reactProject('react')
+            expect(store.backend).toEqual({ backend: true })
+            expect(store.serverTesting).toEqual({ server: 'mocha' })
+            expect(store.database).toEqual({ database: 'mongo' })
+            expect(inquirer.prompt).toBeCalledWith([backend]) 
+            expect(inquirer.prompt).toBeCalledWith([serverTesting]) 
+            expect(inquirer.prompt).toBeCalledWith([database]) 
+        })
+
+        it('prompts for yarn if yarn available', async () => {
+            helpers.yarn = jest.fn()
+            inquirer.prompt
+                .mockResolvedValueOnce({ css: 'material' })
+                .mockResolvedValueOnce({ linter: 'prettier' })
+                .mockResolvedValueOnce({ enzyme: true })
+                .mockResolvedValueOnce({ e2e: 'cypress' })
+                .mockResolvedValueOnce({ backend: true })
+                .mockResolvedValueOnce({ server: 'mocha' })
+                .mockResolvedValueOnce({ database: 'mongo' })
+
+            await reactProject()
+
+            expect(helpers.yarn).toBeCalled()
+
+        })
+
+        it('calls react', async () => {
+            helpers.yarn = jest.fn()
+            inquirer.prompt
+                .mockResolvedValueOnce({ css: 'material' })
+                .mockResolvedValueOnce({ linter: 'prettier' })
+                .mockResolvedValueOnce({ enzyme: true })
+                .mockResolvedValueOnce({ e2e: 'cypress' })
+                .mockResolvedValueOnce({ backend: true })
+                .mockResolvedValueOnce({ server: 'mocha' })
+                .mockResolvedValueOnce({ database: 'mongo' })
+
+            await reactProject()
+
+            expect(react).toBeCalled()
+        })
     })
 
     describe.skip('vueProject', () => {
