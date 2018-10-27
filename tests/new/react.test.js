@@ -506,8 +506,32 @@ describe('new/react', () => {
     })
   })
 
-  describe.skip('reactRouterScripts', () => {
+  describe('reactRouterScripts', () => {
+    it('creates reactRouter Script files', () => {
+      const mockWrite = helpers.writeFile = jest.fn()
+      helpers.addScriptToNewPackageJSON = jest.fn().mockReturnValue(true)
 
+      reactRouterScripts()
+
+      expect(mockWrite).toBeCalled()
+      expect(mockWrite).toBeCalledTimes(4)
+      expect(mockWrite.mock.calls[0][0]).toEqual('scripts/component.js')
+      expect(mockWrite.mock.calls[1][0]).toEqual('scripts/templates/statefulComponent.js')
+      expect(mockWrite.mock.calls[2][0]).toEqual('scripts/templates/statelessComponent.js')
+      expect(mockWrite.mock.calls[3][0]).toEqual('scripts/view.js')
+    })
+
+    it('adds scripts to new package.json', () => {
+      helpers.writeFile = jest.fn().mockReturnValue(true)
+      const mockAddScript = helpers.addScriptToNewPackageJSON = jest.fn()
+
+      reactRouterScripts()
+
+      expect(mockAddScript).toBeCalled()
+      expect(mockAddScript).toBeCalledTimes(2)
+      expect(mockAddScript.mock.calls[0]).toEqual(['component', 'node scripts/component.js'])
+      expect(mockAddScript.mock.calls[1]).toEqual(['view', 'node scripts/view.js'])
+    })
   })
 
   describe.skip('reduxScripts', () => {
