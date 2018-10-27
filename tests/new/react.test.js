@@ -249,8 +249,49 @@ describe('new/react', () => {
     })
   })
 
-  describe.skip('reactRouter', () => {
+  describe('reactRouter', () => {
+    it('creates components, Navbar, views, and styles directories', () => {
+      const mockMkdirSync = helpers.mkdirSync = jest.fn()
+      helpers.writeFile = jest.fn().mockReturnValue(true)
+      helpers.addDevDependenciesToStore = jest.fn().mockReturnValue(true)
 
+      reactRouter()
+
+      expect(mockMkdirSync).toBeCalled()
+      expect(mockMkdirSync).toBeCalledTimes(4)
+      expect(mockMkdirSync.mock.calls[0][0]).toEqual('src/components')
+      expect(mockMkdirSync.mock.calls[1][0]).toEqual('src/components/Navbar')
+      expect(mockMkdirSync.mock.calls[2][0]).toEqual('src/views')
+      expect(mockMkdirSync.mock.calls[3][0]).toEqual('src/styles')
+    })
+
+    it('creates reactRouter files', () => {
+      const mockWriteFile = helpers.writeFile = jest.fn()
+      helpers.mkdirSync = jest.fn().mockReturnValue(true)
+      helpers.addDevDependenciesToStore = jest.fn().mockReturnValue(true)
+
+      reactRouter()
+
+      expect(mockWriteFile).toBeCalled()
+      expect(mockWriteFile).toBeCalledTimes(6)
+      expect(mockWriteFile.mock.calls[0][0]).toEqual('src/index.js')
+      expect(mockWriteFile.mock.calls[1][0]).toEqual('src/Router.js')
+      expect(mockWriteFile.mock.calls[2][0]).toEqual('src/components/Navbar/Navbar.js')
+      expect(mockWriteFile.mock.calls[3][0]).toEqual('src/components/Navbar/Navbar.css')
+      expect(mockWriteFile.mock.calls[4][0]).toEqual('src/views/Home.js')
+      expect(mockWriteFile.mock.calls[5][0]).toEqual('src/styles/global.css')
+    })
+
+    it('adds devDependencies to the store', () => {
+      helpers.writeFile = jest.fn().mockReturnValue(true)
+      helpers.mkdirSync = jest.fn().mockReturnValue(true)
+      const mockAddDev = helpers.addDevDependenciesToStore = jest.fn()
+
+      reactRouter()
+
+      expect(mockAddDev).toBeCalled()
+      expect(mockAddDev.mock.calls[0][0]).toEqual('react-router-dom')
+    })
   })
 
   describe.skip('redux', () => {
