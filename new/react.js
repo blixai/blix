@@ -45,7 +45,7 @@ const ReduxHomeView = loadFile("./files/frontend/redux/Home.js");
 
 const NavbarContainer = loadFile("./files/frontend/redux/NavbarContainer.js");
 
-const react = () => {
+exports.react = () => {
   createCommonFilesAndFolders();
 
   // create react files
@@ -55,18 +55,18 @@ const react = () => {
   helpers.mkdirSync(`src/services`);
 
   // build project specific contents based on type supplied from new/index.js
-  createSrcContents();
+  this.createSrcContents();
 
   // create webpack postcssConfig and babelrc files
   helpers.writeFile(`postcss.config.js`, postcssConfig);
   helpers.writeFile(`.babelrc`, babel);
 
-  createWebpack()
+  this.createWebpack()
 
   // add config file and install linter
   addLinter()
   // install css lib for react 
-  cssLibrary()
+  this.cssLibrary()
   // react testing setup
   installReactTesting();
 
@@ -74,10 +74,10 @@ const react = () => {
   e2eSetup();
 
   // add scripts
-  scripts();
+  this.scripts();
 
   // add packages to store
-  packages();
+  this.packages();
 
   // create backend
   if (store.backend && store.backend.backend) {
@@ -90,7 +90,7 @@ const react = () => {
   }
 };
 
-const cssLibrary = () => {
+exports.cssLibrary = () => {
   if (store.reactCSS === 'material') {
     helpers.addDevDependenciesToStore('@material-ui/core')
   } else if (store.reactCSS === 'bootstrap') {
@@ -100,7 +100,7 @@ const cssLibrary = () => {
   }
 }
 
-const createSrcContents = () => {
+exports.createSrcContents = () => {
   if (store.reactType === "react") {
     reactOnly();
   } else if (store.reactType === "react-router") {
@@ -112,14 +112,14 @@ const createSrcContents = () => {
   }
 };
 
-const reactOnly = () => {
+exports.reactOnly = () => {
   helpers.mkdirSync(`src/App`);
   helpers.writeFile(`src/index.js`, index);
   helpers.writeFile(`src/App/App.js`, app);
   helpers.writeFile(`src/App/App.css`, cssFile);
 };
 
-const reactRouter = () => {
+exports.reactRouter = () => {
   helpers.writeFile(`src/index.js`, reactRouterIndex);
   helpers.writeFile(`src/Router.js`, appRouter);
 
@@ -136,7 +136,7 @@ const reactRouter = () => {
   helpers.addDevDependenciesToStore("react-router-dom");
 };
 
-const redux = () => {
+exports.redux = () => {
   helpers.writeFile(`src/index.js`, reduxIndex)
   helpers.mkdirSync(`src/App`)
   helpers.writeFile(`src/App/App.js`, app)
@@ -154,7 +154,7 @@ const redux = () => {
 
 }
 
-const reactRouterRedux = () => {
+exports.reactRouterRedux = () => {
   helpers.writeFile(`src/index.js`, reactRouterReduxIndex);
   helpers.writeFile(`src/Router.js`, appRouter);
   // components folder, every component will have a folder with associated css, tests, and/or container for that component
@@ -183,7 +183,7 @@ const reactRouterRedux = () => {
   helpers.addDevDependenciesToStore("redux react-redux react-router-dom");
 };
 
-const scripts = () => {
+exports.scripts = () => {
   if (!store.backend.backend) {
     helpers.addScriptToNewPackageJSON(
       "start",
@@ -208,7 +208,7 @@ const scripts = () => {
   }
 };
 
-const reactScripts = () => {
+exports.reactScripts = () => {
   let component = loadFile("./files/scripts/frontend/react/component.js")
   let statefulComponentTemplate = loadFile('./files/scripts/frontend/react/templates/statefulComponent.js')
   let statelessComponentTemplate = loadFile("./files/scripts/frontend/react/templates/statelessComponent.js")
@@ -219,7 +219,7 @@ const reactScripts = () => {
   helpers.addScriptToNewPackageJSON("component", "node scripts/component.js");
 };
 
-const reactRouterScripts = () => {
+exports.reactRouterScripts = () => {
   let component = loadFile("./files/scripts/frontend/react-router/component.js")
   let statefulComponentTemplate = loadFile("./files/scripts/frontend/react/templates/statefulComponent.js")
   let statelessComponentTemplate = loadFile("./files/scripts/frontend/react/templates/statelessComponent.js")
@@ -234,7 +234,7 @@ const reactRouterScripts = () => {
   helpers.addScriptToNewPackageJSON("view", "node scripts/view.js");
 };
 
-const reduxScripts = () => {
+exports.reduxScripts = () => {
   let action = loadFile("./files/scripts/frontend/redux/action.js")
   let actionTemplate = loadFile("./files/scripts/frontend/redux/templates/action.js")
   let reducerTemplate = loadFile("./files/scripts/frontend/redux/templates/reducer.js")
@@ -258,7 +258,7 @@ const reduxScripts = () => {
   helpers.addScriptToNewPackageJSON('action', 'node scripts/action.js')
 }
 
-const reactRouterReduxScripts = () => {
+exports.reactRouterReduxScripts = () => {
   let action = loadFile("./files/scripts/frontend/reactRouter-redux/action.js")
   let actionTemplate = loadFile("./files/scripts/frontend/redux/templates/action.js")
   let reducerTemplate = loadFile("./files/scripts/frontend/redux/templates/reducer.js")
@@ -285,14 +285,14 @@ const reactRouterReduxScripts = () => {
   helpers.addScriptToNewPackageJSON("view", "node scripts/view.js");
 };
 
-const packages = () => {
+exports.packages = () => {
   if (!store.backend.backend) {
     helpers.addDevDependenciesToStore("webpack-dev-server")
   }
   helpers.addDevDependenciesToStore("react react-dom webpack webpack-cli babel-loader css-loader @babel/core @babel/preset-env @babel/preset-react style-loader sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-preset-env postcss-import postcss-loader")
 };
 
-const createWebpack = () => {
+exports.createWebpack = () => {
   if (store.backend.backend) {
     helpers.writeFile(`webpack.config.js`, webpackWithHotReloading);
     let hotReloadIndex = `\nif (module.hot) {\n\tconsole.clear()\n\tmodule.hot.accept();\n}`
@@ -301,5 +301,3 @@ const createWebpack = () => {
     helpers.writeFile(`webpack.config.js`, webpack);
   }
 }
-
-module.exports = {react};
