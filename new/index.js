@@ -38,9 +38,11 @@ const promptPreset = async () => {
     await helpers.yarn()
     react()
   } else {
-    promptFrontend()
+    this.promptFrontend()
   }
 }
+
+exports.promptPreset = promptPreset
 
 
 // prompts user to select frontend type and branches into project specific questions from there
@@ -48,16 +50,16 @@ const promptFrontend = async () => {
   const answer = await prompt([frontendOptions]);
   switch (answer.frontend) {
     case "react":
-      reactProject("react");
+      this.reactProject("react");
       break;
     case "react-router":
-      reactProject("react-router");
+      this.reactProject("react-router");
       break;
     case "redux":
-      reactProject('redux');
+      this.reactProject('redux');
       break;
     case "reactRouter-redux":
-      reactProject("reactRouter-redux")
+      this.reactProject("reactRouter-redux")
       break
     case "vue":
       vueProject("vue");
@@ -69,10 +71,12 @@ const promptFrontend = async () => {
       vanillaJSProject();
       break;
     default:
-      backendOnly();
+      this.backendOnly();
       break;
   }
 };
+
+exports.promptFrontend = promptFrontend
 
 const reactProject = async reactType => {
   store.reactType = reactType
@@ -91,6 +95,8 @@ const reactProject = async reactType => {
   await helpers.yarn()
   react();
 };
+
+exports.reactProject = reactProject
 
 const vueProject = async vueType => {
   const vueTestingSelection = await prompt([vueTesting]);
@@ -140,34 +146,29 @@ const backendOnly = async () => {
   createBackend();
 };
 
+exports.backendOnly = backendOnly
+
 const promptForName = async () => {
   let answer = await prompt([namePrompt])
   store.name = answer.name
-  createProject()
+  this.createProject()
 }
+
+exports.promptForName = promptForName
 
 // create project ensures there shouldn't be errors before starting the prompts
 const createProject = () => {
   if (!store.name) {
     console.clear()
-    promptForName()
+    this.promptForName()
     return
   }
   if (fs.existsSync(`./${store.name}`)) {
     console.error(chalk`{red A project named ${store.name} already exists!}`);
-    promptForName()
+    this.promptForName()
     return
   }
-  promptPreset()
+  this.promptPreset()
 };
 
-module.exports = {
-  createProject,
-  promptForName,
-  backendOnly,
-  vanillaJSProject,
-  vueProject,
-  reactProject,
-  promptFrontend,
-  promptPreset
-};
+exports.createProject = createProject
