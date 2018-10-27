@@ -1,41 +1,32 @@
-jest.mock('../../helpers')
+const { createCommonFilesAndFolders } = require('../../new/utils/createCommonFiles')
+const { testBackend } = require('../../new/utils/addBackendTests')
+const { addLinter } = require('../../new/utils/addLinter')
+const { addMongooseToScripts } = require('../../new/utils/addMongoDB')
+const { addBookshelfToScripts } = require('../../new/utils/addBookshelf')
+const { newProjectInstructions } = require('../../new/utils/newProjectInstructions')
+const helpers = require('../../helpers')
+const fs = require('fs')
+const store = require('../../new/store')
 
-let { createCommonFilesAndFolders } = require('../../new/utils/createCommonFiles')
-let { testBackend } = require('../../new/utils/addBackendTests')
-let { addLinter } = require('../../new/utils/addLinter')
-let { addMongooseToScripts } = require('../../new/utils/addMongoDB')
-let { addBookshelfToScripts } = require('../../new/utils/addBookshelf')
-let { newProjectInstructions } = require('../../new/utils/newProjectInstructions')
-
-
-jest.mock('../../new/utils/createCommonFiles', () => ({
-    createCommonFilesAndFolders: jest.fn()
-}))
-
-
-jest.mock('../../new/utils/addLinter', () => ({
-    addLinter: jest.fn()
-}))
 jest.mock('../../new/utils/addBackendTests')
 jest.mock('../../new/utils/addMongoDB')
 jest.mock('../../new/utils/addBookshelf')
 jest.mock('../../new/utils/newProjectInstructions')
-
-let helpers = require('../../helpers')
-
 jest.mock('fs', () => ({
-    readFileSync: jest.fn()
+  readFileSync: jest.fn()
 }))
-
 jest.mock('path', () => ({
-    resolve: jest.fn()
+  resolve: jest.fn()
 }))
+jest.mock('../../new/utils/addLinter', () => ({
+  addLinter: jest.fn()
+}))
+jest.mock('../../new/utils/createCommonFiles', () => ({
+  createCommonFilesAndFolders: jest.fn()
+}))
+jest.mock('../../helpers')
 
-let fs = require('fs')
-
-const store = require('../../new/store')
-
-let {
+const {
     createBackend,
     standard,
     mvcType,
@@ -57,7 +48,6 @@ describe('new/backend.js', () => {
         it('creates common files and folders if backendType is api', () => {
             store.backendType = 'api'
 
-
             createBackend()
 
             expect(createCommonFilesAndFolders).toBeCalled()
@@ -73,17 +63,16 @@ describe('new/backend.js', () => {
 
 
         it('does not create an assets folder if backend type isn\'t api', () => {
-           store.backendType = 'api' 
+          store.backendType = 'api' 
 
-           createBackend()
+          createBackend()
 
-            expect(helpers.mkdirSync).not.toBeCalledWith('assets')
+          expect(helpers.mkdirSync).not.toBeCalledWith('assets')
+          store.backendType = ''
 
-            store.backendType = ''
+          createBackend()
 
-            createBackend()
-
-            expect(helpers.mkdirSync).toBeCalledWith('assets')
+          expect(helpers.mkdirSync).toBeCalledWith('assets')
         })
 
         it.skip('creates a standard type if backendType is standard', () => {

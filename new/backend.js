@@ -17,7 +17,7 @@ const loadFile = filePath => {
 const cluster = loadFile('./files/backend/common/cluster.js')
 const routes = loadFile('./files/backend/common/routes.js')
 
-const createBackend = () => {
+exports.createBackend = () => {
   // if api mode need to create common files and folders
   if (store.backendType === 'api') {
     createCommonFilesAndFolders()
@@ -37,34 +37,34 @@ const createBackend = () => {
 
   if (store.backendType === 'standard') {
     // type when there is a frontend framework and for the most part the backend is a soa but serves some assets and files
-    standard()
+    this.standard()
   } else if (store.backendType === 'mvc') {
     // mode for when their is no frontend framework so pug is default (this is a rails style mvc with ssr)
-    mvcType()
+    this.mvcType()
   } else {
     // api mode json only, no views, no cookies
-    apiType()
+    this.apiType()
   }
 
-  addDatabase(store.database)
+  this.addDatabase(store.database)
 
   // scripts: controller, model, and if pug project view and add their associated commands to the package.json
-  scripts(store.backendType)
+  this.scripts(store.backendType)
 
   // packages to install
-  packages(store.backendType)
+  this.packages(store.backendType)
   // setup endpoint tests
   testBackend(store.serverTesting)
 
   //add variables to .env file
-  envSetup()
+  this.envSetup()
 
   helpers.installAllPackages()
   // new project instructions and add to readms
   newProjectInstructions()
 }
 
-const standard = () => {
+exports.standard = () => {
   let html = loadFile('./files/frontend/other/index.html')
   let server = loadFile('./files/backend/standard/serverWithHotReloading.js')
   let controller = loadFile('./files/backend/standard/home.js')
@@ -77,7 +77,7 @@ const standard = () => {
   helpers.writeFile(`server/controllers/home.js`, controller)
 }
 
-const mvcType = () => {
+exports.mvcType = () => {
   const server = loadFile('./files/backend/mvc/server.js')
   const error = loadFile('./files/backend/mvc/error.pug')
   const layout = loadFile('./files/backend/mvc/layout.pug')
@@ -93,7 +93,7 @@ const mvcType = () => {
   helpers.writeFile(`server/server.js`, server)
 }
 
-const apiType = () => {
+exports.apiType = () => {
   let server = loadFile('./files/backend/api/server.js')
   let controller = loadFile('./files/backend/api/home.js')
 
@@ -103,7 +103,7 @@ const apiType = () => {
   addLinter()
 }
 
-const addDatabase = databaseSelection => {
+exports.addDatabase = databaseSelection => {
   if (databaseSelection.database === 'mongo') {
     addMongooseToScripts()
   } else if (databaseSelection.database === 'pg') {
@@ -111,7 +111,7 @@ const addDatabase = databaseSelection => {
   }
 }
 
-const scripts = mode => {
+exports.scripts = mode => {
   let controller = loadFile('./files/scripts/backend/controller.js')
   let controllerTemplate = loadFile('./files/scripts/backend/templates/controller.js')
   let routesTemplate = loadFile('./files/scripts/backend/templates/routes.js')
@@ -129,7 +129,7 @@ const scripts = mode => {
   helpers.writeFile(`scripts/templates/routes.js`, routesTemplate)
 }
 
-const packages = mode => {
+exports.packages = mode => {
   if (mode === 'standard') {
     helpers.addDependenciesToStore(
       'express nodemon body-parser compression helmet dotenv morgan cookie-parser'
@@ -146,17 +146,6 @@ const packages = mode => {
   }
 }
 
-const envSetup = () => {
+exports.envSetup = () => {
     helpers.appendFile(`.env`, '\nWORKERS=1')
-}
-
-module.exports = {
-  createBackend,
-  standard,
-  mvcType,
-  apiType,
-  addDatabase,
-  scripts,
-  packages,
-  envSetup
 }
