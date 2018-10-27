@@ -13,7 +13,15 @@ const {
   createSrcContents,
   reactOnly,
   reactRouter,
-
+  redux,
+  reactRouterRedux,
+  scripts,
+  reactScripts,
+  reactRouterScripts,
+  reduxScripts,
+  reactRouterReduxScripts,
+  packages,
+  createWebpack
 } = require('../../new/react')
 
 jest.mock('../../new/utils/createCommonFiles')
@@ -294,8 +302,49 @@ describe('new/react', () => {
     })
   })
 
-  describe.skip('redux', () => {
+  describe('redux', () => {
+    it('creates App, actions and reducers directories', () => {
+      const mockMkdirSync = helpers.mkdirSync = jest.fn()
+      helpers.writeFile = jest.fn().mockReturnValue(true)
+      helpers.addDevDependenciesToStore = jest.fn().mockReturnValue(true)
 
+      redux()
+
+      expect(mockMkdirSync).toBeCalled()
+      expect(mockMkdirSync).toBeCalledTimes(3)
+      expect(mockMkdirSync.mock.calls[0][0]).toEqual('src/App')
+      expect(mockMkdirSync.mock.calls[1][0]).toEqual('src/actions')
+      expect(mockMkdirSync.mock.calls[2][0]).toEqual('src/reducers')
+    })
+
+    it('creates redux files', () => {
+      const mockWriteFile = helpers.writeFile = jest.fn()
+      helpers.mkdirSync = jest.fn().mockReturnValue(true)
+      helpers.addDevDependenciesToStore = jest.fn().mockReturnValue(true)
+
+      redux()
+
+      expect(mockWriteFile).toBeCalled()
+      expect(mockWriteFile).toBeCalledTimes(7)
+      expect(mockWriteFile.mock.calls[0][0]).toEqual('src/index.js')
+      expect(mockWriteFile.mock.calls[1][0]).toEqual('src/App/App.js')
+      expect(mockWriteFile.mock.calls[2][0]).toEqual('src/App/AppContainer.js')
+      expect(mockWriteFile.mock.calls[3][0]).toEqual('src/App/App.css')
+      expect(mockWriteFile.mock.calls[4][0]).toEqual('src/actions/index.js')
+      expect(mockWriteFile.mock.calls[5][0]).toEqual('src/reducers/rootReducer.js')
+      expect(mockWriteFile.mock.calls[6][0]).toEqual('src/configStore.js')
+    })
+
+    it('adds devDependencies to the store', () => {
+      helpers.writeFile = jest.fn().mockReturnValue(true)
+      helpers.mkdirSync = jest.fn().mockReturnValue(true)
+      const mockAddDev = helpers.addDevDependenciesToStore = jest.fn()
+
+      redux()
+
+      expect(mockAddDev).toBeCalled()
+      expect(mockAddDev.mock.calls[0][0]).toEqual('redux react-redux')
+    })
   })
 
   describe.skip('reactRouterRedux', () => {
