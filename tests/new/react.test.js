@@ -9,7 +9,11 @@ const helpers = require('../../helpers')
 const reactMod = require('../../new/react')
 const {
   react,
-  cssLibrary
+  cssLibrary,
+  createSrcContents,
+  reactOnly,
+  reactRouter,
+
 } = require('../../new/react')
 
 jest.mock('../../new/utils/createCommonFiles')
@@ -176,8 +180,50 @@ describe('new/react', () => {
     })
   })
 
-  describe.skip('createSrcContents', () => {
+  describe('createSrcContents', () => {
+    afterEach(() => {
+      store.reactType = ''
+    })
 
+    it('calls reactOnly if react is selected', () => {
+      const mockReactOnly = reactMod.reactOnly = jest.fn()
+      mockReactOnly.mockReturnValue(true)
+      store.reactType = 'react'
+
+      createSrcContents()
+
+      expect(mockReactOnly).toBeCalled()
+    })
+
+    it('calls reactRouter if react-router is selected', () => {
+      const mockreactRouter = reactMod.reactRouter = jest.fn()
+      mockreactRouter.mockReturnValue(true)
+      store.reactType = 'react-router'
+
+      createSrcContents()
+
+      expect(mockreactRouter).toBeCalled()
+    })
+
+    it('calls redux if redux is selected', () => {
+      const mockredux = reactMod.redux = jest.fn()
+      mockredux.mockReturnValue(true)
+      store.reactType = 'redux'
+
+      createSrcContents()
+
+      expect(mockredux).toBeCalled()
+    })
+
+    it('calls reactRouterRedux if reactRouter-redux is selected', () => {
+      const mockReactRouterRedux = reactMod.reactRouterRedux = jest.fn()
+      mockReactRouterRedux.mockReturnValue(true)
+      store.reactType = 'reactRouter-redux'
+
+      createSrcContents()
+
+      expect(mockReactRouterRedux).toBeCalled()
+    })
   })
 
   describe.skip('reactOnly', () => {

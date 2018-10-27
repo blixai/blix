@@ -102,13 +102,13 @@ exports.cssLibrary = () => {
 
 exports.createSrcContents = () => {
   if (store.reactType === "react") {
-    reactOnly();
+    this.reactOnly();
   } else if (store.reactType === "react-router") {
-    reactRouter();
+    this.reactRouter();
   } else if (store.reactType === "redux") {
-    redux()
+    this.redux()
   } else if (store.reactType === "reactRouter-redux") {
-    reactRouterRedux();
+    this.reactRouterRedux();
   }
 };
 
