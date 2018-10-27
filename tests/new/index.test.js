@@ -18,7 +18,9 @@ jest.mock('../../new/react.js', () => ({
 
 const { react } = require('../../new/react')
 
-jest.mock('../../new/backend.js')
+jest.mock('../../new/backend.js', () => ({
+    createBackend: jest.fn()
+}))
 
 jest.mock('../../helpers')
 
@@ -50,10 +52,11 @@ const {
     reactTesting,
     vueTesting,
     reactCSS,
-    linterPrompt
+    linterPrompt,
+    yarnPrompt
 } = require('../../new/prompts')
 
-let backendModule = require('../../new/backend')
+let { createBackend } = require('../../new/backend')
 
 const store = require('../../new/store')
 
@@ -328,8 +331,65 @@ describe('new/index.js', () => {
         
     })
 
-    describe.skip('backendOnly', () => {
+    describe('backendOnly', () => {
+        it('prompts for a linter', async () => {
+            inquirer.prompt
+                .mockResolvedValueOnce({ linter: 'eslint' })
+            
+            await backendOnly()
+
+            expect(store.linter).toEqual('eslint')
+            expect(inquirer.prompt).toBeCalledWith([linterPrompt])
+        }) 
+
+        it('prompts for serverTesting options', async () => {
+            inquirer.prompt
+                .mockResolvedValueOnce({ linter: 'eslint' })
+                .mockResolvedValueOnce({ server: 'jest' })
         
+            await backendOnly()
+
+            expect(store.serverTesting).toEqual({ server: 'jest' }) 
+            expect(inquirer.prompt).toBeCalledWith([serverTesting])
+        })
+
+        it('prompts for a database', async () => {
+            inquirer.prompt
+                .mockResolvedValueOnce({ linter: 'eslint' })
+                .mockResolvedValueOnce({ server: 'jest' })
+                .mockResolvedValueOnce({ database: 'pg' })
+    
+            await backendOnly()
+
+            expect(store.database).toEqual({ database: 'pg' }) 
+            expect(inquirer.prompt).toBeCalledWith([database])
+        })
+
+        it('prompts for yarn if yarn available', async () => {
+            
+            inquirer.prompt
+                .mockResolvedValueOnce({ linter: 'eslint' })
+                .mockResolvedValueOnce({ server: 'jest' })
+                .mockResolvedValueOnce({ database: 'pg' })
+                .mockResolvedValueOnce({ yarn: true })
+    
+            await backendOnly()
+
+            expect(helpers.yarn).toBeCalled()
+        })
+
+        it('calls createBackend', async () => {
+            
+            inquirer.prompt
+                .mockResolvedValueOnce({ linter: 'eslint' })
+                .mockResolvedValueOnce({ server: 'jest' })
+                .mockResolvedValueOnce({ database: 'pg' })
+                .mockResolvedValueOnce({ yarn: true })
+    
+            await backendOnly()
+
+            expect(createBackend).toBeCalled()
+        })
     })
 
     describe.skip('promptForName', () => {
