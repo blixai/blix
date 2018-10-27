@@ -332,9 +332,15 @@ describe('new/index.js', () => {
     })
 
     describe('backendOnly', () => {
+        beforeEach(() => {
+            jest.resetAllMocks()
+        })
         it('prompts for a linter', async () => {
             inquirer.prompt
                 .mockResolvedValueOnce({ linter: 'eslint' })
+                .mockResolvedValueOnce({ server: 'jest' })
+                .mockResolvedValueOnce({ database: 'pg' })
+                .mockResolvedValueOnce({ yarn: true })
             
             await backendOnly()
 
@@ -358,6 +364,7 @@ describe('new/index.js', () => {
                 .mockResolvedValueOnce({ linter: 'eslint' })
                 .mockResolvedValueOnce({ server: 'jest' })
                 .mockResolvedValueOnce({ database: 'pg' })
+                .mockResolvedValueOnce({ yarn: true })
     
             await backendOnly()
 
@@ -379,7 +386,7 @@ describe('new/index.js', () => {
         })
 
         it('calls createBackend', async () => {
-            
+            newModule.createProject = jest.fn().mockReturnValue(true)
             inquirer.prompt
                 .mockResolvedValueOnce({ linter: 'eslint' })
                 .mockResolvedValueOnce({ server: 'jest' })
@@ -392,11 +399,69 @@ describe('new/index.js', () => {
         })
     })
 
-    describe.skip('promptForName', () => {
-        
+    describe('promptForName', () => {
+        beforeEach(() => {
+            jest.resetAllMocks()
+            resetStore()
+        })
+        it('prompts for a name', async () => {
+            inquirer.prompt.mockResolvedValueOnce({ name: 'test' })
+            newModule.createProject = jest.fn()
+
+            await promptForName()
+
+            expect(inquirer.prompt).toBeCalledWith([namePrompt])
+            expect(store.name).toEqual('test')
+        })
+
+        it('calls createProject', async () => {
+            inquirer.prompt.mockResolvedValueOnce({ name: 'test' })
+            newModule.createProject = jest.fn()
+
+            await promptForName()
+
+            expect(newModule.createProject).toBeCalled()
+        })
     })
 
-    describe.skip('createProject', () => {
-        
+    describe('createProject', () => {
+        it('calls promptForName if no store.name provided', () => {
+            store.name = ''
+            newModule.promptForName = jest.fn()
+
+            createProject()
+
+            expect(newModule.promptForName).toBeCalled()
+        })
+
+        it('doesn\'t call promptForName if store.name is provided', () => {
+            store.name = 'test'
+            newModule.promptForName = jest.fn()
+
+            createProject()
+
+            expect(newModule.promptForName).not.toBeCalled() 
+        })
+
+        it('checks if the project already exists, and prompts for new name if it does', () => {
+            store.name = 'test'
+            newModule.promptForName = jest.fn()
+            console.error = jest.fn()
+            fs.existsSync.mockReturnValue(true)
+
+            createProject()
+
+            expect(newModule.promptForName).toBeCalled()  
+        })
+
+        it('prompts for preset selection if name and project with same name doesn\'t exist', () => {
+            store.name = 'test'
+            fs.existsSync.mockReturnValue(false)
+            newModule.promptPreset = jest.fn()
+
+            createProject()
+
+            expect(newModule.promptPreset).toBeCalled()  
+        })
     })
 })
