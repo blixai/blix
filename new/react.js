@@ -198,13 +198,13 @@ exports.scripts = () => {
   helpers.addScriptToNewPackageJSON("build", "webpack --mode='production'");
   // need to add scripts for creating containers actions
   if (store.reactType === "react") {
-    reactScripts();
+    this.reactScripts();
   } else if (store.reactType === "react-router") {
-    reactRouterScripts();
+    this.reactRouterScripts();
   } else if (store.reactType === 'redux') {
-    reduxScripts()
+    this.reduxScripts()
   } else if (store.reactType === "reactRouter-redux") {
-    reactRouterReduxScripts();
+    this.reactRouterReduxScripts();
   }
 };
 
