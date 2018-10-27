@@ -249,9 +249,9 @@ exports.reduxScripts = () => {
   helpers.writeFile(`scripts/templates/reducer.js`, reducerTemplate)
   // component script and templates
   helpers.writeFile(`scripts/component.js`, component)
+  helpers.writeFile(`scripts/templates/statefulComponent.js`, statefulComponentTemplate)
   helpers.writeFile(`scripts/templates/statelessComponent.js`, statelessComponentTemplate)
   helpers.writeFile(`scripts/templates/container.js`, containerTemplate)
-  helpers.writeFile(`scripts/templates/statefulComponent.js`, statefulComponentTemplate)
 
   // add scripts for action and component to package.json
   helpers.addScriptToNewPackageJSON('component', 'node scripts/component.js')
@@ -273,9 +273,9 @@ exports.reactRouterReduxScripts = () => {
   helpers.writeFile(`scripts/templates/reducer.js`, reducerTemplate);
   // component script and templates
   helpers.writeFile(`scripts/component.js`, component);
+  helpers.writeFile(`scripts/templates/statefulComponent.js`, statefulComponentTemplate);
   helpers.writeFile(`scripts/templates/statelessComponent.js`, statelessComponentTemplate);
   helpers.writeFile(`scripts/templates/container.js`, containerTemplate);
-  helpers.writeFile(`scripts/templates/statefulComponent.js`, statefulComponentTemplate);
   // view script
   helpers.writeFile(`scripts/view.js`, view);
 

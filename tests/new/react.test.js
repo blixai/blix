@@ -506,24 +506,149 @@ describe('new/react', () => {
     })
   })
 
-  describe.skip('reactRouterScripts', () => {
+  describe('reactRouterScripts', () => {
+    it('creates reactRouter Script files', () => {
+      const mockWrite = helpers.writeFile = jest.fn()
+      helpers.addScriptToNewPackageJSON = jest.fn().mockReturnValue(true)
 
+      reactRouterScripts()
+
+      expect(mockWrite).toBeCalled()
+      expect(mockWrite).toBeCalledTimes(4)
+      expect(mockWrite.mock.calls[0][0]).toEqual('scripts/component.js')
+      expect(mockWrite.mock.calls[1][0]).toEqual('scripts/templates/statefulComponent.js')
+      expect(mockWrite.mock.calls[2][0]).toEqual('scripts/templates/statelessComponent.js')
+      expect(mockWrite.mock.calls[3][0]).toEqual('scripts/view.js')
+    })
+
+    it('adds scripts to new package.json', () => {
+      helpers.writeFile = jest.fn().mockReturnValue(true)
+      const mockAddScript = helpers.addScriptToNewPackageJSON = jest.fn()
+
+      reactRouterScripts()
+
+      expect(mockAddScript).toBeCalled()
+      expect(mockAddScript).toBeCalledTimes(2)
+      expect(mockAddScript.mock.calls[0]).toEqual(['component', 'node scripts/component.js'])
+      expect(mockAddScript.mock.calls[1]).toEqual(['view', 'node scripts/view.js'])
+    })
   })
 
-  describe.skip('reduxScripts', () => {
+  describe('reduxScripts', () => {
+    it('creates redux Script files', () => {
+      const mockWrite = helpers.writeFile = jest.fn()
+      helpers.addScriptToNewPackageJSON = jest.fn().mockReturnValue(true)
 
+      reduxScripts()
+
+      expect(mockWrite).toBeCalled()
+      expect(mockWrite).toBeCalledTimes(7)
+      expect(mockWrite.mock.calls[0][0]).toEqual('scripts/action.js')
+      expect(mockWrite.mock.calls[1][0]).toEqual('scripts/templates/action.js')
+      expect(mockWrite.mock.calls[2][0]).toEqual('scripts/templates/reducer.js')
+      expect(mockWrite.mock.calls[3][0]).toEqual('scripts/component.js')
+      expect(mockWrite.mock.calls[4][0]).toEqual('scripts/templates/statefulComponent.js')
+      expect(mockWrite.mock.calls[5][0]).toEqual('scripts/templates/statelessComponent.js')
+      expect(mockWrite.mock.calls[6][0]).toEqual('scripts/templates/container.js')
+    })
+
+    it('adds scripts to new package.json', () => {
+      helpers.writeFile = jest.fn().mockReturnValue(true)
+      const mockAddScript = helpers.addScriptToNewPackageJSON = jest.fn()
+
+      reduxScripts()
+
+      expect(mockAddScript).toBeCalled()
+      expect(mockAddScript).toBeCalledTimes(2)
+      expect(mockAddScript.mock.calls[0]).toEqual(['component', 'node scripts/component.js'])
+      expect(mockAddScript.mock.calls[1]).toEqual(['action', 'node scripts/action.js'])
+    })
   })
 
-  describe.skip('reactRouterReduxScripts', () => {
+  describe('reactRouterReduxScripts', () => {
+    it('creates redux Script files', () => {
+      const mockWrite = helpers.writeFile = jest.fn()
+      helpers.addScriptToNewPackageJSON = jest.fn().mockReturnValue(true)
 
+      reactRouterReduxScripts()
+
+      expect(mockWrite).toBeCalled()
+      expect(mockWrite).toBeCalledTimes(8)
+      expect(mockWrite.mock.calls[0][0]).toEqual('scripts/action.js')
+      expect(mockWrite.mock.calls[1][0]).toEqual('scripts/templates/action.js')
+      expect(mockWrite.mock.calls[2][0]).toEqual('scripts/templates/reducer.js')
+      expect(mockWrite.mock.calls[3][0]).toEqual('scripts/component.js')
+      expect(mockWrite.mock.calls[4][0]).toEqual('scripts/templates/statefulComponent.js')
+      expect(mockWrite.mock.calls[5][0]).toEqual('scripts/templates/statelessComponent.js')
+      expect(mockWrite.mock.calls[6][0]).toEqual('scripts/templates/container.js')
+      expect(mockWrite.mock.calls[7][0]).toEqual('scripts/view.js')
+    })
+
+    it('adds scripts to new package.json', () => {
+      helpers.writeFile = jest.fn().mockReturnValue(true)
+      const mockAddScript = helpers.addScriptToNewPackageJSON = jest.fn()
+
+      reactRouterReduxScripts()
+
+      expect(mockAddScript).toBeCalled()
+      expect(mockAddScript).toBeCalledTimes(3)
+      expect(mockAddScript.mock.calls[0]).toEqual(['component', 'node scripts/component.js'])
+      expect(mockAddScript.mock.calls[1]).toEqual(['action', 'node scripts/action.js'])
+      expect(mockAddScript.mock.calls[2]).toEqual(['view', 'node scripts/view.js'])
+    })
   })
 
-  describe.skip('packages', () => {
+  describe('packages', () => {
+    it('adds webpack-dev-server as a devDependency if backend is not selected', () => {
+      const mockAddDev = helpers.addDevDependenciesToStore = jest.fn()
+      store.backend = {backend: false}
 
+      packages()
+
+      expect(mockAddDev).toBeCalled()
+      expect(mockAddDev).toBeCalledTimes(2)
+      expect(mockAddDev.mock.calls[0][0]).toEqual('webpack-dev-server')
+      expect(mockAddDev.mock.calls[1][0]).toEqual('react react-dom webpack webpack-cli babel-loader css-loader @babel/core @babel/preset-env @babel/preset-react style-loader sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-preset-env postcss-import postcss-loader')
+    })
+
+    it('only adds devDependencies to the store if backend is selected', () => {
+      const mockAddDev = helpers.addDevDependenciesToStore = jest.fn()
+      store.backend = {backend: true}
+
+      packages()
+
+      expect(mockAddDev).toBeCalled()
+      expect(mockAddDev).toBeCalledTimes(1)
+      expect(mockAddDev.mock.calls[0][0]).toEqual('react react-dom webpack webpack-cli babel-loader css-loader @babel/core @babel/preset-env @babel/preset-react style-loader sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-preset-env postcss-import postcss-loader')
+    })
   })
 
-  describe.skip('createWebpac', () => {
+  describe('createWebpack', () => {
+    it('sets up webpack with hot reloading if backend is selected', () => {
+      const mockWrite = helpers.writeFile = jest.fn()
+      const mockAppend = helpers.appendFile = jest.fn()
+      store.backend = {backend: true}
 
+      createWebpack()
+
+      expect(mockWrite).toBeCalled()
+      expect(mockWrite.mock.calls[0][0]).toEqual('webpack.config.js')
+      expect(mockWrite.mock.calls[0][1]).toContain('webpack.HotModuleReplacementPlugin()')
+      expect(mockAppend.mock.calls[0][0]).toEqual('src/index.js')
+      expect(mockAppend.mock.calls[0][1]).toEqual('\nif (module.hot) {\n\tconsole.clear()\n\tmodule.hot.accept();\n}')
+    })
+
+    it('creates a default webpack config if backend is not selected', () => {
+      const mockWrite = helpers.writeFile = jest.fn() 
+      store.backend = {backend: false}
+
+      createWebpack()
+
+      expect(mockWrite).toBeCalled()
+      expect(mockWrite.mock.calls[0][0]).toEqual('webpack.config.js')
+      expect(mockWrite.mock.calls[0][1]).not.toContain('webpack.HotModuleReplacementPlugin()')
+
+    })
   })
 
 })
