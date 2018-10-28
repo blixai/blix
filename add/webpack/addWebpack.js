@@ -1,17 +1,10 @@
 let fs         = require('fs')
 let path       = require('path')
-let execSync   = require('child_process').execSync;
 let chalk      = require('chalk');
-let log        = console.log;
 let glob       = require('glob')
 let inquirer   = require('inquirer')
 let prompt     = inquirer.prompt
 let helpers    = require('../../helpers')
-
-
-let webpack = () => {
-  installWebpack()
-}
 
 // helper function to load files 
 let loadFile = filePath => {
@@ -43,7 +36,7 @@ let noPackageJSON = {
   message: `No package.json file found. You're in the ${helpers.getCWDName()} directory. Do you wish continue: `
 }
 
-let fileChecks = async () => {
+const fileChecks = async () => {
   if (fs.existsSync('./webpack.config.js')) {
     console.error('Webpack config file already exists')
     process.exit(1)
@@ -55,8 +48,10 @@ let fileChecks = async () => {
   }
 }
 
-let installWebpack = async () => {
-   await fileChecks()
+exports.fileChecks = fileChecks
+
+const webpack = async () => {
+  await fileChecks()
   let files = glob.sync('{,!(node_modules)/**/}*.js')
   webpackEntry.choices = files
   let ans = await prompt([webpackEntry])
@@ -67,15 +62,19 @@ let installWebpack = async () => {
   reactQuestion(ans, output)
 }
 
-let reactQuestion = async (ans, output) => {
+exports.webpack = webpack
+
+const reactQuestion = async (ans, output) => {
   let react = await prompt([addReact])
   react = react.react
   await helpers.yarn()
   createConfig(ans, output, react)
 }
 
+exports.reactQuestion = reactQuestion
 
-let createConfig = async (input, output, react) => {
+
+const createConfig = async (input, output, react) => {
   let webpack = loadFile('./webpack.config.js')
   let babel
   if (react) {
@@ -117,6 +116,4 @@ let createConfig = async (input, output, react) => {
   await helpers.installAllPackagesToExistingProject()
 }
 
-
-
-module.exports = webpack
+exports.createConfig = createConfig
