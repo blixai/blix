@@ -28,9 +28,16 @@
     "blix": "./index.js"
   },
   "dependencies": {
+    "body-parser": "^1.18.3",
     "chalk": "^2.4.1",
+    "compression": "^1.7.3",
+    "dotenv": "^6.1.0",
+    "express": "^4.16.4",
     "glob": "^7.1.2",
-    "inquirer": "^4.0.1"
+    "helmet": "^3.14.0",
+    "inquirer": "^4.0.1",
+    "morgan": "^1.9.1",
+    "nodemon": "^1.18.5"
   },
   "devDependencies": {
     "jest": "^23.6.0",

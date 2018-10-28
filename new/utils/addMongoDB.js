@@ -26,4 +26,3 @@ exports.addMongoDBToProject = () => {
   helpers.addDependenciesToStore("mongo mongoose")
 };
 
-
