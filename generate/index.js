@@ -5,12 +5,12 @@ const execSync = require('child_process').execSync
 let possibleScripts = ['component', 'view', 'model', 'page', 'controller', 'action']
 
 
-const generate = () => {
+exports.generate = () => {
     if (!fs.existsSync('package.json')) {
         console.error(chalk.red`Unable to find package.json. Are you in a project`)
         process.exit(1)
     } else if (!process.argv[3]) {
-        noArg()
+        this.noArg()
     }
 
     if (possibleScripts.includes(process.argv[3]) && helpers.checkIfScriptIsTaken(process.argv[3])) {
@@ -25,13 +25,11 @@ const generate = () => {
             console.error(err)
         }
     } else {
-        scriptNotFound()
+        this.scriptNotFound()
     }
 }
 
-module.exports = generate 
-
-const noArg = () => {
+exports.noArg = () => {
     console.log(chalk.red`No command type entered.`)
     possibleScripts.forEach(script => {
         if (helpers.checkIfScriptIsTaken(script)) {
@@ -42,7 +40,7 @@ const noArg = () => {
     process.exit()
 }
 
-const scriptNotFound = () => {
+exports.scriptNotFound = () => {
     console.log(chalk.red`It seems you're trying to run a command that doesn't exist.`)
     possibleScripts.forEach(script => {
         if (helpers.checkIfScriptIsTaken(script)) {
