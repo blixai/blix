@@ -2,8 +2,8 @@ const store = require('../../../new/store');
 const helpers = require('../../../helpers');
 const fs = require('fs');
 const chalk = require('chalk')
-const readFile = fs.readFileSync;
 const {
+  options,
   logCustomScriptInstructions,
   readmeFormatter,
   consoleFormatter,
@@ -18,6 +18,7 @@ jest.mock('fs', () => ({
 describe('New Project Instructions', () => {
 
   describe('logCustomScriptInstructions', () => {  
+
     it('calls readmeFormatter', () => {
       const mockFormatter = projectInstructions.readmeFormatter = jest.fn()
 
@@ -25,9 +26,10 @@ describe('New Project Instructions', () => {
 
       expect(mockFormatter).toBeCalled()
     })
-    it('sets options to log based on reactType', () => {
+
+    it('sets options to log for reactType react', () => {
       const mockFormatter = projectInstructions.readmeFormatter = jest.fn()
-      const reactComponent = { command: 'component', example: 'blix generate component <name>', use: 'Creates a stateful or stateless React component and CSS file in a folder within src/' }
+      const reactComponent = options.reactComponent
       store.reactType = 'react'
 
       logCustomScriptInstructions()
@@ -35,10 +37,38 @@ describe('New Project Instructions', () => {
       expect(mockFormatter).toBeCalled()
       expect(mockFormatter.mock.calls[0][0]).toEqual([reactComponent])
     })
+    
+    it('sets options to log for reactType react-router', () => {
+        const mockFormatter = projectInstructions.readmeFormatter = jest.fn()
+        const reactRouterComponent = options.reactRouterComponent
+        const view = options.view
+        store.reactType = 'react-router'
+
+        logCustomScriptInstructions()
+
+        expect(mockFormatter).toBeCalledWith([reactRouterComponent, view])
+    })
+
+    it('sets options to log reactType redux', () => {
+      const mockFormatter = projectInstructions.readmeFormatter = jest.fn()
+      const reduxComponent = options.reduxComponent
+      const action = options.action
+      store.reactType = 'redux'
+
+      logCustomScriptInstructions()
+
+      expect(mockFormatter).toBeCalledWith([reduxComponent, action])
+    })
+
+    it('', () => {
+      
+    })
   })
   
   describe('readmeFormatter()', () => {
+
     let options = [{example: 'this'}, {command: 'that', use: 'Thing'}]
+
     beforeEach(() => {
       projectInstructions.consoleFormatter = jest.fn()
     })
@@ -58,9 +88,11 @@ describe('New Project Instructions', () => {
       expect(projectInstructions.consoleFormatter).toBeCalled()
       expect(projectInstructions.consoleFormatter).toBeCalledWith(options)
     })
+
   })
 
   describe('consoleFormatter', () => {
+
     it('Logs the options to the console', () => {
       let options = [ {command: "component", example: "blix generate component <name>", use: "Creates a stateful or stateless React component and CSS file in a folder within src/" },]
       console.log = jest.fn()
