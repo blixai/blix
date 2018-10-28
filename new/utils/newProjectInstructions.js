@@ -16,10 +16,8 @@ const options = {
   controller: { command: "controller", example: "blix generate controller <name>", use: "Quickly create api/v1 get|post|put|delete endpoints for a resource"},
 };
 
-let optionsToLog = []
-
-const logCustomScriptInstructions = () => {
-  // frontend
+exports.logCustomScriptInstructions = () => {
+  let optionsToLog = []
   if (store.reactType === "react") {
     optionsToLog.push(options.reactComponent)
   } else if (store.reactType === 'react-router') {
@@ -43,12 +41,12 @@ const logCustomScriptInstructions = () => {
   } else if (store.database && store.database.database === 'pg') {
     optionsToLog.push(options.postgresModel)
   }
-  readmeFormatter()
+  this.readmeFormatter(optionsToLog)
 }
 
-const readmeFormatter = () => {
+exports.readmeFormatter = (options) => {
   let outputString = ''
-  optionsToLog.forEach(option => {
+  options.forEach(option => {
     if (option && option.example && option.command && option.use) {
       if (outputString) {
         outputString += '\n\n' + option.command + ' || example: ' + option.example + ' || use: ' + option.use  
@@ -65,10 +63,10 @@ const readmeFormatter = () => {
     store.env === 'development' ? log(err) : ""
   }
 
-  consoleFormatter()
+  this.consoleFormatter()
 }
 
-const consoleFormatter = () => {
+exports.consoleFormatter = () => {
   optionsToLog.forEach(option => {
     if (option && option.example && option.command && option.use) {
       log('\n' + '  ' + chalk`{cyan  ${option.example} }` + `\n\t${option.use}`)
@@ -76,26 +74,21 @@ const consoleFormatter = () => {
   })
 }
 
-const newProjectInstructions = () => {
-  let name = store.name
-  console.clear()
-  console.log("")
-  console.log(`Success! Created new project ${name} at ${process.cwd() + '/' + name}`);
-  console.log();
-  console.log('Inside that directory you can run these custom scripts:')
-  logCustomScriptInstructions()
-  console.log(`\nWe suggest you begin by typing:`)
-  console.log(chalk`\n  {cyan cd} ${name}`)
-  console.log(chalk`{cyan   ${store.useYarn ? 'yarn start': 'npm start'}}`)
-  console.log(`\nFor examples and other information visit ${link}`)
-  console.log('Happy hacking!')
-  log('')
+exports.newProjectInstructions = () => {
+  console.log("new Project instructions")
+  // let name = store.name
+  // console.clear()
+  // console.log("")
+  // console.log(`Success! Created new project ${name} at ${process.cwd() + '/' + name}`);
+  // console.log();
+  // console.log('Inside that directory you can run these custom scripts:')
+  // logCustomScriptInstructions()
+  // console.log(`\nWe suggest you begin by typing:`)
+  // console.log(chalk`\n  {cyan cd} ${name}`)
+  // console.log(chalk`{cyan   ${store.useYarn ? 'yarn start': 'npm start'}}`)
+  // console.log(`\nFor examples and other information visit ${link}`)
+  // console.log('Happy hacking!')
+  // log('')
 };
 
-module.exports = { 
-  logCustomScriptInstructions,
-  readmeFormatter,
-  consoleFormatter,
-  newProjectInstructions,
-  options
- };
+

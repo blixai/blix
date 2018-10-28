@@ -8,7 +8,7 @@ const loadFile = filePath => {
 };
 
 //
-const addMongooseToScripts = () => {
+exports.addMongooseToScripts = () => {
   let model = loadFile("../files/scripts/backend/mongoose.js");
   let schemaTemplate = loadFile(
     "../files/scripts/backend/templates/mongoose.js"
@@ -16,17 +16,13 @@ const addMongooseToScripts = () => {
   helpers.writeFile(`scripts/model.js`, model);
   helpers.writeFile(`scripts/templates/schemaTemplate.js`, schemaTemplate);
   helpers.addScriptToNewPackageJSON("model", "node scripts/model.js");
-  addMongoDBToProject();
+  this.addMongoDBToProject();
 };
 
-const addMongoDBToProject = () => {
+exports.addMongoDBToProject = () => {
   let connectionString = `const mongoose = require('mongoose')\nmongoose.connect(process.env.MONGO, { useNewUrlParser: true })\n`
   helpers.insert(`./${store.name}/server/server.js`, connectionString, 0)
   helpers.appendFile(`.env`,`MONGO=${`mongodb://localhost:27017/${store.name}`}`);
   helpers.addDependenciesToStore("mongo mongoose")
 };
 
-module.exports = {
-  addMongooseToScripts,
-  addMongoDBToProject
-};
