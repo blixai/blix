@@ -12,7 +12,7 @@ const { createProject } = require("./new");
 const help = require("./help/help.js");
 const scripts = require("./scripts/script.js");
 const add = require("./add/add");
-const generate = require('./generate')
+const { generate } = require('./generate')
 const command = process.argv[2];
 const log = console.log
 
