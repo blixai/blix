@@ -3,7 +3,7 @@ const store = require('../store')
 const chalk = require('chalk')
 const link = 'blixjs.com'
 
-const options = {
+exports.options = {
   mongooseModel: { command: "model", example: "blix generate model <ModelName> [fieldName]:[Type] [fieldName]:[Type]", use: "Creates Mongoose model" },
   postgresModel: { command: "model", example: "blix generate model <ModelName> [fieldName]:[type] [fieldName]:[type]", use: "Creates Bookself model" },
   reactComponent: { command: "component", example: "blix generate component <name>", use: "Creates a stateful or stateless React component and CSS file in a folder within src/" },
@@ -18,27 +18,27 @@ const options = {
 exports.logCustomScriptInstructions = () => {
   let optionsToLog = []
   if (store.reactType === "react") {
-    optionsToLog.push(options.reactComponent)
+    optionsToLog.push(this.options.reactComponent)
   } else if (store.reactType === 'react-router') {
-    optionsToLog.push(options.reactRouterComponent)
-    optionsToLog.push(options.view)
+    optionsToLog.push(this.options.reactRouterComponent)
+    optionsToLog.push(this.options.view)
   } else if (store.reactType === 'redux') {
-    optionsToLog.push(options.reduxComponent)
-    optionsToLog.push(options.action)
+    optionsToLog.push(this.options.reduxComponent)
+    optionsToLog.push(this.options.action)
   } else if (store.reactType === 'reactRouter-redux') {
-    optionsToLog.push(options.reactRouterReduxComponent)
-    optionsToLog.push(options.view)
-    optionsToLog.push(options.action)
+    optionsToLog.push(this.options.reactRouterReduxComponent)
+    optionsToLog.push(this.options.view)
+    optionsToLog.push(this.options.action)
   }
   //backend
   if (store.backend && store.backend.backend) {
-    optionsToLog.push(options.controller)
+    optionsToLog.push(this.options.controller)
   }
 
   if (store.database && store.database.database === 'mongo') {
-    optionsToLog.push(options.mongooseModel)
+    optionsToLog.push(this.options.mongooseModel)
   } else if (store.database && store.database.database === 'pg') {
-    optionsToLog.push(options.postgresModel)
+    optionsToLog.push(this.options.postgresModel)
   }
   this.readmeFormatter(optionsToLog)
 }
