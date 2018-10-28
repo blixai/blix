@@ -14,28 +14,27 @@ const loadFile = filePath => {
   return fs.readFileSync(path.resolve(__dirname, filePath), "utf8")
 }
 
-beforeAll(() => {
-  try{
-    store.name = "testApp";
-    store.env = "development";
-    fs.mkdirSync(store.name);
-    let pkgJson = loadFile('../../../new/files/common/package.json')
-    writeFile(`package.json`, pkgJson)
-    fs.mkdirSync(`${store.name}/test`);
-  } catch(err){
-    console.error(err)
-  }
-})
-
-afterAll(() => {
-  try{
-    execSync(`rm -rf ${store.name}`)
-  } catch(err){
-    console.error(err)
-  }
-})
-
-describe("Add React Testing", () => { 
+describe.skip("Add React Testing", () => { 
+  beforeAll(() => {
+    try{
+      store.name = "testApp";
+      store.env = "development";
+      fs.mkdirSync(store.name);
+      let pkgJson = loadFile('../../../new/files/common/package.json')
+      writeFile(`package.json`, pkgJson)
+      fs.mkdirSync(`${store.name}/test`);
+    } catch(err){
+      console.error(err)
+    }
+  })
+  
+  afterAll(() => {
+    try{
+      execSync(`rm -rf ${store.name}`)
+    } catch(err){
+      console.error(err)
+    }
+  })
 
   it("Does not create testing files if enzyme is not selected", () => {
     installReactTesting()

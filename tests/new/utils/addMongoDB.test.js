@@ -1,85 +1,91 @@
-const fs = require('fs');
-const exists = fs.existsSync;
 const store = require('../../../new/store');
 const helpers = require('../../../helpers')
-const { writeFile, mkdirSync } = helpers
-const path = require("path");
-const readFile = fs.readFileSync;
 const {
   addMongooseToScripts,
   addMongoDBToProject,
 } = require('../../../new/utils/addMongoDB');
-const execSync = require("child_process").execSync;
+const addMongoDb = require('../../../new/utils/addMongoDB')
 
-const loadFile = filePath => {
-  return fs.readFileSync(path.resolve(__dirname, filePath), "utf8")
-}
-
-beforeAll(() => {
-  try{
-    process.chdir('./tests/new/utils')
-    store.name = "tmpTest"
-    store.env = "development"
-    fs.mkdirSync(store.name)
-    let pkgJson = loadFile('../../../new/files/common/package.json')
-    helpers.writeFile('package.json', pkgJson)
-    const files = [
-      "server/server.js",
-      ".env"
-    ]
-    const folders = [
-      "scripts",
-      "scripts/templates",
-      "server"
-    ]
-
-    folders.forEach(folder => {
-      mkdirSync(`${folder}`)
-    })
-    files.forEach(file => {
-      writeFile(`${file}`)
-    })
-  } catch(err){
-    console.error(err)
-  }
-})
-
-afterAll(() => {
-  execSync(`rm -rf ${store.name}`)
-})
 
 describe('Add Mongo DB', () => {
-  
   describe("addMongooseToScripts", () => {
-    beforeAll(() => {
-      addMongooseToScripts();
+
+    it('creates model.js and schemaTemplate.js', () => {
+      const mockWrite = helpers.writeFile = jest.fn()
+      addMongoDb.addMongoDBToProject = jest.fn()
+      helpers.addScriptToNewPackageJSON = jest.fn()
+
+      addMongooseToScripts()
+
+      expect(mockWrite).toBeCalled()
+      expect(mockWrite).toBeCalledTimes(2)
+      expect(mockWrite.mock.calls[0][0]).toEqual('scripts/model.js')
+      expect(mockWrite.mock.calls[0][1]).not.toEqual(undefined)
+      expect(mockWrite.mock.calls[1][0]).toEqual('scripts/templates/schemaTemplate.js')
+      expect(mockWrite.mock.calls[1][1]).not.toEqual(undefined)
+    });
+
+    it('adds scripts to new package.json', () => {
+      const mockAdd = helpers.addScriptToNewPackageJSON = jest.fn()
+      helpers.writeFile = jest.fn()
+      addMongoDb.addMongoDBToProject = jest.fn()
+
+      addMongooseToScripts()
+
+      expect(mockAdd).toBeCalled()
+      expect(mockAdd.mock.calls[0]).toEqual(["model", "node scripts/model.js"])
+    });
+
+    it('calls addMongoDBToProject', () => {
+      helpers.writeFile = jest.fn()
+      helpers.addScriptToNewPackageJSON = jest.fn()
+      const mockAddMongo = addMongoDb.addMongoDBToProject = jest.fn()
+
+      addMongooseToScripts()
+
+      expect(mockAddMongo).toBeCalled()
     })
-
-    it("Contains model.js", () => {
-      expect(exists(`${store.name}/scripts/model.js`)).toBe(true);
-    });
-
-    it("Contains schemaTemplate.js", () => {
-      expect(exists(`${store.name}/scripts/templates/schemaTemplate.js`)).toBe(true);
-    });
   })
     
 
   describe("addMongoDBToProject", () => {
-    beforeAll(() => {
-      addMongoDBToProject();
-    })
-
     it("Adds mongoose to server.js", () => {
-      expect(readFile(`${store.name}/server/server.js`, "utf8")).toContain("require('mongoose')")
+      const connectionString = `const mongoose = require('mongoose')\nmongoose.connect(process.env.MONGO, { useNewUrlParser: true })\n`
+      const mockInsert = helpers.insert = jest.fn()
+      helpers.appendFile = jest.fn()
+      helpers.addDependenciesToStore = jest.fn()
+      store.name = 'TestApp'
+
+      addMongoDBToProject()
+
+      expect(mockInsert).toBeCalled()
+      expect(mockInsert.mock.calls[0][0]).toEqual('./TestApp/server/server.js')
+      expect(mockInsert.mock.calls[0][1]).toEqual(connectionString)
+      expect(mockInsert.mock.calls[0][2]).toEqual(0)
     })
 
     it("Adds the Mongo connection string to .env", () => {
-      expect(readFile(`${store.name}/.env`, "utf8")).toContain(`mongodb://localhost:27017/${store.name}`)
+      const mockAppend = helpers.appendFile = jest.fn()
+      helpers.insert = jest.fn()
+      helpers.addDependenciesToStore = jest.fn()
+      store.name = 'TestApp'
+
+      addMongoDBToProject()
+
+      expect(mockAppend).toBeCalled()
+      expect(mockAppend.mock.calls[0][0]).toEqual('.env')
+      expect(mockAppend.mock.calls[0][1]).toEqual('MONGO=mongodb://localhost:27017/TestApp')
     })
 
     it("Adds mongo and mongoose to the store devDependencies", () => {
-      expect(store.dependencies).toContain("mongo mongoose")
+      const mockAdd = helpers.addDependenciesToStore = jest.fn()
+      helpers.appendFile = jest.fn()
+      helpers.insert = jest.fn()
+
+      addMongoDBToProject()
+
+      expect(mockAdd).toBeCalled()
+      expect(mockAdd.mock.calls[0][0]).toEqual('mongo mongoose')
     })
   })
 });
