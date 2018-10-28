@@ -60,8 +60,51 @@ describe('New Project Instructions', () => {
       expect(mockFormatter).toBeCalledWith([reduxComponent, action])
     })
 
-    it('', () => {
-      
+    it('sets options to log for reactType reactRouter-redux', () => {
+      const mockFormatter = projectInstructions.readmeFormatter = jest.fn()
+      const reactRouterReduxComponent = options.reactRouterReduxComponent
+      const action = options.action
+      const view = options.view
+      store.reactType = 'reactRouter-redux'
+
+      logCustomScriptInstructions()
+
+      expect(mockFormatter).toBeCalledWith([reactRouterReduxComponent, view ,action])      
+    })
+
+    it('sets options to log for backend', () => {
+      const mockFormatter = projectInstructions.readmeFormatter = jest.fn()
+      const controller = options.controller
+      store.reactType = ''
+      store.backend = { backend: true }
+
+      logCustomScriptInstructions()
+
+      expect(mockFormatter).toBeCalledWith([controller])
+    })
+
+    it('sets option to log for database type mongo', () => {
+      const mockFormatter = projectInstructions.readmeFormatter = jest.fn()
+      const model = options.mongooseModel
+      store.reactType = ''
+      store.backend = ''
+      store.database = { database: 'mongo' }
+
+      logCustomScriptInstructions()
+
+      expect(mockFormatter).toBeCalledWith([model])
+    })
+
+    it('sets options to log for database type postgres', () => {
+      const mockFormatter = projectInstructions.readmeFormatter = jest.fn()
+      const model = options.postgresModel
+      store.reactType = ''
+      store.backend = ''
+      store.database = { database: 'pg' }
+
+      logCustomScriptInstructions()
+
+      expect(mockFormatter).toBeCalledWith([model])
     })
   })
   
