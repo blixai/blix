@@ -130,6 +130,18 @@ const linterPrompt = {
   ]
 }
 
+const helpCommands = {
+  type    : 'list',
+  message : 'Learn more about:',
+  name    : 'help',
+  choices : [
+    { name: 'new'     },
+    { name: 'scripts' },
+    { name: 'add'     },
+    { name: 'generate'}
+  ]
+}
+
 module.exports = {
   namePrompt,
   defaultOrCustom,
@@ -143,5 +155,6 @@ module.exports = {
   vueTesting,
   reactCSS,
   yarnPrompt,
-  linterPrompt
+  linterPrompt,
+  helpCommands
 };
