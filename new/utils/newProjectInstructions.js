@@ -1,4 +1,3 @@
-const log = console.log;
 const fs = require('fs')
 const store = require('../store')
 const chalk = require('chalk')
@@ -63,32 +62,31 @@ exports.readmeFormatter = (options) => {
     store.env === 'development' ? log(err) : ""
   }
 
-  this.consoleFormatter()
+  this.consoleFormatter(options)
 }
 
-exports.consoleFormatter = () => {
-  optionsToLog.forEach(option => {
+exports.consoleFormatter = (options) => {
+  options.forEach(option => {
     if (option && option.example && option.command && option.use) {
-      log('\n' + '  ' + chalk`{cyan  ${option.example} }` + `\n\t${option.use}`)
+      console.log('\n' + '  ' + chalk`{cyan  ${option.example} }` + `\n\t${option.use}`)
     }
   })
 }
 
 exports.newProjectInstructions = () => {
-  console.log("new Project instructions")
-  // let name = store.name
-  // console.clear()
-  // console.log("")
-  // console.log(`Success! Created new project ${name} at ${process.cwd() + '/' + name}`);
-  // console.log();
-  // console.log('Inside that directory you can run these custom scripts:')
-  // logCustomScriptInstructions()
-  // console.log(`\nWe suggest you begin by typing:`)
-  // console.log(chalk`\n  {cyan cd} ${name}`)
-  // console.log(chalk`{cyan   ${store.useYarn ? 'yarn start': 'npm start'}}`)
-  // console.log(`\nFor examples and other information visit ${link}`)
-  // console.log('Happy hacking!')
-  // log('')
+  let name = store.name
+  console.clear()
+  console.log("")
+  console.log(`Success! Created new project ${name} at ${process.cwd() + '/' + name}`);
+  console.log();
+  console.log('Inside that directory you can run these custom scripts:')
+  this.logCustomScriptInstructions()
+  console.log(`\nWe suggest you begin by typing:`)
+  console.log(chalk`\n  {cyan cd} ${name}`)
+  console.log(chalk`{cyan   ${store.useYarn ? 'yarn start': 'npm start'}}`)
+  console.log(`\nFor examples and other information visit ${link}`)
+  console.log('Happy hacking!')
+  console.log('')
 };
 
 
