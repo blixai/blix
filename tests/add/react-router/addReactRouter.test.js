@@ -319,6 +319,39 @@ describe('add/addReactRouter', () => {
   })
 
   describe('createReactApp', () => {
+    it('makes components and components/App folders', () => {
+      createReactApp() 
 
+      expect(helpers.mkdirSync).toBeCalled()
+      expect(helpers.mkdirSync).toBeCalledTimes(2)
+      expect(helpers.mkdirSync.mock.calls[0][0]).toEqual('src/components')
+      expect(helpers.mkdirSync.mock.calls[1][0]).toEqual('src/components/App')
+    })
+
+    it('moves ./src/App.js to ./src/components/App/App.js', () => {
+      createReactApp()
+
+      expect(helpers.rename).toBeCalled()
+      expect(helpers.rename.mock.calls[0]).toEqual(["./src/App.js", "./src/components/App/App.js"])
+    })
+
+    it('moves App.css, logo.svg and App.test.js if they exist', () => {
+      fs.existsSync.mockReturnValue(true)
+      createReactApp()
+
+      expect(helpers.rename).toBeCalled()
+      expect(helpers.rename).toBeCalledTimes(4)
+      expect(helpers.rename.mock.calls[0]).toEqual(["./src/App.js", "./src/components/App/App.js"])
+      expect(helpers.rename.mock.calls[1]).toEqual(["./src/App.css", "./src/components/App/App.css"])
+      expect(helpers.rename.mock.calls[2]).toEqual(["./src/logo.svg", "./src/components/App/logo.svg"])
+      expect(helpers.rename.mock.calls[3]).toEqual(["./src/App.test.js", "./src/components/App/App.test.js"])
+    })
+
+    it('calls createView without a param', () => {
+      createReactApp()
+
+      expect(mockModule.createView).toBeCalled() 
+      expect(mockModule.createView).toBeCalledWith()
+    })
   })
 })
