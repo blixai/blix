@@ -3,8 +3,8 @@ let prompt   = inquirer.prompt
 const addProjectInstructions = require('../addProjectInstructions')
 const helpers = require('../../helpers')
 const { database } = require('../../new/prompts')
-const { addMongooseToScripts } = require('../backend/addMongoDB')
-const { addBookshelfToScripts } = require('../backend/addBookshelf')
+const { addMongooseToScripts } = require('../../new/utils/addMongoDB')
+const { addBookshelfToScripts } = require('../../new/utils/addBookshelf')
 const store = require('../../new/store')
 
 const addDatabase = async () => {

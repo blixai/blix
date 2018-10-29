@@ -13,6 +13,7 @@ const {
   mvcType,
   apiType,
   scripts,
+  addDatabase
 } = require('../../new/backend')
 
 const loadFile = filePath => {
