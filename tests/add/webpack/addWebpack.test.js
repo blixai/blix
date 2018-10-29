@@ -15,7 +15,8 @@ const {
     fileChecks,
     webpack,
     reactQuestion,
-    createConfig
+    createConfig,
+    addScripts
 } = require('../../../add/webpack/addWebpack')
 
 const addWebpackModule = require('../../../add/webpack/addWebpack')
@@ -141,41 +142,85 @@ describe('addWebpack', () => {
         })
     })
 
-    describe.skip('function createConfig', () => {
-        it('', () => {
-            
+    describe('function createConfig', () => {
+        it('if react was selected create a reactBabel file and add webpack react loaders', async () => {
+            fs.readFileSync = jest.fn()
+                .mockReturnValueOnce('webpack')
+
+            await createConfig('', '', true)
+
+            expect(fs.readFileSync.mock.calls[1][0]).toContain('reactBabel')
+            expect(helpers.addDependenciesToStore).toBeCalledWith('react react-dom')
+            expect(helpers.addDevDependenciesToStore).toBeCalledWith( "webpack babel-loader css-loader @babel/core @babel/preset-env style-loader sass-loader node-sass cssnano postcss postcss-preset-env postcss-import postcss-loader webpack-cli @babel/preset-react")
         })
         
-        it('', () => {
-            
+        it('if react wasn\'t selected create a normal babel file and webpack loaders', async () => {
+            fs.readFileSync = jest.fn() 
+                .mockReturnValueOnce('webpack')
+
+            await createConfig('', '', false)
+
+            expect(fs.readFileSync.mock.calls[1][0]).toContain('.babelrc')
+            expect(helpers.addDevDependenciesToStore).toBeCalledWith('webpack babel-loader css-loader @babel/core @babel/preset-env style-loader sass-loader node-sass cssnano postcss postcss-preset-env postcss-import postcss-loader webpack-cli')
         })
 
-        it('', () => {
-            
+        it('replaces the webpack config with the input and output selected and creates webpack config file', async () => {
+            fs.readFileSync = jest.fn() 
+                .mockReturnValueOnce('INPUT OUTPUT')
+
+            await createConfig('src/index.js', 'dist', false)
+
+            expect(helpers.writeFile.mock.calls[1][1]).toContain('src/index.js dist')
         })
 
-        it('', () => {
-            
+        it('creates a postcss config', async () => {
+            fs.readFileSync = jest.fn().mockReturnValueOnce('')            
+
+            await createConfig('', '', false)
+
+            expect(helpers.writeFile.mock.calls[0][0]).toEqual('postcss.config.js')
         })
 
-        it('', () => {
+        it('creates a babelrc file', async () => {
+            fs.readFileSync
+                .mockReturnValueOnce('')
             
+            await createConfig('', '', false)
+
+            expect(helpers.writeFile.mock.calls[2][0]).toEqual('.babelrc')   
         })
 
-        it('', () => {
+        it('doesn\'t create a babelrc file if one already exists', async () => {
+            fs.readFileSync
+                .mockReturnValueOnce('')
+            fs.existsSync.mockReturnValue(true)
             
+            await createConfig('', '', false)
+
+            expect(helpers.writeFile).toBeCalledTimes(2)
         })
 
-        it('', () => {
+        it('calls local addScripts function', async () => {
+            addWebpackModule.addScripts = jest.fn()
+            fs.readFileSync
+                .mockReturnValueOnce('')
             
+            await createConfig('', '', false)
+
+            expect(addWebpackModule.addScripts).toBeCalled()            
         })
 
-        it('', () => {
-            
-        })
+        it('calls helpers installAllPackagesToExistingProject', async () => {
+            fs.readFileSync
+                .mockReturnValueOnce('')
+        
+            await createConfig('', '', false) 
 
-        it('', () => {
-            
+            expect(helpers.installAllPackagesToExistingProject).toBeCalled()
         })
+    })
+
+    describe.skip('function addScripts', () => {
+
     })
 })
