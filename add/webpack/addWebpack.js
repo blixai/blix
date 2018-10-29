@@ -1,6 +1,5 @@
 let fs         = require('fs')
 let path       = require('path')
-let chalk      = require('chalk');
 let glob       = require('glob')
 let inquirer   = require('inquirer')
 let prompt     = inquirer.prompt
@@ -80,7 +79,7 @@ const createConfig = async (input, output, react) => {
   if (react) {
     babel = loadFile('../../new/files/frontend/babel/reactBabel')
     helpers.addDependenciesToStore('react react-dom')
-    helpers.addDependenciesToStore('webpack babel-loader css-loader @babel/core @babel/preset-env style-loader sass-loader node-sass cssnano postcss postcss-preset-env postcss-import postcss-loader webpack-cli @babel/preset-react')
+    helpers.addDevDependenciesToStore('webpack babel-loader css-loader @babel/core @babel/preset-env style-loader sass-loader node-sass cssnano postcss postcss-preset-env postcss-import postcss-loader webpack-cli @babel/preset-react')
   } else {
     babel = loadFile('../../new/files/frontend/babel/.babelrc')
     helpers.addDevDependenciesToStore('webpack babel-loader css-loader @babel/core @babel/preset-env style-loader sass-loader node-sass cssnano postcss postcss-preset-env postcss-import postcss-loader webpack-cli')
@@ -90,14 +89,21 @@ const createConfig = async (input, output, react) => {
   webpack = webpack.replace(/OUTPUT/g, output)
 
   let postcss = loadFile('../../new/files/frontend/postcss.config.js')
-  helpers.writeFile('postcss.config.js', postcss, 'Created postcss.config.js')
+  helpers.writeFile('postcss.config.js', postcss)
 
-  helpers.writeFile('webpack.config.js', webpack, 'Created webpack.config.js')
+  helpers.writeFile('webpack.config.js', webpack)
   if (!fs.existsSync('./.babelrc')) {
-    helpers.writeFile('.babelrc', babel, 'Created .babelrc')
+    helpers.writeFile('.babelrc', babel)
   }
 
+  this.addScripts() 
 
+  await helpers.installAllPackagesToExistingProject()
+}
+
+exports.createConfig = createConfig
+
+const addScripts = () => {
   try {
     if (helpers.checkIfScriptIsTaken('build')) {
       helpers.addScriptToPackageJSON('build:prod', "webpack --mode='production'")
@@ -113,7 +119,6 @@ const createConfig = async (input, output, react) => {
   } catch (e) {
     console.error(`Couldn't add webpack development and production scripts to package json.`)
   }
-  await helpers.installAllPackagesToExistingProject()
 }
 
-exports.createConfig = createConfig
+exports.addScripts = addScripts
