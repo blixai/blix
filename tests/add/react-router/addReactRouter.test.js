@@ -294,7 +294,28 @@ describe('add/addReactRouter', () => {
   })
 
   describe('blixReact', () => {
+    it('makes components and components/App folders', () => {
+      blixReact() 
 
+      expect(helpers.mkdirSync).toBeCalled()
+      expect(helpers.mkdirSync).toBeCalledTimes(2)
+      expect(helpers.mkdirSync.mock.calls[0][0]).toEqual('src/components')
+      expect(helpers.mkdirSync.mock.calls[1][0]).toEqual('src/components/App')
+    })
+
+    it('moves all files in ./src/App to ./src/components/App', () => {
+      blixReact()
+
+      expect(helpers.moveAllFilesInDir).toBeCalled()
+      expect(helpers.moveAllFilesInDir.mock.calls[0]).toEqual(["./src/App", "./src/components/App"])
+    })
+
+    it('calls createView without a param', () => {
+      blixReact()
+
+      expect(mockModule.createView).toBeCalled() 
+      expect(mockModule.createView).toBeCalledWith()
+    })
   })
 
   describe('createReactApp', () => {
