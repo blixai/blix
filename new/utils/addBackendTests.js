@@ -7,8 +7,10 @@ const loadFile = filePath => {
   return fs.readFileSync(path.resolve(__dirname, filePath), "utf8");
 };
 
+let filePath = ''
+
 const checkOrCreateServerTestFolder = () => {
-  if (!fs.existsSync(`./${store.name}/test/server`)) {
+  if (!fs.existsSync(`./${filePath}test/server`)) {
     helpers.mkdirSync(`test/server`);
   }
 };
@@ -19,7 +21,7 @@ const mochaTestBackend = () => {
   checkOrCreateServerTestFolder();
   helpers.writeFile(`test/server/test.spec.js`, loadFile("../files/testing/backend/mocha.js"))
 
-  let json = JSON.parse(fs.readFileSync(`./${store.name}/package.json`, "utf8"));
+  let json = JSON.parse(fs.readFileSync(`./${filePath}package.json`, "utf8"));
   if (json.hasOwnProperty("jest")) {
     json.jest["modulePathIgnorePatterns"] = [
       "<rootDir>/test/e2e/",
@@ -38,7 +40,7 @@ const testJestBackend = () => {
     `test/server/test.spec.js`,
     loadFile("../files/testing/backend/jest.js")
   );
-  let json = JSON.parse(fs.readFileSync(`./${store.name}/package.json`, "utf8"));
+  let json = JSON.parse(fs.readFileSync(`./${filePath}package.json`, "utf8"));
   if (!json.hasOwnProperty("jest")) {
     let jest = {
       modulePathIgnorePatterns: ["<rootDir>/test/e2e/", "<rootDir>/cypress"],
@@ -56,6 +58,9 @@ const testJestBackend = () => {
 };
 
 let testBackend = () => {
+  if (store.name){
+    filePath = store.name + '/'
+  } 
   store.serverTesting.server === "mocha"
     ? mochaTestBackend()
     : store.serverTesting.server === "jest"
