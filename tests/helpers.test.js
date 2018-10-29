@@ -38,7 +38,6 @@ const {
   installDevDependenciesToExistingProject,
   checkScriptsFolderExist,
   getCWDName,
-  modifyKnexExistingProject,
   appendFile,
   checkIfScriptIsTaken,
   moveAllFilesInDir,
@@ -145,7 +144,10 @@ describe('Helper Tests', () => {
 
   describe('installKnexGlobal', () => {
     beforeEach(() => {
-      let name = 'tests'
+      store.name = 'tests'
+      const spy = jest.spyOn(process, 'chdir').mockImplementation(() => {
+        return
+      })
     })
     afterEach(() => {
       store.name = ''
@@ -153,7 +155,9 @@ describe('Helper Tests', () => {
     it('attempts to install a postgres db', () => {
       child_process.execSync.mockReturnValue(true)
       store.env = 'development'
+
       installKnexGlobal()
+
       expect(child_process.execSync.mock.calls[0][0]).toContain('')
       expect(child_process.execSync).toBeCalledTimes(2)
     })
@@ -161,13 +165,17 @@ describe('Helper Tests', () => {
     it('if yarn selected and installed uses yarn to install knex globally', () => {
       child_process.execSync.mockReturnValue(true)
       store.useYarn = true
+
       installKnexGlobal()
+
       expect(child_process.execSync.mock.calls[0][0]).toEqual('yarn add knex global')
     })
     it('if npm selected and installed uses npm to install knex globally', () => {
       child_process.execSync.mockReturnValue(true)
       store.useYarn = false
+
       installKnexGlobal()
+
       expect(child_process.execSync.mock.calls[0][0]).toEqual('npm install -g knex')
     })
   })
@@ -260,6 +268,58 @@ describe('Helper Tests', () => {
       expect(fs.writeFileSync.mock.calls[0][0]).toEqual('./tests/knexfile.js')
       expect(fs.mkdirSync.mock.calls[0][0]).toEqual('./tests/db')
       expect(fs.mkdirSync.mock.calls[1][0]).toEqual('./tests/db/migrations')
+    })
+
+    it('creates a knexfile with connection of store.name', () => {
+      fs.existsSync.mockReturnValue(false)
+
+      modifyKnex()
+
+      expect(fs.existsSync).toBeCalledWith(`./tests/knexfile.js`)
+      expect(fs.writeFileSync.mock.calls[0][0]).toEqual('./tests/knexfile.js')
+      expect(fs.mkdirSync.mock.calls[0][0]).toEqual('./tests/db')
+      expect(fs.mkdirSync.mock.calls[1][0]).toEqual('./tests/db/migrations')
+    })
+
+    it('appends a knexfile with connection of getCWDName if store.name is undefined', () => {
+      store.name = ''
+      helpers.getCWDName = jest.fn().mockReturnValueOnce('test')
+      fs.existsSync.mockReturnValueOnce(true)
+      helpers.appendFile = jest.fn()
+
+      modifyKnex()
+
+      expect(fs.existsSync).toBeCalledWith(`./knexfile.js`)
+      expect(helpers.appendFile.mock.calls[0][1]).toContain('test')
+    })
+
+    it('creates db and db/migrations folders', () => {
+      helpers.mkdirSync = jest.fn()
+
+      modifyKnex()
+
+      expect(helpers.mkdirSync).toBeCalledWith('db')
+      expect(helpers.mkdirSync).toBeCalledWith('db/migrations')
+    })
+
+    it('logs a simple error if something goes wrong', () => {
+      store.env = ''
+      helpers.mkdirSync = jest.fn().mockImplementationOnce(() => { throw 'Error' })
+      console.error = jest.fn()
+
+      modifyKnex()
+
+      expect(console.error).toBeCalledWith(chalk`\t{red Error modifying Knex}`)
+    })
+
+    it('logs a verbose error if something goes wrong and store.env is development', () => {
+      store.env = 'development'
+      helpers.mkdirSync = jest.fn().mockImplementationOnce(() => { throw 'Error' })
+      console.error = jest.fn()
+
+      modifyKnex()
+
+      expect(console.error).toBeCalledWith('Error')
     })
   })
 
@@ -576,7 +636,7 @@ describe('Helper Tests', () => {
     })
   })
 
-  describe('modifyKnexExistingProject', () => {
+  describe.skip('modifyKnexExistingProject', () => {
     it("Throws an error if cwd is not passed as a parameter", () => {
       console.error = jest.fn()
 

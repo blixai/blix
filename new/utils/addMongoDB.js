@@ -22,7 +22,28 @@ exports.addMongooseToScripts = () => {
 exports.addMongoDBToProject = () => {
   let connectionString = `const mongoose = require('mongoose')\nmongoose.connect(process.env.MONGO, { useNewUrlParser: true })\n`
   helpers.insert(`./${store.name}/server/server.js`, connectionString, 0)
-  helpers.appendFile(`.env`, `MONGO=${`mongodb://localhost:27017/${store.name}`}`);
+
+  this.envFile()
+  
   helpers.addDependenciesToStore("mongo mongoose")
 };
+
+exports.envFile = () => {
+  let name
+  if (store.name) {
+    name = store.name
+  } else {
+    name = helpers.getCWDName()
+  }
+
+  try {
+    if (fs.existsSync('./.env')) {
+      helpers.appendFile('.env', `\nMONGO=${`mongodb://localhost:27017/${name}`}`)
+    } else {
+      helpers.writeFile('.env', `MONGO=${`mongodb://localhost:27017/${name}`}`)
+    }
+  } catch (err) {
+    console.error('Failed to find, create or append .env file')
+  }
+}
 

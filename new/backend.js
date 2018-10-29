@@ -128,8 +128,6 @@ exports.scripts = mode => {
   helpers.writeFile(`scripts/controller.js`, controller)
   helpers.writeFile(`scripts/templates/controller.js`, controllerTemplate)
   helpers.writeFile(`scripts/templates/routes.js`, routesTemplate)
-
-
 }
 
 exports.packages = mode => {
