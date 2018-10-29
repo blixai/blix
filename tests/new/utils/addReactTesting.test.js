@@ -80,7 +80,7 @@ describe("Add React Testing", () => {
 
       installReactTesting()
 
-      expect(helpers.addScriptToNewPackageJSON).toBeCalledWith('test', 'jest')
+      expect(helpers.addScript).toBeCalledWith('test', 'jest')
       expect(fs.writeFileSync.mock.calls[0][0]).toEqual('./test/package.json')
       expect(fs.writeFileSync.mock.calls[0][1]).toContain('jest')
     })

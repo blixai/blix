@@ -14,11 +14,11 @@ let eslintPrettier = loadFile('common/linter/eslintPrettier.js')
 
 const eslintPackageJsonScripts = () => {
     if (store.backend.backend && store.reactType) {
-        helpers.addScriptToNewPackageJSON('lint', `eslint 'src/**/*.js' 'server/**/*.js'`)
+        helpers.addScript('lint', `eslint 'src/**/*.js' 'server/**/*.js'`)
     } else if (store.backend.backend) {
-        helpers.addScriptToNewPackageJSON('lint', `eslint 'server/**/*.js'`)
+        helpers.addScript('lint', `eslint 'server/**/*.js'`)
     } else if (store.reactType) {
-        helpers.addScriptToNewPackageJSON('lint', `eslint 'src/**/*.js'`)
+        helpers.addScript('lint', `eslint 'src/**/*.js'`)
     }
 }
 
@@ -26,7 +26,7 @@ const addLinter = () => {
     if (store.linter === 'prettier') {
         helpers.addDevDependenciesToStore('prettier')
         helpers.writeFile(`prettier.config.js`, prettierConfig)
-        helpers.addScriptToNewPackageJSON('lint', `prettier --config prettier.config.js --write '**/*.js'`)
+        helpers.addScript('lint', `prettier --config prettier.config.js --write '**/*.js'`)
     } else if (store.linter === 'eslint') {
         helpers.addDevDependenciesToStore('eslint eslint-plugin-react')
         helpers.writeFile(`.eslintrc.js`, eslintBasicConfig)

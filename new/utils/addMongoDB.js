@@ -15,7 +15,7 @@ exports.addMongooseToScripts = () => {
   );
   helpers.writeFile(`scripts/model.js`, model);
   helpers.writeFile(`scripts/templates/schemaTemplate.js`, schemaTemplate);
-  helpers.addScriptToNewPackageJSON("model", "node scripts/model.js");
+  helpers.addScript("model", "node scripts/model.js");
   this.addMongoDBToProject();
 };
 

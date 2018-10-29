@@ -13,7 +13,7 @@ describe('Add Mongo DB', () => {
     it('creates model.js and schemaTemplate.js', () => {
       const mockWrite = helpers.writeFile = jest.fn()
       addMongoDb.addMongoDBToProject = jest.fn()
-      helpers.addScriptToNewPackageJSON = jest.fn()
+      helpers.addScript = jest.fn()
 
       addMongooseToScripts()
 
@@ -26,7 +26,7 @@ describe('Add Mongo DB', () => {
     });
 
     it('adds scripts to new package.json', () => {
-      const mockAdd = helpers.addScriptToNewPackageJSON = jest.fn()
+      const mockAdd = helpers.addScript = jest.fn()
       helpers.writeFile = jest.fn()
       addMongoDb.addMongoDBToProject = jest.fn()
 
@@ -38,7 +38,7 @@ describe('Add Mongo DB', () => {
 
     it('calls addMongoDBToProject', () => {
       helpers.writeFile = jest.fn()
-      helpers.addScriptToNewPackageJSON = jest.fn()
+      helpers.addScript = jest.fn()
       const mockAddMongo = addMongoDb.addMongoDBToProject = jest.fn()
 
       addMongooseToScripts()

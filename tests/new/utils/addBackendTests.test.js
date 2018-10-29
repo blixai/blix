@@ -63,8 +63,8 @@ describe('New Utils module: addBackendTests', () => {
       mochaTestBackend()
 
       expect(helpers.addDevDependenciesToStore).toBeCalledWith('mocha chai chai-http')
-      expect(helpers.addScriptToNewPackageJSON).toBeCalled()
-      expect(helpers.addScriptToNewPackageJSON).toBeCalledWith('mocha', 'mocha test/server')
+      expect(helpers.addScript).toBeCalled()
+      expect(helpers.addScript).toBeCalledWith('mocha', 'mocha test/server')
       expect(fs.existsSync).toHaveBeenCalled()
       expect(helpers.mkdirSync).toHaveBeenCalledWith('test/server')
       // called twice due to file loading to write the test file
@@ -97,7 +97,7 @@ describe('New Utils module: addBackendTests', () => {
       expect(helpers.writeFile.mock.calls[0][0]).toEqual('test/server/test.spec.js')
       expect(fs.writeFileSync).toBeCalled()      
       expect(fs.writeFileSync.mock.calls[0][1]).toContain('modulePathIgnorePatterns')
-      expect(helpers.addScriptToNewPackageJSON).toBeCalledWith("jest", "jest")
+      expect(helpers.addScript).toBeCalledWith("jest", "jest")
     })
 
     it('won\'t add jest config to package.json if the project already uses jest', () => {

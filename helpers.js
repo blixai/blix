@@ -92,12 +92,18 @@ exports.installKnexGlobal = () => {
 
 
 exports.addScript = (command, script) => {
+  let filePath = ''
+    if (store.name){
+      filePath = `./${store.name}/package.json`
+    } else {
+      filePath = './package.json'
+    }
   try {
-    let buffer = fs.readFileSync("package.json");
+    let buffer = fs.readFileSync(filePath);
     let json = JSON.parse(buffer);
     json.scripts[command] = script;
     let newPackage = JSON.stringify(json, null, 2);
-    fs.writeFileSync("package.json", newPackage);
+    fs.writeFileSync(filePath, newPackage);
     console.log(chalk`{cyan insert} ${command} script into package.json`)
   } catch (err) {
     if (store.env === 'development') {
@@ -119,18 +125,6 @@ exports.modifyKnex = () => {
   }
   this.mkdirSync(`db`);
   this.mkdirSync(`db/migrations`);
-};
-
-exports.addScriptToNewPackageJSON = (command, script) => {
-  try {
-    let buffer = fs.readFileSync(`${store.name}/package.json`);
-    let json = JSON.parse(buffer);
-    json.scripts[command] = script;
-    let newPackage = JSON.stringify(json, null, 2);
-    fs.writeFileSync(`./${store.name}/package.json`, newPackage);
-  } catch (err) {
-    console.error(err)
-  }
 };
 
 exports.writeFile = (filePath, file, message) => {

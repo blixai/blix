@@ -400,7 +400,7 @@ describe('new/react', () => {
 
   describe('scripts', () => {
     it('adds webpack-dev-server script to packageJson if backend is not selected', () => {
-      const mockAddScript = helpers.addScriptToNewPackageJSON = jest.fn()
+      const mockAddScript = helpers.addScript = jest.fn()
       helpers.writeFile = jest.fn().mockReturnValue(true)
       store.backend = {backend: false}
 
@@ -413,7 +413,7 @@ describe('new/react', () => {
     })
 
     it('creates an index.html if backend is not selected', () => {
-      helpers.addScriptToNewPackageJSON = jest.fn().mockReturnValue(true)
+      helpers.addScript = jest.fn().mockReturnValue(true)
       const mockWrite = helpers.writeFile = jest.fn()
       store.backend = {backend: false}
 
@@ -425,7 +425,7 @@ describe('new/react', () => {
     })
 
     it('Only creates dev and build scripts if backend is selected', () => {
-      const mockAddScript = helpers.addScriptToNewPackageJSON = jest.fn()
+      const mockAddScript = helpers.addScript = jest.fn()
       store.backend = {backend: true}
 
       scripts()
@@ -437,7 +437,7 @@ describe('new/react', () => {
     })
 
     it('calls reactScripts if reactType is react', () => {
-      helpers.addScriptToNewPackageJSON = jest.fn().mockReturnValue(true)
+      helpers.addScript = jest.fn().mockReturnValue(true)
       const mockReactScripts = reactMod.reactScripts = jest.fn().mockReturnValue(true)
       store.backend = {backend: true}
       store.reactType = 'react'
@@ -448,7 +448,7 @@ describe('new/react', () => {
     })
 
     it('calls reactRouterScripts if reactType is react-router', () => {
-      helpers.addScriptToNewPackageJSON = jest.fn().mockReturnValue(true)
+      helpers.addScript = jest.fn().mockReturnValue(true)
       const mockReactScripts = reactMod.reactRouterScripts = jest.fn().mockReturnValue(true)
       store.backend = {backend: true}
       store.reactType = 'react-router'
@@ -459,7 +459,7 @@ describe('new/react', () => {
     })
 
     it('calls reduxScripts if reactType is redux', () => {
-      helpers.addScriptToNewPackageJSON = jest.fn().mockReturnValue(true)
+      helpers.addScript = jest.fn().mockReturnValue(true)
       const mockReactScripts = reactMod.reduxScripts = jest.fn().mockReturnValue(true)
       store.backend = {backend: true}
       store.reactType = 'redux'
@@ -470,7 +470,7 @@ describe('new/react', () => {
     })
 
     it('calls reactRouterReduxScripts if reactType is reactRouterRedux', () => {
-      helpers.addScriptToNewPackageJSON = jest.fn().mockReturnValue(true)
+      helpers.addScript = jest.fn().mockReturnValue(true)
       const mockReactScripts = reactMod.reactRouterReduxScripts = jest.fn().mockReturnValue(true)
       store.backend = {backend: true}
       store.reactType = 'reactRouter-redux'
@@ -484,7 +484,7 @@ describe('new/react', () => {
   describe('reactScripts', () => {
     it('creates reactScript files', () => {
       const mockWrite = helpers.writeFile = jest.fn()
-      helpers.addScriptToNewPackageJSON = jest.fn().mockReturnValue(true)
+      helpers.addScript = jest.fn().mockReturnValue(true)
 
       reactScripts()
 
@@ -497,7 +497,7 @@ describe('new/react', () => {
 
     it('adds scripts to new package.json', () => {
       helpers.writeFile = jest.fn().mockReturnValue(true)
-      const mockAddScript = helpers.addScriptToNewPackageJSON = jest.fn()
+      const mockAddScript = helpers.addScript = jest.fn()
 
       reactScripts()
 
@@ -509,7 +509,7 @@ describe('new/react', () => {
   describe('reactRouterScripts', () => {
     it('creates reactRouter Script files', () => {
       const mockWrite = helpers.writeFile = jest.fn()
-      helpers.addScriptToNewPackageJSON = jest.fn().mockReturnValue(true)
+      helpers.addScript = jest.fn().mockReturnValue(true)
 
       reactRouterScripts()
 
@@ -523,7 +523,7 @@ describe('new/react', () => {
 
     it('adds scripts to new package.json', () => {
       helpers.writeFile = jest.fn().mockReturnValue(true)
-      const mockAddScript = helpers.addScriptToNewPackageJSON = jest.fn()
+      const mockAddScript = helpers.addScript = jest.fn()
 
       reactRouterScripts()
 
@@ -537,7 +537,7 @@ describe('new/react', () => {
   describe('reduxScripts', () => {
     it('creates redux Script files', () => {
       const mockWrite = helpers.writeFile = jest.fn()
-      helpers.addScriptToNewPackageJSON = jest.fn().mockReturnValue(true)
+      helpers.addScript = jest.fn().mockReturnValue(true)
 
       reduxScripts()
 
@@ -554,7 +554,7 @@ describe('new/react', () => {
 
     it('adds scripts to new package.json', () => {
       helpers.writeFile = jest.fn().mockReturnValue(true)
-      const mockAddScript = helpers.addScriptToNewPackageJSON = jest.fn()
+      const mockAddScript = helpers.addScript = jest.fn()
 
       reduxScripts()
 
@@ -568,7 +568,7 @@ describe('new/react', () => {
   describe('reactRouterReduxScripts', () => {
     it('creates redux Script files', () => {
       const mockWrite = helpers.writeFile = jest.fn()
-      helpers.addScriptToNewPackageJSON = jest.fn().mockReturnValue(true)
+      helpers.addScript = jest.fn().mockReturnValue(true)
 
       reactRouterReduxScripts()
 
@@ -586,7 +586,7 @@ describe('new/react', () => {
 
     it('adds scripts to new package.json', () => {
       helpers.writeFile = jest.fn().mockReturnValue(true)
-      const mockAddScript = helpers.addScriptToNewPackageJSON = jest.fn()
+      const mockAddScript = helpers.addScript = jest.fn()
 
       reactRouterReduxScripts()
 

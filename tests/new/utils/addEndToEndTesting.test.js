@@ -41,7 +41,7 @@ describe('New Utils module: addEndToEndTesting', () => {
     it('sets up cypress', () => {
         fs.readFileSync.mockReturnValue(`{"jest": {} }`)
         installCypress()
-        expect(helpers.addScriptToNewPackageJSON).toBeCalledWith("e2e", "cypress open")
+        expect(helpers.addScript).toBeCalledWith("e2e", "cypress open")
         expect(helpers.addDevDependenciesToStore).toBeCalledWith("cypress")
         expect(helpers.mkdirSync).toBeCalledTimes(2)
         expect(helpers.writeFile.mock.calls[0][0]).toEqual('cypress/integration/test.js')
@@ -53,7 +53,7 @@ describe('New Utils module: addEndToEndTesting', () => {
     it('sets up cafe', () => {
       fs.readFileSync.mockReturnValue(`{"jest": {} }`)
       installTestCafe()
-      expect(helpers.addScriptToNewPackageJSON).toBeCalledWith("e2e", "testcafe chrome test/e2e")
+      expect(helpers.addScript).toBeCalledWith("e2e", "testcafe chrome test/e2e")
       expect(helpers.addDevDependenciesToStore).toBeCalledWith("testcafe")
       expect(helpers.mkdirSync).toBeCalledTimes(1)
       expect(helpers.writeFile.mock.calls[0][0]).toEqual('test/e2e/test.js')
