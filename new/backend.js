@@ -1,12 +1,12 @@
 const fs = require('fs')
 const helpers = require('../helpers')
 const path = require('path')
-const { createCommonFilesAndFolders } = require('./utils/createCommonFiles')
-const { testBackend } = require('./utils/addBackendTests')
-const { addLinter } = require('./utils/addLinter')
-const { addMongooseToScripts } = require('./utils/addMongoDB')
-const { addBookshelfToScripts } = require('./utils/addBookshelf')
-const { newProjectInstructions } = require('./utils/newProjectInstructions')
+const {createCommonFilesAndFolders} = require('./utils/createCommonFiles')
+const {testBackend} = require('./utils/addBackendTests')
+const {addLinter} = require('./utils/addLinter')
+const {addMongooseToScripts} = require('./utils/addMongoDB')
+const {addBookshelfToScripts} = require('./utils/addBookshelf')
+const {newProjectInstructions} = require('./utils/newProjectInstructions')
 const store = require('./store')
 
 const loadFile = filePath => {
@@ -118,12 +118,12 @@ exports.scripts = mode => {
   let routesTemplate = loadFile('./files/scripts/backend/templates/routes.js')
 
   if (mode === 'standard') {
-    helpers.addScript('start', `nodemon --watch server server/cluster.js`)
+    helpers.addScriptToPackageJSON('start', `nodemon --watch server server/cluster.js`)
   } else {
-    helpers.addScript('start', 'nodemon server/cluster.js')
+    helpers.addScriptToPackageJSON('start', 'nodemon server/cluster.js')
   }
   // controller script
-  helpers.addScript('controller', 'node scripts/controller.js')
+  helpers.addScriptToPackageJSON('controller', 'node scripts/controller.js')
   // create files
   helpers.writeFile(`scripts/controller.js`, controller)
   helpers.writeFile(`scripts/templates/controller.js`, controllerTemplate)
@@ -150,5 +150,5 @@ exports.packages = mode => {
 }
 
 exports.envSetup = () => {
-    helpers.appendFile(`.env`, '\nWORKERS=1')
+  helpers.appendFile(`.env`, '\nWORKERS=1')
 }

@@ -26,7 +26,7 @@ const addBookshelfToScripts = async () => {
   helpers.writeFile(`scripts/templates/migration.js`, migration)
   helpers.writeFile(`scripts/templates/bookshelf.js`, model)
 
-  helpers.addScript('model', 'node scripts/model.js')
+  helpers.addScriptToPackageJSON('model', 'node scripts/model.js')
   installKnexGlobal()
   helpers.modifyKnexExistingProject(helpers.getCWDName())
   helpers.addDependenciesToStore('pg bookshelf knex')

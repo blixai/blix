@@ -242,19 +242,19 @@ describe('new/backend.js', () => {
     it('adds a start script', () => {
       scripts()
 
-      expect(helpers.addScript).toBeCalledWith('start', 'nodemon server/cluster.js')
+      expect(helpers.addScriptToPackageJSON).toBeCalledWith('start', 'nodemon server/cluster.js')
     })
 
     it('adds a different start script for standard backends which use webpack-dev-middleware', () => {
       scripts('standard')
 
-      expect(helpers.addScript).toBeCalledWith('start', 'nodemon --watch server server/cluster.js')
+      expect(helpers.addScriptToPackageJSON).toBeCalledWith('start', 'nodemon --watch server server/cluster.js')
     })
 
     it('adds a controller script', () => {
       scripts()
 
-      expect(helpers.addScript).toBeCalledWith('controller', 'node scripts/controller.js')
+      expect(helpers.addScriptToPackageJSON).toBeCalledWith('controller', 'node scripts/controller.js')
     })
 
     it('adds the controller script with templates to the scripts/ folder', () => {

@@ -112,7 +112,7 @@ const scripts = () => {
 };
 
 const addAction = () => {
-  helpers.addScript("action", "node scripts/action.js");
+  helpers.addScriptToPackageJSON("action", "node scripts/action.js");
   checkScriptsFolderExists();
 
   let action = loadFile("frontend/redux/action.js");
@@ -132,7 +132,7 @@ const addAction = () => {
 };
 
 const addModel = () => {
-  helpers.addScript("model", "node scripts/model.js");
+  helpers.addScriptToPackageJSON("model", "node scripts/model.js");
   prompt([model]).then(ans => {
     if (ans.model === "m") {
       // add moongoose
@@ -194,7 +194,7 @@ const addModel = () => {
 
 let addReact = () => {
   // always add script first because if there is no package.json it'll process.exit()
-  helpers.addScript("component", "node scripts/component.js");
+  helpers.addScriptToPackageJSON("component", "node scripts/component.js");
   let react = loadFile("frontend/react/component.js");
   checkScriptsFolderExists();
   helpers.writeFile("scripts/component.js", react, "Created component.js script file in scripts folder");
@@ -205,7 +205,7 @@ let addReact = () => {
 };
 
 let addRedux = () => {
-  helpers.addScript("component", "node scripts/component.js");
+  helpers.addScriptToPackageJSON("component", "node scripts/component.js");
   checkScriptsFolderExists();
 
   // load component script and templates 
@@ -226,7 +226,7 @@ let addRedux = () => {
 };
 
 let addClientView = () => {
-  helpers.addScript("view", "node scripts/view.js")
+  helpers.addScriptToPackageJSON("view", "node scripts/view.js")
   checkScriptsFolderExists()
   prompt([viewType]).then(answer => {
     // if true project uses redux
@@ -264,7 +264,7 @@ let checkReactTemplatesExist = () => {
 }
 
 let addController = () => {
-  helpers.addScript("controller", "node scripts/controller.js");
+  helpers.addScriptToPackageJSON("controller", "node scripts/controller.js");
 
   let controller = loadFile("backend/controller.js");
   let controllerTemplate = loadFile("backend/templates/controller.js");
@@ -289,7 +289,7 @@ let addController = () => {
 };
 
 let createNewScript = name => {
-  helpers.addScript(name, `node scripts/${name}.js`);
+  helpers.addScriptToPackageJSON(name, `node scripts/${name}.js`);
   checkScriptsFolderExists();
   helpers.writeFile(`scripts/${name}.js`, "");
   prompt([template]).then(a => {

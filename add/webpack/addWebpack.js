@@ -100,15 +100,15 @@ const createConfig = async (input, output, react) => {
 
   try {
     if (helpers.checkIfScriptIsTaken('build')) {
-      helpers.addScript('build:prod', "webpack --mode='production'")
+      helpers.addScriptToPackageJSON('build:prod', "webpack --mode='production'")
     } else {
-      helpers.addScript('build', "webpack --mode='production'")
+      helpers.addScriptToPackageJSON('build', "webpack --mode='production'")
     }
 
     if (helpers.checkIfScriptIsTaken('dev')) {
-      helpers.addScript('build:dev', "webpack --watch --mode='development'") 
+      helpers.addScriptToPackageJSON('build:dev', "webpack --watch --mode='development'") 
     } else {
-      helpers.addScript('dev', "webpack --watch --mode='development'")
+      helpers.addScriptToPackageJSON('dev', "webpack --watch --mode='development'")
     }
   } catch (e) {
     console.error(`Couldn't add webpack development and production scripts to package json.`)

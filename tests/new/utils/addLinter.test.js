@@ -13,7 +13,7 @@ describe('Utils module: addLinter', () => {
   describe('addLinter', () => {
     beforeEach(() => {
       store.linter = ''
-    })  
+    })
 
     it('adds prettier if selected', () => {
       store.linter = 'prettier'
@@ -21,7 +21,7 @@ describe('Utils module: addLinter', () => {
 
       expect(helpers.addDevDependenciesToStore).toHaveBeenCalledWith('prettier')
       expect(helpers.writeFile).toHaveBeenCalledTimes(1)
-      expect(helpers.addScript).toBeCalledTimes(1)
+      expect(helpers.addScriptToPackageJSON).toBeCalledTimes(1)
     })
 
     it('adds eslint if selected', () => {
@@ -35,7 +35,7 @@ describe('Utils module: addLinter', () => {
     it('adds eslint + prettier if selected', () => {
       store.linter = 'eslint_prettier'
       addLinter()
-      
+
       expect(helpers.addDevDependenciesToStore).toHaveBeenCalledTimes(1)
       expect(helpers.writeFile).toHaveBeenCalledTimes(1)
     })
@@ -43,43 +43,43 @@ describe('Utils module: addLinter', () => {
 
   describe('eslintPackageJsonSCripts', () => {
     beforeEach(() => {
-      store.backend = { backend: false }
+      store.backend = {backend: false}
       store.reactType = ''
     })
 
     it('adds script to package.json if backend selected and frontend type is React', () => {
-      store.backend = { backend: true }
+      store.backend = {backend: true}
       store.reactType = 'react'
       eslintPackageJsonScripts()
 
-      expect(helpers.addScript).toHaveBeenCalledWith('lint', `eslint 'src/**/*.js' 'server/**/*.js'`)
+      expect(helpers.addScriptToPackageJSON).toHaveBeenCalledWith('lint', `eslint 'src/**/*.js' 'server/**/*.js'`)
     })
 
     it('adds script to package.json if only backend', () => {
-      store.backend = { backend: true }
+      store.backend = {backend: true}
       eslintPackageJsonScripts()
-      
-      expect(helpers.addScript).toHaveBeenCalledWith('lint', `eslint 'server/**/*.js'`)
-    }) 
+
+      expect(helpers.addScriptToPackageJSON).toHaveBeenCalledWith('lint', `eslint 'server/**/*.js'`)
+    })
 
     it('adds script to package.json if only a frontend React type', () => {
       store.reactType = 'react'
       eslintPackageJsonScripts()
 
-      expect(helpers.addScript).toHaveBeenCalledWith('lint', `eslint 'src/**/*.js'`)
+      expect(helpers.addScriptToPackageJSON).toHaveBeenCalledWith('lint', `eslint 'src/**/*.js'`)
     })
 
     it('adds script to package.json if only a frontend Redux type', () => {
       store.reactType = 'redux'
       eslintPackageJsonScripts()
 
-      expect(helpers.addScript).toHaveBeenCalledWith('lint', `eslint 'src/**/*.js'`)
+      expect(helpers.addScriptToPackageJSON).toHaveBeenCalledWith('lint', `eslint 'src/**/*.js'`)
     })
 
     it('doesn\'t add lint script to package.json if no backend or frontend isn\'t react', () => {
       eslintPackageJsonScripts()
 
-      expect(helpers.addScript).toHaveBeenCalledTimes(0)
+      expect(helpers.addScriptToPackageJSON).toHaveBeenCalledTimes(0)
     })
   })
 })

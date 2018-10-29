@@ -13,7 +13,7 @@ let installReactTesting = () => {
   if (!store.reactTesting['enzyme']) {
     return;
   }
-  if (store.reactType === 'react-router' || store.reactType === 'reactRouter-redux'){
+  if (store.reactType === 'react-router' || store.reactType === 'reactRouter-redux') {
     file = "Router.spec.js"
   } else {
     file = "App.spec.js"
@@ -35,7 +35,7 @@ let installReactTesting = () => {
   json["jest"] = jest;
   let newPackage = JSON.stringify(json, null, 2);
   fs.writeFileSync(`./${name}/package.json`, newPackage);
-  helpers.addScript("test", "jest");
+  helpers.addScriptToPackageJSON("test", "jest");
 };
 
-module.exports = { installReactTesting };
+module.exports = {installReactTesting};

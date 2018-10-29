@@ -172,7 +172,7 @@ describe('new/react', () => {
       store.reactCSS = 'bootstrap'
 
       cssLibrary()
-      
+
       expect(mockAddDevDependencies).toBeCalled()
       expect(mockAddDevDependencies.mock.calls[0][0]).toEqual('react-bootstrap')
     })
@@ -182,7 +182,7 @@ describe('new/react', () => {
       store.reactCSS = 'styled'
 
       cssLibrary()
-      
+
       expect(mockAddDevDependencies).toBeCalled()
       expect(mockAddDevDependencies.mock.calls[0][0]).toEqual('styled-components')
     })
@@ -400,20 +400,20 @@ describe('new/react', () => {
 
   describe('scripts', () => {
     it('adds webpack-dev-server script to packageJson if backend is not selected', () => {
-      const mockAddScript = helpers.addScript = jest.fn()
+      const mockaddScriptToPackageJSON = helpers.addScriptToPackageJSON = jest.fn()
       helpers.writeFile = jest.fn().mockReturnValue(true)
       store.backend = {backend: false}
 
       scripts()
 
-      expect(mockAddScript).toBeCalled()
-      expect(mockAddScript).toBeCalledTimes(3)
-      expect(mockAddScript.mock.calls[0][0]).toEqual('start')
-      expect(mockAddScript.mock.calls[0][1]).toEqual("webpack-dev-server --output-public-path=/dist/ --inline --hot --open --port 3000 --mode='development'")
+      expect(mockaddScriptToPackageJSON).toBeCalled()
+      expect(mockaddScriptToPackageJSON).toBeCalledTimes(3)
+      expect(mockaddScriptToPackageJSON.mock.calls[0][0]).toEqual('start')
+      expect(mockaddScriptToPackageJSON.mock.calls[0][1]).toEqual("webpack-dev-server --output-public-path=/dist/ --inline --hot --open --port 3000 --mode='development'")
     })
 
     it('creates an index.html if backend is not selected', () => {
-      helpers.addScript = jest.fn().mockReturnValue(true)
+      helpers.addScriptToPackageJSON = jest.fn().mockReturnValue(true)
       const mockWrite = helpers.writeFile = jest.fn()
       store.backend = {backend: false}
 
@@ -425,19 +425,19 @@ describe('new/react', () => {
     })
 
     it('Only creates dev and build scripts if backend is selected', () => {
-      const mockAddScript = helpers.addScript = jest.fn()
+      const mockaddScriptToPackageJSON = helpers.addScriptToPackageJSON = jest.fn()
       store.backend = {backend: true}
 
       scripts()
 
-      expect(mockAddScript).toBeCalled()
-      expect(mockAddScript).toBeCalledTimes(2)
-      expect(mockAddScript.mock.calls[0]).toEqual(["dev", "webpack --watch --mode='development'"])
-      expect(mockAddScript.mock.calls[1]).toEqual(["build", "webpack --mode='production'"])
+      expect(mockaddScriptToPackageJSON).toBeCalled()
+      expect(mockaddScriptToPackageJSON).toBeCalledTimes(2)
+      expect(mockaddScriptToPackageJSON.mock.calls[0]).toEqual(["dev", "webpack --watch --mode='development'"])
+      expect(mockaddScriptToPackageJSON.mock.calls[1]).toEqual(["build", "webpack --mode='production'"])
     })
 
     it('calls reactScripts if reactType is react', () => {
-      helpers.addScript = jest.fn().mockReturnValue(true)
+      helpers.addScriptToPackageJSON = jest.fn().mockReturnValue(true)
       const mockReactScripts = reactMod.reactScripts = jest.fn().mockReturnValue(true)
       store.backend = {backend: true}
       store.reactType = 'react'
@@ -448,7 +448,7 @@ describe('new/react', () => {
     })
 
     it('calls reactRouterScripts if reactType is react-router', () => {
-      helpers.addScript = jest.fn().mockReturnValue(true)
+      helpers.addScriptToPackageJSON = jest.fn().mockReturnValue(true)
       const mockReactScripts = reactMod.reactRouterScripts = jest.fn().mockReturnValue(true)
       store.backend = {backend: true}
       store.reactType = 'react-router'
@@ -459,7 +459,7 @@ describe('new/react', () => {
     })
 
     it('calls reduxScripts if reactType is redux', () => {
-      helpers.addScript = jest.fn().mockReturnValue(true)
+      helpers.addScriptToPackageJSON = jest.fn().mockReturnValue(true)
       const mockReactScripts = reactMod.reduxScripts = jest.fn().mockReturnValue(true)
       store.backend = {backend: true}
       store.reactType = 'redux'
@@ -470,7 +470,7 @@ describe('new/react', () => {
     })
 
     it('calls reactRouterReduxScripts if reactType is reactRouterRedux', () => {
-      helpers.addScript = jest.fn().mockReturnValue(true)
+      helpers.addScriptToPackageJSON = jest.fn().mockReturnValue(true)
       const mockReactScripts = reactMod.reactRouterReduxScripts = jest.fn().mockReturnValue(true)
       store.backend = {backend: true}
       store.reactType = 'reactRouter-redux'
@@ -484,7 +484,7 @@ describe('new/react', () => {
   describe('reactScripts', () => {
     it('creates reactScript files', () => {
       const mockWrite = helpers.writeFile = jest.fn()
-      helpers.addScript = jest.fn().mockReturnValue(true)
+      helpers.addScriptToPackageJSON = jest.fn().mockReturnValue(true)
 
       reactScripts()
 
@@ -497,19 +497,19 @@ describe('new/react', () => {
 
     it('adds scripts to new package.json', () => {
       helpers.writeFile = jest.fn().mockReturnValue(true)
-      const mockAddScript = helpers.addScript = jest.fn()
+      const mockaddScriptToPackageJSON = helpers.addScriptToPackageJSON = jest.fn()
 
       reactScripts()
 
-      expect(mockAddScript).toBeCalled()
-      expect(mockAddScript.mock.calls[0]).toEqual(['component', 'node scripts/component.js'])
+      expect(mockaddScriptToPackageJSON).toBeCalled()
+      expect(mockaddScriptToPackageJSON.mock.calls[0]).toEqual(['component', 'node scripts/component.js'])
     })
   })
 
   describe('reactRouterScripts', () => {
     it('creates reactRouter Script files', () => {
       const mockWrite = helpers.writeFile = jest.fn()
-      helpers.addScript = jest.fn().mockReturnValue(true)
+      helpers.addScriptToPackageJSON = jest.fn().mockReturnValue(true)
 
       reactRouterScripts()
 
@@ -523,21 +523,21 @@ describe('new/react', () => {
 
     it('adds scripts to new package.json', () => {
       helpers.writeFile = jest.fn().mockReturnValue(true)
-      const mockAddScript = helpers.addScript = jest.fn()
+      const mockaddScriptToPackageJSON = helpers.addScriptToPackageJSON = jest.fn()
 
       reactRouterScripts()
 
-      expect(mockAddScript).toBeCalled()
-      expect(mockAddScript).toBeCalledTimes(2)
-      expect(mockAddScript.mock.calls[0]).toEqual(['component', 'node scripts/component.js'])
-      expect(mockAddScript.mock.calls[1]).toEqual(['view', 'node scripts/view.js'])
+      expect(mockaddScriptToPackageJSON).toBeCalled()
+      expect(mockaddScriptToPackageJSON).toBeCalledTimes(2)
+      expect(mockaddScriptToPackageJSON.mock.calls[0]).toEqual(['component', 'node scripts/component.js'])
+      expect(mockaddScriptToPackageJSON.mock.calls[1]).toEqual(['view', 'node scripts/view.js'])
     })
   })
 
   describe('reduxScripts', () => {
     it('creates redux Script files', () => {
       const mockWrite = helpers.writeFile = jest.fn()
-      helpers.addScript = jest.fn().mockReturnValue(true)
+      helpers.addScriptToPackageJSON = jest.fn().mockReturnValue(true)
 
       reduxScripts()
 
@@ -554,21 +554,21 @@ describe('new/react', () => {
 
     it('adds scripts to new package.json', () => {
       helpers.writeFile = jest.fn().mockReturnValue(true)
-      const mockAddScript = helpers.addScript = jest.fn()
+      const mockaddScriptToPackageJSON = helpers.addScriptToPackageJSON = jest.fn()
 
       reduxScripts()
 
-      expect(mockAddScript).toBeCalled()
-      expect(mockAddScript).toBeCalledTimes(2)
-      expect(mockAddScript.mock.calls[0]).toEqual(['component', 'node scripts/component.js'])
-      expect(mockAddScript.mock.calls[1]).toEqual(['action', 'node scripts/action.js'])
+      expect(mockaddScriptToPackageJSON).toBeCalled()
+      expect(mockaddScriptToPackageJSON).toBeCalledTimes(2)
+      expect(mockaddScriptToPackageJSON.mock.calls[0]).toEqual(['component', 'node scripts/component.js'])
+      expect(mockaddScriptToPackageJSON.mock.calls[1]).toEqual(['action', 'node scripts/action.js'])
     })
   })
 
   describe('reactRouterReduxScripts', () => {
     it('creates redux Script files', () => {
       const mockWrite = helpers.writeFile = jest.fn()
-      helpers.addScript = jest.fn().mockReturnValue(true)
+      helpers.addScriptToPackageJSON = jest.fn().mockReturnValue(true)
 
       reactRouterReduxScripts()
 
@@ -586,15 +586,15 @@ describe('new/react', () => {
 
     it('adds scripts to new package.json', () => {
       helpers.writeFile = jest.fn().mockReturnValue(true)
-      const mockAddScript = helpers.addScript = jest.fn()
+      const mockaddScriptToPackageJSON = helpers.addScriptToPackageJSON = jest.fn()
 
       reactRouterReduxScripts()
 
-      expect(mockAddScript).toBeCalled()
-      expect(mockAddScript).toBeCalledTimes(3)
-      expect(mockAddScript.mock.calls[0]).toEqual(['component', 'node scripts/component.js'])
-      expect(mockAddScript.mock.calls[1]).toEqual(['action', 'node scripts/action.js'])
-      expect(mockAddScript.mock.calls[2]).toEqual(['view', 'node scripts/view.js'])
+      expect(mockaddScriptToPackageJSON).toBeCalled()
+      expect(mockaddScriptToPackageJSON).toBeCalledTimes(3)
+      expect(mockaddScriptToPackageJSON.mock.calls[0]).toEqual(['component', 'node scripts/component.js'])
+      expect(mockaddScriptToPackageJSON.mock.calls[1]).toEqual(['action', 'node scripts/action.js'])
+      expect(mockaddScriptToPackageJSON.mock.calls[2]).toEqual(['view', 'node scripts/view.js'])
     })
   })
 
@@ -639,7 +639,7 @@ describe('new/react', () => {
     })
 
     it('creates a default webpack config if backend is not selected', () => {
-      const mockWrite = helpers.writeFile = jest.fn() 
+      const mockWrite = helpers.writeFile = jest.fn()
       store.backend = {backend: false}
 
       createWebpack()
