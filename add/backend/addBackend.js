@@ -6,7 +6,7 @@ const path = require('path')
 const store = require('../../new/store')
 const addProjectInstructions = require('../addProjectInstructions')
 
-const {testBackend} = require('../../new/utils/addBackendTests')
+const { testBackend } = require('../../new/utils/addBackendTests')
 const {
   packages,
   standard,
@@ -20,7 +20,7 @@ const loadFile = filePath => {
   return fs.readFileSync(path.resolve(__dirname, root + filePath), 'utf8')
 }
 
-const {serverTesting, database, backendType} = require('../../new/prompts')
+const { serverTesting, database, backendType } = require('../../new/prompts')
 
 let addBackend = async () => {
   store.backendType = await prompt([backendType])
@@ -45,11 +45,7 @@ const createBackend = (mode, serverTestingSelection, databaseSelection) => {
   helpers.mkdirSync('server/controllers')
   helpers.mkdirSync('server/helpers')
   if (mode !== 'api') {
-    try {
-      helpers.mkdirSync('assets')
-    } catch (err) {
-      console.error('Tried to create assets folder but one already exists')
-    }
+    helpers.mkdirSync('assets')
   }
 
   helpers.writeFile('server/routes.js', routes)
@@ -65,8 +61,8 @@ const createBackend = (mode, serverTestingSelection, databaseSelection) => {
     // api mode json only, no views, no cookies
     apiType()
   }
-
-  checkAddDatabase(databaseSelection)
+  helpers.checkScriptsFolderExist()
+  addDatabase(databaseSelection)
   checkScripts(mode.mode)
   packages(mode)
   testBackend(serverTestingSelection)
@@ -74,33 +70,11 @@ const createBackend = (mode, serverTestingSelection, databaseSelection) => {
   addProjectInstructions()
 }
 
-const checkAddDatabase = databaseSelection => {
-  helpers.checkScriptsFolderExist()
-  addDatabase(databaseSelection)
-}
-
 const checkScripts = mode => {
-  helpers.checkScriptsFolderExist()
   scripts(mode)
   if (mode === 'mvc') {
     pugScript()
-  } else if (mode === 'standard') {
-    pageScript()
   }
-}
-
-const pageScript = () => {
-  const script = loadFile('scripts/backend/htmlPage.js')
-  const htmlTemplate = loadFile('scripts/backend/templates/index.html')
-
-  if (helpers.checkIfScriptIsTaken('view')) {
-    helpers.addScriptToPackageJSON('server:view', 'node scripts/page')
-    helpers.writeFile('scripts/page.js', script)
-  } else {
-    helpers.addScriptToPackageJSON('view', 'node scripts/view.js')
-    helpers.writeFile('scripts/view.js', script)
-  }
-  helpers.writeFile('scripts/templates/index.html', htmlTemplate)
 }
 
 const pugScript = () => {

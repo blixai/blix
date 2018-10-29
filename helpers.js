@@ -133,17 +133,20 @@ exports.addScriptToPackageJSON = (command, script) => {
 };
 
 exports.modifyKnex = () => {
-  let name 
+  let name
+  let connectionName
   if (store.name) {
-    name = store.name
+    connectionName = store.name
+    name = './' + store.name + '/'
   } else {
-    name = this.getCWDName()
+    name = './'
+    connectionName = this.getCWDName()
   }
   try {
-    let newKnex = `module.exports = {\n\n\tdevelopment: {\n\t\tclient: 'pg',\n\t\tconnection: 'postgres://localhost/${name}',\n\t\tmigrations: {\n\t\t\tdirectory: './db/migrations'\n\t\t},\n\t\tseeds: {\n\t\t\tdirectory: 'db/seeds/dev'\n\t\t},\n\t\tuseNullAsDefault: true\n\t},\n\n\tproduction: {\n\t\tclient: 'pg',\n\t\tconnection: process.env.DATABASE_URL + '?ssl=true',\n\t\tmigrations: {\n\t\t\tdirectory: 'db/migrations'\n\t\t},\n\t\tseeds: {\n\t\t\tdirectory: 'db/seeds/dev'\n\t\t},\n\t\tuseNullAsDefault: true\n\t}\n\n};`;
-    if (fs.existsSync(`./${name}/knexfile.js`)) {
-      fs.truncateSync(`./${name}/knexfile.js`, 0)
-      this.appendFile(`knexfile.js`, newKnex)
+    let newKnex = `module.exports = {\n\n\tdevelopment: {\n\t\tclient: 'pg',\n\t\tconnection: 'postgres://localhost/${connectionName}',\n\t\tmigrations: {\n\t\t\tdirectory: './db/migrations'\n\t\t},\n\t\tseeds: {\n\t\t\tdirectory: 'db/seeds/dev'\n\t\t},\n\t\tuseNullAsDefault: true\n\t},\n\n\tproduction: {\n\t\tclient: 'pg',\n\t\tconnection: process.env.DATABASE_URL + '?ssl=true',\n\t\tmigrations: {\n\t\t\tdirectory: 'db/migrations'\n\t\t},\n\t\tseeds: {\n\t\t\tdirectory: 'db/seeds/dev'\n\t\t},\n\t\tuseNullAsDefault: true\n\t}\n\n};`;
+    if (fs.existsSync(`${name}knexfile.js`)) {
+      fs.truncateSync(`${name}knexfile.js`, 0)
+      this.appendFile(`${name}knexfile.js`, newKnex)
     } else {
       this.writeFile(`knexfile.js`, newKnex)
     }

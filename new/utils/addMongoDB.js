@@ -23,12 +23,12 @@ exports.addMongoDBToProject = () => {
   let connectionString = `const mongoose = require('mongoose')\nmongoose.connect(process.env.MONGO, { useNewUrlParser: true })\n`
   helpers.insert(`./${store.name}/server/server.js`, connectionString, 0)
 
-  this.envFileExists()
+  this.envFile()
   
   helpers.addDependenciesToStore("mongo mongoose")
 };
 
-exports.envFileExists = () => {
+exports.envFile = () => {
   let name
   if (store.name) {
     name = store.name
