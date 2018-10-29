@@ -5,7 +5,7 @@ jest.mock('../../../helpers', () => ({
   writeFile: jest.fn(), 
   checkScriptsFolderExist: jest.fn(),
   checkIfScriptIsTaken: jest.fn(),
-  addScript: jest.fn(),
+  addScriptToPackageJSON: jest.fn(),
   moveAllFilesInDir: jest.fn(),
   rename: jest.fn()
 }))
@@ -193,10 +193,10 @@ describe('add/addReactRouter', () => {
       expect(helpers.writeFile.mock.calls[4][0]).toEqual('scripts/templates/statefulComponent.js')
       expect(helpers.writeFile.mock.calls[5][0]).toEqual('scripts/component.js')
       expect(helpers.writeFile.mock.calls[6][0]).toEqual('scripts/view.js')
-      expect(helpers.addScript).toBeCalled()
-      expect(helpers.addScript).toBeCalledTimes(2)
-      expect(helpers.addScript.mock.calls[0][0]).toEqual('component')
-      expect(helpers.addScript.mock.calls[1][0]).toEqual('view')
+      expect(helpers.addScriptToPackageJSON).toBeCalled()
+      expect(helpers.addScriptToPackageJSON).toBeCalledTimes(2)
+      expect(helpers.addScriptToPackageJSON.mock.calls[0][0]).toEqual('component')
+      expect(helpers.addScriptToPackageJSON.mock.calls[1][0]).toEqual('view')
     })
 
     it('creates default files and folders if type is unknown', () => {
@@ -227,12 +227,12 @@ describe('add/addReactRouter', () => {
       expect(helpers.writeFile.mock.calls[4][0]).toEqual('scripts/templates/statefulComponent.js')
       expect(helpers.writeFile.mock.calls[5][0]).toEqual('scripts/component.js')
       expect(helpers.writeFile.mock.calls[6][0]).toEqual('scripts/view.js')
-      expect(helpers.addScript).toBeCalled()
-      expect(helpers.addScript).toBeCalledTimes(2)
-      expect(helpers.addScript.mock.calls[0][0]).toEqual('component')
-      expect(helpers.addScript.mock.calls[0][1]).toEqual('node scripts/component.js')
-      expect(helpers.addScript.mock.calls[1][0]).toEqual('view')
-      expect(helpers.addScript.mock.calls[1][1]).toEqual('node scripts/view.js')
+      expect(helpers.addScriptToPackageJSON).toBeCalled()
+      expect(helpers.addScriptToPackageJSON).toBeCalledTimes(2)
+      expect(helpers.addScriptToPackageJSON.mock.calls[0][0]).toEqual('component')
+      expect(helpers.addScriptToPackageJSON.mock.calls[0][1]).toEqual('node scripts/component.js')
+      expect(helpers.addScriptToPackageJSON.mock.calls[1][0]).toEqual('view')
+      expect(helpers.addScriptToPackageJSON.mock.calls[1][1]).toEqual('node scripts/view.js')
     })
 
     it('checks if script foler exists', () => {

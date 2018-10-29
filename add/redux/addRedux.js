@@ -57,9 +57,9 @@ let createContainer = (name) => {
 let createScripts = () => {
   helpers.checkScriptsFolderExist()
   // add scripts to package.json
-  helpers.addScript('component', 'node scripts/component.js')
-  helpers.addScript('action', 'node scripts/action.js')
-  helpers.addScript('view', 'node scripts/view.js')
+  helpers.addScriptToPackageJSON('component', 'node scripts/component.js')
+  helpers.addScriptToPackageJSON('action', 'node scripts/action.js')
+  helpers.addScriptToPackageJSON('view', 'node scripts/view.js')
   // write scripts and templates
   let file = loadFile('scripts/frontend/redux/component.js')
   helpers.writeFile('scripts/component.js', file)

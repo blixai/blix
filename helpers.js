@@ -91,7 +91,7 @@ exports.installKnexGlobal = () => {
 };
 
 
-exports.addScript = (command, script) => {
+exports.addScriptToPackageJSON = (command, script) => {
   let filePath = ''
     if (store.name){
       filePath = `./${store.name}/package.json`

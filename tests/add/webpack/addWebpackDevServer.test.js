@@ -56,7 +56,7 @@ describe('addWebpackDevServer', () => {
 
         await addWebpackDevServer()  
 
-        expect(helpers.addScript).toBeCalledWith('dev', "webpack-dev-server --output-public-path=/dist/ --inline --hot --open --port 3000 --mode='development'")
+        expect(helpers.addScriptToPackageJSON).toBeCalledWith('dev', "webpack-dev-server --output-public-path=/dist/ --inline --hot --open --port 3000 --mode='development'")
     })
 
     it('adds a start script of "dev:server" if server and dev scripts are already taken', async () => {
@@ -66,7 +66,7 @@ describe('addWebpackDevServer', () => {
 
         await addWebpackDevServer()  
 
-        expect(helpers.addScript).toBeCalledWith('dev:server',  "webpack-dev-server --output-public-path=/dist/ --inline --hot --open --port 3000 --mode='development'")
+        expect(helpers.addScriptToPackageJSON).toBeCalledWith('dev:server',  "webpack-dev-server --output-public-path=/dist/ --inline --hot --open --port 3000 --mode='development'")
     })
 
     it('adds a start script of "server" if the server command isn\'t already taken', async () => {
@@ -76,6 +76,6 @@ describe('addWebpackDevServer', () => {
 
         await addWebpackDevServer()  
 
-        expect(helpers.addScript).toBeCalledWith('server',  "webpack-dev-server --output-public-path=/dist/ --inline --hot --open --port 3000 --mode='development'")
+        expect(helpers.addScriptToPackageJSON).toBeCalledWith('server',  "webpack-dev-server --output-public-path=/dist/ --inline --hot --open --port 3000 --mode='development'")
     })
 })

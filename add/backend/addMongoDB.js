@@ -16,7 +16,7 @@ const addMongooseToScripts = () => {
   helpers.writeFile(`scripts/model.js`, model)
   helpers.writeFile(`scripts/templates/schemaTemplate.js`, schemaTemplate)
 
-  helpers.addScript('model', 'node scripts/model.js')
+  helpers.addScriptToPackageJSON('model', 'node scripts/model.js')
   addMongoDBToProject()
 }
 

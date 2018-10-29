@@ -18,12 +18,12 @@ let addWebpackDevServer = async () => {
   helpers.installDevDependenciesToExistingProject('webpack-dev-server')
   if (helpers.checkIfScriptIsTaken('server')) {
     if (helpers.checkIfScriptIsTaken('dev')) {
-      helpers.addScript('dev:server', `webpack-dev-server --output-public-path=/${answer.output}/ --inline --hot --open --port 3000 --mode='development'`)
+      helpers.addScriptToPackageJSON('dev:server', `webpack-dev-server --output-public-path=/${answer.output}/ --inline --hot --open --port 3000 --mode='development'`)
     } else {
-      helpers.addScript('dev', `webpack-dev-server --output-public-path=/${answer.output}/ --inline --hot --open --port 3000 --mode='development'`) 
+      helpers.addScriptToPackageJSON('dev', `webpack-dev-server --output-public-path=/${answer.output}/ --inline --hot --open --port 3000 --mode='development'`) 
     }
   } else {
-    helpers.addScript('server', `webpack-dev-server --output-public-path=/${answer.output}/ --inline --hot --open --port 3000 --mode='development'`)
+    helpers.addScriptToPackageJSON('server', `webpack-dev-server --output-public-path=/${answer.output}/ --inline --hot --open --port 3000 --mode='development'`)
   }
 }
 

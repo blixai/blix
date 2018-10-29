@@ -6,9 +6,9 @@ const path = require('path')
 const store = require('../../new/store')
 const addProjectInstructions = require('../addProjectInstructions')
 
-const { testBackend } = require('./addBackendTests')
-const { addMongooseToScripts } = require('./addMongoDB')
-const { addBookshelfToScripts } = require('./addBookshelf')
+const {testBackend} = require('./addBackendTests')
+const {addMongooseToScripts} = require('./addMongoDB')
+const {addBookshelfToScripts} = require('./addBookshelf')
 const {
   packages,
   standard,
@@ -21,7 +21,7 @@ const loadFile = filePath => {
   return fs.readFileSync(path.resolve(__dirname, root + filePath), 'utf8')
 }
 
-const { serverTesting, database, backendType } = require('../../new/prompts')
+const {serverTesting, database, backendType} = require('../../new/prompts')
 
 let addBackend = async () => {
   store.backendType = await prompt([backendType])
@@ -89,9 +89,9 @@ const scripts = mode => {
   const controllerTemplate = loadFile('scripts/backend/templates/controller.js')
   const routesTemplate = loadFile('scripts/backend/templates/routes.js')
 
-  helpers.addScript('server', 'nodemon server/cluster.js')
+  helpers.addScriptToPackageJSON('server', 'nodemon server/cluster.js')
   // controller script
-  helpers.addScript('controller', 'node scripts/controller.js')
+  helpers.addScriptToPackageJSON('controller', 'node scripts/controller.js')
   helpers.writeFile('scripts/controller.js', controller)
   helpers.writeFile('scripts/templates/controller.js', controllerTemplate)
   helpers.writeFile('scripts/templates/routes.js', routesTemplate)
@@ -108,10 +108,10 @@ const pageScript = () => {
   const htmlTemplate = loadFile('scripts/backend/templates/index.html')
 
   if (helpers.checkIfScriptIsTaken('view')) {
-   helpers.addScript('server:view', 'node scripts/page') 
-   helpers.writeFile('scripts/page.js', script)
+    helpers.addScriptToPackageJSON('server:view', 'node scripts/page')
+    helpers.writeFile('scripts/page.js', script)
   } else {
-    helpers.addScript('view', 'node scripts/view.js')
+    helpers.addScriptToPackageJSON('view', 'node scripts/view.js')
     helpers.writeFile('scripts/view.js', script)
   }
   helpers.writeFile('scripts/templates/index.html', htmlTemplate)
@@ -123,10 +123,10 @@ const pugScript = () => {
 
   if (helpers.checkIfScriptIsTaken('view')) {
     // view script is taken
-    helpers.addScript('server:view', 'node scripts/pug.js')
+    helpers.addScriptToPackageJSON('server:view', 'node scripts/pug.js')
     helpers.writeFile('scripts/pug.js', script)
   } else {
-    helpers.addScript('view', 'node scripts/view.js')
+    helpers.addScriptToPackageJSON('view', 'node scripts/view.js')
     helpers.writeFile('scripts/view.js', script)
   }
   helpers.writeFile('scripts/templates/pugTemplate.pug', pugTemplate)
