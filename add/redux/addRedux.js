@@ -166,6 +166,8 @@ let createFilesWithRouter = async () => {
   return
 }
 
+exports.createFilesWithRouter = createFilesWithRouter
+
 // for a basic redux setup without a router
 let dontAddReactRouter = async () => {
   await helpers.yarn()
@@ -194,6 +196,8 @@ let dontAddReactRouter = async () => {
   helpers.installDependenciesToExistingProject('react-redux redux')
   return
 }
+
+exports.dontAddReactRouter = dontAddReactRouter
 
 let reactRouter = {
   type: 'confirm',
@@ -231,4 +235,4 @@ let addRedux = async () => {
   addProjectInstructions()
 }
 
-module.exports = addRedux
+exports.addRedux = addRedux
