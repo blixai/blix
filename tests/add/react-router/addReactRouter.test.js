@@ -1,14 +1,20 @@
 jest.mock('../../../helpers', () => ({
   yarn: jest.fn(),
-  installDevDependenciesToExistingProject: jest.fn()
+  installDevDependenciesToExistingProject: jest.fn(),
+  mkdirSync: jest.fn(),
+  writeFile: jest.fn(), 
+  checkScriptsFolderExist: jest.fn(),
+  checkIfScriptIsTaken: jest.fn(),
+  addScript: jest.fn()
 }))
 jest.mock('inquirer', () => ({
     prompt: jest.fn()
 }))
-
 jest.mock('fs', () => ({
-  existsSync: jest.fn()
+  existsSync: jest.fn(),
+  readFileSync: jest.fn()
 }))
+jest.mock('../../../add/addProjectInstructions')
 
 const fs = require('fs')
 const helpers = require('../../../helpers')
@@ -22,8 +28,8 @@ const {
   createReactApp
 } = require('../../../add/react-router/addReactRouter')
 const mockModule = require('../../../add/react-router/addReactRouter')
-const addProjectInstructions = require('../../../add/addProjectInstructions')
 const store = require('../../../new/store')
+const addProjectInstructions = require('../../../add/addProjectInstructions')
 
 describe('add/addReactRouter', () => {
 
@@ -170,7 +176,94 @@ describe('add/addReactRouter', () => {
   })
 
   describe('createView', () => {
+    it('creates default files and folders, adds scripts if type passed is undefined', () => {
+      createView()
 
+      expect(helpers.mkdirSync).toBeCalled()
+      expect(helpers.mkdirSync).toBeCalledTimes(1)
+      expect(helpers.mkdirSync).toBeCalledWith('src/views')
+      expect(helpers.writeFile).toBeCalled()
+      expect(helpers.writeFile).toBeCalledTimes(7)
+      expect(helpers.writeFile.mock.calls[0][0]).toEqual('src/views/Home.js')
+      expect(helpers.writeFile.mock.calls[1][0]).toEqual('src/Router.js')
+      expect(helpers.writeFile.mock.calls[2][0]).toEqual('src/index.js')
+      expect(helpers.writeFile.mock.calls[3][0]).toEqual('scripts/templates/statelessComponent.js')
+      expect(helpers.writeFile.mock.calls[4][0]).toEqual('scripts/templates/statefulComponent.js')
+      expect(helpers.writeFile.mock.calls[5][0]).toEqual('scripts/component.js')
+      expect(helpers.writeFile.mock.calls[6][0]).toEqual('scripts/view.js')
+      expect(helpers.addScript).toBeCalled()
+      expect(helpers.addScript).toBeCalledTimes(2)
+      expect(helpers.addScript.mock.calls[0][0]).toEqual('component')
+      expect(helpers.addScript.mock.calls[1][0]).toEqual('view')
+    })
+
+    it('creates default files and folders if type is unknown', () => {
+      createView('unknown')
+
+      expect(helpers.mkdirSync).toBeCalled()
+      expect(helpers.mkdirSync).toBeCalledTimes(1)
+      expect(helpers.mkdirSync).toBeCalledWith('src/views')
+      expect(helpers.writeFile).toBeCalled()
+      expect(helpers.writeFile).toBeCalledTimes(3)
+      expect(helpers.writeFile.mock.calls[0][0]).toEqual('src/views/Home.js')
+      expect(helpers.writeFile.mock.calls[1][0]).toEqual('src/Router.js')
+      expect(helpers.writeFile.mock.calls[2][0]).toEqual('src/index.js')
+    })
+
+    it('creates files and folders if redux is passed as type', () => {
+      createView('redux')
+
+      expect(helpers.mkdirSync).toBeCalled()
+      expect(helpers.mkdirSync).toBeCalledTimes(1)
+      expect(helpers.mkdirSync).toBeCalledWith('src/views')
+      expect(helpers.writeFile).toBeCalled()
+      expect(helpers.writeFile).toBeCalledTimes(7)
+      expect(helpers.writeFile.mock.calls[0][0]).toEqual('src/views/Home.js')
+      expect(helpers.writeFile.mock.calls[1][0]).toEqual('src/Router.js')
+      expect(helpers.writeFile.mock.calls[2][0]).toEqual('src/index.js')
+      expect(helpers.writeFile.mock.calls[3][0]).toEqual('scripts/templates/statelessComponent.js')
+      expect(helpers.writeFile.mock.calls[4][0]).toEqual('scripts/templates/statefulComponent.js')
+      expect(helpers.writeFile.mock.calls[5][0]).toEqual('scripts/component.js')
+      expect(helpers.writeFile.mock.calls[6][0]).toEqual('scripts/view.js')
+      expect(helpers.addScript).toBeCalled()
+      expect(helpers.addScript).toBeCalledTimes(2)
+      expect(helpers.addScript.mock.calls[0][0]).toEqual('component')
+      expect(helpers.addScript.mock.calls[0][1]).toEqual('node scripts/component.js')
+      expect(helpers.addScript.mock.calls[1][0]).toEqual('view')
+      expect(helpers.addScript.mock.calls[1][1]).toEqual('node scripts/view.js')
+    })
+
+    it('checks if script foler exists', () => {
+      createView()
+
+      expect(helpers.checkScriptsFolderExist).toBeCalled()
+    })
+
+    it('checks if the script is taken', () => {
+      createView()
+
+      expect(helpers.checkIfScriptIsTaken).toBeCalled()
+    })
+
+    it('sets reactType based on the type passed in', () => {
+      store.reactType = ''
+      createView()
+      expect(store.reactType).toEqual('react-router')
+
+      store.reactType = ''
+      createView('unknown')
+      expect(store.reactType).toEqual('')
+
+      store.reactType = ''
+      createView('redux')
+      expect(store.reactType).toEqual('reactRouter-redux')
+    })
+
+    it('calls addProjectInstructions', () => {
+      createView()
+
+      expect(addProjectInstructions).toBeCalled()
+    })
   })
 
   describe('blixRedux', () => {
