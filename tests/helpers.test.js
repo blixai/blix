@@ -31,7 +31,6 @@ const {
     installKnexGlobal,
     addScript,
     modifyKnex,
-    addScriptToNewPackageJSON,
     writeFile,
     mkdirSync,
     rename,
@@ -174,20 +173,40 @@ describe('Helper Tests', () => {
     })
 
     describe('addScript', () => {
-        it('should add script to package.json if package.json exits', () => {
-            fs.readFileSync.mockReturnValue(`{"scripts": {} }`)
-            console.error = jest.fn()
-            console.log = jest.fn()
-            addScript('test', 'node')
-            expect(console.error).not.toBeCalled()
-            expect(console.log.mock.calls[0][0]).toContain('test script into package.json')
-        })
-        it('throws an error if no package.json', () => {
-            fs.readFileSync.mockReturnValue(null)
+      it('should add script to package.json if package.json exits', () => {
+        fs.readFileSync.mockReturnValue(`{"scripts": {} }`)
+        let command = 'test'
+        let script = 'node'
+        console.error = jest.fn()
+        console.log = jest.fn()
 
-            addScript('test', 'node')
-            expect(console.error).toBeCalled()
+        addScript(command, script)
+
+        expect(console.error).not.toBeCalled()
+        expect(console.log.mock.calls[0][0]).toContain('test script into package.json')
+        expect(fs.writeFileSync.mock.calls[0][1]).toContain(command, script)
+      })
+
+      it('throws an error if no package.json', () => {
+        fs.readFileSync.mockReturnValue(null)
+
+        addScript('test', 'node')
+        
+        expect(console.error).toBeCalled()
+      })
+
+      it('throws a verbose error if in development', () => {
+        store.env = 'development'
+        fs.readFileSync.mockImplementation(() => {
+          throw 'Error'
         })
+        console.error = jest.fn() 
+
+        addScript('test', 'node')
+
+        expect(console.error).toBeCalled()
+        expect(console.error).toBeCalledWith('Error')
+      })
     })
 
     describe('modifyKnex', () => {
@@ -217,23 +236,6 @@ describe('Helper Tests', () => {
             expect(fs.mkdirSync.mock.calls[0][0]).toEqual('./tests/db')
             expect(fs.mkdirSync.mock.calls[1][0]).toEqual('./tests/db/migrations') 
         })
-    })
-
-    describe('addScriptToNewPackageJSON', () => {
-      let command = 'test'
-      let script = 'node'
-      it('should add script to new package.json if package.json exits', () => {
-        fs.readFileSync.mockReturnValue(`{"scripts": {} }`)
-        console.error = jest.fn()
-        addScriptToNewPackageJSON(command, script)
-        expect(console.error).not.toBeCalled()
-        expect(fs.writeFileSync.mock.calls[0][1]).toContain(command, script)
-      })
-      it('throws an error if no package.json', () => {
-          fs.readFileSync.mockReturnValue(null)
-          addScriptToNewPackageJSON(command, script)
-          expect(console.error).toBeCalled()
-      })
     })
 
     describe('writeFile', () => {

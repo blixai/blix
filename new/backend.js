@@ -82,15 +82,16 @@ exports.mvcType = () => {
   const error = loadFile('./files/backend/mvc/error.pug')
   const layout = loadFile('./files/backend/mvc/layout.pug')
   const pug = loadFile('./files/backend/mvc/index.pug')
+  const controller = loadFile('./files/backend/mvc/home.js')
 
   helpers.mkdirSync(`server/views`)
+  helpers.mkdirSync(`server/views/home`)
 
   helpers.writeFile(`server/views/error.pug`, error)
   helpers.writeFile(`server/views/layout.pug`, layout)
-  helpers.mkdirSync(`server/views/home`)
   helpers.writeFile(`server/views/home/index.pug`, pug)
-
   helpers.writeFile(`server/server.js`, server)
+  helpers.writeFile('server/controllers/home.js', controller)
 }
 
 exports.apiType = () => {
@@ -117,16 +118,18 @@ exports.scripts = mode => {
   let routesTemplate = loadFile('./files/scripts/backend/templates/routes.js')
 
   if (mode === 'standard') {
-    helpers.addScriptToNewPackageJSON('start', `nodemon --watch server server/cluster.js`)
+    helpers.addScript('start', `nodemon --watch server server/cluster.js`)
   } else {
-    helpers.addScriptToNewPackageJSON('start', 'nodemon server/cluster.js')
+    helpers.addScript('start', 'nodemon server/cluster.js')
   }
   // controller script
-  helpers.addScriptToNewPackageJSON('controller', 'node scripts/controller.js')
+  helpers.addScript('controller', 'node scripts/controller.js')
   // create files
   helpers.writeFile(`scripts/controller.js`, controller)
   helpers.writeFile(`scripts/templates/controller.js`, controllerTemplate)
   helpers.writeFile(`scripts/templates/routes.js`, routesTemplate)
+
+
 }
 
 exports.packages = mode => {

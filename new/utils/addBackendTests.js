@@ -15,7 +15,7 @@ const checkOrCreateServerTestFolder = () => {
 
 const mochaTestBackend = () => {
   helpers.addDevDependenciesToStore("mocha chai chai-http");
-  helpers.addScriptToNewPackageJSON("mocha", "mocha test/server");
+  helpers.addScript("mocha", "mocha test/server");
   checkOrCreateServerTestFolder();
   helpers.writeFile(`test/server/test.spec.js`, loadFile("../files/testing/backend/mocha.js"))
 
@@ -52,7 +52,7 @@ const testJestBackend = () => {
   }
   let newPackage = JSON.stringify(json, null, 2);
   fs.writeFileSync(`package.json`, newPackage);
-  helpers.addScriptToNewPackageJSON("jest", "jest");
+  helpers.addScript("jest", "jest");
 };
 
 let testBackend = () => {

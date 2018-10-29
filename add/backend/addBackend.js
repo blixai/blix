@@ -9,6 +9,12 @@ const addProjectInstructions = require('../addProjectInstructions')
 const { testBackend } = require('./addBackendTests')
 const { addMongooseToScripts } = require('./addMongoDB')
 const { addBookshelfToScripts } = require('./addBookshelf')
+const {
+  packages,
+  standard,
+  mvcType,
+  apiType,
+} = require('../../new/backend')
 
 const loadFile = filePath => {
   let root = '../../new/files/'
@@ -50,7 +56,16 @@ const createBackend = (mode, serverTestingSelection, databaseSelection) => {
   helpers.writeFile('server/routes.js', routes)
   helpers.writeFile('server/cluster.js', cluster)
 
-  mode.mode === 'standard' ? standard() : mode.mode === 'mvc' ? mvc() : api()
+  if (mode.mode === 'standard') {
+    // type when there is a frontend framework and for the most part the backend is a soa but serves some assets and files
+    standard()
+  } else if (mode.mode === 'mvc') {
+    // mode for when their is no frontend framework so pug is default (this is a rails style mvc with ssr)
+    mvcType()
+  } else {
+    // api mode json only, no views, no cookies
+    apiType()
+  }
 
   addDatabase(databaseSelection)
   scripts(mode.mode)
@@ -58,61 +73,6 @@ const createBackend = (mode, serverTestingSelection, databaseSelection) => {
   testBackend(serverTestingSelection)
   helpers.installAllPackagesToExistingProject()
   addProjectInstructions()
-}
-
-const standard = () => {
-  const html = loadFile('frontend/other/index.html')
-  const server = loadFile('backend/standard/server.js')
-  const controller = loadFile('backend/standard/home.js')
-
-  helpers.writeFile('server/server.js', server)
-  helpers.writeFile('server/controllers/home.js', controller)
-  helpers.mkdirSync('server/views')
-  helpers.mkdirSync('server/views/home')
-  helpers.writeFile('server/views/home/index.html', html)
-}
-
-const mvc = () => {
-  const server = loadFile('backend/mvc/server.js')
-  const error = loadFile('backend/mvc/error.pug')
-  const layout = loadFile('backend/mvc/layout.pug')
-  const pug = loadFile('backend/mvc/index.pug')
-  const controller = loadFile('backend/mvc/home.js')
-
-  helpers.writeFile('server/server.js', server)
-
-  helpers.mkdirSync('server/views')
-  helpers.writeFile('server/views/error.pug', error)
-  helpers.writeFile('server/views/layout.pug', layout)
-  helpers.mkdirSync('server/views/home')
-  helpers.writeFile('server/views/home/index.pug', pug)
-
-  helpers.writeFile('server/controllers/home.js', controller)
-}
-
-const api = () => {
-  const server = loadFile('backend/api/server.js')
-  const homeController = loadFile('backend/api/home.js')
-
-  helpers.writeFile('server/server.js', server)
-  helpers.writeFile('server/controllers/home.js', homeController)
-}
-
-const packages = mode => {
-  mode = mode.mode
-  if (mode === 'standard') {
-    helpers.addDependenciesToStore(
-      'express nodemon body-parser compression helmet dotenv morgan cookie-parser'
-    )
-  } else if (mode === 'mvc') {
-    helpers.addDependenciesToStore(
-      'express nodemon body-parser compression helmet dotenv morgan cookie-parser pug'
-    )
-  } else {
-    helpers.addDependenciesToStore(
-      'express nodemon body-parser compression helmet dotenv morgan'
-    )
-  }
 }
 
 const addDatabase = databaseSelection => {

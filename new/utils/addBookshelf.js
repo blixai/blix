@@ -22,7 +22,7 @@ const addBookshelfToScripts = () => {
   helpers.writeFile(`scripts/templates/migration.js`, migration);
   helpers.writeFile(`scripts/templates/bookshelf.js`, model);
 
-  helpers.addScriptToNewPackageJSON("model", "node scripts/model.js");
+  helpers.addScript("model", "node scripts/model.js");
   helpers.installKnexGlobal();
   helpers.modifyKnex();
   helpers.addDependenciesToStore("pg bookshelf knex");
