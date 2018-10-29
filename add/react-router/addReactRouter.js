@@ -96,7 +96,7 @@ exports.createView = type => {
                helpers.writeFile('scripts/component.js', componentScript)
             }
 
-            helpers.addScript('component', 'node scripts/component.js')
+            helpers.addScriptToPackageJSON('component', 'node scripts/component.js')
         }
     } else {
         if (type === 'redux') {
@@ -113,12 +113,12 @@ exports.createView = type => {
         // redux type script
         let viewScript = loadFile('scripts/frontend/reactRouter-redux/view.js')
         helpers.writeFile('scripts/view.js', viewScript)
-        helpers.addScript('view', 'node scripts/view.js')
+        helpers.addScriptToPackageJSON('view', 'node scripts/view.js')
     } else if (type !== 'unknown') {
         // need to check if components script and templates already exist
         let viewScript = loadFile('scripts/frontend/react-router/view.js')
         helpers.writeFile('scripts/view.js', viewScript)
-        helpers.addScript('view', 'node scripts/view.js')
+        helpers.addScriptToPackageJSON('view', 'node scripts/view.js')
     }
 
     // redux action script update

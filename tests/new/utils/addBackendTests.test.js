@@ -25,7 +25,7 @@ describe('New Utils module: addBackendTests', () => {
     })
 
     it('invokes mochaTestBackend() if mocha testing selected', () => {
-      store.serverTesting = { server: 'mocha' }
+      store.serverTesting = {server: 'mocha'}
       fs.readFileSync.mockReturnValue('{ "test": 1 }')
       fs.existsSync.mockReturnValue(false)
 
@@ -35,9 +35,9 @@ describe('New Utils module: addBackendTests', () => {
     })
 
     it('invokes testJestBackend() if jest testing selected', () => {
-      store.serverTesting = { server: 'jest' }
+      store.serverTesting = {server: 'jest'}
       fs.readFileSync.mockReturnValue('{ "test": 1 }')
-      fs.existsSync.mockReturnValue(false) 
+      fs.existsSync.mockReturnValue(false)
 
       testBackend()
 
@@ -45,9 +45,9 @@ describe('New Utils module: addBackendTests', () => {
     })
 
     it('won\'t create a server folder if one already exists', () => {
-      store.serverTesting = { server: 'mocha' }
+      store.serverTesting = {server: 'mocha'}
       fs.readFileSync.mockReturnValue('{ "test": 1 }')
-      fs.existsSync.mockReturnValue(true) 
+      fs.existsSync.mockReturnValue(true)
 
       testBackend()
 
@@ -63,8 +63,8 @@ describe('New Utils module: addBackendTests', () => {
       mochaTestBackend()
 
       expect(helpers.addDevDependenciesToStore).toBeCalledWith('mocha chai chai-http')
-      expect(helpers.addScript).toBeCalled()
-      expect(helpers.addScript).toBeCalledWith('mocha', 'mocha test/server')
+      expect(helpers.addScriptToPackageJSON).toBeCalled()
+      expect(helpers.addScriptToPackageJSON).toBeCalledWith('mocha', 'mocha test/server')
       expect(fs.existsSync).toHaveBeenCalled()
       expect(helpers.mkdirSync).toHaveBeenCalledWith('test/server')
       // called twice due to file loading to write the test file
@@ -95,14 +95,14 @@ describe('New Utils module: addBackendTests', () => {
       expect(helpers.mkdirSync).toBeCalledWith('test/server')
       expect(helpers.writeFile).toBeCalled()
       expect(helpers.writeFile.mock.calls[0][0]).toEqual('test/server/test.spec.js')
-      expect(fs.writeFileSync).toBeCalled()      
+      expect(fs.writeFileSync).toBeCalled()
       expect(fs.writeFileSync.mock.calls[0][1]).toContain('modulePathIgnorePatterns')
-      expect(helpers.addScript).toBeCalledWith("jest", "jest")
+      expect(helpers.addScriptToPackageJSON).toBeCalledWith("jest", "jest")
     })
 
     it('won\'t add jest config to package.json if the project already uses jest', () => {
       fs.readFileSync.mockReturnValue('{ "jest": {} }')
-      fs.existsSync.mockReturnValue(false)  
+      fs.existsSync.mockReturnValue(false)
 
       testJestBackend()
 
