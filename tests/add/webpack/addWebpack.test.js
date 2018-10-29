@@ -220,7 +220,44 @@ describe('addWebpack', () => {
         })
     })
 
-    describe.skip('function addScripts', () => {
+    describe('function addScripts', () => {
+        it('adds script "build" if none exists', () => {
+            
+            addScripts()
 
+            expect(helpers.addScriptToPackageJSON).toBeCalledWith('build', "webpack --mode='production'")
+        })
+
+        it('adds script "build:prod" if "build" is taken', () => {
+            helpers.checkIfScriptIsTaken.mockReturnValueOnce(true)
+            addScripts()
+
+            expect(helpers.addScriptToPackageJSON).toBeCalledWith('build:prod', "webpack --mode='production'") 
+        })
+
+        it('adds watch script "dev" if it\'s not taken', () => {
+            addScripts()
+
+            expect(helpers.addScriptToPackageJSON).toBeCalledWith('dev', "webpack --watch --mode='development'")
+        })
+
+        it('adds watch script "build:dev" if "dev" is taken', () => {
+            helpers.checkIfScriptIsTaken
+                .mockReturnValueOnce(false)
+                .mockReturnValueOnce(true)
+                
+            addScripts()
+
+            expect(helpers.addScriptToPackageJSON).toBeCalledWith('build:dev', "webpack --watch --mode='development'")
+        })
+
+        it('logs an error if something goes wrong', () => {
+            helpers.addScriptToPackageJSON.mockImplementation(() => { throw 'Error' })
+            console.error = jest.fn()
+
+            addScripts()
+
+            expect(console.error).toBeCalledWith(`Couldn't add webpack development and production scripts to package json.`)
+        })
     })
 })

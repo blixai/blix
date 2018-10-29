@@ -1,6 +1,5 @@
 let fs         = require('fs')
 let path       = require('path')
-let chalk      = require('chalk');
 let glob       = require('glob')
 let inquirer   = require('inquirer')
 let prompt     = inquirer.prompt
