@@ -5,7 +5,9 @@ jest.mock('../../../helpers', () => ({
   writeFile: jest.fn(), 
   checkScriptsFolderExist: jest.fn(),
   checkIfScriptIsTaken: jest.fn(),
-  addScript: jest.fn()
+  addScript: jest.fn(),
+  moveAllFilesInDir: jest.fn(),
+  rename: jest.fn()
 }))
 jest.mock('inquirer', () => ({
     prompt: jest.fn()
@@ -23,7 +25,7 @@ const {
   addReactRouter,
   projectType,
   createView,
-  blixReux,
+  blixRedux,
   blixReact,
   createReactApp
 } = require('../../../add/react-router/addReactRouter')
@@ -39,6 +41,7 @@ describe('add/addReactRouter', () => {
       console.log = jest.fn()
       inquirer.prompt.mockResolvedValue({confirm: false})
       mockModule.projectType = jest.fn()
+
       await addReactRouter()
 
       expect(console.clear).toBeCalled()
@@ -50,7 +53,6 @@ describe('add/addReactRouter', () => {
 
     it('calls projectType if the user confirms the mutation', async () => {
       inquirer.prompt.mockResolvedValue({confirm: true})
-      mockModule.projectType = jest.fn()
 
       await addReactRouter()
 
@@ -267,7 +269,28 @@ describe('add/addReactRouter', () => {
   })
 
   describe('blixRedux', () => {
+    it('makes components and components/App folders', () => {
+      blixRedux() 
 
+      expect(helpers.mkdirSync).toBeCalled()
+      expect(helpers.mkdirSync).toBeCalledTimes(2)
+      expect(helpers.mkdirSync.mock.calls[0][0]).toEqual('src/components')
+      expect(helpers.mkdirSync.mock.calls[1][0]).toEqual('src/components/App')
+    })
+
+    it('moves all files in ./src/App to ./src/components/App', () => {
+      blixRedux()
+
+      expect(helpers.moveAllFilesInDir).toBeCalled()
+      expect(helpers.moveAllFilesInDir.mock.calls[0]).toEqual(["./src/App", "./src/components/App"])
+    })
+
+    it('calls createView with redux as param', () => {
+      blixRedux()
+
+      expect(mockModule.createView).toBeCalled() 
+      expect(mockModule.createView).toBeCalledWith('redux')
+    })
   })
 
   describe('blixReact', () => {
