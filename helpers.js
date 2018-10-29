@@ -70,23 +70,41 @@ exports.installDevDependencies = packages => {
 };
 
 exports.installKnexGlobal = () => {
-  let name = store.name
-  try {
-    process.chdir(`./${name}`)
-    if (store.useYarn) {
-      execSync(`yarn add knex global`, { stdio: [0, 1, 2] })
-    } else {
-      execSync(`npm install -g knex`, {stdio: [0, 1, 2]})
+  let name 
+  if (store.name) {
+    name = store.name
+    try {
+      process.chdir(`./${name}`)
+      if (store.useYarn) {
+        execSync(`yarn add knex global`, { stdio: [0, 1, 2] })
+      } else {
+        execSync(`npm install -g knex`, {stdio: [0, 1, 2]})
+      }
+      execSync(`createdb ${name}`, {stdio: [0, 1, 2]})
+      process.chdir('../')
+    } catch(err) {
+      if (store.env === 'development') {
+        console.error(err) 
+      } else {
+        console.error(chalk.red`Error creating db: make sure postgres is installed and running and try again by entering: createdb ${name}`)
+      }
+      process.chdir('../')
     }
-    execSync(`createdb ${name}`, {stdio: [0, 1, 2]})
-    process.chdir('../')
-  } catch(err) {
-    if (store.env === 'development') {
-      console.error(err) 
-    } else {
-      console.error(chalk.red`Error creating db: make sure postgres is installed and running and try again by entering: createdb ${name}`)
+  } else {
+    name = this.getCWDName()
+    try {
+      if (fs.existsSync('./yarn.lock')) {
+        execSync('yarn add knex global', { stdio: [0, 1, 2] })
+      } else {
+        execSync('npm install -g knex', { stdio: [0, 1, 2] })
+      }
+  
+      execSync(`createdb ${name}`, { stdio: [0, 1, 2] })
+    } catch (err) {
+      console.error(chalk.red
+        `Error creating db: make sure postgres is installed and running and try again by entering: createdb ${name}`
+      )
     }
-    process.chdir('../')
   }
 };
 
@@ -115,16 +133,29 @@ exports.addScriptToPackageJSON = (command, script) => {
 };
 
 exports.modifyKnex = () => {
-  let name = store.name
-  let newKnex = `module.exports = {\n\n\tdevelopment: {\n\t\tclient: 'pg',\n\t\tconnection: 'postgres://localhost/${name}',\n\t\tmigrations: {\n\t\t\tdirectory: './db/migrations'\n\t\t},\n\t\tseeds: {\n\t\t\tdirectory: 'db/seeds/dev'\n\t\t},\n\t\tuseNullAsDefault: true\n\t},\n\n\tproduction: {\n\t\tclient: 'pg',\n\t\tconnection: process.env.DATABASE_URL + '?ssl=true',\n\t\tmigrations: {\n\t\t\tdirectory: 'db/migrations'\n\t\t},\n\t\tseeds: {\n\t\t\tdirectory: 'db/seeds/dev'\n\t\t},\n\t\tuseNullAsDefault: true\n\t}\n\n};`;
-  if (fs.existsSync(`./${name}/knexfile.js`)) {
-    fs.truncateSync(`./${name}/knexfile.js`, 0)
-    this.appendFile(`knexfile.js`, newKnex)
+  let name 
+  if (store.name) {
+    name = store.name
   } else {
-    this.writeFile(`knexfile.js`, newKnex)
+    name = this.getCWDName()
   }
-  this.mkdirSync(`db`);
-  this.mkdirSync(`db/migrations`);
+  try {
+    let newKnex = `module.exports = {\n\n\tdevelopment: {\n\t\tclient: 'pg',\n\t\tconnection: 'postgres://localhost/${name}',\n\t\tmigrations: {\n\t\t\tdirectory: './db/migrations'\n\t\t},\n\t\tseeds: {\n\t\t\tdirectory: 'db/seeds/dev'\n\t\t},\n\t\tuseNullAsDefault: true\n\t},\n\n\tproduction: {\n\t\tclient: 'pg',\n\t\tconnection: process.env.DATABASE_URL + '?ssl=true',\n\t\tmigrations: {\n\t\t\tdirectory: 'db/migrations'\n\t\t},\n\t\tseeds: {\n\t\t\tdirectory: 'db/seeds/dev'\n\t\t},\n\t\tuseNullAsDefault: true\n\t}\n\n};`;
+    if (fs.existsSync(`./${name}/knexfile.js`)) {
+      fs.truncateSync(`./${name}/knexfile.js`, 0)
+      this.appendFile(`knexfile.js`, newKnex)
+    } else {
+      this.writeFile(`knexfile.js`, newKnex)
+    }
+    this.mkdirSync(`db`);
+    this.mkdirSync(`db/migrations`);
+  } catch (err){
+    if (store.env === 'development') {
+      console.error(err)
+    } else {
+      console.error(chalk`\t{red Error modifying Knex}`)
+    }
+  }
 };
 
 exports.writeFile = (filePath, file, message) => {
@@ -251,27 +282,9 @@ exports.getCWDName = () => {
   return name
 }
 
-exports.modifyKnexExistingProject = (cwd) => {
-  if (!cwd) {
-    return console.error(chalk`\t{red Error cwd is undefined\nmodifyKnexExistingProject requires cwd to be passed as a parameter}`)
-  }
-  try {
-    let newKnex = `module.exports = {\n\n\tdevelopment: {\n\t\tclient: 'pg',\n\t\tconnection: 'postgres://localhost/${cwd}',\n\t\tmigrations: {\n\t\t\tdirectory: './db/migrations'\n\t\t},\n\t\tseeds: {\n\t\t\tdirectory: 'db/seeds/dev'\n\t\t},\n\t\tuseNullAsDefault: true\n\t},\n\n\tproduction: {\n\t\tclient: 'pg',\n\t\tconnection: process.env.DATABASE_URL + '?ssl=true',\n\t\tmigrations: {\n\t\t\tdirectory: 'db/migrations'\n\t\t},\n\t\tseeds: {\n\t\t\tdirectory: 'db/seeds/dev'\n\t\t},\n\t\tuseNullAsDefault: true\n\t}\n\n};`
-    if (fs.existsSync(`./knexfile.js`)) {
-      fs.truncateSync(`./knexfile.js`, 0)
-      this.appendFile(`./knexfile.js`, newKnex)
-    } else {
-      this.writeFile(`knexfile.js`, newKnex)
-    }
-    this.mkdirSync(`db`)
-    this.mkdirSync(`db/migrations`)
-  } catch (err){
-    if (store.env === 'development') {
-      console.error(err)
-    } else {
-      console.error(chalk`\t{red Error modifying Knex}`)
-    }
-  }
+exports.modifyKnexExistingProject = () => {
+
+  
 }
 
 // current implementation does not take into account store.name. Should that change? - Dev

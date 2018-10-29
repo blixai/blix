@@ -9,7 +9,6 @@ const loadFile = filePath => {
 
 //
 const addMongooseToScripts = () => {
-  helpers.checkScriptsFolderExist()
   let model = loadFile('scripts/backend/mongoose.js')
   let schemaTemplate = loadFile('scripts/backend/templates/mongoose.js')
 

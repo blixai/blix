@@ -67,7 +67,7 @@ const createBackend = (mode, serverTestingSelection, databaseSelection) => {
     apiType()
   }
 
-  addDatabase(databaseSelection)
+  checkAddDatabase(databaseSelection)
   scripts(mode.mode)
   packages(mode)
   testBackend(serverTestingSelection)
@@ -75,12 +75,9 @@ const createBackend = (mode, serverTestingSelection, databaseSelection) => {
   addProjectInstructions()
 }
 
-const addDatabase = databaseSelection => {
-  if (databaseSelection.database === 'mongo') {
-    addMongooseToScripts()
-  } else if (databaseSelection.database === 'pg') {
-    addBookshelfToScripts()
-  }
+const checkAddDatabase = databaseSelection => {
+  helpers.checkScriptsFolderExist()
+  addDatabase(databaseSelection)
 }
 
 const scripts = mode => {

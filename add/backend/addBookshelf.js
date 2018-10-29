@@ -11,7 +11,6 @@ const loadFile = filePath => {
 
 const addBookshelfToScripts = async () => {
   // load files for scripts folder
-  helpers.checkScriptsFolderExist()
   const bookshelf = loadFile('scripts/backend/bookshelf.js')
   const model = loadFile('scripts/backend/templates/bookshelf.js')
   const migration = loadFile('scripts/backend/templates/migration.js')
@@ -27,8 +26,8 @@ const addBookshelfToScripts = async () => {
   helpers.writeFile(`scripts/templates/bookshelf.js`, model)
 
   helpers.addScriptToPackageJSON('model', 'node scripts/model.js')
-  installKnexGlobal()
-  helpers.modifyKnexExistingProject(helpers.getCWDName())
+  helpers.installKnexGlobal()
+  helpers.modifyKnex()
   helpers.addDependenciesToStore('pg bookshelf knex')
 }
 
@@ -36,19 +35,3 @@ module.exports = {
   addBookshelfToScripts
 }
 
-const installKnexGlobal = () => {
-  let name = helpers.getCWDName()
-  try {
-    if (fs.existsSync('./yarn.lock')) {
-      execSync('yarn add knex global', { stdio: [0, 1, 2] })
-    } else {
-      execSync('npm install -g knex', { stdio: [0, 1, 2] })
-    }
-
-    execSync(`createdb ${name}`, { stdio: [0, 1, 2] })
-  } catch (err) {
-    console.error(chalk.red
-      `Error creating db: make sure postgres is installed and running and try again by entering: createdb ${name}`
-    )
-  }
-}

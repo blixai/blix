@@ -38,7 +38,6 @@ const {
   installDevDependenciesToExistingProject,
   checkScriptsFolderExist,
   getCWDName,
-  modifyKnexExistingProject,
   appendFile,
   checkIfScriptIsTaken,
   moveAllFilesInDir,
@@ -145,7 +144,10 @@ describe('Helper Tests', () => {
 
   describe('installKnexGlobal', () => {
     beforeEach(() => {
-      let name = 'tests'
+      store.name = 'tests'
+      const spy = jest.spyOn(process, 'chdir').mockImplementation(() => {
+        return
+      })
     })
     afterEach(() => {
       store.name = ''
@@ -153,7 +155,9 @@ describe('Helper Tests', () => {
     it('attempts to install a postgres db', () => {
       child_process.execSync.mockReturnValue(true)
       store.env = 'development'
+
       installKnexGlobal()
+
       expect(child_process.execSync.mock.calls[0][0]).toContain('')
       expect(child_process.execSync).toBeCalledTimes(2)
     })
@@ -161,13 +165,17 @@ describe('Helper Tests', () => {
     it('if yarn selected and installed uses yarn to install knex globally', () => {
       child_process.execSync.mockReturnValue(true)
       store.useYarn = true
+
       installKnexGlobal()
+
       expect(child_process.execSync.mock.calls[0][0]).toEqual('yarn add knex global')
     })
     it('if npm selected and installed uses npm to install knex globally', () => {
       child_process.execSync.mockReturnValue(true)
       store.useYarn = false
+
       installKnexGlobal()
+
       expect(child_process.execSync.mock.calls[0][0]).toEqual('npm install -g knex')
     })
   })
@@ -576,7 +584,7 @@ describe('Helper Tests', () => {
     })
   })
 
-  describe('modifyKnexExistingProject', () => {
+  describe.skip('modifyKnexExistingProject', () => {
     it("Throws an error if cwd is not passed as a parameter", () => {
       console.error = jest.fn()
 
