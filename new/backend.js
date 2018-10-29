@@ -90,8 +90,8 @@ exports.mvcType = () => {
   helpers.writeFile(`server/views/error.pug`, error)
   helpers.writeFile(`server/views/layout.pug`, layout)
   helpers.writeFile(`server/views/home/index.pug`, pug)
-  helpers.writeFile('server/controllers/home.js', controller)
   helpers.writeFile(`server/server.js`, server)
+  helpers.writeFile('server/controllers/home.js', controller)
 }
 
 exports.apiType = () => {
@@ -129,7 +129,7 @@ exports.scripts = mode => {
   helpers.writeFile(`scripts/templates/controller.js`, controllerTemplate)
   helpers.writeFile(`scripts/templates/routes.js`, routesTemplate)
 
-  
+
 }
 
 exports.packages = mode => {
