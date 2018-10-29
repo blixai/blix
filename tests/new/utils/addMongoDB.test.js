@@ -3,6 +3,7 @@ const helpers = require('../../../helpers')
 const {
   addMongooseToScripts,
   addMongoDBToProject,
+  envFileExists
 } = require('../../../new/utils/addMongoDB');
 const addMongoDb = require('../../../new/utils/addMongoDB')
 
@@ -64,17 +65,12 @@ describe('Add Mongo DB', () => {
       expect(mockInsert.mock.calls[0][2]).toEqual(0)
     })
 
-    it("Adds the Mongo connection string to .env", () => {
-      const mockAppend = helpers.appendFile = jest.fn()
-      helpers.insert = jest.fn()
-      helpers.addDependenciesToStore = jest.fn()
-      store.name = 'TestApp'
+    it('calls envFileExists', () => {
+      const mockEnvFileExists = addMongoDb.envFileExists = jest.fn()
 
       addMongoDBToProject()
 
-      expect(mockAppend).toBeCalled()
-      expect(mockAppend.mock.calls[0][0]).toEqual('.env')
-      expect(mockAppend.mock.calls[0][1]).toEqual('MONGO=mongodb://localhost:27017/TestApp')
+      expect(mockEnvFileExists).toBeCalled()
     })
 
     it("Adds mongo and mongoose to the store devDependencies", () => {
@@ -86,6 +82,24 @@ describe('Add Mongo DB', () => {
 
       expect(mockAdd).toBeCalled()
       expect(mockAdd.mock.calls[0][0]).toEqual('mongo mongoose')
+    })
+  })
+
+  describe('envFileExists', () => {
+    it.skip('sets name to store.name if store.name exists', () => {
+    })
+    
+    it("writes the Mongo connection string to a new .env if .env does not exist", () => {
+      const mockwrite = helpers.writeFile = jest.fn()
+      helpers.insert = jest.fn()
+      helpers.addDependenciesToStore = jest.fn()
+      store.name = 'TestApp'
+
+      envFileExists()
+
+      expect(mockwrite).toBeCalled()
+      expect(mockwrite.mock.calls[0][0]).toEqual('.env')
+      expect(mockwrite.mock.calls[0][1]).toEqual('MONGO=mongodb://localhost:27017/TestApp')
     })
   })
 });

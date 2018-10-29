@@ -6,14 +6,13 @@ const path = require('path')
 const store = require('../../new/store')
 const addProjectInstructions = require('../addProjectInstructions')
 
-const {testBackend} = require('./addBackendTests')
-const {addMongooseToScripts} = require('./addMongoDB')
-const {addBookshelfToScripts} = require('./addBookshelf')
+const {testBackend} = require('../../new/utils/addBackendTests')
 const {
   packages,
   standard,
   mvcType,
   apiType,
+  scripts,
 } = require('../../new/backend')
 
 const loadFile = filePath => {
@@ -67,35 +66,22 @@ const createBackend = (mode, serverTestingSelection, databaseSelection) => {
     apiType()
   }
 
-  addDatabase(databaseSelection)
-  scripts(mode.mode)
+  checkAddDatabase(databaseSelection)
+  checkScripts(mode.mode)
   packages(mode)
   testBackend(serverTestingSelection)
   helpers.installAllPackagesToExistingProject()
   addProjectInstructions()
 }
 
-const addDatabase = databaseSelection => {
-  if (databaseSelection.database === 'mongo') {
-    addMongooseToScripts()
-  } else if (databaseSelection.database === 'pg') {
-    addBookshelfToScripts()
-  }
+const checkAddDatabase = databaseSelection => {
+  helpers.checkScriptsFolderExist()
+  addDatabase(databaseSelection)
 }
 
-const scripts = mode => {
+const checkScripts = mode => {
   helpers.checkScriptsFolderExist()
-  const controller = loadFile('scripts/backend/controller.js')
-  const controllerTemplate = loadFile('scripts/backend/templates/controller.js')
-  const routesTemplate = loadFile('scripts/backend/templates/routes.js')
-
-  helpers.addScriptToPackageJSON('server', 'nodemon server/cluster.js')
-  // controller script
-  helpers.addScriptToPackageJSON('controller', 'node scripts/controller.js')
-  helpers.writeFile('scripts/controller.js', controller)
-  helpers.writeFile('scripts/templates/controller.js', controllerTemplate)
-  helpers.writeFile('scripts/templates/routes.js', routesTemplate)
-
+  scripts(mode)
   if (mode === 'mvc') {
     pugScript()
   } else if (mode === 'standard') {
