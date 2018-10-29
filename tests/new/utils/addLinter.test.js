@@ -21,7 +21,7 @@ describe('Utils module: addLinter', () => {
 
       expect(helpers.addDevDependenciesToStore).toHaveBeenCalledWith('prettier')
       expect(helpers.writeFile).toHaveBeenCalledTimes(1)
-      expect(helpers.addScriptToNewPackageJSON).toBeCalledTimes(1)
+      expect(helpers.addScript).toBeCalledTimes(1)
     })
 
     it('adds eslint if selected', () => {
@@ -52,34 +52,34 @@ describe('Utils module: addLinter', () => {
       store.reactType = 'react'
       eslintPackageJsonScripts()
 
-      expect(helpers.addScriptToNewPackageJSON).toHaveBeenCalledWith('lint', `eslint 'src/**/*.js' 'server/**/*.js'`)
+      expect(helpers.addScript).toHaveBeenCalledWith('lint', `eslint 'src/**/*.js' 'server/**/*.js'`)
     })
 
     it('adds script to package.json if only backend', () => {
       store.backend = { backend: true }
       eslintPackageJsonScripts()
       
-      expect(helpers.addScriptToNewPackageJSON).toHaveBeenCalledWith('lint', `eslint 'server/**/*.js'`)
+      expect(helpers.addScript).toHaveBeenCalledWith('lint', `eslint 'server/**/*.js'`)
     }) 
 
     it('adds script to package.json if only a frontend React type', () => {
       store.reactType = 'react'
       eslintPackageJsonScripts()
 
-      expect(helpers.addScriptToNewPackageJSON).toHaveBeenCalledWith('lint', `eslint 'src/**/*.js'`)
+      expect(helpers.addScript).toHaveBeenCalledWith('lint', `eslint 'src/**/*.js'`)
     })
 
     it('adds script to package.json if only a frontend Redux type', () => {
       store.reactType = 'redux'
       eslintPackageJsonScripts()
 
-      expect(helpers.addScriptToNewPackageJSON).toHaveBeenCalledWith('lint', `eslint 'src/**/*.js'`)
+      expect(helpers.addScript).toHaveBeenCalledWith('lint', `eslint 'src/**/*.js'`)
     })
 
     it('doesn\'t add lint script to package.json if no backend or frontend isn\'t react', () => {
       eslintPackageJsonScripts()
 
-      expect(helpers.addScriptToNewPackageJSON).toHaveBeenCalledTimes(0)
+      expect(helpers.addScript).toHaveBeenCalledTimes(0)
     })
   })
 })

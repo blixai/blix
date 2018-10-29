@@ -35,7 +35,7 @@ let installReactTesting = () => {
   json["jest"] = jest;
   let newPackage = JSON.stringify(json, null, 2);
   fs.writeFileSync(`./${name}/package.json`, newPackage);
-  helpers.addScriptToNewPackageJSON("test", "jest");
+  helpers.addScript("test", "jest");
 };
 
 module.exports = { installReactTesting };

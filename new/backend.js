@@ -118,12 +118,12 @@ exports.scripts = mode => {
   let routesTemplate = loadFile('./files/scripts/backend/templates/routes.js')
 
   if (mode === 'standard') {
-    helpers.addScriptToNewPackageJSON('start', `nodemon --watch server server/cluster.js`)
+    helpers.addScript('start', `nodemon --watch server server/cluster.js`)
   } else {
-    helpers.addScriptToNewPackageJSON('start', 'nodemon server/cluster.js')
+    helpers.addScript('start', 'nodemon server/cluster.js')
   }
   // controller script
-  helpers.addScriptToNewPackageJSON('controller', 'node scripts/controller.js')
+  helpers.addScript('controller', 'node scripts/controller.js')
   // create files
   helpers.writeFile(`scripts/controller.js`, controller)
   helpers.writeFile(`scripts/templates/controller.js`, controllerTemplate)

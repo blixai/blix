@@ -38,7 +38,7 @@ const addJestToPackageJson = () => {
 }
 
 const installCypress = () => {
-  helpers.addScriptToNewPackageJSON("e2e", "cypress open");
+  helpers.addScript("e2e", "cypress open");
   helpers.addDevDependenciesToStore("cypress");
   helpers.mkdirSync(`cypress`);
   helpers.mkdirSync(`cypress/integration`);
@@ -50,7 +50,7 @@ const installCypress = () => {
 };
 
 const installTestCafe = () => {
-  helpers.addScriptToNewPackageJSON("e2e", "testcafe chrome test/e2e");
+  helpers.addScript("e2e", "testcafe chrome test/e2e");
   helpers.addDevDependenciesToStore("testcafe");
   helpers.mkdirSync(`test/e2e`);
   helpers.writeFile(

@@ -185,17 +185,17 @@ exports.reactRouterRedux = () => {
 
 exports.scripts = () => {
   if (!store.backend.backend) {
-    helpers.addScriptToNewPackageJSON(
+    helpers.addScript(
       "start",
       "webpack-dev-server --output-public-path=/dist/ --inline --hot --open --port 3000 --mode='development'"
     );
     helpers.writeFile(`index.html`, htmlFile);
   }
-  helpers.addScriptToNewPackageJSON(
+  helpers.addScript(
     "dev",
     "webpack --watch --mode='development'"
   );
-  helpers.addScriptToNewPackageJSON("build", "webpack --mode='production'");
+  helpers.addScript("build", "webpack --mode='production'");
   // need to add scripts for creating containers actions
   if (store.reactType === "react") {
     this.reactScripts();
@@ -216,7 +216,7 @@ exports.reactScripts = () => {
   helpers.writeFile(`scripts/component.js`, component);
   helpers.writeFile(`scripts/templates/statefulComponent.js`, statefulComponentTemplate);
   helpers.writeFile(`scripts/templates/statelessComponent.js`, statelessComponentTemplate);
-  helpers.addScriptToNewPackageJSON("component", "node scripts/component.js");
+  helpers.addScript("component", "node scripts/component.js");
 };
 
 exports.reactRouterScripts = () => {
@@ -230,8 +230,8 @@ exports.reactRouterScripts = () => {
   helpers.writeFile(`scripts/templates/statelessComponent.js`, statelessComponentTemplate);
   helpers.writeFile(`scripts/view.js`, view);
   // add scripts to package.json
-  helpers.addScriptToNewPackageJSON("component", "node scripts/component.js");
-  helpers.addScriptToNewPackageJSON("view", "node scripts/view.js");
+  helpers.addScript("component", "node scripts/component.js");
+  helpers.addScript("view", "node scripts/view.js");
 };
 
 exports.reduxScripts = () => {
@@ -254,8 +254,8 @@ exports.reduxScripts = () => {
   helpers.writeFile(`scripts/templates/container.js`, containerTemplate)
 
   // add scripts for action and component to package.json
-  helpers.addScriptToNewPackageJSON('component', 'node scripts/component.js')
-  helpers.addScriptToNewPackageJSON('action', 'node scripts/action.js')
+  helpers.addScript('component', 'node scripts/component.js')
+  helpers.addScript('action', 'node scripts/action.js')
 }
 
 exports.reactRouterReduxScripts = () => {
@@ -280,9 +280,9 @@ exports.reactRouterReduxScripts = () => {
   helpers.writeFile(`scripts/view.js`, view);
 
   // add scripts for action and component to package.json
-  helpers.addScriptToNewPackageJSON("component", "node scripts/component.js");
-  helpers.addScriptToNewPackageJSON("action", "node scripts/action.js");
-  helpers.addScriptToNewPackageJSON("view", "node scripts/view.js");
+  helpers.addScript("component", "node scripts/component.js");
+  helpers.addScript("action", "node scripts/action.js");
+  helpers.addScript("view", "node scripts/view.js");
 };
 
 exports.packages = () => {
