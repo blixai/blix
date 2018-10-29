@@ -17,19 +17,17 @@ let continuePrompt = {
     name: 'confirm'
 }
 
-let addReactRouter = async () => {
+exports.addReactRouter = async () => {
     console.clear()
     console.log('Mutating a project can cause loss of files. Make sure you have everything committed.')
     let answer = await prompt([continuePrompt])
     answer = answer.confirm
     if (answer) {
-        projectType()
+        this.projectType()
     }
 }
 
-module.exports = addReactRouter
-
-let projectType = async () => {
+exports.projectType = async () => {
     await helpers.yarn()
     helpers.installDevDependenciesToExistingProject('react-router-dom')
     // make sure there is a src folder
@@ -40,21 +38,21 @@ let projectType = async () => {
         console.error('A src/views folder already exists.')
         return
     } else if (fs.existsSync('./src/components')) {
-        createView('unknown')
+        this.createView('unknown')
         return
     }
 
     // check if created by blix with redux, blix basic react, or create-react-app
     if (fs.existsSync('./src/App/AppContainer.js')) {
-        blixRedux()
+        this.blixRedux()
     } else if (fs.existsSync('./src/App/App.js')) {
-        blixReact()
+        this.blixReact()
     } else if (fs.existsSync('./src/App.js') && !fs.existsSync('./src/components')) {
-        createReactApp()
+        this.createReactApp()
     }
 }
 
-let createView = type => {
+exports.createView = type => {
     helpers.mkdirSync('src/views')
 
     if (type === 'redux') {
@@ -137,23 +135,23 @@ let createView = type => {
     addProjectInstructions()
 }
 
-let blixRedux = () => {
+exports.blixRedux = () => {
     helpers.mkdirSync('src/components')
     helpers.mkdirSync('src/components/App')
     helpers.moveAllFilesInDir('./src/App', './src/components/App')
 
-    createView('redux')
+    this.createView('redux')
 }
 
-let blixReact = () => {
+exports.blixReact = () => {
     helpers.mkdirSync('src/components')
     helpers.mkdirSync('src/components/App')
     helpers.moveAllFilesInDir('./src/App', './src/components/App')
 
-    createView()
+    this.createView()
 }
 
-let createReactApp = () => {
+exports.createReactApp = () => {
     helpers.mkdirSync('src/components')
     helpers.mkdirSync('src/components/App')
 
@@ -167,5 +165,5 @@ let createReactApp = () => {
     if (fs.existsSync('./src/App.test.js')) {
         helpers.rename('./src/App.test.js', './src/components/App/App.test.js')
     }
-    createView()
+    this.createView()
 }
