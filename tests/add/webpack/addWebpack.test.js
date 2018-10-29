@@ -113,17 +113,31 @@ describe('addWebpack', () => {
         })
     })
 
-    describe.skip('function reactQuestion', () => {
-        it('', () => {
-            
+    describe('function reactQuestion', () => {
+        it('prompts if the user intends to use react', async () => {
+            addWebpackModule.createConfig = jest.fn()
+
+            await reactQuestion()
+
+            expect(inquirer.prompt).toBeCalled()
         })
 
-        it('', () => {
-            
+        it('calls helpers yarn', async () => {
+            addWebpackModule.createConfig = jest.fn()
+            helpers.yarn = jest.fn()
+
+            await reactQuestion()
+
+            expect(helpers.yarn).toBeCalled()
         })
 
-        it('', () => {
-            
+        it('calls createConfig with the entry point, output, and react boolean', async () => {
+            addWebpackModule.createConfig = jest.fn()
+            inquirer.prompt.mockResolvedValueOnce({ react: true })
+
+            await reactQuestion('src/index.js', 'dist') 
+
+            expect(addWebpackModule.createConfig).toBeCalledWith('src/index.js', 'dist', true)
         })
     })
 
