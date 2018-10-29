@@ -51,7 +51,7 @@ const fileChecks = async () => {
 exports.fileChecks = fileChecks
 
 const webpack = async () => {
-  await fileChecks()
+  await this.fileChecks()
   let files = glob.sync('{,!(node_modules)/**/}*.js')
   webpackEntry.choices = files
   let ans = await prompt([webpackEntry])
@@ -59,7 +59,7 @@ const webpack = async () => {
   ans = './' + ans
   let output = await prompt([webpackOutput])
   output = output.output
-  reactQuestion(ans, output)
+  this.reactQuestion(ans, output)
 }
 
 exports.webpack = webpack
@@ -68,7 +68,7 @@ const reactQuestion = async (ans, output) => {
   let react = await prompt([addReact])
   react = react.react
   await helpers.yarn()
-  createConfig(ans, output, react)
+  this.createConfig(ans, output, react)
 }
 
 exports.reactQuestion = reactQuestion
