@@ -173,8 +173,28 @@ describe('Helper Tests', () => {
   })
 
   describe('addScriptToPackageJSON', () => {
+    afterEach(() => {
+      store.name = ''
+    })
+
     it('sets the path if the store name exists', () => {
+      fs.readFileSync.mockReturnValue(`{"scripts": {} }`)
+      let command = 'test'
+      let script = 'node'
+      console.log = jest.fn() 
+
+      addScriptToPackageJSON(command, script)
+
+      expect(fs.readFileSync).toBeCalled()
+      expect(fs.readFileSync.mock.calls[0][0]).toEqual('./package.json')
+
+      store.name = 'TestApp'
       
+      addScriptToPackageJSON(command, script)
+
+      expect(fs.readFileSync).toBeCalled()
+      expect(fs.readFileSync.mock.calls[1][0]).toEqual('./TestApp/package.json')
+
     })
 
     it('should add script to package.json if package.json exits', () => {
@@ -188,6 +208,7 @@ describe('Helper Tests', () => {
 
       expect(console.error).not.toBeCalled()
       expect(console.log.mock.calls[0][0]).toContain('test script into package.json')
+      expect(fs.writeFileSync.mock.calls[0][0]).toEqual('./package.json')
       expect(fs.writeFileSync.mock.calls[0][1]).toContain(command, script)
     })
 
