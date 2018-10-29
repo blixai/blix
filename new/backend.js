@@ -82,14 +82,15 @@ exports.mvcType = () => {
   const error = loadFile('./files/backend/mvc/error.pug')
   const layout = loadFile('./files/backend/mvc/layout.pug')
   const pug = loadFile('./files/backend/mvc/index.pug')
+  const controller = loadFile('./files/backend/mvc/home.js')
 
   helpers.mkdirSync(`server/views`)
+  helpers.mkdirSync(`server/views/home`)
 
   helpers.writeFile(`server/views/error.pug`, error)
   helpers.writeFile(`server/views/layout.pug`, layout)
-  helpers.mkdirSync(`server/views/home`)
   helpers.writeFile(`server/views/home/index.pug`, pug)
-
+  helpers.writeFile('server/controllers/home.js', controller)
   helpers.writeFile(`server/server.js`, server)
 }
 
@@ -127,6 +128,8 @@ exports.scripts = mode => {
   helpers.writeFile(`scripts/controller.js`, controller)
   helpers.writeFile(`scripts/templates/controller.js`, controllerTemplate)
   helpers.writeFile(`scripts/templates/routes.js`, routesTemplate)
+
+  
 }
 
 exports.packages = mode => {
