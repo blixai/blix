@@ -44,7 +44,6 @@ exports.redux = () => {
 
 // creates an index.js file that imports the App.js router and creates store provider
 exports.createIndex = () => {
-  fs.truncateSync('./src/index.js', 0)
   helpers.writeFile('src/index.js', index)
 }
 
@@ -62,14 +61,16 @@ exports.createScripts = () => {
   helpers.addScriptToPackageJSON('view', 'node scripts/view.js')
   // write scripts and templates
   let file = loadFile('scripts/frontend/redux/component.js')
+
   helpers.writeFile('scripts/component.js', file)
+  helpers.writeFile('scripts/action.js', action)
+  helpers.writeFile('scripts/view.js', view)
+
   helpers.writeFile('scripts/templates/statelessComponent.js', statelessComponent)
   helpers.writeFile('scripts/templates/container.js', container)
   helpers.writeFile('scripts/templates/statefulComponent.js', statefulComponent)
   helpers.writeFile('scripts/templates/reducer.js', reducerTemplate)
   helpers.writeFile('scripts/templates/action.js', actionTemplate)
-  helpers.writeFile('scripts/action.js', action)
-  helpers.writeFile('scripts/view.js', view)
 }
 
 // option add router selected, and was created with create-react-app
