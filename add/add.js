@@ -1,4 +1,4 @@
-let addWebpack  = require('./webpack/addWebpack.js')
+let {webpack}  = require('./webpack/addWebpack.js')
 let addWebpackDevServer = require('./webpack/addWebpackDevServer')
 let addBackend  = require('./backend/addBackend')
 let addDatabase = require('./database/addDataBase')
@@ -34,7 +34,7 @@ let add = () => {
     command = ans.command
     switch (command) {
       case "webpack":  
-        addWebpack()
+        webpack()
         break;
       case "webpack-dev-server":
         addWebpackDevServer();
