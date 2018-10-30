@@ -124,7 +124,20 @@ describe('addRedux', () => {
     })
 
     describe('createReactApp', () => {
-        
+        it('calls createIndex', () => {
+            addReduxModule.createIndex = jest.fn() 
+
+            createReactApp()
+    
+            expect(addReduxModule.createIndex).toBeCalled()
+
+        })
+
+        it('makes a src/components folder, src/components/App folder, and src/views folder', () => {
+            
+        })
+ 
+
     })
 
     describe('basicReactCreatedByBlix', () => {

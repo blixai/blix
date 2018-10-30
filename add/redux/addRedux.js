@@ -85,7 +85,7 @@ exports.createReactApp = () => {
   let router = loadFile('frontend/react-router/Router.js')
   helpers.writeFile('src/Router.js', router)
   
-  let AppContainer = createContainer('App')
+  let AppContainer = this.createContainer('App')
   helpers.writeFile(`src/components/App/AppContainer.js`, AppContainer)
   if (fs.existsSync('./src/App.css')) {
     helpers.rename('./src/App.css', './src/components/App/App.css')
