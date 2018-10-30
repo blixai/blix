@@ -11,8 +11,10 @@ const addDatabase = async () => {
   store.database = await prompt([database])
   await helpers.yarn()
   if (store.database.database === 'mongo') {
+    helpers.checkScriptsFolderExist()
     addMongooseToScripts()
   } else if (store.database.database === 'pg') {
+    helpers.checkScriptsFolderExist()
     addBookshelfToScripts()
   }
   helpers.installAllPackagesToExistingProject()
