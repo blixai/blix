@@ -194,7 +194,49 @@ describe('addRedux', () => {
     })
 
     describe('basicReactCreatedByBlix', () => {
-        
+        beforeEach(() => {
+            fs.rmdirSync = jest.fn()
+        })
+
+        it('creates a Router.js file', () => {
+            basicReactCreatedByBlix()
+
+            expect(helpers.writeFile).toBeCalledWith('src/Router.js', expect.any(String))
+        })
+
+        it('creates and moves files into src/components/App', () => {
+            addReduxModule.createContainer = jest.fn().mockReturnValueOnce('')
+
+            basicReactCreatedByBlix()
+
+            expect(helpers.rename).toBeCalledWith('./src/App/App.js', './src/components/App/App.js')
+            expect(addReduxModule.createContainer).toBeCalledWith('App')
+            expect(helpers.writeFile).toBeCalledWith('src/components/App/AppContainer.js', expect.any(String))
+            expect(helpers.rename).toBeCalledWith('./src/App/App.css', './src/components/App/App.css')
+        })
+
+        it('creates a view "Home" in src/views', () => {
+            basicReactCreatedByBlix()
+
+            expect(helpers.writeFile).toBeCalledWith('src/views/Home.js', expect.any(String))
+        })
+
+        it('try\'s to delete the src/App folder', () => {
+            basicReactCreatedByBlix()
+
+            expect(fs.rmdirSync).toBeCalledWith('./src/App')
+
+        })
+
+        it('logs an error if it can\'t remove the src/App folder', () => {
+            fs.rmdirSync.mockImplementation(() => {throw 'Error'})
+            console.error = jest.fn()
+
+            basicReactCreatedByBlix()
+
+            expect(fs.rmdirSync).toBeCalledWith('./src/App')
+            expect(console.error).toBeCalledWith('Error')
+        })
     })
 
     describe('reactRouterCreatedByBlix', () => {

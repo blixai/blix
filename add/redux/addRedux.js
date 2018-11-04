@@ -108,7 +108,7 @@ exports.basicReactCreatedByBlix = () => {
   helpers.writeFile('src/Router.js', router)
 
   helpers.rename('./src/App/App.js', './src/components/App/App.js')
-  let AppContainer = createContainer('App')
+  let AppContainer = this.createContainer('App')
   helpers.writeFile(`src/components/App/AppContainer.js`, AppContainer)
   helpers.rename('./src/App/App.css', './src/components/App/App.css')
 
