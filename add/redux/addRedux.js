@@ -108,7 +108,7 @@ exports.basicReactCreatedByBlix = () => {
   helpers.writeFile('src/Router.js', router)
 
   helpers.rename('./src/App/App.js', './src/components/App/App.js')
-  let AppContainer = createContainer('App')
+  let AppContainer = this.createContainer('App')
   helpers.writeFile(`src/components/App/AppContainer.js`, AppContainer)
   helpers.rename('./src/App/App.css', './src/components/App/App.css')
 
@@ -137,15 +137,14 @@ exports.createdByBlix = () => {
   if (fs.existsSync('./src/views') && fs.existsSync('./src/components')) {
     // blix react-router style
     this.reactRouterCreatedByBlix()
-    this.createIndex()
   } else {
     // blix basic react style
-    this.createIndex()
     helpers.mkdirSync('src/components')
     helpers.mkdirSync('src/components/App')
     helpers.mkdirSync('src/views')
     this.basicReactCreatedByBlix()
   }
+  this.createIndex()
 
   this.createScripts()
 }

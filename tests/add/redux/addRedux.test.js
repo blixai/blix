@@ -194,15 +194,109 @@ describe('addRedux', () => {
     })
 
     describe('basicReactCreatedByBlix', () => {
-        
+        beforeEach(() => {
+            fs.rmdirSync = jest.fn()
+        })
+
+        it('creates a Router.js file', () => {
+            basicReactCreatedByBlix()
+
+            expect(helpers.writeFile).toBeCalledWith('src/Router.js', expect.any(String))
+        })
+
+        it('creates and moves files into src/components/App', () => {
+            addReduxModule.createContainer = jest.fn().mockReturnValueOnce('')
+
+            basicReactCreatedByBlix()
+
+            expect(helpers.rename).toBeCalledWith('./src/App/App.js', './src/components/App/App.js')
+            expect(addReduxModule.createContainer).toBeCalledWith('App')
+            expect(helpers.writeFile).toBeCalledWith('src/components/App/AppContainer.js', expect.any(String))
+            expect(helpers.rename).toBeCalledWith('./src/App/App.css', './src/components/App/App.css')
+        })
+
+        it('creates a view "Home" in src/views', () => {
+            basicReactCreatedByBlix()
+
+            expect(helpers.writeFile).toBeCalledWith('src/views/Home.js', expect.any(String))
+        })
+
+        it('try\'s to delete the src/App folder', () => {
+            basicReactCreatedByBlix()
+
+            expect(fs.rmdirSync).toBeCalledWith('./src/App')
+
+        })
+
+        it('logs an error if it can\'t remove the src/App folder', () => {
+            fs.rmdirSync.mockImplementation(() => {throw 'Error'})
+            console.error = jest.fn()
+
+            basicReactCreatedByBlix()
+
+            expect(fs.rmdirSync).toBeCalledWith('./src/App')
+            expect(console.error).toBeCalledWith('Error')
+        })
     })
 
-    describe('reactRouterCreatedByBlix', () => {
-        
+    describe.skip('reactRouterCreatedByBlix', () => {
+       it('reads all files and folders in the src/components directory', () => {
+            fs.readdirSync = jest.fn().mockReturnValueOnce(['Navbar', 'App'])
+            fs.lstatSync
+            fs.stat.isDirectory = jest.fn()
+            // process.stdout(fs.lstatSync('').isDirectory())
+            // fs.lstatSync = jest.fn()
+            // let stat = fs.lstatSync
+            // stat.isDirectory = jest.fn()
+            // fs.lstatSync.isDirectory = jest.fn()
+                // .mockReturnValueOnce(true)
+
+            reactRouterCreatedByBlix()             
+
+            // expect(fs.readdirSync).toBeCalledWith('./src/components')
+       }) 
+
+       it('for each directory in src/components a redux container file is created and written into that directory', () => {
+
+       })
+
+       it('calls createIndex', () => {
+
+       })
     })
 
     describe('createdByBlix', () => {
+        it('is a react-router type if src/views and src/components exist and calls reactRouterCreatedByBlix', () => {
+            fs.existsSync = jest.fn()
+                .mockReturnValueOnce(true)
+                .mockReturnValueOnce(true)
+            addReduxModule.reactRouterCreatedByBlix = jest.fn()
 
+            createdByBlix()
+            
+            expect(addReduxModule.reactRouterCreatedByBlix).toBeCalled()
+        })
+
+        it('is a basic react type if and calls basicReactCreatedByBlix after creating folders', () => {
+            addReduxModule.basicReactCreatedByBlix = jest.fn()
+
+            createdByBlix()
+
+            expect(helpers.mkdirSync).toBeCalledWith('src/components')
+            expect(helpers.mkdirSync).toBeCalledWith('src/components/App')
+            expect(helpers.mkdirSync).toBeCalledWith('src/views')
+            expect(addReduxModule.basicReactCreatedByBlix).toBeCalled()
+        })
+
+        it('calls createIndex and createScripts', () => {
+            addReduxModule.createIndex = jest.fn()
+            addReduxModule.createScripts = jest.fn()
+
+            createdByBlix()
+
+            expect(addReduxModule.createIndex).toBeCalled()
+            expect(addReduxModule.createScripts).toBeCalled()
+        })
     })
 
     describe('createFilesWithRouter', () => {
