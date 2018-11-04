@@ -152,7 +152,6 @@ exports.createdByBlix = () => {
 // advanced redux setup
 let createFilesWithRouter = async () => {
   await helpers.yarn()
-  
   this.redux()
 
   if (fs.existsSync('./src/App.js') && !fs.existsSync('./src/components')) {
@@ -164,7 +163,7 @@ let createFilesWithRouter = async () => {
     console.log("This doesn't seem to have been created by create-react-app or blix. We're not sure how to handle this so to be safe we won't modify anything.")
   }
 
-  await helpers.installDependenciesToExistingProject('redux react-redux react-router-dom')
+  helpers.installDependenciesToExistingProject('redux react-redux react-router-dom')
   return
 }
 
