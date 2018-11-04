@@ -85,8 +85,9 @@ exports.createReactApp = () => {
   let router = loadFile('frontend/react-router/Router.js')
   helpers.writeFile('src/Router.js', router)
   
-  let AppContainer = createContainer('App')
+  let AppContainer = this.createContainer('App')
   helpers.writeFile(`src/components/App/AppContainer.js`, AppContainer)
+
   if (fs.existsSync('./src/App.css')) {
     helpers.rename('./src/App.css', './src/components/App/App.css')
   }
@@ -96,6 +97,7 @@ exports.createReactApp = () => {
   if (fs.existsSync('./src/App.test.js')) {
     helpers.rename('./src/App.test.js', './src/components/App/App.test.js')
   }
+
   helpers.writeFile('src/views/Home.js', homeView) 
   this.createScripts()
 }
