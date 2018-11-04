@@ -130,14 +130,67 @@ describe('addRedux', () => {
             createReactApp()
     
             expect(addReduxModule.createIndex).toBeCalled()
-
         })
 
         it('makes a src/components folder, src/components/App folder, and src/views folder', () => {
-            
+            addReduxModule.createContainer = jest.fn()
+
+            createReactApp()            
+
+            expect(helpers.mkdirSync).toBeCalledWith('src/components')
+            expect(helpers.mkdirSync).toBeCalledWith('src/components/App')
+            expect(helpers.mkdirSync).toBeCalledWith('src/views')
+        })
+        
+        it('creates a router file', () => {
+            createReactApp()
+
+            expect(helpers.writeFile).toBeCalledWith('src/Router.js', expect.any(String))
         })
  
+        it('moves files if they exist', () => {
+            fs.existsSync = jest.fn()
+                .mockReturnValueOnce(true)
+                .mockReturnValueOnce(true)
+                .mockReturnValueOnce(true)
+            addReduxModule.createContainer = jest.fn().mockReturnValueOnce('')
+            addReduxModule.createScripts = jest.fn()
 
+            createReactApp()
+
+            expect(helpers.writeFile).toBeCalledWith('src/Router.js', expect.any(String))
+
+
+            expect(helpers.rename).toBeCalledWith('./src/App.js', './src/components/App/App.js')
+
+            expect(helpers.rename).toBeCalledWith('./src/App.css', './src/components/App/App.css')
+            expect(helpers.rename).toBeCalledWith('./src/logo.svg', './src/components/App/logo.svg')         
+            expect(helpers.rename).toBeCalledWith('./src/App.test.js', './src/components/App/App.test.js')
+        })
+
+        it('creates a redux container named "App"', () => {
+            addReduxModule.createContainer = jest.fn().mockReturnValueOnce('')
+
+            createReactApp()
+
+            expect(addReduxModule.createContainer).toBeCalledWith('App')
+            expect(helpers.writeFile).toBeCalledWith('src/components/App/AppContainer.js', expect.any(String))
+
+        })
+
+        it('creates a view "Home" in the src/views folder', () => {
+            createReactApp()
+
+            expect(helpers.writeFile).toBeCalledWith('src/views/Home.js', expect.any(String))
+        })
+
+        it('calls createScripts', () => {
+            addReduxModule.createScripts = jest.fn()
+
+            createReactApp()
+
+            expect(addReduxModule.createScripts).toBeCalled()
+        })
     })
 
     describe('basicReactCreatedByBlix', () => {
