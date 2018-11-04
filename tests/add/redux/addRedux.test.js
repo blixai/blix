@@ -239,12 +239,64 @@ describe('addRedux', () => {
         })
     })
 
-    describe('reactRouterCreatedByBlix', () => {
-        
+    describe.skip('reactRouterCreatedByBlix', () => {
+       it('reads all files and folders in the src/components directory', () => {
+            fs.readdirSync = jest.fn().mockReturnValueOnce(['Navbar', 'App'])
+            fs.lstatSync
+            fs.stat.isDirectory = jest.fn()
+            // process.stdout(fs.lstatSync('').isDirectory())
+            // fs.lstatSync = jest.fn()
+            // let stat = fs.lstatSync
+            // stat.isDirectory = jest.fn()
+            // fs.lstatSync.isDirectory = jest.fn()
+                // .mockReturnValueOnce(true)
+
+            reactRouterCreatedByBlix()             
+
+            // expect(fs.readdirSync).toBeCalledWith('./src/components')
+       }) 
+
+       it('for each directory in src/components a redux container file is created and written into that directory', () => {
+
+       })
+
+       it('calls createIndex', () => {
+
+       })
     })
 
     describe('createdByBlix', () => {
+        it('is a react-router type if src/views and src/components exist and calls reactRouterCreatedByBlix', () => {
+            fs.existsSync = jest.fn()
+                .mockReturnValueOnce(true)
+                .mockReturnValueOnce(true)
+            addReduxModule.reactRouterCreatedByBlix = jest.fn()
 
+            createdByBlix()
+            
+            expect(addReduxModule.reactRouterCreatedByBlix).toBeCalled()
+        })
+
+        it('is a basic react type if and calls basicReactCreatedByBlix after creating folders', () => {
+            addReduxModule.basicReactCreatedByBlix = jest.fn()
+
+            createdByBlix()
+
+            expect(helpers.mkdirSync).toBeCalledWith('src/components')
+            expect(helpers.mkdirSync).toBeCalledWith('src/components/App')
+            expect(helpers.mkdirSync).toBeCalledWith('src/views')
+            expect(addReduxModule.basicReactCreatedByBlix).toBeCalled()
+        })
+
+        it('calls createIndex and createScripts', () => {
+            addReduxModule.createIndex = jest.fn()
+            addReduxModule.createScripts = jest.fn()
+
+            createdByBlix()
+
+            expect(addReduxModule.createIndex).toBeCalled()
+            expect(addReduxModule.createScripts).toBeCalled()
+        })
     })
 
     describe('createFilesWithRouter', () => {

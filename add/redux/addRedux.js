@@ -137,15 +137,14 @@ exports.createdByBlix = () => {
   if (fs.existsSync('./src/views') && fs.existsSync('./src/components')) {
     // blix react-router style
     this.reactRouterCreatedByBlix()
-    this.createIndex()
   } else {
     // blix basic react style
-    this.createIndex()
     helpers.mkdirSync('src/components')
     helpers.mkdirSync('src/components/App')
     helpers.mkdirSync('src/views')
     this.basicReactCreatedByBlix()
   }
+  this.createIndex()
 
   this.createScripts()
 }
