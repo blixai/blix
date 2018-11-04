@@ -377,7 +377,68 @@ describe('addRedux', () => {
     })
 
     describe('dontAddReactRouter', () => {
+        it('calls helpers.yarn', async () => {
+            helpers.yarn.mockResolvedValueOnce(true)
 
+            dontAddReactRouter()
+
+            expect(helpers.yarn).toBeCalled()
+        })
+
+        it('calls redux', async () => {
+            addReduxModule.redux = jest.fn()
+            
+            await dontAddReactRouter()
+
+            expect(addReduxModule.redux).toBeCalled()
+        })
+
+        it('calls reactRouterCreatedByBlix and createScripts if src/compoents and src/views exist', async () => {
+            addReduxModule.reactRouterCreatedByBlix = jest.fn() 
+            addReduxModule.createScripts = jest.fn()
+
+            fs.existsSync = jest.fn()
+                .mockReturnValueOnce(true)
+                .mockReturnValueOnce(true)
+            
+            await dontAddReactRouter()
+
+            expect(addReduxModule.reactRouterCreatedByBlix).toBeCalled()
+            expect(addReduxModule.createScripts).toBeCalled()
+        })
+
+        it('creates an App container and overwrites src/index.js if src/App/App.js exists', async () => {
+            addReduxModule.createContainer = jest.fn().mockReturnValueOnce('')
+            fs.existsSync = jest.fn()
+                .mockReturnValueOnce(false)
+                .mockReturnValueOnce(true)
+        
+            await dontAddReactRouter() 
+
+            expect(addReduxModule.createContainer).toBeCalledWith('App')
+            expect(helpers.writeFile).toBeCalledWith('src/App/AppContainer.js', expect.any(String))
+            expect(helpers.writeFile).toBeCalledWith('src/index.js', expect.any(String))
+        })
+
+        it('creates an App container and overwrites src/index.js if src/App.js exists', async () => {
+            addReduxModule.createContainer = jest.fn().mockReturnValueOnce('')
+            fs.existsSync = jest.fn()
+                .mockReturnValueOnce(false)
+                .mockReturnValueOnce(false)
+                .mockReturnValueOnce(true)
+        
+            await dontAddReactRouter()
+
+            expect(addReduxModule.createContainer).toBeCalledWith('App')
+            expect(helpers.writeFile).toBeCalledWith('src/AppContainer.js', expect.any(String))
+            expect(helpers.writeFile).toBeCalledWith('src/index.js', expect.any(String))
+        })
+
+        it('installs dependencies', async () => {
+            await dontAddReactRouter()
+
+            expect(helpers.installDependenciesToExistingProject).toBeCalledWith('react-redux redux')
+        })
     })
 
     describe('addRedux', () => {
