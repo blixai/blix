@@ -23,6 +23,7 @@ const {
     addRedux
 } = require('../../../add/redux/addRedux')
 const addReduxModule = require('../../../add/redux/addRedux')
+const addProjectInstructions = require('../../../add/addProjectInstructions')
 
 
 describe('addRedux', () => {
@@ -443,5 +444,84 @@ describe('addRedux', () => {
 
     describe('addRedux', () => {
 
+        it('clears the console and warns the user that mutating is risky', async () => {
+            inquirer.prompt.mockResolvedValueOnce({ confirm: true })
+            console.clear = jest.fn()
+            console.log = jest.fn()
+
+            await addRedux()
+
+            expect(console.clear).toBeCalled()
+            expect(console.log).toBeCalledWith('Mutating a project can cause loss of files. Make sure you have everything committed.')
+        })
+
+        it('prompts the user if they want to continue', async () => {
+            inquirer.prompt.mockResolvedValueOnce({ confirm: true })
+            await addRedux()
+
+            expect(inquirer.prompt).toBeCalled()
+        })
+
+        it('exits if the user doesn\'t want to continue', async () => {
+            inquirer.prompt.mockResolvedValueOnce({ confirm: false })
+
+            await addRedux()
+
+            expect(addProjectInstructions).not.toBeCalled()
+        })
+
+        it('checks if react-router is a dependency and prompts if the user if they also want to install it if it\'s not installed', async () => {
+            inquirer.prompt
+                .mockResolvedValueOnce({ confirm: true })
+                .mockResolvedValueOnce({ router: true })
+            jest.mock('fs', () => ({
+                readFileSync: jest.fn()
+            }))
+            fs.readFileSync.mockReturnValueOnce('')
+            
+            await addRedux()
+
+            expect(fs.readFileSync).toBeCalledWith('./package.json', 'utf8')
+            expect(inquirer.prompt).toBeCalledTimes(2)
+        })
+
+        it('calls createFilesWithRouter if user selects to also install react-router', async () => {
+            inquirer.prompt
+                .mockResolvedValueOnce({ confirm: true })
+                .mockResolvedValueOnce({ router: true })
+            jest.mock('fs', () => ({
+                readFileSync: jest.fn()
+            }))
+            fs.readFileSync.mockReturnValueOnce('')
+            addReduxModule.createFilesWithRouter = jest.fn()
+
+            await addRedux()
+
+            expect(addReduxModule.createFilesWithRouter).toBeCalled()
+            expect(store.reactType).toEqual('reactRouter-redux')
+        })
+
+        it('calls dontAddReactRouter if the user selects not to install react-router', async () => {
+            inquirer.prompt
+                .mockResolvedValueOnce({ confirm: true })
+                .mockResolvedValueOnce({ router: false })
+            jest.mock('fs', () => ({
+                readFileSync: jest.fn()
+            }))
+            fs.readFileSync.mockReturnValueOnce('')
+            addReduxModule.dontAddReactRouter = jest.fn()
+
+            await addRedux()
+
+            expect(addReduxModule.dontAddReactRouter).toBeCalled()
+            expect(store.reactType).toEqual('redux')
+        })
+
+        it('calls addProjectInstructions', async () => {
+            inquirer.prompt.mockResolvedValueOnce({ confirm: true })
+            await addRedux()
+
+            expect(addProjectInstructions).toBeCalled()
+        })
     })
 })
