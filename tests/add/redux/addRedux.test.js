@@ -300,11 +300,145 @@ describe('addRedux', () => {
     })
 
     describe('createFilesWithRouter', () => {
+        it('calls helpers.yarn', () => {
+            helpers.yarn.mockResolvedValue(true)
 
+            createFilesWithRouter()
+
+            expect(helpers.yarn).toBeCalled()
+        })
+
+        it('calls redux', async () => {
+            helpers.yarn.mockResolvedValueOnce(true)
+            addReduxModule.redux = jest.fn()
+
+            await createFilesWithRouter()
+
+            expect(addReduxModule.redux).toBeCalled()
+        })
+
+        it('calls createReactApp if src/App.js exists and there is no src/components folder', async () => {
+            fs.existsSync = jest.fn()
+                .mockReturnValueOnce(true)
+                .mockReturnValueOnce(false)
+            addReduxModule.createReactApp = jest.fn()
+
+            await createFilesWithRouter()
+
+            expect(addReduxModule.createReactApp).toBeCalled()
+        })
+
+        it('calls createdByBlix if src/App/App.js exists', async () => {
+            fs.existsSync = jest.fn()
+                .mockReturnValueOnce(true)
+                .mockReturnValueOnce(true)
+                .mockReturnValueOnce(true)
+                
+            addReduxModule.createdByBlix = jest.fn()
+
+            await createFilesWithRouter()
+
+            expect(addReduxModule.createdByBlix).toBeCalled()
+        })
+
+        it('calls createdByBlix if src/App/App.js doesn\'t exist but src/components and src/views do exist', async () => {
+            fs.existsSync = jest.fn()
+                .mockReturnValueOnce(true)
+                .mockReturnValueOnce(true)
+                .mockReturnValueOnce(false)
+                .mockReturnValueOnce(true)
+                .mockReturnValueOnce(true) 
+                
+            addReduxModule.createdByBlix = jest.fn()
+
+            await createFilesWithRouter()
+
+            expect(addReduxModule.createdByBlix).toBeCalled()
+        })
+
+        it('logs information if it cant determine what type of project it is', async () => {
+            fs.existsSync = jest.fn()
+                .mockReturnValueOnce(true)
+                .mockReturnValueOnce(true)
+                .mockReturnValueOnce(false)
+                .mockReturnValueOnce(false)
+            console.log = jest.fn()                
+
+            await createFilesWithRouter()
+
+            expect(console.log).toBeCalledWith("This doesn't seem to have been created by create-react-app or blix. We're not sure how to handle this so to be safe we won't modify anything.")
+        })
+
+        it('installsDependencies', async () => {
+            await createFilesWithRouter()
+
+            expect(helpers.installDependenciesToExistingProject).toBeCalledWith('redux react-redux react-router-dom')
+        })
     })
 
     describe('dontAddReactRouter', () => {
+        it('calls helpers.yarn', async () => {
+            helpers.yarn.mockResolvedValueOnce(true)
 
+            dontAddReactRouter()
+
+            expect(helpers.yarn).toBeCalled()
+        })
+
+        it('calls redux', async () => {
+            addReduxModule.redux = jest.fn()
+            
+            await dontAddReactRouter()
+
+            expect(addReduxModule.redux).toBeCalled()
+        })
+
+        it('calls reactRouterCreatedByBlix and createScripts if src/compoents and src/views exist', async () => {
+            addReduxModule.reactRouterCreatedByBlix = jest.fn() 
+            addReduxModule.createScripts = jest.fn()
+
+            fs.existsSync = jest.fn()
+                .mockReturnValueOnce(true)
+                .mockReturnValueOnce(true)
+            
+            await dontAddReactRouter()
+
+            expect(addReduxModule.reactRouterCreatedByBlix).toBeCalled()
+            expect(addReduxModule.createScripts).toBeCalled()
+        })
+
+        it('creates an App container and overwrites src/index.js if src/App/App.js exists', async () => {
+            addReduxModule.createContainer = jest.fn().mockReturnValueOnce('')
+            fs.existsSync = jest.fn()
+                .mockReturnValueOnce(false)
+                .mockReturnValueOnce(true)
+        
+            await dontAddReactRouter() 
+
+            expect(addReduxModule.createContainer).toBeCalledWith('App')
+            expect(helpers.writeFile).toBeCalledWith('src/App/AppContainer.js', expect.any(String))
+            expect(helpers.writeFile).toBeCalledWith('src/index.js', expect.any(String))
+        })
+
+        it('creates an App container and overwrites src/index.js if src/App.js exists', async () => {
+            addReduxModule.createContainer = jest.fn().mockReturnValueOnce('')
+            fs.existsSync = jest.fn()
+                .mockReturnValueOnce(false)
+                .mockReturnValueOnce(false)
+                .mockReturnValueOnce(true)
+        
+            await dontAddReactRouter()
+
+            expect(addReduxModule.createContainer).toBeCalledWith('App')
+            expect(helpers.writeFile).toBeCalledWith('src/AppContainer.js', expect.any(String))
+            expect(helpers.writeFile).toBeCalledWith('src/index.js', expect.any(String))
+        })
+
+        it('installs dependencies', async () => {
+            await dontAddReactRouter()
+
+            expect(helpers.installDependenciesToExistingProject).toBeCalledWith('react-redux redux')
+        })
     })
 
     describe('addRedux', () => {
