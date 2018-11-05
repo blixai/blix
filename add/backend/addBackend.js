@@ -28,20 +28,21 @@ let addBackend = async () => {
   let serverTestingSelection = await prompt([serverTesting])
   store.database = await prompt([database])
   await helpers.yarn()
-  createBackend(store.backendType, serverTestingSelection, store.database)
+  this.createBackend(store.backendType, serverTestingSelection, store.database)
 }
+
+exports.addBackend = addBackend
 
 // load files
 const cluster = loadFile('backend/common/cluster.js')
 const routes = loadFile('backend/common/routes.js')
 
-const createBackend = (mode, serverTestingSelection, databaseSelection) => {
-  try {
-    helpers.mkdirSync('server')
-  } catch (err) {
+exports.createBackend = (mode, serverTestingSelection, databaseSelection) => {
+  if (fs.existsSync('server')) {
     console.error('Server folder already exists')
     process.exit(1)
   }
+  helpers.mkdirSync('server')
   helpers.mkdirSync('server/models')
   helpers.mkdirSync('server/controllers')
   helpers.mkdirSync('server/helpers')
@@ -64,21 +65,21 @@ const createBackend = (mode, serverTestingSelection, databaseSelection) => {
   }
   helpers.checkScriptsFolderExist()
   addDatabase(databaseSelection)
-  checkScripts(mode.mode)
+  this.checkScripts(mode.mode)
   packages(mode)
   testBackend(serverTestingSelection)
   helpers.installAllPackagesToExistingProject()
   addProjectInstructions()
 }
 
-const checkScripts = mode => {
+exports.checkScripts = mode => {
   scripts(mode)
   if (mode === 'mvc') {
-    pugScript()
+    this.pugScript()
   }
 }
 
-const pugScript = () => {
+exports.pugScript = () => {
   const script = loadFile('scripts/backend/pugPage.js')
   const pugTemplate = loadFile('scripts/backend/templates/pug.pug')
 
@@ -93,4 +94,3 @@ const pugScript = () => {
   helpers.writeFile('scripts/templates/pugTemplate.pug', pugTemplate)
 }
 
-module.exports = addBackend
