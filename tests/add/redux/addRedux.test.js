@@ -26,7 +26,7 @@ const {
     addRedux
 } = require('../../../add/redux/addRedux')
 const addReduxModule = require('../../../add/redux/addRedux')
-const addProjectInstructions = require('../../../add/addProjectInstructions')
+const { addProjectInstructions } = require('../../../add/addProjectInstructions')
 
 
 describe('addRedux', () => {

@@ -7,7 +7,7 @@ jest.mock('../../../new/utils/addBookshelf')
 jest.mock('../../../add/addProjectInstructions')
 
 const inquirer = require('inquirer')
-const addProjectInstructions = require('../../../add/addProjectInstructions')
+const { addProjectInstructions } = require('../../../add/addProjectInstructions')
 const helpers = require('../../../helpers')
 const { addMongooseToScripts } = require('../../../new/utils/addMongoDB')
 const { addBookshelfToScripts } = require('../../../new/utils/addBookshelf')

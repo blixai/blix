@@ -4,7 +4,7 @@ let inquirer   = require('inquirer')
 let prompt     = inquirer.prompt
 let helpers    = require('../../helpers')
 let store      = require('../../new/store')
-let addProjectInstructions = require('../addProjectInstructions')
+let { addProjectInstructions } = require('../addProjectInstructions')
 
 
 let loadFile = filePath => {
