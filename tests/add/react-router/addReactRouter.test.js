@@ -31,7 +31,7 @@ const {
 } = require('../../../add/react-router/addReactRouter')
 const mockModule = require('../../../add/react-router/addReactRouter')
 const store = require('../../../new/store')
-const addProjectInstructions = require('../../../add/addProjectInstructions')
+const { addProjectInstructions } = require('../../../add/addProjectInstructions')
 
 describe('add/addReactRouter', () => {
 

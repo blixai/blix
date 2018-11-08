@@ -29,7 +29,7 @@ const helpers = require('../../../helpers')
 const fs = require('fs')
 const addBackendModule = require('../../../add/backend/addBackend')
 const store = require('../../../new/store')
-const addProjectInstructions = require('../../../add/addProjectInstructions')
+const { addProjectInstructions } = require('../../../add/addProjectInstructions')
 const { testBackend } = require('../../../new/utils/addBackendTests')
 const inquirer = require('inquirer')
 

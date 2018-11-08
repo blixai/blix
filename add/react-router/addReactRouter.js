@@ -3,7 +3,7 @@ let path = require('path')
 let helpers = require('../../helpers')
 let inquirer = require('inquirer')
 let prompt = inquirer.prompt
-let addProjectInstructions = require('../addProjectInstructions')
+let { addProjectInstructions } = require('../addProjectInstructions')
 let store = require('../../new/store')
 
 let loadFile = filePath => {

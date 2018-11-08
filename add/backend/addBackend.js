@@ -4,7 +4,7 @@ const helpers = require('../../helpers')
 const fs = require('fs')
 const path = require('path')
 const store = require('../../new/store')
-const addProjectInstructions = require('../addProjectInstructions')
+const { addProjectInstructions } = require('../addProjectInstructions')
 
 const { testBackend } = require('../../new/utils/addBackendTests')
 const {

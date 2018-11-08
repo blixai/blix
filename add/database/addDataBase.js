@@ -1,6 +1,6 @@
 let inquirer = require('inquirer')
 let prompt   = inquirer.prompt
-const addProjectInstructions = require('../addProjectInstructions')
+const { addProjectInstructions } = require('../addProjectInstructions')
 const helpers = require('../../helpers')
 const { database } = require('../../new/prompts')
 const { addMongooseToScripts } = require('../../new/utils/addMongoDB')
