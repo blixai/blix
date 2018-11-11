@@ -10,7 +10,7 @@ if (process.argv.includes('--verbose')) {
 
 const { createProject } = require("./new");
 const help = require("./help/help.js");
-const scripts = require("./scripts/script.js");
+const { scripts } = require("./scripts/script.js");
 const add = require("./add/add");
 const { generate } = require('./generate')
 const command = process.argv[2];
