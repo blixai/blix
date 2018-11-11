@@ -1,6 +1,5 @@
 const fs = require("fs");
 const path = require("path");
-const log = console.log;
 const inquirer = require('inquirer');
 const prompt = inquirer.prompt;
 const helpers = require("../helpers");
@@ -76,259 +75,225 @@ const templateName = {
 };
 
 
-const scripts = () => {
+const scripts = async () => {
   console.clear();
+  let answer = await prompt([commands])
 
-  prompt([commands]).then(answer => {
-    switch (answer.commands) {
-      case "react":
-        addReact();
-        break;
-      case "redux":
-        addRedux();
-        break;
-      case "controller":
-        addController();
-        break;
-      case "model":
-        addModel();
-        break;
-      case "action":
-        addAction();
-        break;
-      case "view":
-        addClientView()
-        break;
-      case "custom":
-        prompt([custom]).then(custom => {
-          createNewScript(custom.custom);
-        });
-        break;
-      default:
-        log("Something went wrong. Please try again");
-        break;
-    }
-  });
+  switch (answer.commands) {
+    case "react":
+      this.addReact();
+      break;
+    case "redux":
+      this.addRedux();
+      break;
+    case "controller":
+      this.addController();
+      break;
+    case "model":
+      this.addModel();
+      break;
+    case "action":
+      this.addAction();
+      break;
+    case "view":
+      this.addClientView()
+      break;
+    case "custom":
+      let customSelection = await prompt([custom])
+      this.createNewScript(customSelection.custom);
+      break;
+    default:
+      console.log("Something went wrong. Please try again");
+      break;
+  }
 };
 
-const addAction = () => {
+exports.scripts = scripts
+
+
+exports.addAction = () => {
   helpers.addScriptToPackageJSON("action", "node scripts/action.js");
-  checkScriptsFolderExists();
+  helpers.checkScriptsFolderExist()
 
   let action = loadFile("frontend/redux/action.js");
   let actionTemplate = loadFile("frontend/redux/templates/action.js");
   let reducerTemplate = loadFile("frontend/redux/templates/reducer.js");
 
-  helpers.writeFile("scripts/action.js", action, "Created action.js script file in scripts folder");
-  helpers.writeFile("scripts/templates/action.js", actionTemplate, "Created action template in script/templates");
-  helpers.writeFile("scripts/templates/reducer.js", reducerTemplate, "Created reducer template in  script/templates");
-  log("")
-  log("Added script to project, to run: npm run action")
-  log("This will prompt for the actions name, and the reducers name")
-  log("From there it will create the action in src/action/index.js and if the reducer already exists add it to that reducer or create a reducer with that action in src/reducers.")
-  log("If the reducer is created it will also be added to the rootReducer.js file in src/reducers")
-  log("You will then be prompted with an array of containers from src/components/ that the action should be added to, enter each container (case-sensitive)")
-  log("The action will then be imported into each selected container and added to each containers mapDispatchToProps.")
+  helpers.writeFile("scripts/action.js", action);
+  helpers.writeFile("scripts/templates/action.js", actionTemplate);
+  helpers.writeFile("scripts/templates/reducer.js", reducerTemplate);
+
+  console.log("")
+  console.log("Added script to project, to run: npm run action")
+  console.log("This will prompt for the actions name, and the reducers name")
+  console.log("From there it will create the action in src/action/index.js and if the reducer already exists add it to that reducer or create a reducer with that action in src/reducers.")
+  console.log("If the reducer is created it will also be added to the rootReducer.js file in src/reducers")
+  console.log("You will then be prompted with an array of containers from src/components/ that the action should be added to, enter each container (case-sensitive)")
+  console.log("The action will then be imported into each selected container and added to each containers mapDispatchToProps.")
 };
 
-const addModel = () => {
+
+const addModel = async () => {
   helpers.addScriptToPackageJSON("model", "node scripts/model.js");
-  prompt([model]).then(ans => {
-    if (ans.model === "m") {
-      // add moongoose
-      checkScriptsFolderExists();
-      let model = loadFile("backend/mongoose.js");
-      let schemaTemplate = loadFile("backend/templates/mongoose.js");
+  helpers.checkScriptsFolderExist();
 
-      helpers.writeFile("scripts/model.js", model, "Created model.js script file in scripts folder");
-      helpers.writeFile(
-        "scripts/templates/schemaTemplate.js",
-        schemaTemplate,
-        "Created Mongoose schema template in scripts/templates"
-      );
-      log("")
-      log("Added script to project, to run: npm run model <name>")
-      log("This creates a new model in server/models")
-      log("This script accepts arguments to create a schema: npm run model <name> email:String friends:Array pin:Number")
-      log("To view all valid data types go to scripts/model.js and search for 'validSchemas'")
-    } else {
-      // add bookshelf
-      checkScriptsFolderExists();
-      // load file for server/models/bookshelf.js 
-      let bookshelfRequiredFile = loadFile("backend/templates/bookshelf.js");
-      // load scripts files 
-      let migration = loadFile("backend/templates/migration.js");
-      let bookshelf = loadFile("backend/templates/bookshelf.js");
-      let model = loadFile(
-        "backend/bookshelf.js"
-      );
-      // create files 
-      helpers.writeFile("scripts/model.js", model, "Created model.js script in scripts folder");
-      helpers.writeFile(
-        "scripts/templates/migration.js",
-        migration,
-        "Created knex migration template file in scripts/templates folder"
-      );
-      helpers.writeFile(
-        "scripts/templates/bookshelf.js",
-        bookshelf,
-        "Created Bookshelf template file in scripts/templates folder"
-      );
-      // bookshelf required file needs to be placed inside the project, preferably the models folder
-      try {
-        helpers.writeFile("server/models/bookshelf.js", bookshelfRequiredFile);
-        log("Created Bookshelf file in server/models/bookshelf.js");
-      } catch (e) {
-        log(
-          `Failed to create a bookshelf.js file in server/models. You'll need to create this yourself.`
-        );
-      }
-      log("")
-      log("Added script to project, to run: npm run model <name>")
-      log("This creates a new model in server/models, and new migration in db/migrations ")
-      log("This script accepts arguments to create a schema: npm run model <name> email:string admin:boolean loggedIn:dateTime")
-      log("To view all valid data types go to scripts/model.js and search for 'possibleFields'")
-    }
-  });
+  let ans = await prompt([model])
+  
+  if (ans.model === "m") {
+    // add moongoose
+    let model = loadFile("backend/mongoose.js");
+    let schemaTemplate = loadFile("backend/templates/mongoose.js");
+
+    helpers.writeFile("scripts/model.js", model);
+    helpers.writeFile("scripts/templates/schemaTemplate.js", schemaTemplate);
+    console.log("")
+    console.log("Added script to project, to run: npm run model <name>")
+    console.log("This creates a new model in server/models")
+    console.log("This script accepts arguments to create a schema: npm run model <name> email friends:Array pin:Number")
+    console.log("To view all valid data types go to scripts/model.js and search for 'validSchemas'")
+  } else {
+    // add bookshelf
+    // load file for server/models/bookshelf.js 
+    let bookshelfRequiredFile = loadFile("backend/templates/bookshelf.js");
+    // load scripts files 
+    let migration = loadFile("backend/templates/migration.js");
+    let bookshelf = loadFile("backend/templates/bookshelf.js");
+    let model = loadFile(
+      "backend/bookshelf.js"
+    );
+    // create files 
+    helpers.writeFile("scripts/model.js", model);
+    helpers.writeFile("scripts/templates/migration.js", migration);
+    helpers.writeFile("scripts/templates/bookshelf.js", bookshelf);
+    // bookshelf required file needs to be placed inside the project, preferably the models folder
+    helpers.writeFile("server/models/bookshelf.js", bookshelfRequiredFile);
+    console.log("")
+    console.log("Added script to project, to run: npm run model <name>")
+    console.log("This creates a new model in server/models, and new migration in db/migrations ")
+    console.log("This script accepts arguments to create a schema: npm run model <name> email:string admin:boolean loggedIn:dateTime")
+    console.log("To view all valid data types go to scripts/model.js and search for 'possibleFields'")
+  }
 };
 
-let addReact = () => {
+exports.addModel = addModel
+
+
+exports.addReact = () => {
   // always add script first because if there is no package.json it'll process.exit()
   helpers.addScriptToPackageJSON("component", "node scripts/component.js");
+  helpers.checkScriptsFolderExist();
+
   let react = loadFile("frontend/react/component.js");
-  checkScriptsFolderExists();
-  helpers.writeFile("scripts/component.js", react, "Created component.js script file in scripts folder");
-  checkReactTemplatesExist()
-  log("")
-  log("Added script to project, to run: npm run component <name>")
-  log("This will create a stateless or stateful component in a folder <name> within src/")
+  helpers.writeFile("scripts/component.js", react);
+  this.checkReactTemplatesExist()
+
+  console.log("")
+  console.log("Added script to project, to run: npm run component <name>")
+  console.log("This will create a stateless or stateful component in a folder <name> within src/")
 };
 
-let addRedux = () => {
+
+exports.addRedux = () => {
   helpers.addScriptToPackageJSON("component", "node scripts/component.js");
-  checkScriptsFolderExists();
+  helpers.checkScriptsFolderExist();
 
   // load component script and templates 
+  this.checkReactTemplatesExist()
+
   let redux = loadFile("frontend/redux/component.js");
-  checkReactTemplatesExist()
-  let container = loadFile(
-    "frontend/redux/templates/container.js"
-  );
+  let container = loadFile("frontend/redux/templates/container.js");
   // write files
-  helpers.writeFile("scripts/component.js", redux, "Created component.js script file in scripts folder");
-  helpers.writeFile(
-    "scripts/templates/container.js",
-    container 
-  );
-  log("")
-  log("Added script to project, to run: npm run component <name>")
-  log("This will create a stateless or stateful component with a redux container in src/components")
+  helpers.writeFile("scripts/component.js", redux);
+  helpers.writeFile("scripts/templates/container.js", container);
+
+  console.log("")
+  console.log("Added script to project, to run: npm run component <name>")
+  console.log("This will create a stateless or stateful component with a redux container in src/components")
 };
 
-let addClientView = () => {
-  helpers.addScriptToPackageJSON("view", "node scripts/view.js")
-  checkScriptsFolderExists()
-  prompt([viewType]).then(answer => {
-    // if true project uses redux
-    if (answer.view) {
-      let reduxViewScript = loadFile("frontend/redux/view.js")
-      helpers.writeFile("scripts/view.js", reduxViewScript, "Created view.js script file in scripts folder")
-      checkReactTemplatesExist()
-      log("")
-      log("Added script to project, to run: npm run view <name>")
-      log("This will create a new stateless or stateful component in src/views and ask which components/containers to import into the view. It will also ask for a route path for the view and add this view with it's route into the App.js file.")
-      log("If view already exists it will just ask what containers/components from src/components to import into that view.")
-    } else {
-      let reactRouterViewScript = loadFile("frontend/react-router/view.js")
-      helpers.writeFile("scripts/view.js", reactRouterViewScript, "Created view.js script file in scripts folder")
-      checkReactTemplatesExist()
-      log("")
-      log("Added script to project, to run: npm run view <name>")
-      log("This will create a new stateless or stateful component in src/views and ask which components to import into the view. It will also ask for a route path for the view and add this view with it's route into the App.js file.")
-      log("If view already exists it will just ask what components from src/components to import into that view.")
-    }
-  })
-}
 
-// make sure react component templates exist and if not create them 
-let checkReactTemplatesExist = () => {
-  try {
-    let stateless = fs.readFileSync('./scripts/templates/statefulComponent.js', 'utf8')
-    let stateful = fs.readFileSync('./scripts/templates/statelessComponent.js', 'utf8')
-  } catch (err) {
-    let statefulComponent = loadFile("frontend/react/templates/statefulComponent.js")
-    let statelessComponent = loadFile("frontend/react/templates/statelessComponent.js")
-    helpers.writeFile("scripts/templates/statefulComponent.js", statefulComponent, "Created statefulComponent template in scripts/templates/")
-    helpers.writeFile("scripts/templates/statelessComponent.js", statelessComponent, "Created statelessComponent template in scripts/templates/")
+exports.addClientView = () => {
+  helpers.addScriptToPackageJSON("view", "node scripts/view.js")
+  helpers.checkScriptsFolderExist()
+  this.checkReactTemplatesExist()
+
+  // if true project uses redux
+  if (fs.existsSync('./src/store')) {
+    let reduxViewScript = loadFile("frontend/redux/view.js")
+    helpers.writeFile("scripts/view.js", reduxViewScript)
+
+    console.log("")
+    console.log("Added script to project, to run: npm run view <name>")
+    console.log("This will create a new stateless or stateful component in src/views and ask which components/containers to import into the view. It will also ask for a route path for the view and add this view with it's route into the App.js file.")
+    console.log("If view already exists it will just ask what containers/components from src/components to import into that view.")
+  } else {
+    let reactRouterViewScript = loadFile("frontend/react-router/view.js")
+    helpers.writeFile("scripts/view.js", reactRouterViewScript)
+
+    console.log("")
+    console.log("Added script to project, to run: npm run view <name>")
+    console.log("This will create a new stateless or stateful component in src/views and ask which components to import into the view. It will also ask for a route path for the view and add this view with it's route into the App.js file.")
+    console.log("If view already exists it will just ask what components from src/components to import into that view.")
   }
 }
 
-let addController = () => {
+
+// make sure react component templates exist and if not create them 
+exports.checkReactTemplatesExist = () => {
+  try {
+    fs.readFileSync('./scripts/templates/statefulComponent.js', 'utf8')
+    fs.readFileSync('./scripts/templates/statelessComponent.js', 'utf8')
+  } catch (err) {
+    let statefulComponent = loadFile("frontend/react/templates/statefulComponent.js")
+    let statelessComponent = loadFile("frontend/react/templates/statelessComponent.js")
+    helpers.writeFile("scripts/templates/statefulComponent.js", statefulComponent)
+    helpers.writeFile("scripts/templates/statelessComponent.js", statelessComponent)
+  }
+}
+
+
+exports.addController = () => {
   helpers.addScriptToPackageJSON("controller", "node scripts/controller.js");
 
   let controller = loadFile("backend/controller.js");
   let controllerTemplate = loadFile("backend/templates/controller.js");
   let routes = loadFile("backend/templates/routes.js");
 
-  checkScriptsFolderExists();
+  helpers.checkScriptsFolderExists();
 
-  helpers.writeFile("scripts/controller.js", controller, "Created controller.js script file in scripts folder");
-  helpers.writeFile(
-    "scripts/templates/controller.js",
-    controllerTemplate,
-    "Created controller.js template in scripts/templates"
-  );
-  helpers.writeFile(
-    "scripts/templates/routes.js",
-    routes,
-    "Created routes.js template in scripts/templates"
-  );
-  log("")
-  log("Added script to project, to run: npm run controller <name>")
-  log("This will create a controller in server/controllers and add the associated GET/PUT/DELETE/POST routes to server/routes.js")
+  helpers.writeFile("scripts/controller.js", controller);
+  helpers.writeFile("scripts/templates/controller.js", controllerTemplate);
+  helpers.writeFile("scripts/templates/routes.js", routes);
+  console.log("")
+  console.log("Added script to project, to run: npm run controller <name>")
+  console.log("This will create a controller in server/controllers and add the associated GET/PUT/DELETE/POST routes to server/routes.js")
 };
 
-let createNewScript = name => {
+
+const createNewScript = async name => {
   helpers.addScriptToPackageJSON(name, `node scripts/${name}.js`);
-  checkScriptsFolderExists();
+  helpers.checkScriptsFolderExists();
   helpers.writeFile(`scripts/${name}.js`, "");
-  prompt([template]).then(a => {
-    a = a.template;
-    if (a) {
-      prompt([templateName]).then(ans => {
-        ans = ans.templateName;
-        let importTemplate = fs.readFileSync(path.resolve(__dirname, './templates/customScript.js'), 'utf8');
-        importTemplate = importTemplate.replace(/Name/g, ans)
-        helpers.appendFile(`./scripts/${name}.js`, importTemplate)
-        helpers.writeFile(`scripts/templates/${ans}.js`, "");
-        log("");
-        log(`Added script to project, to run npm run ${name}`)
-        log(`Created template ${ans} in scripts/templates`)
-        log("Go to the scripts folder and start customizing them!")
-      });
-    } else {
-      log("");
-      log(`Added script to project, to run npm run ${name}`)
-      log("Go to the scripts folder and start customizing it!")
-      process.exit();
-    }
-  });
-};
-
-let checkScriptsFolderExists = () => {
-  console.clear()
-  try {
-    if (fs.existsSync("./scripts")) {
-      if (!fs.existsSync("./scripts/templates")) {
-        helpers.mkdirSync("scripts/templates");
-      }
-    } else {
-      helpers.mkdirSync("scripts");
-      helpers.mkdirSync("scripts/templates");
-    }
-  } catch (err) {
-    console.error("Could not create scripts and scripts/templates folder. Here is the error: ", err)
+  
+  let a = await prompt([template])
+  a = a.template;
+  if (a) {
+    let ans = await prompt([templateName])
+    ans = ans.templateName;
+    let importTemplate = fs.readFileSync(path.resolve(__dirname, './templates/customScript.js'), 'utf8');
+    importTemplate = importTemplate.replace(/Name/g, ans)
+    helpers.appendFile(`./scripts/${name}.js`, importTemplate)
+    helpers.writeFile(`scripts/templates/${ans}.js`, "");
+    console.log("");
+    console.log(`Added script to project, to run npm run ${name}`)
+    console.log(`Created template ${ans} in scripts/templates`)
+    console.log("Go to the scripts folder and start customizing them!")
+  } else {
+    console.log("");
+    console.log(`Added script to project, to run: npm run ${name}`)
+    console.log("Go to the scripts folder and start customizing it!")
+    process.exit();
   }
 };
 
-module.exports = scripts;
+exports.createNewScript = createNewScript
