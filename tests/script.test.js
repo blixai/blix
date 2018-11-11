@@ -233,20 +233,101 @@ describe('scripts', () => {
             expect(scriptsModule.checkReactTemplatesExist).toBeCalled()
         })
 
-        it('if src/store exists assume user is using redux and use redux + react-router view script', () => {
+        it.skip('if src/store exists assume user is using redux and use redux + react-router view script', () => {
+
+
+            addClientView()
+
+            expect(fs.existsSync).toBeCalled()
 
         })
 
-        it('if src/store doesn\'t exist use react-router view script', () => {
+        it.skip('if src/store doesn\'t exist use react-router view script', () => {
 
         })
     })
 
     describe('checkReactTemplatesExist', () => {
+        it('attemtps to read react stateless and stateful templates and if an error is thrown because it doesn\'t exists writes to both', () => {
+            checkReactTemplatesExist()
+
+            expect(helpers.writeFile).toBeCalledWith('scripts/templates/statefulComponent.js', expect.any(String))
+            expect(helpers.writeFile).toBeCalledWith('scripts/templates/statelessComponent.js', expect.any(String))
+        })
+
+    })
+
+    describe('addController', () => {
+        it('adds scripts to package.json and ensures the scripts folder exists', () => {
+            addController()
+
+            expect(helpers.addScriptToPackageJSON).toBeCalledWith('controller', 'node scripts/controller.js')
+            expect(helpers.checkScriptsFolderExist).toBeCalled()
+        })
+
+        it('writes controller script, and controller and route templates', () => {
+            addController()
+            
+            expect(helpers.writeFile).toBeCalledWith('scripts/controller.js', expect.any(String))
+            expect(helpers.writeFile).toBeCalledWith('scripts/templates/controller.js', expect.any(String))
+            expect(helpers.writeFile).toBeCalledWith('scripts/templates/routes.js', expect.any(String))
+        })
+
+        it('console logs instructions to use the script', () => {
+            addController()
+
+            expect(console.log).toBeCalledTimes(3)
+        })
 
     })
 
     describe('createNewScript', () => {
+        it('adds a script to package json with the name selected, checks if scripts folder exists, and writes script file of selected name',async () => {
+            inquirer.prompt.mockResolvedValueOnce({ template: false })
 
+            await createNewScript('someName')
+
+            expect(helpers.addScriptToPackageJSON).toBeCalledWith('someName', 'node scripts/someName.js')
+            expect(helpers.checkScriptsFolderExist).toBeCalled()
+            expect(helpers.writeFile).toBeCalledWith('scripts/someName.js', "")
+        })
+
+        it('prompts if you need a template', async () => {
+            inquirer.prompt.mockResolvedValueOnce({ template: false })
+
+            await createNewScript('someName')
+
+            expect(inquirer.prompt).toBeCalled()
+        })
+
+        it('if template selected it prompts for the name of the template if template selected and creates a template with that name and adds the path into the script', async () => {
+            inquirer.prompt
+                .mockResolvedValueOnce({ template: true })
+                .mockResolvedValueOnce({ templateName: 'someTemplate' })
+
+            await createNewScript('someName')
+
+            expect(helpers.appendFile).toBeCalledWith(`./scripts/someName.js`, expect.any(String))
+            expect(helpers.writeFile).toBeCalledWith('scripts/templates/someTemplate.js', expect.any(String))
+        })
+        
+
+        it('logs the instructions if script and template created', async () => {
+            inquirer.prompt
+                .mockResolvedValueOnce({ template: true })
+                .mockResolvedValueOnce({ templateName: 'someTemplate' })
+
+            await createNewScript('someName')
+
+            expect(console.log).toBeCalledTimes(4)
+        })
+
+        it('logs the instructions if only script created', async () => {
+            inquirer.prompt.mockResolvedValueOnce({ template: false })
+
+            await createNewScript('someName')
+
+            expect(console.log).toBeCalledTimes(3)
+        })
     })
 })

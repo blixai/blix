@@ -49,12 +49,6 @@ const custom = {
   name: "custom"
 };
 
-const viewType = {
-  type: "confirm",
-  message: "Does your project use Redux:",
-  name: "view"
-}
-
 const model = {
   type: "list",
   message: "Pick a model type:",
@@ -246,6 +240,7 @@ exports.checkReactTemplatesExist = () => {
   } catch (err) {
     let statefulComponent = loadFile("frontend/react/templates/statefulComponent.js")
     let statelessComponent = loadFile("frontend/react/templates/statelessComponent.js")
+
     helpers.writeFile("scripts/templates/statefulComponent.js", statefulComponent)
     helpers.writeFile("scripts/templates/statelessComponent.js", statelessComponent)
   }
@@ -254,16 +249,16 @@ exports.checkReactTemplatesExist = () => {
 
 exports.addController = () => {
   helpers.addScriptToPackageJSON("controller", "node scripts/controller.js");
+  helpers.checkScriptsFolderExist();
 
   let controller = loadFile("backend/controller.js");
   let controllerTemplate = loadFile("backend/templates/controller.js");
   let routes = loadFile("backend/templates/routes.js");
 
-  helpers.checkScriptsFolderExists();
-
   helpers.writeFile("scripts/controller.js", controller);
   helpers.writeFile("scripts/templates/controller.js", controllerTemplate);
   helpers.writeFile("scripts/templates/routes.js", routes);
+
   console.log("")
   console.log("Added script to project, to run: npm run controller <name>")
   console.log("This will create a controller in server/controllers and add the associated GET/PUT/DELETE/POST routes to server/routes.js")
@@ -272,7 +267,7 @@ exports.addController = () => {
 
 const createNewScript = async name => {
   helpers.addScriptToPackageJSON(name, `node scripts/${name}.js`);
-  helpers.checkScriptsFolderExists();
+  helpers.checkScriptsFolderExist();
   helpers.writeFile(`scripts/${name}.js`, "");
   
   let a = await prompt([template])
@@ -284,6 +279,7 @@ const createNewScript = async name => {
     importTemplate = importTemplate.replace(/Name/g, ans)
     helpers.appendFile(`./scripts/${name}.js`, importTemplate)
     helpers.writeFile(`scripts/templates/${ans}.js`, "");
+
     console.log("");
     console.log(`Added script to project, to run npm run ${name}`)
     console.log(`Created template ${ans} in scripts/templates`)
@@ -292,7 +288,6 @@ const createNewScript = async name => {
     console.log("");
     console.log(`Added script to project, to run: npm run ${name}`)
     console.log("Go to the scripts folder and start customizing it!")
-    process.exit();
   }
 };
 
