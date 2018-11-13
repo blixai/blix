@@ -24,12 +24,13 @@ describe('addDataBase', () => {
         expect(inquirer.prompt).toBeCalledWith([database])
     })
 
-    it('calls helpers.yarn', async () => {
+    it('calls helpers.yarn and helpers.checkScriptsFolderExist', async () => {
         inquirer.prompt.mockResolvedValueOnce({ database: 'mongo' })
 
         await addDatabase()
 
         expect(helpers.yarn).toBeCalled()
+        expect(helpers.checkScriptsFolderExist).toBeCalled()
     })
 
     it('calls addMongooseToScripts if selection is mongo', async () => {

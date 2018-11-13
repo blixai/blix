@@ -10,6 +10,9 @@ const store = require('../../new/store')
 const addDatabase = async () => {
   store.database = await prompt([database])
   await helpers.yarn()
+
+  helpers.checkScriptsFolderExist()
+
   if (store.database.database === 'mongo') {
     addMongooseToScripts()
   } else if (store.database.database === 'pg') {
