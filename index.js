@@ -9,15 +9,13 @@ if (process.argv.includes('--verbose')) {
 }
 
 const { createProject } = require("./new");
-const help = require("./help/help.js");
-const { scripts } = require("./scripts/script.js");
+const help = require("./help/help");
+const { scripts } = require("./scripts/script");
 const add = require("./add/add");
 const { generate } = require('./generate')
-const command = process.argv[2];
-const log = console.log
 
-const checkCommand = command => {
-  switch (command) {
+exports.checkCommand = command => {
+  switch (process.argv[2]) {
     case "new":
       createProject();
       break;
@@ -37,34 +35,34 @@ const checkCommand = command => {
       generate()
       break
     case "version":
-      checkVersion()
+      this.checkVersion()
       break
     case "-v":
-      checkVersion()
+      this.checkVersion()
       break
     default:
-      noCommand()
+      this.noCommand()
       break;
   }
 };
 
-const checkVersion = () => {
+exports.checkVersion = () => {
   var pjson = require("./package.json");
-  log(pjson.version);
+  console.log(pjson.version);
 }
 
-const noCommand = () => {
-  log('No command entered')
-  log('')
-  log('Here is a list of blix commands:')
-  log('new')
-  log('add')
-  log('scripts')
-  log('generate | g')
-  log('version | -v')
-  log('help')
-  log('')
-  log('Run: "blix help" to learn more about a command')
+exports.noCommand = () => {
+  console.log('No command entered')
+  console.log('')
+  console.log('Here is a list of blix commands:')
+  console.log('new')
+  console.log('add')
+  console.log('scripts')
+  console.log('generate | g')
+  console.log('version | -v')
+  console.log('help')
+  console.log('')
+  console.log('Run: "blix help" to learn more about a command')
 }
 
 let currentNodeVersion = process.versions.node;
@@ -82,4 +80,4 @@ if (major < 8) {
   process.exit(1);
 }
 
-checkCommand(command);
+this.checkCommand();
