@@ -52,7 +52,7 @@ exports.react = () => {
   helpers.mkdirSync(`dist`);
   helpers.mkdirSync(`src`);
   // A FOLDER TO HOLD FILES WITH RESOURCE FETCH CALLS TO ONE RESOURCE PER FILE (similar to controllers server side)
-  helpers.mkdirSync(`src/services`);
+  helpers.mkdirSync(`src/api`);
 
   // build project specific contents based on type supplied from new/index.js
   this.createSrcContents();

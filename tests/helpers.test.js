@@ -843,8 +843,8 @@ describe('Helper Tests', () => {
       expect(console.error).toBeCalledWith(chalk`{red No directory to move files to specified.}`)
     })
 
-    it('doesn\'t move directories named actions, components, store, or services', () => {
-      fs.readdirSync.mockReturnValue(['actions', 'components', 'store', 'services'])
+    it('doesn\'t move directories named actions, components, store, or api', () => {
+      fs.readdirSync.mockReturnValue(['actions', 'components', 'store', 'api'])
 
       let mock = helpers.rename = jest.fn()
 
