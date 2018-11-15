@@ -57,7 +57,7 @@ describe('new/react', () => {
       expect(mockMkdirSync).toBeCalledTimes(3)
       expect(mockMkdirSync.mock.calls[0][0]).toEqual("dist")
       expect(mockMkdirSync.mock.calls[1][0]).toEqual("src")
-      expect(mockMkdirSync.mock.calls[2][0]).toEqual("src/services")
+      expect(mockMkdirSync.mock.calls[2][0]).toEqual("src/api")
     })
 
     it('calls createSrcContents', () => {

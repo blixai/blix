@@ -333,7 +333,7 @@ exports.moveAllFilesInDir = (dirToSearch, dirToMoveTo) => {
 
   try {
     fs.readdirSync(dirToSearch).forEach(file => {
-      if (file === 'actions' || file === 'components' || file === 'store' || file === 'services') {
+      if (file === 'actions' || file === 'components' || file === 'store' || file === 'api') {
         return
       }
       try {

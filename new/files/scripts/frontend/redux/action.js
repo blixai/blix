@@ -118,7 +118,7 @@ let importAction = () => {
   fs.readdirSync("./src").forEach(file => {
     let filePath = `${p}/` + `${file}`;
     let stats = fs.statSync(filePath, "utf8");
-    if (stats.isDirectory() && file !== 'reducers' && file !== 'services' && file !== 'actions') {
+    if (stats.isDirectory() && file !== 'reducers' && file !== 'api' && file !== 'actions') {
       folders.push(file);
     }
   });
