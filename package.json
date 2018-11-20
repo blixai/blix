@@ -1,6 +1,6 @@
 {
   "name": "blix",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Yeoman on steroids: quickly create a multitude of Javascript applications from scratch and automate tasks with hackable scrips or add scripts and tools to existing projects.",
   "main": "index.js",
   "scripts": {
@@ -38,7 +38,7 @@
     "sinon": "^7.0.0"
   },
   "homepage": "https://github.com/blixjs/blix",
-  "engines" : { 
-    "node" : ">=8.11.3"
+  "engines": {
+    "node": ">=8.11.3"
   }
 }
