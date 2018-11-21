@@ -32,7 +32,7 @@ yarn global add blix@next
 
 ## Blix commands: 
 ```
-  blix new <projectName>
+  blix new
   blix add
   blix scripts
   blix generate | g
@@ -45,7 +45,7 @@ yarn global add blix@next
 To run Blix without installing it you can use [npx](https://medium.com/@maybekatz/introducing-npx-an-npm-package-runner-55f7d4bd282b) to try it out!
 
 ```
-npx blix new my-project 
+npx blix@next new my-project 
 ```
 
 You will then be prompted on what you need for your new project. 
