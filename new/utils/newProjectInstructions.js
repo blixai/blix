@@ -13,6 +13,7 @@ exports.options = {
   reactRouterReduxComponent: { command: "component", example: "blix generate component <name>", use: "Create a React component, Redux container, and CSS file in a folder within src/components"},
   action: { command: "action", example: "blix generate action", use: "Create new action, and creates or appends a Reducer, and adds the action to selected containers"},
   controller: { command: "controller", example: "blix generate controller <name>", use: "Quickly create api/v1 get|post|put|delete endpoints for a resource"},
+  api: { command: "api", example: "blix generate api <resource>", use: "Quickly create client side axios requests to api/v1 get|post|put|delete endpoints for a resource"}
 };
 
 exports.logCustomScriptInstructions = () => {
@@ -29,6 +30,10 @@ exports.logCustomScriptInstructions = () => {
     optionsToLog.push(this.options.reactRouterReduxComponent)
     optionsToLog.push(this.options.view)
     optionsToLog.push(this.options.action)
+  }
+  // api
+  if (store.reactType) {
+    optionsToLog.push(this.options.api)
   }
   //backend
   if (store.backend && store.backend.backend) {
