@@ -24,6 +24,12 @@ apiCalls = apiCalls.replace(/name/g, `${resource}`)
 
 try {
     fs.writeFileSync(`./src/api/${resource}Data.js`, apiCalls)
+    console.log("Created axios requests:")
+    console.log("")
+    console.log(`GET:    api/v1/${resource}`);
+    console.log(`PUT:    api/v1/${resource}/:id`);
+    console.log(`DELETE: api/v1/${resource}/:id `);
+    console.log(`POST:   api/v1/${resource} `);
 } catch (err) {
     console.error('Couldn\'t create file. Error: ', err)
 }
