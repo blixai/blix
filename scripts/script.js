@@ -3,6 +3,7 @@ const path = require("path");
 const inquirer = require('inquirer');
 const prompt = inquirer.prompt;
 const helpers = require("../helpers");
+const addAPIScript = require('../new/utils/addAPIScript')
 
 // helper function to load files
 let loadFile = filePath => {
@@ -39,6 +40,10 @@ const commands = {
     {
       name: "view: create a new client side view in projects with react-router",
       value: "view"
+    },
+    {
+      name: "api: create axios requests to a resource quickly",
+      value: "api"
     }
   ]
 };
@@ -91,6 +96,9 @@ const scripts = async () => {
       break;
     case "view":
       this.addClientView()
+      break;
+    case "api":
+      this.addAPI()
       break;
     case "custom":
       let customSelection = await prompt([custom])
@@ -292,3 +300,13 @@ const createNewScript = async name => {
 };
 
 exports.createNewScript = createNewScript
+
+exports.addAPI = () => {
+  helpers.checkScriptsFolderExist()
+
+  addAPIScript()
+
+  console.log("")
+  console.log("Added script to project, to run: npm run api <resource>")
+  console.log("This will create a file with several basic axios requests in src/api/<resource>.js")
+}

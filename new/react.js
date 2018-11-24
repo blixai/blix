@@ -6,6 +6,7 @@ const {addLinter} = require('./utils/addLinter')
 const {installReactTesting} = require("./utils/addReactTesting");
 const {e2eSetup} = require("./utils/addEndToEndTesting");
 const {newProjectInstructions} = require('./utils/newProjectInstructions')
+const addAPIScript = require('./utils/addAPIScript')
 const {createBackend} = require("./backend");
 const store = require('./store')
 
@@ -206,6 +207,8 @@ exports.scripts = () => {
   } else if (store.reactType === "reactRouter-redux") {
     this.reactRouterReduxScripts();
   }
+
+  addAPIScript()
 };
 
 exports.reactScripts = () => {
@@ -289,7 +292,7 @@ exports.packages = () => {
   if (!store.backend.backend) {
     helpers.addDevDependenciesToStore("webpack-dev-server")
   }
-  helpers.addDevDependenciesToStore("react react-dom webpack webpack-cli babel-loader css-loader @babel/core @babel/preset-env @babel/preset-react style-loader sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-preset-env postcss-import postcss-loader")
+  helpers.addDevDependenciesToStore("react react-dom webpack webpack-cli babel-loader css-loader @babel/core @babel/preset-env @babel/preset-react @babel/plugin-transform-runtime @babel/runtime style-loader sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-preset-env postcss-import postcss-loader")
 };
 
 exports.createWebpack = () => {

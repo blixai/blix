@@ -2,6 +2,7 @@ jest.mock('../helpers')
 jest.mock('inquirer', () => ({
     prompt: jest.fn()
 }))
+jest.mock('../new/utils/addAPIScript')
 
 
 const {
@@ -13,9 +14,10 @@ const {
     addClientView,
     checkReactTemplatesExist,
     addController,
-    createNewScript
+    createNewScript,
+    addAPI
 } = require('../scripts/script')
-
+const addAPIScript = require('../new/utils/addAPIScript')
 const scriptsModule = require('../scripts/script')
 let inquirer = require('inquirer')
 const helpers = require('../helpers')
@@ -100,6 +102,16 @@ describe('scripts', () => {
 
             expect(inquirer.prompt).toBeCalledTimes(2)
             expect(scriptsModule.createNewScript).toBeCalledWith('someScript') 
+        })
+
+        it('calls addAPI when api is select', async () => {
+            inquirer.prompt
+                .mockResolvedValueOnce({ commands: 'api' })
+            scriptsModule.addAPI = jest.fn()
+
+            await scripts()
+
+            expect(scriptsModule.addAPI).toBeCalled()
         })
 
     })
@@ -326,6 +338,26 @@ describe('scripts', () => {
             inquirer.prompt.mockResolvedValueOnce({ template: false })
 
             await createNewScript('someName')
+
+            expect(console.log).toBeCalledTimes(3)
+        })
+    })
+
+    describe('addAPI', () => {
+        it('calls helpers.checkScriptsFolderExist', () => {
+            addAPI()
+
+            expect(helpers.checkScriptsFolderExist).toBeCalled()
+        })
+
+        it('calls addAPIScript', () => {
+            addAPI()
+
+            expect(addAPIScript).toBeCalled()
+        })
+        it('logs instructions', () => {
+            console.log = jest.fn()
+            addAPI()
 
             expect(console.log).toBeCalledTimes(3)
         })
