@@ -7,6 +7,7 @@ const {createBackend} = require('../../new/backend');
 const store = require('../../new/store')
 const helpers = require('../../helpers')
 const reactMod = require('../../new/react')
+const addAPIScripts = require('../../new/utils/addAPIScript')
 const {
   react,
   cssLibrary,
@@ -35,6 +36,7 @@ jest.mock('../../new/utils/newProjectInstructions')
 jest.mock('../../new/utils/createCommonFiles', () => ({
   createCommonFilesAndFolders: jest.fn()
 }))
+jest.mock('../../new/utils/addAPIScript')
 
 describe('new/react', () => {
 
@@ -479,6 +481,12 @@ describe('new/react', () => {
 
       expect(mockReactScripts).toBeCalled()
     })
+
+    it('calls addAPIScript', () => {
+      scripts()
+
+      expect(addAPIScripts).toBeCalled()
+    })
   })
 
   describe('reactScripts', () => {
@@ -608,7 +616,7 @@ describe('new/react', () => {
       expect(mockAddDev).toBeCalled()
       expect(mockAddDev).toBeCalledTimes(2)
       expect(mockAddDev.mock.calls[0][0]).toEqual('webpack-dev-server')
-      expect(mockAddDev.mock.calls[1][0]).toEqual('react react-dom webpack webpack-cli babel-loader css-loader @babel/core @babel/preset-env @babel/preset-react style-loader sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-preset-env postcss-import postcss-loader')
+      expect(mockAddDev.mock.calls[1][0]).toEqual('react react-dom webpack webpack-cli babel-loader css-loader @babel/core @babel/preset-env @babel/preset-react @babel/plugin-transform-runtime @babel/runtime style-loader sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-preset-env postcss-import postcss-loader')
     })
 
     it('only adds devDependencies to the store if backend is selected', () => {
@@ -619,7 +627,7 @@ describe('new/react', () => {
 
       expect(mockAddDev).toBeCalled()
       expect(mockAddDev).toBeCalledTimes(1)
-      expect(mockAddDev.mock.calls[0][0]).toEqual('react react-dom webpack webpack-cli babel-loader css-loader @babel/core @babel/preset-env @babel/preset-react style-loader sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-preset-env postcss-import postcss-loader')
+      expect(mockAddDev.mock.calls[0][0]).toEqual('react react-dom webpack webpack-cli babel-loader css-loader @babel/core @babel/preset-env @babel/preset-react @babel/plugin-transform-runtime @babel/runtime style-loader sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-preset-env postcss-import postcss-loader')
     })
   })
 

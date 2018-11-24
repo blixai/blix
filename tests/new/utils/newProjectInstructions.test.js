@@ -30,34 +30,37 @@ describe('New Project Instructions', () => {
     it('sets options to log for reactType react', () => {
       const mockFormatter = projectInstructions.readmeFormatter = jest.fn()
       const reactComponent = options.reactComponent
+      const api = options.api
       store.reactType = 'react'
 
       logCustomScriptInstructions()
 
       expect(mockFormatter).toBeCalled()
-      expect(mockFormatter.mock.calls[0][0]).toEqual([reactComponent])
+      expect(mockFormatter.mock.calls[0][0]).toEqual([reactComponent, api])
     })
     
     it('sets options to log for reactType react-router', () => {
         const mockFormatter = projectInstructions.readmeFormatter = jest.fn()
         const reactRouterComponent = options.reactRouterComponent
         const view = options.view
+        const api = options.api
         store.reactType = 'react-router'
 
         logCustomScriptInstructions()
 
-        expect(mockFormatter).toBeCalledWith([reactRouterComponent, view])
+        expect(mockFormatter).toBeCalledWith([reactRouterComponent, view, api])
     })
 
     it('sets options to log reactType redux', () => {
       const mockFormatter = projectInstructions.readmeFormatter = jest.fn()
       const reduxComponent = options.reduxComponent
       const action = options.action
+      const api = options.api
       store.reactType = 'redux'
 
       logCustomScriptInstructions()
 
-      expect(mockFormatter).toBeCalledWith([reduxComponent, action])
+      expect(mockFormatter).toBeCalledWith([reduxComponent, action, api])
     })
 
     it('sets options to log for reactType reactRouter-redux', () => {
@@ -65,11 +68,12 @@ describe('New Project Instructions', () => {
       const reactRouterReduxComponent = options.reactRouterReduxComponent
       const action = options.action
       const view = options.view
+      const api = options.api
       store.reactType = 'reactRouter-redux'
 
       logCustomScriptInstructions()
 
-      expect(mockFormatter).toBeCalledWith([reactRouterReduxComponent, view ,action])      
+      expect(mockFormatter).toBeCalledWith([reactRouterReduxComponent, view ,action, api])      
     })
 
     it('sets options to log for backend', () => {

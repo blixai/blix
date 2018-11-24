@@ -2,7 +2,7 @@ const helpers = require('../helpers')
 const fs = require('fs')
 const chalk = require('chalk')
 const execSync = require('child_process').execSync
-let possibleScripts = ['component', 'view', 'model', 'page', 'controller', 'action']
+let possibleScripts = ['component', 'view', 'model', 'page', 'controller', 'action', 'api']
 
 
 exports.generate = () => {
