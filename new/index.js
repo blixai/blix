@@ -9,8 +9,6 @@ let store = require('./store')
 const chalk = require('chalk')
 const helpers = require('../helpers')
 
-store.name = process.argv[3] || '';
-
 // console prompts
 const {
   namePrompt,

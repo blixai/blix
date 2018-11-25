@@ -2,7 +2,6 @@
 const program = require('commander');
 const store = require('./new/store')
 const { createProject } = require("./new");
-const help = require("./help/help");
 const { scripts } = require("./scripts/script");
 const add = require("./add/add");
 const { generate } = require('./generate')
@@ -63,5 +62,3 @@ if (program.verbose) store.env = 'development'
 if (!process.argv.slice(2).length) {
   program.outputHelp()
 }
-
-
