@@ -127,15 +127,18 @@ describe('Helper Tests', () => {
   })
 
   describe('installKnexGlobal', () => {
+
     beforeEach(() => {
       store.name = 'tests'
       const spy = jest.spyOn(process, 'chdir').mockImplementation(() => {
         return
       })
     })
+
     afterEach(() => {
       store.name = ''
     })
+
     it('attempts to install a postgres db', () => {
       child_process.execSync.mockReturnValue(true)
       store.env = 'development'
@@ -154,6 +157,7 @@ describe('Helper Tests', () => {
 
       expect(child_process.execSync.mock.calls[0][0]).toEqual('yarn add knex global')
     })
+
     it('if npm selected and installed uses npm to install knex globally', () => {
       child_process.execSync.mockReturnValue(true)
       store.useYarn = false
@@ -161,6 +165,25 @@ describe('Helper Tests', () => {
       installKnexGlobal()
 
       expect(child_process.execSync.mock.calls[0][0]).toEqual('npm install -g knex')
+    })
+
+    it('if no store.name it checks if yarn.lock file exists and if it does runs yarn installation', () => {
+      store.name = ''
+      child_process.execSync.mockReturnValue(true)
+      fs.existsSync = jest.fn().mockReturnValueOnce(true)
+
+      installKnexGlobal()
+
+      expect(child_process.execSync).toBeCalledWith('yarn add knex global', {"stdio": [0, 1, 2]})
+    })
+
+    it('if no store.name it checks if yarn.lock file exists and if it does not runs npm installation', () => {
+      store.name = ''
+      child_process.execSync.mockReturnValue(true)
+
+      installKnexGlobal() 
+
+      expect(child_process.execSync).toBeCalledWith('npm install -g knex', {"stdio": [0, 1, 2]})
     })
   })
 
