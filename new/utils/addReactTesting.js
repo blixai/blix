@@ -18,7 +18,7 @@ let installReactTesting = () => {
   } else {
     file = "App.spec.js"
   }
-  helpers.addDevDependenciesToStore("jest enzyme enzyme-adapter-react-16 identity-obj-proxy babel-jest 'babel-core@^7.0.0-0'")
+  helpers.addDependenciesToStore("jest enzyme enzyme-adapter-react-16 identity-obj-proxy babel-jest 'babel-core@^7.0.0-0'", 'dev')
   helpers.writeFile(
     `test/${file}`,
     loadFile(`../files/frontend/enzyme/${file}`)

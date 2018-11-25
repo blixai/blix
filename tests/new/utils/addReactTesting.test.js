@@ -69,7 +69,7 @@ describe("Add React Testing", () => {
     store.reactType = "react"
     installReactTesting()
 
-    expect(helpers.addDevDependenciesToStore).toBeCalledWith("jest enzyme enzyme-adapter-react-16 identity-obj-proxy babel-jest 'babel-core@^7.0.0-0'")
+    expect(helpers.addDependenciesToStore).toBeCalledWith("jest enzyme enzyme-adapter-react-16 identity-obj-proxy babel-jest 'babel-core@^7.0.0-0'", 'dev')
   })
 
 

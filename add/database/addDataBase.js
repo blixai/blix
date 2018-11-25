@@ -18,7 +18,7 @@ const addDatabase = async () => {
   } else if (store.database.database === 'pg') {
     addBookshelfToScripts()
   }
-  helpers.installAllPackagesToExistingProject()
+  helpers.installAllPackages()
   addProjectInstructions()
 }
 

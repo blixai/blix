@@ -160,33 +160,27 @@ describe('new/react', () => {
 
   describe('cssLibrary', () => {
     it('adds @material-ui/core to store.devDependencies if material is in the store', () => {
-      const mockAddDevDependencies = helpers.addDevDependenciesToStore.mockReturnValue(true)
       store.reactCSS = 'material'
 
       cssLibrary()
 
-      expect(mockAddDevDependencies).toBeCalled()
-      expect(mockAddDevDependencies.mock.calls[0][0]).toEqual('@material-ui/core')
+      expect(helpers.addDependenciesToStore).toBeCalledWith('@material-ui/core', 'dev')
     })
 
     it('adds react-bootstrap to store.devDependencies if bootstrap is in the store', () => {
-      const mockAddDevDependencies = helpers.addDevDependenciesToStore.mockReturnValue(true)
       store.reactCSS = 'bootstrap'
 
       cssLibrary()
 
-      expect(mockAddDevDependencies).toBeCalled()
-      expect(mockAddDevDependencies.mock.calls[0][0]).toEqual('react-bootstrap')
+      expect(helpers.addDependenciesToStore).toBeCalledWith("react-bootstrap", "dev")
     })
 
     it('adds styled-components to store.devDependencies if styled is in the store', () => {
-      const mockAddDevDependencies = helpers.addDevDependenciesToStore.mockReturnValue(true)
       store.reactCSS = 'styled'
 
       cssLibrary()
 
-      expect(mockAddDevDependencies).toBeCalled()
-      expect(mockAddDevDependencies.mock.calls[0][0]).toEqual('styled-components')
+      expect(helpers.addDependenciesToStore).toBeCalledWith('styled-components', 'dev')
     })
   })
 
@@ -263,7 +257,6 @@ describe('new/react', () => {
     it('creates components, Navbar, views, and styles directories', () => {
       const mockMkdirSync = helpers.mkdirSync = jest.fn()
       helpers.writeFile = jest.fn().mockReturnValue(true)
-      helpers.addDevDependenciesToStore = jest.fn().mockReturnValue(true)
 
       reactRouter()
 
@@ -278,7 +271,6 @@ describe('new/react', () => {
     it('creates reactRouter files', () => {
       const mockWriteFile = helpers.writeFile = jest.fn()
       helpers.mkdirSync = jest.fn().mockReturnValue(true)
-      helpers.addDevDependenciesToStore = jest.fn().mockReturnValue(true)
 
       reactRouter()
 
@@ -295,12 +287,10 @@ describe('new/react', () => {
     it('adds devDependencies to the store', () => {
       helpers.writeFile = jest.fn().mockReturnValue(true)
       helpers.mkdirSync = jest.fn().mockReturnValue(true)
-      const mockAddDev = helpers.addDevDependenciesToStore = jest.fn()
 
       reactRouter()
 
-      expect(mockAddDev).toBeCalled()
-      expect(mockAddDev.mock.calls[0][0]).toEqual('react-router-dom')
+      expect(helpers.addDependenciesToStore).toBeCalledWith('react-router-dom', 'dev')
     })
   })
 
@@ -308,7 +298,6 @@ describe('new/react', () => {
     it('creates App, actions and reducers directories', () => {
       const mockMkdirSync = helpers.mkdirSync = jest.fn()
       helpers.writeFile = jest.fn().mockReturnValue(true)
-      helpers.addDevDependenciesToStore = jest.fn().mockReturnValue(true)
 
       redux()
 
@@ -322,7 +311,6 @@ describe('new/react', () => {
     it('creates redux files', () => {
       const mockWriteFile = helpers.writeFile = jest.fn()
       helpers.mkdirSync = jest.fn().mockReturnValue(true)
-      helpers.addDevDependenciesToStore = jest.fn().mockReturnValue(true)
 
       redux()
 
@@ -340,12 +328,10 @@ describe('new/react', () => {
     it('adds devDependencies to the store', () => {
       helpers.writeFile = jest.fn().mockReturnValue(true)
       helpers.mkdirSync = jest.fn().mockReturnValue(true)
-      const mockAddDev = helpers.addDevDependenciesToStore = jest.fn()
 
       redux()
 
-      expect(mockAddDev).toBeCalled()
-      expect(mockAddDev.mock.calls[0][0]).toEqual('redux react-redux')
+      expect(helpers.addDependenciesToStore).toBeCalledWith('redux react-redux', 'dev')
     })
   })
 
@@ -353,7 +339,6 @@ describe('new/react', () => {
     it('creates reactRouterRedux folders', () => {
       const mockMkdirSync = helpers.mkdirSync = jest.fn()
       helpers.writeFile = jest.fn().mockReturnValue(true)
-      helpers.addDevDependenciesToStore = jest.fn().mockReturnValue(true)
 
       reactRouterRedux()
 
@@ -370,7 +355,6 @@ describe('new/react', () => {
     it('creates reactRouterRedux files', () => {
       const mockWriteFile = helpers.writeFile = jest.fn()
       helpers.mkdirSync = jest.fn().mockReturnValue(true)
-      helpers.addDevDependenciesToStore = jest.fn().mockReturnValue(true)
 
       reactRouterRedux()
 
@@ -391,12 +375,10 @@ describe('new/react', () => {
     it('adds devDependencies to the store', () => {
       helpers.writeFile = jest.fn().mockReturnValue(true)
       helpers.mkdirSync = jest.fn().mockReturnValue(true)
-      const mockAddDev = helpers.addDevDependenciesToStore = jest.fn()
 
       reactRouterRedux()
 
-      expect(mockAddDev).toBeCalled()
-      expect(mockAddDev.mock.calls[0][0]).toEqual('redux react-redux react-router-dom')
+      expect(helpers.addDependenciesToStore).toBeCalledWith('redux react-redux react-router-dom', 'dev')
     })
   })
 
@@ -608,26 +590,20 @@ describe('new/react', () => {
 
   describe('packages', () => {
     it('adds webpack-dev-server as a devDependency if backend is not selected', () => {
-      const mockAddDev = helpers.addDevDependenciesToStore = jest.fn()
       store.backend = {backend: false}
 
       packages()
 
-      expect(mockAddDev).toBeCalled()
-      expect(mockAddDev).toBeCalledTimes(2)
-      expect(mockAddDev.mock.calls[0][0]).toEqual('webpack-dev-server')
-      expect(mockAddDev.mock.calls[1][0]).toEqual('react react-dom webpack webpack-cli babel-loader css-loader @babel/core @babel/preset-env @babel/preset-react @babel/plugin-transform-runtime @babel/runtime style-loader sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-preset-env postcss-import postcss-loader')
+      expect(helpers.addDependenciesToStore).toBeCalledWith('webpack-dev-server', 'dev')
+      expect(helpers.addDependenciesToStore).toBeCalledWith('react react-dom webpack webpack-cli babel-loader css-loader @babel/core @babel/preset-env @babel/preset-react @babel/plugin-transform-runtime @babel/runtime style-loader sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-preset-env postcss-import postcss-loader', 'dev')
     })
 
     it('only adds devDependencies to the store if backend is selected', () => {
-      const mockAddDev = helpers.addDevDependenciesToStore = jest.fn()
       store.backend = {backend: true}
 
       packages()
 
-      expect(mockAddDev).toBeCalled()
-      expect(mockAddDev).toBeCalledTimes(1)
-      expect(mockAddDev.mock.calls[0][0]).toEqual('react react-dom webpack webpack-cli babel-loader css-loader @babel/core @babel/preset-env @babel/preset-react @babel/plugin-transform-runtime @babel/runtime style-loader sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-preset-env postcss-import postcss-loader')
+      expect(helpers.addDependenciesToStore).not.toBeCalledWith('react react-dom webpack webpack-cli babel-loader css-loader @babel/core @babel/preset-env @babel/preset-react @babel/plugin-transform-runtime @babel/runtime style-loader sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-preset-env postcss-import postcss-loader')
     })
   })
 

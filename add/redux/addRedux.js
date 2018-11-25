@@ -163,7 +163,7 @@ let createFilesWithRouter = async () => {
     console.log("This doesn't seem to have been created by create-react-app or blix. We're not sure how to handle this so to be safe we won't modify anything.")
   }
 
-  helpers.installDependenciesToExistingProject('redux react-redux react-router-dom')
+  helpers.installDependencies('redux react-redux react-router-dom')
   return
 }
 
@@ -192,7 +192,7 @@ let dontAddReactRouter = async () => {
     let index = `import React from 'react'\nimport ReactDOM from 'react-dom'\nimport AppContainer from './AppContainer'\nimport { configureStore } from './configStore'\nimport { Provider } from 'react-redux'\n\n\nconst store = configureStore()\n\n\nReactDOM.render(\n\t<Provider store={store}>\n\t\t<AppContainer/>\n\t</Provider>\n, document.getElementById('root'))`
     helpers.writeFile('src/index.js', index)
   }
-  helpers.installDependenciesToExistingProject('react-redux redux')
+  helpers.installDependencies('react-redux redux')
   return
 }
 

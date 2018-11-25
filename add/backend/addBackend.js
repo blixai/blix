@@ -68,7 +68,7 @@ exports.createBackend = (mode, serverTestingSelection, databaseSelection) => {
   this.checkScripts(mode.mode)
   packages(mode)
   testBackend(serverTestingSelection)
-  helpers.installAllPackagesToExistingProject()
+  helpers.installAllPackages()
   addProjectInstructions()
 }
 

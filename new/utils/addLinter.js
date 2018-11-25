@@ -24,15 +24,15 @@ const eslintPackageJsonScripts = () => {
 
 const addLinter = () => {
   if (store.linter === 'prettier') {
-    helpers.addDevDependenciesToStore('prettier')
+    helpers.addDependenciesToStore('prettier', 'dev')
     helpers.writeFile(`prettier.config.js`, prettierConfig)
     helpers.addScriptToPackageJSON('lint', `prettier --config prettier.config.js --write '**/*.js'`)
   } else if (store.linter === 'eslint') {
-    helpers.addDevDependenciesToStore('eslint eslint-plugin-react')
+    helpers.addDependenciesToStore('eslint eslint-plugin-react', 'dev')
     helpers.writeFile(`.eslintrc.js`, eslintBasicConfig)
     eslintPackageJsonScripts()
   } else if (store.linter === 'eslint_prettier') {
-    helpers.addDevDependenciesToStore('eslint eslint-plugin-react eslint-config-prettier eslint-plugin-prettier prettier')
+    helpers.addDependenciesToStore('eslint eslint-plugin-react eslint-config-prettier eslint-plugin-prettier prettier', 'dev')
     helpers.writeFile(`.eslintrc.js`, eslintPrettier)
     eslintPackageJsonScripts()
   }

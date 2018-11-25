@@ -376,7 +376,7 @@ describe('addRedux', () => {
         it('installsDependencies', async () => {
             await createFilesWithRouter()
 
-            expect(helpers.installDependenciesToExistingProject).toBeCalledWith('redux react-redux react-router-dom')
+            expect(helpers.installDependencies).toBeCalledWith('redux react-redux react-router-dom')
         })
     })
 
@@ -441,7 +441,7 @@ describe('addRedux', () => {
         it('installs dependencies', async () => {
             await dontAddReactRouter()
 
-            expect(helpers.installDependenciesToExistingProject).toBeCalledWith('react-redux redux')
+            expect(helpers.installDependencies).toBeCalledWith('react-redux redux')
         })
     })
 

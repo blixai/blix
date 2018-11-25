@@ -121,7 +121,7 @@ describe('addBackend', () => {
       expect(addBackendModule.checkScripts).toBeCalled()
       expect(packages).toBeCalled()
       expect(testBackend).toBeCalled()
-      expect(helpers.installAllPackagesToExistingProject).toBeCalled()
+      expect(helpers.installAllPackages).toBeCalled()
       expect(addProjectInstructions).toBeCalled()
     })
   })

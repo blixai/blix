@@ -46,7 +46,7 @@ describe('addWebpackDevServer', () => {
 
         await addWebpackDevServer()  
 
-        expect(helpers.installDevDependenciesToExistingProject).toBeCalled()
+        expect(helpers.installDependencies).toBeCalledWith('webpack-dev-server', 'dev')
     })
 
     it('adds a start script of "dev" if server script is already taken', async () => {
