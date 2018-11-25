@@ -49,11 +49,10 @@ describe('generate tests', () => {
         it('executes with yarn if yarn.lock exists and script is in package.json', () => {
             console.log = jest.fn()
             child_process.execSync.mockImplementation(() => true)
-            process.argv = ['node', 'blix', 'g', 'component']
             fs.existsSync.mockReturnValue(true)
             helpers.checkIfScriptIsTaken.mockReturnValue(true)
 
-            generate()
+            generate('component')
 
             expect(child_process.execSync.mock.calls[0][0]).toEqual('yarn component ')
         })
@@ -61,13 +60,12 @@ describe('generate tests', () => {
         it('executes with npm if no yarn.lock exists and script is in package.json', () => {
             console.log = jest.fn()
             child_process.execSync.mockImplementation(() => true)
-            process.argv = ['node', 'blix', 'g', 'component']
             fs.existsSync
                 .mockReturnValueOnce(true)
                 .mockReturnValueOnce(false)
             helpers.checkIfScriptIsTaken.mockReturnValue(true)
 
-            generate()
+            generate('component')
 
             expect(child_process.execSync.mock.calls[0][0]).toEqual('npm run component ')
         })
@@ -75,13 +73,12 @@ describe('generate tests', () => {
         it('executes with additional process args the user passed', () => {
             console.log = jest.fn()
             child_process.execSync.mockImplementation(() => true)
-            process.argv = ['node', 'blix', 'g', 'model', 'User', 'email:String', 'age:Number']
             fs.existsSync
                 .mockReturnValueOnce(true)
                 .mockReturnValueOnce(true)
             helpers.checkIfScriptIsTaken.mockReturnValue(true)
 
-            generate()
+            generate('model', ['User', 'email:String', 'age:Number'])
 
             expect(child_process.execSync.mock.calls[0][0]).toEqual('yarn model User email:String age:Number') 
         })
@@ -90,13 +87,12 @@ describe('generate tests', () => {
             console.log = jest.fn()
             console.error = jest.fn()
             child_process.execSync.mockImplementation(() => { throw 'Error' })
-            process.argv = ['node', 'blix', 'g', 'view']
             fs.existsSync
                 .mockReturnValueOnce(true)
                 .mockReturnValueOnce(true)
             helpers.checkIfScriptIsTaken.mockReturnValue(true)
 
-            generate()
+            generate('view')
 
             expect(console.error).toBeCalledTimes(2)
             expect(console.error).toBeCalledWith('Error')
