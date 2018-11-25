@@ -139,6 +139,10 @@ describe('Helper Tests', () => {
       store.name = ''
     })
 
+    afterAll(() => {
+      jest.restoreAllMocks()
+    })
+
     it('attempts to install a postgres db', () => {
       child_process.execSync.mockReturnValue(true)
       store.env = 'development'
@@ -198,7 +202,8 @@ describe('Helper Tests', () => {
     it('if no store.name and there is an error it logs an basic error', () => {
       store.env = ''
       store.name = ''
-      child_process.execSync.mockImplementation(() => { throw "Error" })
+      child_process.execSync
+        .mockImplementation(() => { throw "Error" })
       console.error = jest.fn()
 
       installKnexGlobal() 
