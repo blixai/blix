@@ -196,7 +196,7 @@ describe('Helper Tests', () => {
 
       installKnexGlobal() 
 
-      expect(child_process.execSync).toBeCalledWith('createdb blix', {"stdio": [0, 1, 2]})
+      expect(child_process.execSync).toBeCalledWith(`createdb ${helpers.getCWDName()}`, {"stdio": [0, 1, 2]})
     })
 
     it('if no store.name and there is an error it logs an basic error', () => {
@@ -208,7 +208,7 @@ describe('Helper Tests', () => {
 
       installKnexGlobal() 
 
-      expect(console.error).toBeCalledWith(chalk`{red Error creating db: make sure postgres is installed and running and try again by entering: createdb blix}`)
+      expect(console.error).toBeCalledWith(chalk`{red Error creating db: make sure postgres is installed and running and try again by entering: createdb ${helpers.getCWDName()}}`)
     })
 
     it('if no store.name and there is an error with mode "development" it logs the full error', () => {
