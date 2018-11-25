@@ -1,70 +1,13 @@
 #!/usr/bin/env node
-
+const program = require('commander');
 const store = require('./new/store')
-// if this isn't here modules will run and load the cli args potentially creating bugs
-if (process.argv.includes('--verbose')) {
-  store.env = 'development'
-  let index = process.argv.indexOf('--verbose')
-  process.argv.splice(index, 1)
-}
-
 const { createProject } = require("./new");
 const help = require("./help/help");
 const { scripts } = require("./scripts/script");
 const add = require("./add/add");
 const { generate } = require('./generate')
-
-exports.checkCommand = command => {
-  switch (process.argv[2]) {
-    case "new":
-      createProject();
-      break;
-    case "help":
-      help();
-      break;
-    case "scripts":
-      scripts();
-      break;
-    case "add":
-      add();
-      break;
-    case "generate":
-      generate()
-      break
-    case "g":
-      generate()
-      break
-    case "version":
-      this.checkVersion()
-      break
-    case "-v":
-      this.checkVersion()
-      break
-    default:
-      this.noCommand()
-      break;
-  }
-};
-
-exports.checkVersion = () => {
-  var pjson = require("./package.json");
-  console.log(pjson.version);
-}
-
-exports.noCommand = () => {
-  console.log('No command entered')
-  console.log('')
-  console.log('Here is a list of blix commands:')
-  console.log('new')
-  console.log('add')
-  console.log('scripts')
-  console.log('generate | g')
-  console.log('version | -v')
-  console.log('help')
-  console.log('')
-  console.log('Run: "blix help" to learn more about a command')
-}
-
+let pjson = require("./package.json");
+let version = pjson.version
 let currentNodeVersion = process.versions.node;
 let semver = currentNodeVersion.split('.');
 let major = semver[0];
@@ -80,4 +23,45 @@ if (major < 8) {
   process.exit(1);
 }
 
-this.checkCommand();
+program
+  .version(version, '-v, --version')
+  .option('--verbose', 'output complete errors if something breaks')
+
+
+program
+  .command('new [name]')
+  .description('create a new project')
+  .action((name) => {
+    if (name) {
+      store.name = name
+    }
+    createProject()
+  }) 
+
+program
+  .command('add')
+  .description('add tools to an existing project')
+  .action(() => add())
+
+program
+  .command('scripts')
+  .description('add premade or custom scripts to a project')
+  .action(() => scripts())
+
+program
+  .command('generate <script> [args...]')
+  .alias('g')
+  .description('run scripts in a project')
+  .action((script, args) => generate(script, args))
+
+
+
+program.parse(process.argv);
+
+if (program.verbose) store.env = 'development'
+
+if (!process.argv.slice(2).length) {
+  program.outputHelp()
+}
+
+
