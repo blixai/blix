@@ -185,6 +185,37 @@ describe('Helper Tests', () => {
 
       expect(child_process.execSync).toBeCalledWith('npm install -g knex', {"stdio": [0, 1, 2]})
     })
+
+    it ('if no store.name it attempts to create a postgres db with the name of the current working directory', () => {
+      store.name = ''
+      child_process.execSync.mockReturnValue(true)
+
+      installKnexGlobal() 
+
+      expect(child_process.execSync).toBeCalledWith('createdb blix', {"stdio": [0, 1, 2]})
+    })
+
+    it('if no store.name and there is an error it logs an basic error', () => {
+      store.env = ''
+      store.name = ''
+      child_process.execSync.mockImplementation(() => { throw "Error" })
+      console.error = jest.fn()
+
+      installKnexGlobal() 
+
+      expect(console.error).toBeCalledWith(chalk`{red Error creating db: make sure postgres is installed and running and try again by entering: createdb blix}`)
+    })
+
+    it('if no store.name and there is an error with mode "development" it logs the full error', () => {
+      store.env = 'development'
+      store.name = ''
+      child_process.execSync.mockImplementation(() => { throw "Error" })
+      console.error = jest.fn()
+
+      installKnexGlobal()  
+
+      expect(console.error).toBeCalledWith(chalk.red`Error`)
+    })
   })
 
   describe('addScriptToPackageJSON', () => {

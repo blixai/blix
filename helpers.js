@@ -87,9 +87,13 @@ exports.installKnexGlobal = () => {
   
       execSync(`createdb ${name}`, { stdio: [0, 1, 2] })
     } catch (err) {
-      console.error(chalk.red
-        `Error creating db: make sure postgres is installed and running and try again by entering: createdb ${name}`
-      )
+      if (store.env === 'development') {
+        console.error(chalk`{red ${err}}`)
+      } else {
+        console.error(chalk
+          `{red Error creating db: make sure postgres is installed and running and try again by entering: createdb ${name}}`
+        ) 
+      }
     }
   }
 };
