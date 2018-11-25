@@ -1,6 +1,6 @@
 jest.mock('../../../helpers', () => ({
   yarn: jest.fn(),
-  installDevDependenciesToExistingProject: jest.fn(),
+  installDependencies: jest.fn(),
   mkdirSync: jest.fn(),
   writeFile: jest.fn(), 
   checkScriptsFolderExist: jest.fn(),
@@ -69,8 +69,8 @@ describe('add/addReactRouter', () => {
       await projectType()
 
       expect(helpers.yarn).toBeCalled()
-      expect(helpers.installDevDependenciesToExistingProject).toBeCalled()
-      expect(helpers.installDevDependenciesToExistingProject).toBeCalledWith('react-router-dom')
+      expect(helpers.installDependencies).toBeCalled()
+      expect(helpers.installDependencies).toBeCalledWith('react-router-dom', 'dev')
     })
 
     it('throws an error if a src file does not exist', async () => {

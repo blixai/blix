@@ -19,7 +19,7 @@ describe('Utils module: addLinter', () => {
       store.linter = 'prettier'
       addLinter()
 
-      expect(helpers.addDevDependenciesToStore).toHaveBeenCalledWith('prettier')
+      expect(helpers.addDependenciesToStore).toHaveBeenCalledWith('prettier', 'dev')
       expect(helpers.writeFile).toHaveBeenCalledTimes(1)
       expect(helpers.addScriptToPackageJSON).toBeCalledTimes(1)
     })
@@ -28,7 +28,7 @@ describe('Utils module: addLinter', () => {
       store.linter = 'eslint'
       addLinter()
 
-      expect(helpers.addDevDependenciesToStore).toHaveBeenCalledWith('eslint eslint-plugin-react')
+      expect(helpers.addDependenciesToStore).toHaveBeenCalledWith('eslint eslint-plugin-react', 'dev')
       expect(helpers.writeFile).toHaveBeenCalledTimes(1)
     })
 
@@ -36,7 +36,7 @@ describe('Utils module: addLinter', () => {
       store.linter = 'eslint_prettier'
       addLinter()
 
-      expect(helpers.addDevDependenciesToStore).toHaveBeenCalledTimes(1)
+      expect(helpers.addDependenciesToStore).toHaveBeenCalledTimes(1)
       expect(helpers.writeFile).toHaveBeenCalledTimes(1)
     })
   })

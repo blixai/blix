@@ -49,12 +49,12 @@ describe('addDataBase', () => {
         expect(addBookshelfToScripts).toBeCalled()
     })
 
-    it('calls helpers.installAllPackagesToExistingProject and addProjectInstructions', async () => {
+    it('calls helpers.installAllPackages and addProjectInstructions', async () => {
         inquirer.prompt.mockResolvedValueOnce({ database: 'mongo' })
 
         await addDatabase()
 
-        expect(helpers.installAllPackagesToExistingProject).toBeCalled()
+        expect(helpers.installAllPackages).toBeCalled()
         expect(addProjectInstructions).toBeCalled()
     })
 })

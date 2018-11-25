@@ -15,7 +15,7 @@ let addWebpackDevServer = async () => {
   webpackOutput.choices = files
   let answer = await prompt([webpackOutput])
   await helpers.yarn()
-  helpers.installDevDependenciesToExistingProject('webpack-dev-server')
+  helpers.installDependencies('webpack-dev-server', 'dev')
   if (helpers.checkIfScriptIsTaken('server')) {
     if (helpers.checkIfScriptIsTaken('dev')) {
       helpers.addScriptToPackageJSON('dev:server', `webpack-dev-server --output-public-path=/${answer.output}/ --inline --hot --open --port 3000 --mode='development'`)

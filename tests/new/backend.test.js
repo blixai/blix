@@ -274,7 +274,7 @@ describe('new/backend.js', () => {
       packages('standard')
 
       expect(helpers.addDependenciesToStore).toBeCalledWith('express nodemon body-parser compression helmet dotenv morgan cookie-parser')
-      expect(helpers.addDevDependenciesToStore).toBeCalledWith('webpack-dev-middleware webpack-hot-middleware')
+      expect(helpers.addDependenciesToStore).toBeCalledWith('webpack-dev-middleware webpack-hot-middleware', 'dev')
     })
 
     it('adds packages for mvc mode', () => {

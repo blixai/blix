@@ -31,7 +31,7 @@ describe('New Utils module: addBackendTests', () => {
 
       testBackend()
 
-      expect(helpers.addDevDependenciesToStore).toBeCalledWith('mocha chai chai-http')
+      expect(helpers.addDependenciesToStore).toBeCalledWith('mocha chai chai-http', 'dev')
     })
 
     it('invokes testJestBackend() if jest testing selected', () => {
@@ -41,7 +41,7 @@ describe('New Utils module: addBackendTests', () => {
 
       testBackend()
 
-      expect(helpers.addDevDependenciesToStore).toBeCalledWith('jest supertest')
+      expect(helpers.addDependenciesToStore).toBeCalledWith('jest supertest', 'dev')
     })
 
     it('won\'t create a server folder if one already exists', () => {
@@ -62,7 +62,7 @@ describe('New Utils module: addBackendTests', () => {
 
       mochaTestBackend()
 
-      expect(helpers.addDevDependenciesToStore).toBeCalledWith('mocha chai chai-http')
+      expect(helpers.addDependenciesToStore).toBeCalledWith('mocha chai chai-http', 'dev')
       expect(helpers.addScriptToPackageJSON).toBeCalled()
       expect(helpers.addScriptToPackageJSON).toBeCalledWith('mocha', 'mocha test/server')
       expect(fs.existsSync).toHaveBeenCalled()
@@ -91,7 +91,7 @@ describe('New Utils module: addBackendTests', () => {
 
       testJestBackend()
 
-      expect(helpers.addDevDependenciesToStore).toBeCalledWith('jest supertest')
+      expect(helpers.addDependenciesToStore).toBeCalledWith('jest supertest', 'dev')
       expect(helpers.mkdirSync).toBeCalledWith('test/server')
       expect(helpers.writeFile).toBeCalled()
       expect(helpers.writeFile.mock.calls[0][0]).toEqual('test/server/test.spec.js')

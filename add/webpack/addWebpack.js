@@ -79,10 +79,10 @@ const createConfig = async (input, output, react) => {
   if (react) {
     babel = loadFile('../../new/files/frontend/babel/reactBabel')
     helpers.addDependenciesToStore('react react-dom')
-    helpers.addDevDependenciesToStore('webpack babel-loader css-loader @babel/core @babel/preset-env style-loader sass-loader node-sass cssnano postcss postcss-preset-env postcss-import postcss-loader webpack-cli @babel/preset-react')
+    helpers.addDependenciesToStore('webpack babel-loader css-loader @babel/core @babel/preset-env style-loader sass-loader node-sass cssnano postcss postcss-preset-env postcss-import postcss-loader webpack-cli @babel/preset-react', 'dev')
   } else {
     babel = loadFile('../../new/files/frontend/babel/.babelrc')
-    helpers.addDevDependenciesToStore('webpack babel-loader css-loader @babel/core @babel/preset-env style-loader sass-loader node-sass cssnano postcss postcss-preset-env postcss-import postcss-loader webpack-cli')
+    helpers.addDependenciesToStore('webpack babel-loader css-loader @babel/core @babel/preset-env style-loader sass-loader node-sass cssnano postcss postcss-preset-env postcss-import postcss-loader webpack-cli', 'dev')
   }
 
   webpack = webpack.replace(/INPUT/g, input)
@@ -98,7 +98,7 @@ const createConfig = async (input, output, react) => {
 
   this.addScripts() 
 
-  await helpers.installAllPackagesToExistingProject()
+  await helpers.installAllPackages()
 }
 
 exports.createConfig = createConfig

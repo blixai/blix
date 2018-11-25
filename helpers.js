@@ -31,36 +31,22 @@ const yarn = async () => {
 
 exports.yarn = yarn
 
-exports.installDependencies = packages => {
+exports.installDependencies = (packages, type) => {
   try {
-    process.chdir(`./${store.name}`)
+    if (store.name) {
+      process.chdir(`./${store.name}`)
+    }
     if (store.useYarn) {
-      execSync(`yarn add ${packages}`, {stdio:[0,1,2]})
+      let command = type === 'dev' ? `yarn add ${packages} --dev` : `yarn add ${packages}`
+      execSync(command, {stdio:[0,1,2]})
     } else {
-      execSync(`npm install --save ${packages}`, {stdio:[0,1,2]});
+      let command = type === 'dev' ? `npm install --save-dev ${packages}` : `npm install --save ${packages}`
+      execSync(command, {stdio:[0,1,2]});
     }
-    process.chdir('../')
+    if (store.name) process.chdir('../')
   } catch(err) {
-    process.chdir('../')
-    if (store.env === 'development') {
-      console.error(err)
-    } else {
-      console.log('Something went wrong installing the packages')
-    }
-  }
-};
+    if (store.name) process.chdir('../')
 
-exports.installDevDependencies = packages => {
-  try {
-    process.chdir(`./${store.name}`)
-    if (store.useYarn) {
-      execSync(`yarn add ${packages} --dev`, {stdio:[0,1,2]})
-    } else {
-      execSync(`npm install --save-dev ${packages}`, {stdio:[0,1,2]})
-    }
-    process.chdir('../')
-  } catch(err) {
-    process.chdir('../')
     if (store.env === 'development') {
       console.error(err)
     } else {
@@ -101,9 +87,13 @@ exports.installKnexGlobal = () => {
   
       execSync(`createdb ${name}`, { stdio: [0, 1, 2] })
     } catch (err) {
-      console.error(chalk.red
-        `Error creating db: make sure postgres is installed and running and try again by entering: createdb ${name}`
-      )
+      if (store.env === 'development') {
+        console.error(chalk`{red ${err}}`)
+      } else {
+        console.error(chalk
+          `{red Error creating db: make sure postgres is installed and running and try again by entering: createdb ${name}}`
+        ) 
+      }
     }
   }
 };
@@ -231,44 +221,6 @@ exports.rename = (oldName, newName) => {
 //   fs.writeFileSync(`./${name}/package.json`, newPackageJSON);
 // };
 
-exports.installDependenciesToExistingProject = packages => {
-  checkIfPackageJSONExists(packages)
-  try {
-    if (store.useYarn) {
-      execSync(`yarn add ${packages}`, { stdio: [0, 1, 2] })
-    } else {
-      execSync(`npm install --save ${packages}`, { stdio: [0, 1, 2] })
-    }
-  } catch (err) {
-    if (store.env === 'development') {
-      console.error(err)
-    } else {
-      console.error(chalk`\t{red Error installing ${packages} }`)
-    }
-  }
-}
-
-
-
-exports.installDevDependenciesToExistingProject = packages => {
-  checkIfPackageJSONExists(packages)
-  try {
-    if (store.useYarn) {
-      execSync(`yarn add ${packages} --dev`, { stdio: [0, 1, 2] })
-    } else {
-      execSync(`npm install --save-dev ${packages}`, { stdio: [0, 1, 2] })
-    }
-  } catch (err) {
-    if (store.env === 'development') {
-      console.error(err)
-    } else {
-      console.error(chalk`\t{red Error installing ${packages} }`)
-    }
-  }
-}
-
-
-
 exports.checkScriptsFolderExist = () => {
   if (!fs.existsSync('./scripts')) {
     this.mkdirSync('scripts')
@@ -283,11 +235,6 @@ exports.getCWDName = () => {
   name = name.split('/')
   name = name.pop()
   return name
-}
-
-exports.modifyKnexExistingProject = () => {
-
-  
 }
 
 // current implementation does not take into account store.name. Should that change? - Dev
@@ -356,19 +303,21 @@ exports.moveAllFilesInDir = (dirToSearch, dirToMoveTo) => {
   }
 }
 
-exports.addDependenciesToStore = deps => {
-  if (!store.dependencies) {
-    store.dependencies = deps
-  } else {
-    store.dependencies += ' ' + deps
+exports.addDependenciesToStore = (deps, type) => {
+  if (type) {
+    if (!store.devDependencies) {
+      store.devDependencies = deps
+    } else {
+      store.devDependencies += ' ' + deps
+    }
   }
-}
 
-exports.addDevDependenciesToStore = deps => {
-  if (!store.devDependencies) {
-    store.devDependencies = deps
-  } else {
-    store.devDependencies += ' ' + deps
+  if (!type) {
+    if (!store.dependencies) {
+      store.dependencies = deps
+    } else {
+      store.dependencies += ' ' + deps
+    }
   }
 }
 
@@ -378,19 +327,7 @@ exports.installAllPackages = () => {
   }
 
   if (store.devDependencies) {
-    this.installDevDependencies(store.devDependencies)
-  }
-
-}
-
-
-exports.installAllPackagesToExistingProject =  () => {
-  if (store.dependencies) {
-    this.installDependenciesToExistingProject(store.dependencies)
-  }
-
-  if (store.devDependencies) {
-    this.installDevDependenciesToExistingProject(store.devDependencies)
+    this.installDependencies(store.devDependencies, 'dev')
   }
 }
 

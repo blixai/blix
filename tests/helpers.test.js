@@ -27,24 +27,19 @@ const {
   canUseYarn,
   yarn,
   installDependencies,
-  installDevDependencies,
   installKnexGlobal,
   addScriptToPackageJSON,
   modifyKnex,
   writeFile,
   mkdirSync,
   rename,
-  installDependenciesToExistingProject,
-  installDevDependenciesToExistingProject,
   checkScriptsFolderExist,
   getCWDName,
   appendFile,
   checkIfScriptIsTaken,
   moveAllFilesInDir,
   addDependenciesToStore,
-  addDevDependenciesToStore,
   installAllPackages,
-  installAllPackagesToExistingProject,
   insert
 } = require('../helpers')
 
@@ -113,45 +108,41 @@ describe('Helper Tests', () => {
   })
 
   describe('installDependencies', () => {
+
     it('uses yarn installs dependencies to a new project if yarn selected', () => {
       child_process.execSync.mockReturnValue(true)
       store.useYarn = true
       installDependencies('react')
+
       expect(child_process.execSync.mock.calls[0][0]).toEqual('yarn add react')
     })
+
     it('uses npm to installs dependencies to a new project if npm selected', () => {
       child_process.execSync.mockReturnValue(true)
       store.useYarn = false
       installDependencies('react')
+
       expect(child_process.execSync.mock.calls[0][0]).toEqual('npm install --save react')
     })
   })
 
-  describe('installDevDependencies', () => {
-    it('uses yarn installs dev dependencies to a new project if yarn selected', () => {
-      child_process.execSync.mockReturnValue(true)
-      store.useYarn = true
-      installDevDependencies('react')
-      expect(child_process.execSync.mock.calls[0][0]).toEqual('yarn add react --dev')
-    })
-    it('uses npm to installs dev dependencies to a new project if npm selected', () => {
-      child_process.execSync.mockReturnValue(true)
-      store.useYarn = false
-      installDevDependencies('react')
-      expect(child_process.execSync.mock.calls[0][0]).toEqual('npm install --save-dev react')
-    })
-  })
-
   describe('installKnexGlobal', () => {
+
     beforeEach(() => {
       store.name = 'tests'
       const spy = jest.spyOn(process, 'chdir').mockImplementation(() => {
         return
       })
     })
+
     afterEach(() => {
       store.name = ''
     })
+
+    afterAll(() => {
+      jest.restoreAllMocks()
+    })
+
     it('attempts to install a postgres db', () => {
       child_process.execSync.mockReturnValue(true)
       store.env = 'development'
@@ -170,6 +161,7 @@ describe('Helper Tests', () => {
 
       expect(child_process.execSync.mock.calls[0][0]).toEqual('yarn add knex global')
     })
+
     it('if npm selected and installed uses npm to install knex globally', () => {
       child_process.execSync.mockReturnValue(true)
       store.useYarn = false
@@ -177,6 +169,57 @@ describe('Helper Tests', () => {
       installKnexGlobal()
 
       expect(child_process.execSync.mock.calls[0][0]).toEqual('npm install -g knex')
+    })
+
+    it('if no store.name it checks if yarn.lock file exists and if it does runs yarn installation', () => {
+      store.name = ''
+      child_process.execSync.mockReturnValue(true)
+      fs.existsSync = jest.fn().mockReturnValueOnce(true)
+
+      installKnexGlobal()
+
+      expect(child_process.execSync).toBeCalledWith('yarn add knex global', {"stdio": [0, 1, 2]})
+    })
+
+    it('if no store.name it checks if yarn.lock file exists and if it does not runs npm installation', () => {
+      store.name = ''
+      child_process.execSync.mockReturnValue(true)
+
+      installKnexGlobal() 
+
+      expect(child_process.execSync).toBeCalledWith('npm install -g knex', {"stdio": [0, 1, 2]})
+    })
+
+    it ('if no store.name it attempts to create a postgres db with the name of the current working directory', () => {
+      store.name = ''
+      child_process.execSync.mockReturnValue(true)
+
+      installKnexGlobal() 
+
+      expect(child_process.execSync).toBeCalledWith(`createdb ${helpers.getCWDName()}`, {"stdio": [0, 1, 2]})
+    })
+
+    it('if no store.name and there is an error it logs an basic error', () => {
+      store.env = ''
+      store.name = ''
+      child_process.execSync
+        .mockImplementation(() => { throw "Error" })
+      console.error = jest.fn()
+
+      installKnexGlobal() 
+
+      expect(console.error).toBeCalledWith(chalk`{red Error creating db: make sure postgres is installed and running and try again by entering: createdb ${helpers.getCWDName()}}`)
+    })
+
+    it('if no store.name and there is an error with mode "development" it logs the full error', () => {
+      store.env = 'development'
+      store.name = ''
+      child_process.execSync.mockImplementation(() => { throw "Error" })
+      console.error = jest.fn()
+
+      installKnexGlobal()  
+
+      expect(console.error).toBeCalledWith(chalk.red`Error`)
     })
   })
 
@@ -519,92 +562,6 @@ describe('Helper Tests', () => {
     })
   })
 
-  describe('installDependenciesToExistingProject', () => {
-    afterEach(() => {
-      store.env = ''
-    })
-
-    it('Calls checkIfPackageJSONExists', () => {
-      fs.existsSync.mockReturnValue(true)
-      installDependenciesToExistingProject()
-      expect(fs.existsSync).toBeCalledWith('package.json')
-    })
-    it('if yarn selected and installed uses yarn to install packages', () => {
-      child_process.execSync.mockReturnValue(true)
-      store.useYarn = true
-      installDependenciesToExistingProject('react')
-      expect(child_process.execSync.mock.calls[0][0]).toEqual('yarn add react')
-    })
-    it('if npm selected and installed uses npm to install packages', () => {
-      child_process.execSync.mockReturnValue(true)
-      store.useYarn = false
-      installDependenciesToExistingProject('react')
-      expect(child_process.execSync.mock.calls[0][0]).toEqual('npm install --save react')
-    })
-    it('Throws an error if there is an error installing packages while in development', () => {
-      child_process.execSync.mockImplementation(() => {throw 'Error'})
-      fs.existsSync.mockReturnValue(true)
-      let packages = 'react'
-      store.env = 'development'
-      console.error = jest.fn()
-      installDependenciesToExistingProject(packages)
-      expect(console.error).toBeCalled()
-    })
-    it('Throws an error to the console containing the packages if there is an error installing', () => {
-      child_process.execSync.mockImplementation(() => {throw 'Error'})
-      fs.existsSync.mockReturnValue(true)
-      let packages = 'react'
-      store.env = 'prod'
-      console.error = jest.fn()
-      installDependenciesToExistingProject(packages)
-      expect(console.error).toBeCalled()
-      expect(console.error.mock.calls[0][0]).toContain(packages)
-    })
-  })
-
-  describe('installDevDependenciesToExistingProject', () => {
-    afterEach(() => {
-      store.env = ''
-    })
-
-    it('Calls checkIfPackageJSONExists', () => {
-      fs.existsSync.mockReturnValue(true)
-      installDevDependenciesToExistingProject()
-      expect(fs.existsSync).toBeCalledWith('package.json')
-    })
-    it('if yarn selected and installed uses yarn to install packages', () => {
-      child_process.execSync.mockReturnValue(true)
-      store.useYarn = true
-      installDevDependenciesToExistingProject('react')
-      expect(child_process.execSync.mock.calls[0][0]).toEqual('yarn add react --dev')
-    })
-    it('if npm selected and installed uses npm to install packages', () => {
-      child_process.execSync.mockReturnValue(true)
-      store.useYarn = false
-      installDevDependenciesToExistingProject('react')
-      expect(child_process.execSync.mock.calls[0][0]).toEqual('npm install --save-dev react')
-    })
-    it('Throws an error if there is an error installing packages while in development', () => {
-      child_process.execSync.mockImplementation(() => {throw 'Error'})
-      fs.existsSync.mockReturnValue(true)
-      let packages = 'react'
-      store.env = 'development'
-      console.error = jest.fn()
-      installDevDependenciesToExistingProject(packages)
-      expect(console.error).toBeCalled()
-    })
-    it('Throws an error to the console containing the packages if there is an error installing', () => {
-      child_process.execSync.mockImplementation(() => {throw 'Error'})
-      fs.existsSync.mockReturnValue(true)
-      let packages = 'react'
-      store.env = 'prod'
-      console.error = jest.fn()
-      installDevDependenciesToExistingProject(packages)
-      expect(console.error).toBeCalled()
-      expect(console.error.mock.calls[0][0]).toContain(packages)
-    })
-  })
-
   describe('checkScriptsFolderExist', () => {
     it("Creates scripts and scripts/templates dir if scripts dir doesn't exist", () => {
       fs.existsSync.mockReturnValueOnce(false)
@@ -940,11 +897,11 @@ describe('Helper Tests', () => {
   describe('addDependenciesToStore', () => {
 
     beforeEach(() => {
+      store.env = ''
       store.dependencies = ''
     })
 
     it('sets store.dependencies equal to argument if store.dependencies is empty string', () => {
-
       addDependenciesToStore('react express')
 
       expect(store.dependencies).toEqual('react express')
@@ -957,25 +914,21 @@ describe('Helper Tests', () => {
 
       expect(store.dependencies).toEqual('react express vue')
     })
-  })
 
-  describe('addDevDependenciesToStore', () => {
-    beforeEach(() => {
-      store.devDependencies = ''
+    it('sets store.devDependencies equal to argument if store.devDependencies is an empty string', () => {
+      addDependenciesToStore('react express', 'dev')
+
+      expect(store.devDependencies).toEqual('react express')
     })
 
-    it('sets store.devDependencies equal to argument if store.devDependencies is empty string', () => {
-      addDevDependenciesToStore('webpack')
+    it('adds a space before combining its arguments with store.devDependencies if store.devDependencies is not an empty string', () => {
+      store.dependencies = 'react express'
 
-      expect(store.devDependencies).toEqual('webpack')
+      addDependenciesToStore('vue', 'dev')
+
+      expect(store.devDependencies).toEqual('react express vue')
     })
 
-    it('adds a space before combining it\'s argument with store.devDependencies if store.devDependencies is not an empty string', () => {
-      store.devDependencies = 'webpack'
-      addDevDependenciesToStore('webpack-dev-server')
-
-      expect(store.devDependencies).toEqual('webpack webpack-dev-server')
-    })
   })
 
   describe('installAllPackages', () => {
@@ -983,40 +936,23 @@ describe('Helper Tests', () => {
       store.dependencies = ''
       store.devDependencies = ''
     })
-    it("Calls installDependencies if store contains dependencies", () => {
+    
+    it("calls installDependencies if store contains dependencies", () => {
       helpers.installDependencies = jest.fn()
       store.dependencies = 'react'
+
       installAllPackages()
-      expect(helpers.installDependencies).toBeCalled()
+
       expect(helpers.installDependencies).toHaveBeenCalledWith('react')
     })
-    it("Calls installDevDependencies if store contains dev dependencies", () => {
+
+    it("calls installDependencies if store contains dev dependencies", () => {
       helpers.installDevDependencies = jest.fn()
       store.devDependencies = 'react'
-      installAllPackages()
-      expect(helpers.installDevDependencies).toBeCalled()
-      expect(helpers.installDevDependencies).toHaveBeenCalledWith('react')
-    })
-  })
 
-  describe('installAllPackagesToExistingProject', () => {
-    beforeEach(() => {
-      store.dependencies = ''
-      store.devDependencies = ''
-    })
-    it("Calls installDependenciesToExistingProject if store contains dependencies", () => {
-      const mockFn = helpers.installDependenciesToExistingProject = jest.fn()
-      store.dependencies = 'react'
-      installAllPackagesToExistingProject()
-      expect(mockFn).toBeCalled()
-      expect(mockFn).toHaveBeenCalledWith('react')
-    })
-    it("Calls installDevDependenciesToExistingProject if store contains dev dependencies", () => {
-      const mockFn = helpers.installDevDependenciesToExistingProject = jest.fn()
-      store.devDependencies = 'react'
-      installAllPackagesToExistingProject()
-      expect(mockFn).toBeCalled()
-      expect(mockFn).toHaveBeenCalledWith('react')
+      installAllPackages()
+
+      expect(helpers.installDependencies).toHaveBeenCalledWith('react', 'dev')
     })
   })
 

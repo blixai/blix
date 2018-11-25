@@ -135,7 +135,7 @@ exports.packages = mode => {
     helpers.addDependenciesToStore(
       'express nodemon body-parser compression helmet dotenv morgan cookie-parser'
     )
-    helpers.addDevDependenciesToStore('webpack-dev-middleware webpack-hot-middleware')
+    helpers.addDependenciesToStore('webpack-dev-middleware webpack-hot-middleware', 'dev')
   } else if (mode === 'mvc') {
     helpers.addDependenciesToStore(
       'express nodemon body-parser compression helmet dotenv morgan cookie-parser pug'

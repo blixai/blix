@@ -93,11 +93,11 @@ exports.react = () => {
 
 exports.cssLibrary = () => {
   if (store.reactCSS === 'material') {
-    helpers.addDevDependenciesToStore('@material-ui/core')
+    helpers.addDependenciesToStore('@material-ui/core', 'dev')
   } else if (store.reactCSS === 'bootstrap') {
-    helpers.addDevDependenciesToStore('react-bootstrap')
+    helpers.addDependenciesToStore('react-bootstrap', 'dev')
   } else if (store.reactCSS === 'styled') {
-    helpers.addDevDependenciesToStore('styled-components')
+    helpers.addDependenciesToStore('styled-components', 'dev')
   }
 }
 
@@ -134,7 +134,7 @@ exports.reactRouter = () => {
   helpers.mkdirSync(`src/styles`);
   helpers.writeFile(`src/styles/global.css`, globalStyle);
   // install react-router-dom for src/index.js file
-  helpers.addDevDependenciesToStore("react-router-dom");
+  helpers.addDependenciesToStore("react-router-dom", 'dev');
 };
 
 exports.redux = () => {
@@ -151,7 +151,7 @@ exports.redux = () => {
   helpers.writeFile(`src/reducers/rootReducer.js`, rootReducer);
   helpers.writeFile(`src/configStore.js`, configStore);
 
-  helpers.addDevDependenciesToStore("redux react-redux")
+  helpers.addDependenciesToStore("redux react-redux", 'dev')
 
 }
 
@@ -181,7 +181,7 @@ exports.reactRouterRedux = () => {
   helpers.writeFile(`src/reducers/rootReducer.js`, rootReducer);
   helpers.writeFile(`src/configStore.js`, configStore);
   //install react-router-dom and other redux specific libs
-  helpers.addDevDependenciesToStore("redux react-redux react-router-dom");
+  helpers.addDependenciesToStore("redux react-redux react-router-dom", 'dev');
 };
 
 exports.scripts = () => {
@@ -290,9 +290,9 @@ exports.reactRouterReduxScripts = () => {
 
 exports.packages = () => {
   if (!store.backend.backend) {
-    helpers.addDevDependenciesToStore("webpack-dev-server")
+    helpers.addDependenciesToStore("webpack-dev-server", 'dev')
   }
-  helpers.addDevDependenciesToStore("react react-dom webpack webpack-cli babel-loader css-loader @babel/core @babel/preset-env @babel/preset-react @babel/plugin-transform-runtime @babel/runtime style-loader sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-preset-env postcss-import postcss-loader")
+  helpers.addDependenciesToStore("react react-dom webpack webpack-cli babel-loader css-loader @babel/core @babel/preset-env @babel/preset-react @babel/plugin-transform-runtime @babel/runtime style-loader sass-loader node-sass extract-text-webpack-plugin cssnano postcss postcss-preset-env postcss-import postcss-loader", 'dev')
 };
 
 exports.createWebpack = () => {

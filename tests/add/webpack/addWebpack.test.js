@@ -151,7 +151,7 @@ describe('addWebpack', () => {
 
             expect(fs.readFileSync.mock.calls[1][0]).toContain('reactBabel')
             expect(helpers.addDependenciesToStore).toBeCalledWith('react react-dom')
-            expect(helpers.addDevDependenciesToStore).toBeCalledWith( "webpack babel-loader css-loader @babel/core @babel/preset-env style-loader sass-loader node-sass cssnano postcss postcss-preset-env postcss-import postcss-loader webpack-cli @babel/preset-react")
+            expect(helpers.addDependenciesToStore).toBeCalledWith( "webpack babel-loader css-loader @babel/core @babel/preset-env style-loader sass-loader node-sass cssnano postcss postcss-preset-env postcss-import postcss-loader webpack-cli @babel/preset-react", 'dev')
         })
         
         it('if react wasn\'t selected create a normal babel file and webpack loaders', async () => {
@@ -161,7 +161,7 @@ describe('addWebpack', () => {
             await createConfig('', '', false)
 
             expect(fs.readFileSync.mock.calls[1][0]).toContain('.babelrc')
-            expect(helpers.addDevDependenciesToStore).toBeCalledWith('webpack babel-loader css-loader @babel/core @babel/preset-env style-loader sass-loader node-sass cssnano postcss postcss-preset-env postcss-import postcss-loader webpack-cli')
+            expect(helpers.addDependenciesToStore).toBeCalledWith('webpack babel-loader css-loader @babel/core @babel/preset-env style-loader sass-loader node-sass cssnano postcss postcss-preset-env postcss-import postcss-loader webpack-cli', 'dev')
         })
 
         it('replaces the webpack config with the input and output selected and creates webpack config file', async () => {
@@ -210,13 +210,13 @@ describe('addWebpack', () => {
             expect(addWebpackModule.addScripts).toBeCalled()            
         })
 
-        it('calls helpers installAllPackagesToExistingProject', async () => {
+        it('calls helpers installAllPackages', async () => {
             fs.readFileSync
                 .mockReturnValueOnce('')
         
             await createConfig('', '', false) 
 
-            expect(helpers.installAllPackagesToExistingProject).toBeCalled()
+            expect(helpers.installAllPackages).toBeCalled()
         })
     })
 
