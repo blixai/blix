@@ -855,6 +855,21 @@ describe('Helper Tests', () => {
 
       expect(store.dependencies).toEqual('react express vue')
     })
+
+    it('sets store.devDependencies equal to argument if store.devDependencies is an empty string', () => {
+      addDependenciesToStore('react express', 'dev')
+
+      expect(store.devDependencies).toEqual('react express')
+    })
+
+    it('adds a space before combining its arguments with store.devDependencies if store.devDependencies is not an empty string', () => {
+      store.dependencies = 'react express'
+
+      addDependenciesToStore('vue', 'dev')
+
+      expect(store.devDependencies).toEqual('react express vue')
+    })
+
   })
 
   describe('installAllPackages', () => {
@@ -863,41 +878,24 @@ describe('Helper Tests', () => {
       store.devDependencies = ''
     })
     
-    it("Calls installDependencies if store contains dependencies", () => {
+    it("calls installDependencies if store contains dependencies", () => {
       helpers.installDependencies = jest.fn()
       store.dependencies = 'react'
+
       installAllPackages()
+
       expect(helpers.installDependencies).toHaveBeenCalledWith('react')
     })
 
-    it("Calls installDevDependencies if store contains dev dependencies", () => {
+    it("calls installDependencies if store contains dev dependencies", () => {
       helpers.installDevDependencies = jest.fn()
       store.devDependencies = 'react'
+
       installAllPackages()
+
       expect(helpers.installDependencies).toHaveBeenCalledWith('react', 'dev')
     })
   })
-
-  // describe('installAllPackagesToExistingProject', () => {
-  //   beforeEach(() => {
-  //     store.dependencies = ''
-  //     store.devDependencies = ''
-  //   })
-  //   it("Calls installDependencies if store contains dependencies", () => {
-  //     const mockFn = helpers.installDependencies= jest.fn()
-  //     store.dependencies = 'react'
-  //     installAllPackagesToExistingProject()
-  //     expect(mockFn).toBeCalled()
-  //     expect(mockFn).toHaveBeenCalledWith('react')
-  //   })
-  //   it("Calls installDependencies if store contains dev dependencies", () => {
-  //     const mockFn = helpers.installDependencies = jest.fn()
-  //     store.devDependencies = 'react'
-  //     installAllPackagesToExistingProject()
-  //     expect(mockFn).toBeCalled()
-  //     expect(mockFn).toHaveBeenCalledWith('react')
-  //   })
-  // })
 
   describe('insert', () => {
 
