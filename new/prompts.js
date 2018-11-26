@@ -25,8 +25,10 @@ const frontendOptions = {
     { name: "React, React-Router", value: "react-router" },
     { name: "React, Redux ", value: "redux" },
     { name: "React, Redux, React-Router", value: "reactRouter-redux" },
-    // { name: "Vue", value: "vue" },
-    // { name: "Vue, Vuex, Vue-Router", value: "vuex" },
+    { name: "Vue", value: "vue" },
+    { name: "Vue, Vue-Router", value: "vue-router" }, 
+    { name: "Vue, Vuex", value: "vuex" },
+    { name: "Vue, Vuex, Vue-Router", value: "vueRouter-vuex" },
     // { name: "Vanilla JS", value: "js" },
     { name: "None (Express.js as an API backend)", value: "none" }
   ]
