@@ -26,9 +26,6 @@
 
 <h2 align="center">For documentation + guides visit our <a href="https://blixjs.com">website</a></h2>
 
-
-# What is Blix.js?
-
 Blix is a **command line tool** for Javascript applications. It can be used to create projects from scratch or integrate new features and tools into existing applications. Blix works to provide a pleasant, rapid development experience by leveraging **convention + configuration**. 
 
 ## Installation
