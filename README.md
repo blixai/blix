@@ -62,10 +62,10 @@ You will then be prompted on what you need for your new project.
 
 For more in-depth walkthroughs check out these quick start examples on our website:
 
-[New Default Project](https://www.blixjs.com/guide/examples/default-project.html)
+[**New Default Project**](https://www.blixjs.com/guide/examples/default-project.html)
 
 
-[Add Redux/React-Router to Create-React-App](https://www.blixjs.com/guide/examples/add-redux-and-react-router-to-create-react-app.html)
+[**Add Redux/React-Router to Create-React-App**](https://www.blixjs.com/guide/examples/add-redux-and-react-router-to-create-react-app.html)
 
 
 
