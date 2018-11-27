@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://blixjs.com" target="_blank" rel="noopener noreferrer">
-    <img width="200" src="https://blixjs.com/logo.png" alt="Blix logo">
+    <img width="222" src="https://blixjs.com/logo.png" alt="Blix logo">
   </a>
 </p>
 <p align="center">
@@ -24,10 +24,12 @@
   </a>
 </p>
 
+<h2 align="center">For documentation + guides visit our <a href="https://blixjs.com">website</a></h2>
 
-# What is [Blix.js](https://blixjs.com)?
 
-Blix is a **command line tool** for Javascript applications. It can be used to create projects from scratch or integrate new features and tools into existing applications. blix works to provide a pleasant, rapid development experience by leveraging **convention + configuration**. 
+# What is Blix.js?
+
+Blix is a **command line tool** for Javascript applications. It can be used to create projects from scratch or integrate new features and tools into existing applications. Blix works to provide a pleasant, rapid development experience by leveraging **convention + configuration**. 
 
 ## Installation
 
