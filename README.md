@@ -1,22 +1,33 @@
-![npm (tag)](https://img.shields.io/npm/v/blix/next.svg)
-![npm](https://img.shields.io/npm/v/blix.svg)
-![GitHub](https://img.shields.io/github/license/mashape/apistatus.svg) 
-![GitHub contributors](https://img.shields.io/github/contributors/blixjs/blix.svg) 
-![CircleCI branch](https://img.shields.io/circleci/project/github/blixjs/blix/v_2.0.0.svg) 
-[![codecov](https://codecov.io/gh/blixjs/blix/branch/v_2.0.0/graph/badge.svg)](https://codecov.io/gh/blixjs/blix)
-[![](https://img.shields.io/badge/localhost%3Aboyz-Approved-brightgreen.svg)](https://twitter.com/LocalhostBoyz)
-
-
-
-
-
+<p align="center">
+  <a href="https://blixjs.com" target="_blank" rel="noopener noreferrer">
+    <img width="200" src="https://blixjs.com/logo.png" alt="Blix logo">
+  </a>
+</p>
+<p align="center">
+  <a href="https://www.npmjs.com/package/blix">
+    <img src="https://img.shields.io/npm/v/blix/next.svg" alt="npm next version"/>
+  </a>
+  <a href="https://www.npmjs.com/package/blix">
+    <img src="https://img.shields.io/npm/v/blix.svg" alt="npm version">
+  </a>
+  <a href="https://github.com/blixjs/blix/blob/v_2.0.0/LICENSE">
+    <img src="https://img.shields.io/github/license/mashape/apistatus.svg" alt="license"/>
+  </a>
+  <a href="https://github.com/blixjs/blix/graphs/contributors">
+     <img src="https://img.shields.io/github/contributors/blixjs/blix.svg" alt="contributors"/> 
+  </a>
+  <a href="https://circleci.com/gh/blixjs/blix/tree/v_2.0.0">
+    <img src="https://img.shields.io/circleci/project/github/blixjs/blix/v_2.0.0.svg" alt="Circle CI Status">
+  </a>
+  <a href="https://codecov.io/gh/blixjs/blix">
+    <img src="https://codecov.io/gh/blixjs/blix/branch/v_2.0.0/graph/badge.svg" alt="coverage"/>
+  </a>
+</p>
 
 
 # What is [Blix.js](https://blixjs.com)?
 
 Blix is a **command line tool** for Javascript applications. It can be used to create projects from scratch or integrate new features and tools into existing applications. blix works to provide a pleasant, rapid development experience by leveraging **convention + configuration**. 
-
-![Automate all the things!](https://imgur.com/TfXuJlH.jpg)
 
 ## Installation
 
