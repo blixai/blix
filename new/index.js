@@ -60,16 +60,16 @@ const promptFrontend = async () => {
       this.reactProject("reactRouter-redux")
       break;
     case "vue":
-      vueProject("vue")
+      this.vueProject("vue")
       break;
     case "vue-router":
-      vueProject("vue-router")
+      this.vueProject("vue-router")
       break;
     case "vuex":
-      vueProject("vuex")
+      this.vueProject("vuex")
       break;
     case "vueRouter-vuex":
-      vueProject("vueRouter-vuex")
+      this.vueProject("vueRouter-vuex")
       break;
     default:
       this.backendOnly();
@@ -111,6 +111,8 @@ const vueProject = async vueType => {
   await helpers.yarn()
   vue()
 }
+
+exports.vueProject = vueProject
 
 const backendOnly = async () => {
   let linter = await prompt([linterPrompt])

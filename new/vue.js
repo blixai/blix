@@ -138,7 +138,6 @@ exports.scripts = () => {
     helpers.addScriptToPackageJSON("build", "webpack --mode='production'");
 
     addAPIScript()
-
 }
 
 exports.vueScripts = () => {
@@ -170,7 +169,7 @@ exports.createWebpack = () => {
 
     if (store.backend.backend) {
       helpers.writeFile(`webpack.config.js`, webpackWithHotReloading);
-      let hotReloadIndex = `\nif (module.hot) {\n\tconsole.clear()\n\tmodule.hot.accept();\n}`
+      let hotReloadIndex = `\n\nif (module.hot) {\n\tconsole.clear()\n\tmodule.hot.accept();\n}`
       helpers.appendFile(`src/main.js`, hotReloadIndex)
     } else {
       helpers.writeFile(`webpack.config.js`, webpack);
