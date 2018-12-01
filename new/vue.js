@@ -87,18 +87,38 @@ exports.vueRouter = () => {
 }
 
 exports.vuex = () => {
-// main.js
-// store/
-// App.vue
-// components
+    let main = loadFile('frontend/vuex/main.js')
+    let App = loadFile('frontend/vue/App.vue')
+    let store = loadFile('frontend/vuex/store.js')
+
+    helpers.writeFile('src/main.js', main)
+    helpers.writeFile('src/App.vue', App)
+    helpers.mkdirSync('src/store')
+    helpers.writeFile('src/store/index.js', store)
+    helpers.mkdirSync('src/components')
+
+    helpers.addDependenciesToStore('vuex', 'dev')
 }
 
 exports.vueRouterVuex = () => {
-    // main.js
-    // App.vue
-    // store/
-    // components/
-    // views/
+    let main = loadFile('frontend/vueRouter-vuex/main.js')
+    let App = loadFile('frontend/vue-router/App.vue')
+    let router = loadFile('frontend/vue-router/router.js')
+    let Home = loadFile('frontend/vue-router/Home.vue')
+    let Navbar = loadFile('frontend/vue-router/Navbar.vue')
+    let store = loadFile('frontend/vuex/store.js')
+
+    helpers.writeFile('src/main.js', main)
+    helpers.writeFile('src/App.vue', App)
+    helpers.writeFile('src/router.js', router)
+    helpers.mkdirSync('src/store')
+    helpers.writeFile('src/store/index.js', store)
+    helpers.mkdirSync('src/views')
+    helpers.writeFile('src/views/Home.vue', Home)
+    helpers.mkdirSync('src/components')
+    helpers.writeFile('src/components/Navbar.vue', Navbar)
+    
+    helpers.addDependenciesToStore('vue-router vuex', 'dev')
 }
 
 exports.scripts = () => {
