@@ -16,7 +16,10 @@ jest.mock('../../new/react.js', () => ({
     react: jest.fn()
 }))
 
+jest.mock('../../new/vue')
+
 const { react } = require('../../new/react')
+const { vue } = require('../../new/vue')
 
 jest.mock('../../new/backend.js', () => ({
     createBackend: jest.fn()
@@ -28,6 +31,7 @@ const {
     promptPreset,
     promptFrontend,
     reactProject,
+    vueProject,
     backendOnly,
     promptForName,
     createProject
@@ -190,6 +194,54 @@ describe('new/index.js', () => {
             expect(newModule.reactProject).toBeCalledTimes(1)
         })
 
+        it('calls vueProject if vue frontend selected', async () => {
+            inquirer.prompt
+                .mockResolvedValueOnce({ frontend: 'vue' })
+            jest.spyOn(newModule, 'vueProject')
+
+            await promptFrontend()
+
+            expect(inquirer.prompt).toBeCalledWith([frontendOptions])
+            expect(store.vueType).toEqual('vue')
+            expect(newModule.vueProject).toBeCalledWith('vue')
+        })
+
+        it('calls vueProject if vue-router frontend selected', async () => {
+            inquirer.prompt
+                .mockResolvedValueOnce({ frontend: 'vue-router' })
+            jest.spyOn(newModule, 'vueProject')
+
+            await promptFrontend()
+
+            expect(inquirer.prompt).toBeCalledWith([frontendOptions])
+            expect(store.vueType).toEqual('vue-router')
+            expect(newModule.vueProject).toBeCalledWith('vue-router')
+        })
+
+        it('calls vueProject if vuex frontend selected', async () => {
+            inquirer.prompt
+                .mockResolvedValueOnce({ frontend: 'vuex' })
+            jest.spyOn(newModule, 'vueProject')
+
+            await promptFrontend()
+
+            expect(inquirer.prompt).toBeCalledWith([frontendOptions])
+            expect(store.vueType).toEqual('vuex')
+            expect(newModule.vueProject).toBeCalledWith('vuex')
+        })
+
+        it('calls vueProject if vueRouter-vuex frontend selected', async () => {
+            inquirer.prompt
+                .mockResolvedValueOnce({ frontend: 'vueRouter-vuex' })
+            jest.spyOn(newModule, 'vueProject')
+
+            await promptFrontend()
+
+            expect(inquirer.prompt).toBeCalledWith([frontendOptions])
+            expect(store.vueType).toEqual('vueRouter-vuex')
+            expect(newModule.vueProject).toBeCalledWith('vueRouter-vuex')
+        })
+
         it('calls backendOnly if no frontend is selected', async () => {
             helpers.yarn.mockResolvedValueOnce({ yarn: true })
             inquirer.prompt
@@ -323,8 +375,112 @@ describe('new/index.js', () => {
         })
     })
 
-    describe.skip('vueProject', () => {
-        
+    describe('vueProject', () => {
+        it('sets the vueType in the store based on what argument it recieved', async () => {
+            await vueProject('vue')
+ 
+            expect(store.vueType).toEqual('vue') 
+         })
+ 
+         it.skip('prompts for a vue css library', async () => {
+             inquirer.prompt
+                 .mockResolvedValueOnce({ css: 'material' })
+ 
+             await vueProject('vue')
+             
+             expect(store.vueCss).toEqual('material')
+             expect(inquirer.prompt).toBeCalledWith([reactCSS])
+         }) 
+ 
+ 
+         it.skip('prompts for a project linter', async () => {
+             inquirer.prompt
+                 .mockResolvedValueOnce({ css: 'material' })
+                 .mockResolvedValueOnce({ linter: 'prettier' })
+ 
+             await vueProject('vue')
+
+             expect(store.linter).toEqual('prettier')
+             expect(inquirer.prompt).toBeCalledWith([linterPrompt]) 
+         }) 
+ 
+         it.skip('prompts for a vueTesting option', async () => {
+             inquirer.prompt
+                 .mockResolvedValueOnce({ css: 'material' })
+                 .mockResolvedValueOnce({ linter: 'prettier' })
+                 .mockResolvedValueOnce({ enzyme: true })
+ 
+             await vueProject('vue')
+
+             expect(store.reactTesting).toEqual({ enzyme: true })
+             expect(inquirer.prompt).toBeCalledWith([reactTesting]) 
+         }) 
+ 
+         it('prompts for a e2e tool', async () => {
+             inquirer.prompt
+                 .mockResolvedValueOnce({ e2e: 'cypress' })
+ 
+             await vueProject('vue')
+
+             expect(store.e2e).toEqual({ e2e: 'cypress' })
+             expect(inquirer.prompt).toBeCalledWith([e2e]) 
+             
+         }) 
+ 
+         it('prompts if user wants an express backend', async () => {
+             inquirer.prompt
+                 .mockResolvedValueOnce({ e2e: 'cypress' })
+                 .mockResolvedValueOnce({ backend: true })
+ 
+             await vueProject('vue')
+
+             expect(store.backend).toEqual({ backend: true })
+             expect(inquirer.prompt).toBeCalledWith([backend]) 
+         })
+ 
+         it('if backend selected prompt for backend serverTesting and database options', async () => {
+             inquirer.prompt
+                 .mockResolvedValueOnce({ e2e: 'cypress' })
+                 .mockResolvedValueOnce({ backend: true })
+                 .mockResolvedValueOnce({ server: 'mocha' })
+                 .mockResolvedValueOnce({ database: 'mongo' })
+ 
+             await vueProject('vue')
+
+             expect(store.backend).toEqual({ backend: true })
+             expect(store.serverTesting).toEqual({ server: 'mocha' })
+             expect(store.database).toEqual({ database: 'mongo' })
+             expect(inquirer.prompt).toBeCalledWith([backend]) 
+             expect(inquirer.prompt).toBeCalledWith([serverTesting]) 
+             expect(inquirer.prompt).toBeCalledWith([database]) 
+         })
+ 
+         it('prompts for yarn if yarn available', async () => {
+             helpers.yarn = jest.fn()
+             inquirer.prompt
+                 .mockResolvedValueOnce({ e2e: 'cypress' })
+                 .mockResolvedValueOnce({ backend: true })
+                 .mockResolvedValueOnce({ server: 'mocha' })
+                 .mockResolvedValueOnce({ database: 'mongo' })
+ 
+             await vueProject()
+ 
+             expect(helpers.yarn).toBeCalled()
+ 
+         })
+ 
+         it('calls react', async () => {
+             helpers.yarn = jest.fn()
+             inquirer.prompt
+                 .mockResolvedValueOnce({ e2e: 'cypress' })
+                 .mockResolvedValueOnce({ backend: true })
+                 .mockResolvedValueOnce({ server: 'mocha' })
+                 .mockResolvedValueOnce({ database: 'mongo' })
+ 
+             await vueProject()
+ 
+             expect(vue).toBeCalled()
+         })
     })
 
     describe.skip('vanillaJSProject', () => {
