@@ -4,7 +4,6 @@
   "description": "Yeoman on steroids: quickly create a multitude of Javascript applications from scratch and automate tasks with hackable scrips or add scripts and tools to existing projects.",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
     "lint": "prettier --single-quote --no-semi --write '**/*.js'",
     "test": "jest --watch",
     "test:coverage": "jest --collectCoverage",
@@ -12,20 +11,14 @@
     "send-coverage": "./node_modules/.bin/codecov"
   },
   "keywords": [
-    "express",
-    "postgres",
-    "bookshelf",
-    "knex",
-    "react",
-    "redux",
-    "react-router",
-    "mongoose",
-    "mongodb"
+    "cli",
+    "generator",
+    "scripts"
   ],
   "author": "Devon Bull",
   "license": "MIT",
   "bin": {
-    "blix": "./index.js"
+    "blix": "./cli.js"
   },
   "dependencies": {
     "chalk": "^2.4.1",
