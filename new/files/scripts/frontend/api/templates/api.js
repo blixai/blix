@@ -2,8 +2,8 @@ import axios from 'axios'
 
 const getName = async () => {
     try {
-        let data = await axios.get('/api/v1/name')
-        return data
+        let response = await axios.get(`/api/v1/name`)
+        return response
     } catch (err) {
         throw err
     }
@@ -11,7 +11,7 @@ const getName = async () => {
 
 const postName = async (name) => {
     try {
-        let response = await axios.post('/api/v1/name', name)
+        let response = await axios.post(`/api/v1/name`, name)
         return response
     } catch (err) {
         throw err

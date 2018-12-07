@@ -296,7 +296,7 @@ describe('new/vue', () => {
 
             packages()
 
-            expect(helpers.addDependenciesToStore).toBeCalledWith("vue vue-loader vue-style-loader vue-template-compiler webpack webpack-cli babel-loader css-loader @babel/core @babel/preset-env @babel/plugin-transform-runtime @babel/runtime style-loader cssnano postcss postcss-preset-env postcss-import postcss-loader", 'dev')
+            expect(helpers.addDependenciesToStore).toBeCalledWith("vue vue-loader vue-style-loader vue-template-compiler webpack webpack-cli babel-loader css-loader @babel/core @babel/preset-env @babel/plugin-transform-runtime @babel/runtime style-loader cssnano postcss postcss-preset-env postcss-import postcss-loader blix@next", 'dev')
         })
     })
 

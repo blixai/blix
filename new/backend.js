@@ -8,14 +8,11 @@ const {addMongooseToScripts} = require('./utils/addMongoDB')
 const {addBookshelfToScripts} = require('./utils/addBookshelf')
 const {newProjectInstructions} = require('./utils/newProjectInstructions')
 const store = require('./store')
-
-const loadFile = filePath => {
-  return fs.readFileSync(path.resolve(__dirname, filePath), 'utf8')
-}
+const { loadFile } = helpers
 
 // load files
-const cluster = loadFile('./files/backend/common/cluster.js')
-const routes = loadFile('./files/backend/common/routes.js')
+const cluster = loadFile('backend/common/cluster.js')
+const routes = loadFile('backend/common/routes.js')
 
 exports.createBackend = () => {
   // if api mode need to create common files and folders
@@ -65,9 +62,9 @@ exports.createBackend = () => {
 }
 
 exports.standard = () => {
-  let html = loadFile('./files/frontend/other/index.html')
-  let server = loadFile('./files/backend/standard/serverWithHotReloading.js')
-  let controller = loadFile('./files/backend/standard/home.js')
+  let html = loadFile('frontend/other/index.html')
+  let server = loadFile('backend/standard/serverWithHotReloading.js')
+  let controller = loadFile('backend/standard/home.js')
 
   // mode for when there is a frontend framework
   helpers.mkdirSync(`server/views`)
@@ -78,11 +75,11 @@ exports.standard = () => {
 }
 
 exports.mvcType = () => {
-  const server = loadFile('./files/backend/mvc/server.js')
-  const error = loadFile('./files/backend/mvc/error.pug')
-  const layout = loadFile('./files/backend/mvc/layout.pug')
-  const pug = loadFile('./files/backend/mvc/index.pug')
-  const controller = loadFile('./files/backend/mvc/home.js')
+  const server = loadFile('backend/mvc/server.js')
+  const error = loadFile('backend/mvc/error.pug')
+  const layout = loadFile('backend/mvc/layout.pug')
+  const pug = loadFile('backend/mvc/index.pug')
+  const controller = loadFile('backend/mvc/home.js')
 
   helpers.mkdirSync(`server/views`)
   helpers.mkdirSync(`server/views/home`)
@@ -95,8 +92,8 @@ exports.mvcType = () => {
 }
 
 exports.apiType = () => {
-  let server = loadFile('./files/backend/api/server.js')
-  let controller = loadFile('./files/backend/api/home.js')
+  let server = loadFile('backend/api/server.js')
+  let controller = loadFile('backend/api/home.js')
 
   helpers.writeFile(`server/server.js`, server)
   helpers.writeFile(`server/controllers/home.js`, controller)
@@ -113,9 +110,9 @@ exports.addDatabase = databaseSelection => {
 }
 
 exports.scripts = mode => {
-  let controller = loadFile('./files/scripts/backend/controller.js')
-  let controllerTemplate = loadFile('./files/scripts/backend/templates/controller.js')
-  let routesTemplate = loadFile('./files/scripts/backend/templates/routes.js')
+  let controller = loadFile('scripts/backend/controller.js')
+  let controllerTemplate = loadFile('scripts/backend/templates/controller.js')
+  let routesTemplate = loadFile('scripts/backend/templates/routes.js')
 
   if (mode === 'standard') {
     helpers.addScriptToPackageJSON('start', `nodemon --watch server server/cluster.js`)

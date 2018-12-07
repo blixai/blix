@@ -9,42 +9,40 @@ const {newProjectInstructions} = require('./utils/newProjectInstructions')
 const addAPIScript = require('./utils/addAPIScript')
 const {createBackend} = require("./backend");
 const store = require('./store')
+const { loadFile } = helpers
 
-const loadFile = filePath => {
-  return fs.readFileSync(path.resolve(__dirname, filePath), "utf8");
-};
 
 // load common files
-const babel = loadFile("./files/frontend/babel/reactBabel");
-const webpack = loadFile("./files/frontend/webpack/react.js");
-const webpackWithHotReloading = loadFile('./files/frontend/webpack/reactWithHotReloading.js');
-const postcssConfig = loadFile("./files/frontend/postcss.config.js");
+const babel = loadFile("frontend/babel/reactBabel");
+const webpack = loadFile("frontend/webpack/react.js");
+const webpackWithHotReloading = loadFile('frontend/webpack/reactWithHotReloading.js');
+const postcssConfig = loadFile("frontend/postcss.config.js");
 
 // load html file for projects without backends
-const htmlFile = loadFile("./files/frontend/other/index.html");
-const cssFile = loadFile("./files/frontend/other/App.css");
+const htmlFile = loadFile("frontend/other/index.html");
+const cssFile = loadFile("frontend/other/App.css");
 
 // load react files
-const index = loadFile("./files/frontend/react/index.js");
-const app = loadFile("./files/frontend/react/App.js");
+const index = loadFile("frontend/react/index.js");
+const app = loadFile("frontend/react/App.js");
 
 // load react-router files
-const reactRouterIndex = loadFile("./files/frontend/react-router/index.js");
-const appRouter = loadFile("./files/frontend/react-router/Router.js");
-const Navbar = loadFile("./files/frontend/react-router/Navbar.js");
-const NavbarCSS = loadFile("./files/frontend/react-router/Navbar.css");
-const HomeView = loadFile("./files/frontend/react-router/Home.js");
-const globalStyle = loadFile("./files/frontend/react-router/global.css");
+const reactRouterIndex = loadFile("frontend/react-router/index.js");
+const appRouter = loadFile("frontend/react-router/Router.js");
+const Navbar = loadFile("frontend/react-router/Navbar.js");
+const NavbarCSS = loadFile("frontend/react-router/Navbar.css");
+const HomeView = loadFile("frontend/react-router/Home.js");
+const globalStyle = loadFile("frontend/react-router/global.css");
 
 // load redux files
-const reduxIndex = loadFile('./files/frontend/redux/index.js')
-const reduxAppContainer = loadFile('./files/frontend/redux/AppContainer.js')
-const reactRouterReduxIndex = loadFile("./files/frontend/reactRouter-redux/index.js");
-const configStore = loadFile("./files/frontend/redux/configStore.js");
-const rootReducer = loadFile("./files/frontend/redux/rootReducer.js");
-const ReduxHomeView = loadFile("./files/frontend/redux/Home.js");
+const reduxIndex = loadFile('frontend/redux/index.js')
+const reduxAppContainer = loadFile('frontend/redux/AppContainer.js')
+const reactRouterReduxIndex = loadFile("frontend/reactRouter-redux/index.js");
+const configStore = loadFile("frontend/redux/configStore.js");
+const rootReducer = loadFile("frontend/redux/rootReducer.js");
+const ReduxHomeView = loadFile("frontend/redux/Home.js");
 
-const NavbarContainer = loadFile("./files/frontend/redux/NavbarContainer.js");
+const NavbarContainer = loadFile("frontend/redux/NavbarContainer.js");
 
 exports.react = () => {
   createCommonFilesAndFolders();
@@ -212,9 +210,9 @@ exports.scripts = () => {
 };
 
 exports.reactScripts = () => {
-  let component = loadFile("./files/scripts/frontend/react/component.js")
-  let statefulComponentTemplate = loadFile('./files/scripts/frontend/react/templates/statefulComponent.js')
-  let statelessComponentTemplate = loadFile("./files/scripts/frontend/react/templates/statelessComponent.js")
+  let component = loadFile("scripts/frontend/react/component.js")
+  let statefulComponentTemplate = loadFile('scripts/frontend/react/templates/statefulComponent.js')
+  let statelessComponentTemplate = loadFile("scripts/frontend/react/templates/statelessComponent.js")
 
   helpers.writeFile(`scripts/component.js`, component);
   helpers.writeFile(`scripts/templates/statefulComponent.js`, statefulComponentTemplate);
@@ -223,10 +221,10 @@ exports.reactScripts = () => {
 };
 
 exports.reactRouterScripts = () => {
-  let component = loadFile("./files/scripts/frontend/react-router/component.js")
-  let statefulComponentTemplate = loadFile("./files/scripts/frontend/react/templates/statefulComponent.js")
-  let statelessComponentTemplate = loadFile("./files/scripts/frontend/react/templates/statelessComponent.js")
-  let view = loadFile('./files/scripts/frontend/react-router/view.js')
+  let component = loadFile("scripts/frontend/react-router/component.js")
+  let statefulComponentTemplate = loadFile("scripts/frontend/react/templates/statefulComponent.js")
+  let statelessComponentTemplate = loadFile("scripts/frontend/react/templates/statelessComponent.js")
+  let view = loadFile('scripts/frontend/react-router/view.js')
 
   helpers.writeFile(`scripts/component.js`, component);
   helpers.writeFile(`scripts/templates/statefulComponent.js`, statefulComponentTemplate);
@@ -238,13 +236,13 @@ exports.reactRouterScripts = () => {
 };
 
 exports.reduxScripts = () => {
-  let action = loadFile("./files/scripts/frontend/redux/action.js")
-  let actionTemplate = loadFile("./files/scripts/frontend/redux/templates/action.js")
-  let reducerTemplate = loadFile("./files/scripts/frontend/redux/templates/reducer.js")
-  let component = loadFile("./files/scripts/frontend/redux/component.js")
-  let statelessComponentTemplate = loadFile("./files/scripts/frontend/react/templates/statelessComponent.js")
-  let containerTemplate = loadFile("./files/scripts/frontend/redux/templates/container.js")
-  let statefulComponentTemplate = loadFile("./files/scripts/frontend/react/templates/statefulComponent.js")
+  let action = loadFile("scripts/frontend/redux/action.js")
+  let actionTemplate = loadFile("scripts/frontend/redux/templates/action.js")
+  let reducerTemplate = loadFile("scripts/frontend/redux/templates/reducer.js")
+  let component = loadFile("scripts/frontend/redux/component.js")
+  let statelessComponentTemplate = loadFile("scripts/frontend/react/templates/statelessComponent.js")
+  let containerTemplate = loadFile("scripts/frontend/redux/templates/container.js")
+  let statefulComponentTemplate = loadFile("scripts/frontend/react/templates/statefulComponent.js")
 
   // action script and templates
   helpers.writeFile(`scripts/action.js`, action)
@@ -262,14 +260,14 @@ exports.reduxScripts = () => {
 }
 
 exports.reactRouterReduxScripts = () => {
-  let action = loadFile("./files/scripts/frontend/reactRouter-redux/action.js")
-  let actionTemplate = loadFile("./files/scripts/frontend/redux/templates/action.js")
-  let reducerTemplate = loadFile("./files/scripts/frontend/redux/templates/reducer.js")
-  let component = loadFile("./files/scripts/frontend/reactRouter-redux/component.js")
-  let statelessComponentTemplate = loadFile("./files/scripts/frontend/react/templates/statelessComponent.js")
-  let containerTemplate = loadFile("./files/scripts/frontend/redux/templates/container.js")
-  let statefulComponentTemplate = loadFile("./files/scripts/frontend/react/templates/statefulComponent.js")
-  let view = loadFile('./files/scripts/frontend/reactRouter-redux/view.js')
+  let action = loadFile("scripts/frontend/reactRouter-redux/action.js")
+  let actionTemplate = loadFile("scripts/frontend/redux/templates/action.js")
+  let reducerTemplate = loadFile("scripts/frontend/redux/templates/reducer.js")
+  let component = loadFile("scripts/frontend/reactRouter-redux/component.js")
+  let statelessComponentTemplate = loadFile("scripts/frontend/react/templates/statelessComponent.js")
+  let containerTemplate = loadFile("scripts/frontend/redux/templates/container.js")
+  let statefulComponentTemplate = loadFile("scripts/frontend/react/templates/statefulComponent.js")
+  let view = loadFile('scripts/frontend/reactRouter-redux/view.js')
   // action script and templates
   helpers.writeFile(`scripts/action.js`, action)
   helpers.writeFile(`scripts/templates/action.js`, actionTemplate);

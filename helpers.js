@@ -1,4 +1,5 @@
 const fs = require("fs");
+const path = require("path")
 const execSync = require("child_process").execSync;
 const chalk = require('chalk');
 const store = require('./new/store')
@@ -373,6 +374,33 @@ const insert = async (fileToInsertInto, whatToInsert, lineToInsertAt) => {
 }
 
 exports.insert = insert
+
+exports.capitalize = (word) => word.charAt(0).toUpperCase() + word.slice(1)
+
+exports.loadFile = (file, folderPath) => {
+  let filePathStartCharacters = file.slice(0, 2)
+  if (!folderPath) {
+    folderPath = store.mode === 'cli' ? './new/files/' : '/scripts/templates/'
+  }
+  if (filePathStartCharacters === './') {
+    file = file.slice(1)
+  }
+
+  try {
+    if (store.mode === 'cli') {
+      file = fs.readFileSync(path.resolve(__dirname, folderPath + file), 'utf8')      
+    } else {
+      file = fs.readFileSync(process.cwd() + folderPath + file, 'utf8')
+    }
+    if (!file) {
+      throw `File ${file} not found!`
+    }
+    return file;
+  } catch (err) {
+    console.error(chalk`{red ${err}}`)
+    return ""
+  }
+}
 
 // local helpers 
 
