@@ -7,21 +7,19 @@ const { createBackend } = require("./backend");
 const store = require('./store')
 const { e2eSetup } = require("./utils/addEndToEndTesting");
 const { newProjectInstructions } = require('./utils/newProjectInstructions')
-
-const loadFile = filePath => {
-    return fs.readFileSync(path.resolve(__dirname, './files/' + filePath), "utf8");
-};
-
-const postcssConfig = loadFile('frontend/postcss.config.js')
-const babel = loadFile('frontend/babel/vuebabel')
+const { loadFile } = helpers
 
 
 exports.vue = () => {
+    const postcssConfig = loadFile('frontend/postcss.config.js')
+    const babel = loadFile('frontend/babel/vuebabel')
+    
     createCommonFilesAndFolders()
 
     helpers.mkdirSync('dist')
     helpers.mkdirSync('src')
     helpers.mkdirSync('src/api')
+    helpers.mkdirSync('src/mixins')
 
     this.createSrcContents()
 
@@ -137,11 +135,20 @@ exports.scripts = () => {
     );
     helpers.addScriptToPackageJSON("build", "webpack --mode='production'");
 
+    if (store.vueType === 'vue') {
+        this.vueScripts()
+    }
+
     addAPIScript()
 }
 
 exports.vueScripts = () => {
-
+    let component = loadFile('scripts/frontend/vue/component.js')
+    let template = loadFile('scripts/frontend/vue/templates/component.vue')
+    
+    helpers.writeFile('scripts/component.js', component)
+    helpers.writeFile('scripts/templates/component.vue', template)
+    helpers.addScriptToPackageJSON('component', 'node scripts/component.js')
 }
 
 exports.vueRouterScripts = () => {
@@ -160,7 +167,7 @@ exports.packages = () => {
     if (!store.backend.backend) {
         helpers.addDependenciesToStore("webpack-dev-server", 'dev')
     }
-    helpers.addDependenciesToStore("vue vue-loader vue-style-loader vue-template-compiler webpack webpack-cli babel-loader css-loader @babel/core @babel/preset-env @babel/plugin-transform-runtime @babel/runtime style-loader cssnano postcss postcss-preset-env postcss-import postcss-loader", 'dev')
+    helpers.addDependenciesToStore("vue vue-loader vue-style-loader vue-template-compiler webpack webpack-cli babel-loader css-loader @babel/core @babel/preset-env @babel/plugin-transform-runtime @babel/runtime style-loader cssnano postcss postcss-preset-env postcss-import postcss-loader blix@next", 'dev')
 }
 
 exports.createWebpack = () => {

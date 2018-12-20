@@ -6,11 +6,8 @@ let helpers    = require('../../helpers')
 let store      = require('../../new/store')
 let { addProjectInstructions } = require('../addProjectInstructions')
 
+const { loadFile } = helpers;
 
-let loadFile = filePath => {
-  let root = '../../new/files/'
-  return fs.readFileSync(path.resolve(__dirname, root + filePath), 'utf8')
-}
 
 // files
 let rootReducer = loadFile('frontend/redux/rootReducer.js')
@@ -125,7 +122,7 @@ exports.reactRouterCreatedByBlix = () => {
   let filesInComponents = fs.readdirSync('./src/components')
   filesInComponents.forEach(file => {
     if (fs.lstatSync(`./src/components/${file}`).isDirectory()) {
-      let container = createContainer(file)
+      let container = this.createContainer(file)
       helpers.writeFile(`src/components/${file}/${file}Container.js`, container)
     }
   })

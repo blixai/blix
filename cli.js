@@ -1,6 +1,9 @@
 #!/usr/bin/env node
 const program = require('commander');
+const updateNotifier = require('update-notifier');
+const pkg = require('./package.json');
 const store = require('./new/store')
+store.mode = 'cli' // this must be set before functions are compiled in order to load necessary files properly
 const { createProject } = require("./new");
 const { scripts } = require("./scripts/script");
 const add = require("./add/add");
@@ -21,6 +24,9 @@ if (major < 8) {
   );
   process.exit(1);
 }
+
+
+updateNotifier({pkg}).notify();
 
 program
   .version(version, '-v, --version')
@@ -49,9 +55,17 @@ program
 
 program
   .command('generate <script> [args...]')
+  .allowUnknownOption()
   .alias('g')
   .description('run scripts in a project')
-  .action((script, args) => generate(script, args))
+  .action((script, args) => {
+    if (process.argv.length > 4) {
+      let options = process.argv.slice(4)
+      generate(script, options)
+    } else {
+      generate(script, args)
+    }
+  })
 
 
 
