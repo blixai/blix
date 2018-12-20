@@ -22,6 +22,7 @@ exports.generate = (scriptArg, otherArgs = '') => {
             } else {
                 execSync(`npm run ${scriptArg} ${otherArgs}`, { stdio: [0, 1, 2] })
             }
+            // execSync(`node scripts/${scriptArg}.js ${otherArgs}`, { stdio: [0, 1, 2] })
         } catch (err) {
             console.error('Something went wrong.')
             console.error(err)

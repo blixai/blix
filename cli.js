@@ -55,9 +55,17 @@ program
 
 program
   .command('generate <script> [args...]')
+  .allowUnknownOption()
   .alias('g')
   .description('run scripts in a project')
-  .action((script, args) => generate(script, args))
+  .action((script, args) => {
+    if (process.argv.length > 4) {
+      let options = process.argv.slice(4)
+      generate(script, options)
+    } else {
+      generate(script, args)
+    }
+  })
 
 
 

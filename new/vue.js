@@ -19,6 +19,7 @@ exports.vue = () => {
     helpers.mkdirSync('dist')
     helpers.mkdirSync('src')
     helpers.mkdirSync('src/api')
+    helpers.mkdirSync('src/mixins')
 
     this.createSrcContents()
 

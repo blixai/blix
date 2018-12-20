@@ -402,6 +402,53 @@ exports.loadFile = (file, folderPath) => {
   }
 }
 
+exports.parseArgs = (argv, nameRequired = true) => {
+  let parsedData = { options: {}, fields: {} }
+
+  if (nameRequired) {
+    if (argv.length > 1 && typeof argv[2] === "string") {
+      if (!/[a-z]+/i.test(argv[2]) || /[:~'!()*]/i.test(argv[2])) {
+        console.error(chalk`{red A valid name argument is required. }`)
+        process.exit()
+      } else {
+        let name = this.capitalize(argv[2])
+        parsedData["name"] = name
+      }
+    } else {
+      console.error(chalk`{red A name argument is required. }`)
+      process.exit() 
+    }
+  } 
+
+  let otherArgs = argv.slice(2)
+  otherArgs.forEach(arg => {
+    arg = arg.toLowerCase()
+    if (/(--)[a-z]+[-]?[a-z]+?=[a-z0-9]+/i.test(arg)) {
+      let keyValuePair = arg.split("=")
+      let key = keyValuePair[0].replace("--","")
+      let value = keyValuePair[1]
+
+      if (value === "true") {
+        value = true
+      } else if (value === "false") {
+        value = false
+      } else if (!isNaN(Number(value))) {
+        value = Number(value)
+      }
+
+      parsedData["options"][key] = value
+
+    } else if (/[a-z]+:[a-z]+/i.test(arg)) {
+      let keyValuePair = arg.split(":")
+      let key = keyValuePair[0]
+      let value = keyValuePair[1]
+      parsedData["fields"][key] = value
+    }
+  })
+
+  return parsedData
+}
+
 // local helpers 
 
 const checkIfPackageJSONExists = packages => {
