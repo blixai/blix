@@ -1,10 +1,8 @@
 const path = require('path')
 const fs = require("fs")
 const helpers = require("../../../dist/src")
+const { loadFile } = helpers
 
-const loadFile = filePath => {
-    return fs.readFileSync(path.resolve(__dirname, "../files/" + filePath), "utf8")
-}
 
 const addAPIScript = () => {
     let apiScript = loadFile('scripts/frontend/api/api.js')

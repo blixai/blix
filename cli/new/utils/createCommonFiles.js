@@ -1,13 +1,7 @@
-const fs = require("fs");
-const path = require("path");
-const helpers = require("../../../dist/src");
+const helpers = require("../../../index");
 const execSync = require('child_process').execSync;
-const store = require('../../../store')
 const chalk = require('chalk')
-
-const loadFile = filePath => {
-  return fs.readFileSync(path.resolve(__dirname, filePath), "utf8");
-};
+const { loadFile, store } = helpers
 
 /// create things like .gitignore, scripts folder, scripts templates folder, README.md, .env, and package.json
 const createCommonFilesAndFolders = () => {
@@ -31,15 +25,15 @@ const createCommonFilesAndFolders = () => {
     }
     helpers.writeFile(
       `.gitignore`,
-      loadFile("../files/common/gitIgnore.txt")
+      loadFile("common/gitIgnore.txt")
     );
     helpers.writeFile(
       `README.md`,
-      loadFile("../files/common/README.md")
+      loadFile("common/README.md")
     );
     helpers.writeFile(
       `package.json`,
-      loadFile("../files/common/package.json")
+      loadFile("common/package.json")
     );
 
     helpers.writeFile(`.env`, "");

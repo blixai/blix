@@ -1,13 +1,13 @@
 const fs = require("fs");
+const helpers = require('../../index')
 const inquirer = require("inquirer");
 const prompt = inquirer.prompt;
 const { createBackend } = require("./backend");
 const { vue } = require("./vue");
 const { react } = require("./react");
 const { vanillaJS } = require("./vanillaJS");
-let store = require('../../store')
 const chalk = require('chalk')
-const helpers = require('../../dist/src')
+const { store } = helpers
 
 // console prompts
 const {

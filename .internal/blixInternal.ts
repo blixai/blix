@@ -1,6 +1,6 @@
 const fs = require('fs')
 const path = require('path')
-const store = require('../store')
+const store = require('../src/store')
 const chalk = require('chalk')
 import { logError } from '../src/logger';
 import { execute } from '../src/process'

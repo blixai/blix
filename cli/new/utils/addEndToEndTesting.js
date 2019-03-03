@@ -1,11 +1,6 @@
 const fs = require("fs");
-const helpers = require("../../../dist/src");
-const path = require("path");
-const store = require('../../../store')
-
-const loadFile = filePath => {
-  return fs.readFileSync(path.resolve(__dirname, filePath), "utf8");
-};
+const helpers = require("../../../index");
+const { loadFile, store } = helpers
 
 let e2eSetup = () => {
   if (store.e2e.e2e === "cafe") {
@@ -44,7 +39,7 @@ const installCypress = () => {
   helpers.mkdirSync(`cypress/integration`);
   helpers.writeFile(
     `cypress/integration/test.js`,
-    loadFile("../files/frontend/e2e/cypress.js")
+    loadFile("frontend/e2e/cypress.js")
   );
   addJestToPackageJson()
 };
@@ -55,7 +50,7 @@ const installTestCafe = () => {
   helpers.mkdirSync(`test/e2e`);
   helpers.writeFile(
     `test/e2e/test.js`,
-    loadFile("../files/frontend/e2e/testcafe.js")
+    loadFile("files/frontend/e2e/testcafe.js")
   );
   addJestToPackageJson()
 };

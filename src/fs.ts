@@ -2,7 +2,7 @@ const fs = require('fs')
 const path = require('path')
 const chalk = require('chalk')
 import { prompt } from "inquirer"
-const store = require('../store')
+const store = require('./store')
 import { _logCaughtError } from '../.internal/blixInternal'
 import { logError, logWarning } from './logger'
 
@@ -144,7 +144,7 @@ export function moveAllFilesInDir(dirToSearch: string, dirToMoveTo: string) {
 export function loadFile(file: string, folderPath: string): string {
     let filePathStartCharacters = file.slice(0, 2)
     if (!folderPath) {
-        folderPath = store.mode === 'cli' ? './new/files/' : '/scripts/templates/'
+        folderPath = store.mode === 'cli' ? '../cli/files/' : '/scripts/templates/'
     }
     if (filePathStartCharacters === './') {
         file = file.slice(1)

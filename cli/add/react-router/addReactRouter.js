@@ -4,12 +4,8 @@ let helpers = require('../../../dist/src')
 let inquirer = require('inquirer')
 let prompt = inquirer.prompt
 let { addProjectInstructions } = require('../addProjectInstructions')
-let store = require('../../../store')
+const { loadFile, store } = helpers
 
-let loadFile = filePath => {
-    let root = '../../new/files/'
-    return fs.readFileSync(path.resolve(__dirname, root + filePath), 'utf8')
-}
 
 let continuePrompt = {
     type: 'confirm',

@@ -6,7 +6,7 @@ var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cook
 Object.defineProperty(exports, "__esModule", { value: true });
 var fs = require('fs');
 var path = require('path');
-var store = require('../store');
+var store = require('../src/store');
 var chalk = require('chalk');
 var logger_1 = require("../src/logger");
 var process_1 = require("../src/process");

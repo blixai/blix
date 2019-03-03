@@ -9,7 +9,8 @@
     "test:coverage": "jest --collectCoverage",
     "test:ci": "jest --coverage",
     "send-coverage": "./node_modules/.bin/codecov",
-    "build": "tsc"
+    "build": "tsc",
+    "dev": "tsc --watch"
   },
   "keywords": [
     "cli",

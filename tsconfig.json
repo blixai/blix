@@ -14,12 +14,13 @@
     "include": [
         "./src/**/*", 
         ".internal/blixInternal.ts", 
-        "./store.js",
-        "./cli/prompts.js"
+        "src/store.js",
+        "./cli/prompts.js",
+        "./cli/files/**/*"
     ],
     "exclude": [
         "node_modules",
-        "**/*.spec.ts"
+        "**/*.spec.ts",
     ],
     "compileOnSave": true,
 }

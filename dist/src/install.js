@@ -42,7 +42,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var fs = require('fs');
 var child_process_1 = require("child_process");
 var chalk = require('chalk');
-var store = require('../store');
+var store = require('./store');
 var prompt = require('inquirer');
 var yarnPrompt = require('../cli/prompts').yarnPrompt;
 var process_1 = require("./process");

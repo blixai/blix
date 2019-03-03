@@ -1,11 +1,7 @@
-const helpers = require("../../../dist/src");
+const helpers = require("../../../index");
 const fs = require("fs");
-const path = require("path");
-const store = require('../../../store')
+const { loadFile, store } = helpers
 
-const loadFile = filePath => {
-  return fs.readFileSync(path.resolve(__dirname, filePath), "utf8");
-};
 
 let filePath = ''
 
@@ -19,7 +15,7 @@ const mochaTestBackend = () => {
   helpers.addDependenciesToStore("mocha chai chai-http", 'dev');
   helpers.addScriptToPackageJSON("mocha", "mocha test/server");
   checkOrCreateServerTestFolder();
-  helpers.writeFile(`test/server/test.spec.js`, loadFile("../files/testing/backend/mocha.js"))
+  helpers.writeFile(`test/server/test.spec.js`, loadFile("testing/backend/mocha.js"))
 
   let json = JSON.parse(fs.readFileSync(`./${filePath}package.json`, "utf8"));
   if (json.hasOwnProperty("jest")) {
@@ -38,7 +34,7 @@ const testJestBackend = () => {
   checkOrCreateServerTestFolder();
   helpers.writeFile(
     `test/server/test.spec.js`,
-    loadFile("../files/testing/backend/jest.js")
+    loadFile("testing/backend/jest.js")
   );
   let json = JSON.parse(fs.readFileSync(`./${filePath}package.json`, "utf8"));
   if (!json.hasOwnProperty("jest")) {

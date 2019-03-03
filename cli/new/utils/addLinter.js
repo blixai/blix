@@ -1,12 +1,5 @@
-const fs = require('fs')
-const path = require('path')
-const helpers = require('../../../dist/src')
-const store = require('../../../store')
-
-const loadFile = filePath => {
-  let root = '../files/'
-  return fs.readFileSync(path.resolve(__dirname, root + filePath), "utf8");
-};
+const helpers = require('../../../index')
+const { loadFile, store } = helpers
 
 let prettierConfig = loadFile('common/linter/prettier.js')
 let eslintBasicConfig = loadFile('common/linter/eslintBasic.js')

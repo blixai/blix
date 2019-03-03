@@ -4,11 +4,8 @@ let glob       = require('glob')
 let inquirer   = require('inquirer')
 let prompt     = inquirer.prompt
 let helpers    = require('../../../dist/src')
+const { loadFile } = helpers
 
-// helper function to load files 
-let loadFile = filePath => {
-  return fs.readFileSync(path.resolve(__dirname, filePath), 'utf8')
-}
 
 let webpackEntry = {
   type: 'list',

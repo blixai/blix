@@ -1,17 +1,13 @@
-const path = require("path");
 const fs = require("fs");
-const helpers = require("../../../dist/src");
-const store = require('../../../store')
+const helpers = require("../../../index");
+const { loadFile, store } = helpers
 
-const loadFile = filePath => {
-  return fs.readFileSync(path.resolve(__dirname, filePath), "utf8");
-};
 
 //
 exports.addMongooseToScripts = () => {
-  let model = loadFile("../files/scripts/backend/mongoose.js");
+  let model = loadFile("scripts/backend/mongoose.js");
   let schemaTemplate = loadFile(
-    "../files/scripts/backend/templates/mongoose.js"
+    "scripts/backend/templates/mongoose.js"
   );
   helpers.writeFile(`scripts/model.js`, model);
   helpers.writeFile(`scripts/templates/schemaTemplate.js`, schemaTemplate);

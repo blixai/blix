@@ -2,15 +2,11 @@ const fs = require("fs");
 const path = require("path");
 const inquirer = require('inquirer');
 const prompt = inquirer.prompt;
-const helpers = require("../../dist/src");
+const helpers = require("../../index");
 const addAPIScript = require('../new/utils/addAPIScript')
+const { loadFile } = helpers
 
 // helper function to load files
-let loadFile = filePath => {
-  let root = '../new/files/scripts/'
-  return fs.readFileSync(path.resolve(__dirname, root + filePath), "utf8");
-};
-
 const commands = {
   type: "list",
   message: "Add a blix script to a project or create your own:",
@@ -117,9 +113,9 @@ exports.addAction = () => {
   helpers.addScriptToPackageJSON("action", "node scripts/action.js");
   helpers.checkScriptsFolderExist()
 
-  let action = loadFile("frontend/redux/action.js");
-  let actionTemplate = loadFile("frontend/redux/templates/action.js");
-  let reducerTemplate = loadFile("frontend/redux/templates/reducer.js");
+  let action = loadFile("scripts/frontend/redux/action.js");
+  let actionTemplate = loadFile("scripts/frontend/redux/templates/action.js");
+  let reducerTemplate = loadFile("scripts/frontend/redux/templates/reducer.js");
 
   helpers.writeFile("scripts/action.js", action);
   helpers.writeFile("scripts/templates/action.js", actionTemplate);
@@ -143,8 +139,8 @@ const addModel = async () => {
   
   if (ans.model === "m") {
     // add moongoose
-    let model = loadFile("backend/mongoose.js");
-    let schemaTemplate = loadFile("backend/templates/mongoose.js");
+    let model = loadFile("scripts/backend/mongoose.js");
+    let schemaTemplate = loadFile("scripts/backend/templates/mongoose.js");
 
     helpers.writeFile("scripts/model.js", model);
     helpers.writeFile("scripts/templates/schemaTemplate.js", schemaTemplate);
@@ -156,10 +152,10 @@ const addModel = async () => {
   } else {
     // add bookshelf
     // load file for server/models/bookshelf.js 
-    let bookshelfRequiredFile = loadFile("backend/templates/bookshelf.js");
+    let bookshelfRequiredFile = loadFile("scripts/backend/templates/bookshelf.js");
     // load scripts files 
-    let migration = loadFile("backend/templates/migration.js");
-    let bookshelf = loadFile("backend/templates/bookshelf.js");
+    let migration = loadFile("scripts/backend/templates/migration.js");
+    let bookshelf = loadFile("scripts/backend/templates/bookshelf.js");
     let model = loadFile(
       "backend/bookshelf.js"
     );
@@ -185,7 +181,7 @@ exports.addReact = () => {
   helpers.addScriptToPackageJSON("component", "node scripts/component.js");
   helpers.checkScriptsFolderExist();
 
-  let react = loadFile("frontend/react/component.js");
+  let react = loadFile("scripts/frontend/react/component.js");
   helpers.writeFile("scripts/component.js", react);
   this.checkReactTemplatesExist()
 
@@ -202,8 +198,8 @@ exports.addRedux = () => {
   // load component script and templates 
   this.checkReactTemplatesExist()
 
-  let redux = loadFile("frontend/redux/component.js");
-  let container = loadFile("frontend/redux/templates/container.js");
+  let redux = loadFile("scripts/frontend/redux/component.js");
+  let container = loadFile("scripts/frontend/redux/templates/container.js");
   // write files
   helpers.writeFile("scripts/component.js", redux);
   helpers.writeFile("scripts/templates/container.js", container);
@@ -221,7 +217,7 @@ exports.addClientView = () => {
 
   // if true project uses redux
   if (fs.existsSync('./src/store')) {
-    let reduxViewScript = loadFile("frontend/redux/view.js")
+    let reduxViewScript = loadFile("scripts/frontend/redux/view.js")
     helpers.writeFile("scripts/view.js", reduxViewScript)
 
     console.log("")
@@ -229,7 +225,7 @@ exports.addClientView = () => {
     console.log("This will create a new stateless or stateful component in src/views and ask which components/containers to import into the view. It will also ask for a route path for the view and add this view with it's route into the App.js file.")
     console.log("If view already exists it will just ask what containers/components from src/components to import into that view.")
   } else {
-    let reactRouterViewScript = loadFile("frontend/react-router/view.js")
+    let reactRouterViewScript = loadFile("scripts/frontend/react-router/view.js")
     helpers.writeFile("scripts/view.js", reactRouterViewScript)
 
     console.log("")
@@ -246,8 +242,8 @@ exports.checkReactTemplatesExist = () => {
     fs.readFileSync('./scripts/templates/statefulComponent.js', 'utf8')
     fs.readFileSync('./scripts/templates/statelessComponent.js', 'utf8')
   } catch (err) {
-    let statefulComponent = loadFile("frontend/react/templates/statefulComponent.js")
-    let statelessComponent = loadFile("frontend/react/templates/statelessComponent.js")
+    let statefulComponent = loadFile("scripts/frontend/react/templates/statefulComponent.js")
+    let statelessComponent = loadFile("scripts/frontend/react/templates/statelessComponent.js")
 
     helpers.writeFile("scripts/templates/statefulComponent.js", statefulComponent)
     helpers.writeFile("scripts/templates/statelessComponent.js", statelessComponent)
@@ -259,9 +255,9 @@ exports.addController = () => {
   helpers.addScriptToPackageJSON("controller", "node scripts/controller.js");
   helpers.checkScriptsFolderExist();
 
-  let controller = loadFile("backend/controller.js");
-  let controllerTemplate = loadFile("backend/templates/controller.js");
-  let routes = loadFile("backend/templates/routes.js");
+  let controller = loadFile("scripts/backend/controller.js");
+  let controllerTemplate = loadFile("scripts/backend/templates/controller.js");
+  let routes = loadFile("scripts/backend/templates/routes.js");
 
   helpers.writeFile("scripts/controller.js", controller);
   helpers.writeFile("scripts/templates/controller.js", controllerTemplate);

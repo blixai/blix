@@ -2,11 +2,10 @@ let fs         = require('fs')
 let path       = require('path')
 let inquirer   = require('inquirer')
 let prompt     = inquirer.prompt
-let helpers    = require('../../../dist/src')
-let store      = require('../../../store')
+let helpers    = require('../../../index')
 let { addProjectInstructions } = require('../addProjectInstructions')
 
-const { loadFile } = helpers;
+const { loadFile, store } = helpers;
 
 
 // files

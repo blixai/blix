@@ -1,11 +1,7 @@
-const helpers = require("../../../dist/src");
+const helpers = require("../../../index");
 const fs = require("fs");
-const path = require("path");
-const store = require('../../../store')
+const { loadFile, store } = helpers
 
-const loadFile = filePath => {
-  return fs.readFileSync(path.resolve(__dirname, filePath), "utf8");
-};
 
 let installReactTesting = () => {
   let name = store.name
@@ -21,7 +17,7 @@ let installReactTesting = () => {
   helpers.addDependenciesToStore("jest enzyme enzyme-adapter-react-16 identity-obj-proxy babel-jest 'babel-core@^7.0.0-0'", 'dev')
   helpers.writeFile(
     `test/${file}`,
-    loadFile(`../files/frontend/enzyme/${file}`)
+    loadFile(`frontend/enzyme/${file}`)
   );
 
   let jest = {

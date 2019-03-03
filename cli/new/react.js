@@ -1,6 +1,4 @@
-const helpers = require("../../dist/src");
-const fs = require("fs");
-const path = require("path");
+const helpers = require("../../index");
 const {createCommonFilesAndFolders} = require("./utils/createCommonFiles");
 const {addLinter} = require('./utils/addLinter')
 const {installReactTesting} = require("./utils/addReactTesting");
@@ -8,8 +6,7 @@ const {e2eSetup} = require("./utils/addEndToEndTesting");
 const {newProjectInstructions} = require('./utils/newProjectInstructions')
 const addAPIScript = require('./utils/addAPIScript')
 const {createBackend} = require("./backend");
-const store = require('../../store')
-const { loadFile } = helpers
+const { loadFile, store } = helpers
 
 
 // load common files

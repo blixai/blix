@@ -1,9 +1,8 @@
 let inquirer = require('inquirer')
 let prompt = inquirer.prompt
-const helpers = require('../../../dist/src')
+const helpers = require('../../../index')
 const fs = require('fs')
-const path = require('path')
-const store = require('../../../store')
+const { store } = helpers
 const { addProjectInstructions } = require('../addProjectInstructions')
 
 const { testBackend } = require('../../new/utils/addBackendTests')
@@ -16,10 +15,8 @@ const {
   addDatabase
 } = require('../../new/backend')
 
-const loadFile = filePath => {
-  let root = '../../new/files/'
-  return fs.readFileSync(path.resolve(__dirname, root + filePath), 'utf8')
-}
+const { loadFile } = helpers
+
 
 const { serverTesting, database, backendType } = require('../../prompts')
 

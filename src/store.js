@@ -1,4 +1,4 @@
-let store = {
+const store = {
   name: '',
   frontend: '',
   backend: '',

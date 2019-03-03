@@ -1,11 +1,10 @@
-const helpers = require('../../dist/src')
+const helpers = require('../../index')
 const { createCommonFilesAndFolders } = require("./utils/createCommonFiles");
 const addAPIScript = require('./utils/addAPIScript')
 const { createBackend } = require("./backend");
-const store = require('../../store')
 const { e2eSetup } = require("./utils/addEndToEndTesting");
 const { newProjectInstructions } = require('./utils/newProjectInstructions')
-const { loadFile } = helpers
+const { loadFile, store } = helpers
 
 
 exports.vue = () => {

@@ -1,7 +1,7 @@
 const fs = require('fs')
 import { execSync } from 'child_process'
 const chalk = require('chalk');
-const store = require('../store')
+const store = require('./store')
 const prompt = require('inquirer')
 const { yarnPrompt } = require('../cli/prompts')
 import { execute } from './process'

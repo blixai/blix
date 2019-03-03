@@ -5,7 +5,7 @@ const helpers = require('../../../dist/src')
 const { database } = require('../../prompts')
 const { addMongooseToScripts } = require('../../new/utils/addMongoDB')
 const { addBookshelfToScripts } = require('../../new/utils/addBookshelf')
-const store = require('../../../store')
+const { store } = helpers
 
 const addDatabase = async () => {
   store.database = await prompt([database])
