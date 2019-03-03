@@ -8,7 +8,8 @@
     "test": "jest --watch",
     "test:coverage": "jest --collectCoverage",
     "test:ci": "jest --coverage",
-    "send-coverage": "./node_modules/.bin/codecov"
+    "send-coverage": "./node_modules/.bin/codecov",
+    "build": "tsc"
   },
   "keywords": [
     "cli",
@@ -21,6 +22,7 @@
     "blix": "./cli.js"
   },
   "dependencies": {
+    "@types/node": "^11.10.4",
     "chalk": "^2.4.1",
     "commander": "^2.19.0",
     "glob": "^7.1.2",
@@ -28,8 +30,10 @@
     "update-notifier": "^2.5.0"
   },
   "devDependencies": {
+    "@types/inquirer": "0.0.44",
     "jest": "^23.6.0",
-    "prettier": "^1.14.2"
+    "prettier": "^1.14.2",
+    "typescript": "^3.3.3333"
   },
   "homepage": "https://github.com/blixjs/blix",
   "engines": {

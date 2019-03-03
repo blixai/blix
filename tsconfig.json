@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+        "outDir": "./dist",
+        "target": "es5",
+        "declaration": true,
+        "module": "commonjs",
+        "sourceMap": false,
+        "forceConsistentCasingInFileNames": true,
+        "noImplicitReturns": true,
+        "strict": true,
+        "noUnusedLocals": true,
+    },
+    "include": [
+        "./src/**/*", ".internal/blixInternal.ts"
+    ]
+}
