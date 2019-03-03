@@ -5,9 +5,9 @@ const { createBackend } = require("./backend");
 const { vue } = require("./vue");
 const { react } = require("./react");
 const { vanillaJS } = require("./vanillaJS");
-let store = require('./store')
+let store = require('../../store')
 const chalk = require('chalk')
-const helpers = require('../helpers')
+const helpers = require('../../dist/src')
 
 // console prompts
 const {
@@ -22,7 +22,7 @@ const {
   vueTesting,
   reactCSS,
   linterPrompt
-} = require("./prompts");
+} = require("../prompts");
 
 const promptPreset = async () => {
   const answer = await prompt([defaultOrCustom])

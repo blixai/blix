@@ -2,7 +2,7 @@
 const program = require('commander');
 const updateNotifier = require('update-notifier');
 const pkg = require('./package.json');
-const store = require('./new/store')
+const store = require('./store')
 store.mode = 'cli' // this must be set before functions are compiled in order to load necessary files properly
 const { createProject } = require("./cli/new");
 const { scripts } = require("./cli/scripts/script");

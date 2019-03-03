@@ -1,5 +1,5 @@
 const fs = require("fs");
-const store = require('../new/store');
+const store = require('../store');
 import { _logCaughtError } from '../.internal/blixInternal'
 import { getCWDName } from './utils'
 import { execute } from './process'

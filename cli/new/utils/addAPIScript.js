@@ -1,6 +1,6 @@
 const path = require('path')
 const fs = require("fs")
-const helpers = require("../../helpers")
+const helpers = require("../../../dist/src")
 
 const loadFile = filePath => {
     return fs.readFileSync(path.resolve(__dirname, "../files/" + filePath), "utf8")

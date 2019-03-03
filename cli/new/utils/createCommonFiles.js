@@ -1,8 +1,8 @@
 const fs = require("fs");
 const path = require("path");
-const helpers = require("../../helpers");
+const helpers = require("../../../dist/src");
 const execSync = require('child_process').execSync;
-const store = require('../store')
+const store = require('../../../store')
 const chalk = require('chalk')
 
 const loadFile = filePath => {

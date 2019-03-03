@@ -1,10 +1,10 @@
 let fs = require('fs')
 let path = require('path')
-let helpers = require('../../helpers')
+let helpers = require('../../../dist/src')
 let inquirer = require('inquirer')
 let prompt = inquirer.prompt
 let { addProjectInstructions } = require('../addProjectInstructions')
-let store = require('../../new/store')
+let store = require('../../../store')
 
 let loadFile = filePath => {
     let root = '../../new/files/'

@@ -1,6 +1,6 @@
-const helpers = require('../helpers')
+const helpers = require('../../dist/src')
 const { options } = require('../new/utils/newProjectInstructions')
-const store = require('../new/store')
+const store = require('../../store')
 const chalk = require('chalk')
 
 exports.selected = []

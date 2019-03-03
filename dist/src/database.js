@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var fs = require("fs");
-var store = require('../new/store');
+var store = require('../store');
 var blixInternal_1 = require("../.internal/blixInternal");
 var utils_1 = require("./utils");
 var process_1 = require("./process");

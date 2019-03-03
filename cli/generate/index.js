@@ -1,4 +1,4 @@
-const helpers = require('../helpers')
+const helpers = require('../../dist/src')
 const fs = require('fs')
 const chalk = require('chalk')
 const execSync = require('child_process').execSync

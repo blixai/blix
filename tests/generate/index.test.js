@@ -1,4 +1,4 @@
-jest.mock('../../helpers')
+jest.mock('../../../')
 jest.mock('fs', () => ({
     existsSync: jest.fn()
 }))

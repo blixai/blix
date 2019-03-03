@@ -1,7 +1,7 @@
 const fs = require('fs')
 const path = require('path')
-const helpers = require('../../helpers')
-const store = require('../store')
+const helpers = require('../../../dist/src')
+const store = require('../../../store')
 
 const loadFile = filePath => {
   let root = '../files/'

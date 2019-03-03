@@ -3,7 +3,7 @@ let path       = require('path')
 let glob       = require('glob')
 let inquirer   = require('inquirer')
 let prompt     = inquirer.prompt
-let helpers    = require('../../helpers')
+let helpers    = require('../../../dist/src')
 
 // helper function to load files 
 let loadFile = filePath => {

@@ -1,9 +1,9 @@
 let inquirer = require('inquirer')
 let prompt = inquirer.prompt
-const helpers = require('../../helpers')
+const helpers = require('../../../dist/src')
 const fs = require('fs')
 const path = require('path')
-const store = require('../../new/store')
+const store = require('../../../store')
 const { addProjectInstructions } = require('../addProjectInstructions')
 
 const { testBackend } = require('../../new/utils/addBackendTests')
@@ -21,7 +21,7 @@ const loadFile = filePath => {
   return fs.readFileSync(path.resolve(__dirname, root + filePath), 'utf8')
 }
 
-const { serverTesting, database, backendType } = require('../../new/prompts')
+const { serverTesting, database, backendType } = require('../../prompts')
 
 let addBackend = async () => {
   store.backendType = await prompt([backendType])

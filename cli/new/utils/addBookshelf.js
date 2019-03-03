@@ -1,5 +1,5 @@
 const fs = require("fs");
-const helpers = require("../../helpers");
+const helpers = require("../../../dist/src");
 const path = require("path");
 
 const loadFile = filePath => {

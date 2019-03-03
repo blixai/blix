@@ -2,7 +2,7 @@ const fs = require("fs");
 const path = require("path");
 const inquirer = require('inquirer');
 const prompt = inquirer.prompt;
-const helpers = require("../helpers");
+const helpers = require("../../dist/src");
 const addAPIScript = require('../new/utils/addAPIScript')
 
 // helper function to load files

@@ -224,7 +224,7 @@ function loadFile(file, folderPath) {
         return file;
     }
     catch (err) {
-        blixInternal_1._logCaughtError('Failed to load file', err);
+        blixInternal_1._logCaughtError("Failed to load file " + file, err);
         return "";
     }
 }

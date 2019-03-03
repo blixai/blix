@@ -1,4 +1,4 @@
-const helpers = require('../../helpers')
+const helpers = require('../../../dist/src')
 let inquirer  = require('inquirer')
 let prompt    = inquirer.prompt
 let glob       = require('glob')

@@ -1,7 +1,7 @@
 const fs = require("fs");
-const helpers = require("../../helpers");
+const helpers = require("../../../dist/src");
 const path = require("path");
-const store = require('../store')
+const store = require('../../../store')
 
 const loadFile = filePath => {
   return fs.readFileSync(path.resolve(__dirname, filePath), "utf8");

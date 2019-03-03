@@ -1,4 +1,4 @@
-const helpers = require("../helpers");
+const helpers = require("../../dist/src");
 const fs = require("fs");
 const path = require("path");
 const {createCommonFilesAndFolders} = require("./utils/createCommonFiles");
@@ -8,7 +8,7 @@ const {e2eSetup} = require("./utils/addEndToEndTesting");
 const {newProjectInstructions} = require('./utils/newProjectInstructions')
 const addAPIScript = require('./utils/addAPIScript')
 const {createBackend} = require("./backend");
-const store = require('./store')
+const store = require('../../store')
 const { loadFile } = helpers
 
 

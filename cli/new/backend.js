@@ -1,5 +1,5 @@
 const fs = require('fs')
-const helpers = require('../helpers')
+const helpers = require('../../dist/src')
 const path = require('path')
 const {createCommonFilesAndFolders} = require('./utils/createCommonFiles')
 const {testBackend} = require('./utils/addBackendTests')
@@ -7,7 +7,7 @@ const {addLinter} = require('./utils/addLinter')
 const {addMongooseToScripts} = require('./utils/addMongoDB')
 const {addBookshelfToScripts} = require('./utils/addBookshelf')
 const {newProjectInstructions} = require('./utils/newProjectInstructions')
-const store = require('./store')
+const store = require('../../store')
 const { loadFile } = helpers
 
 // load files

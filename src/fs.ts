@@ -161,7 +161,7 @@ export function loadFile(file: string, folderPath: string): string {
         }
         return file;
     } catch (err) {
-        _logCaughtError('Failed to load file', err)
+        _logCaughtError(`Failed to load file ${file}`, err)
         return ""
     }
 }
