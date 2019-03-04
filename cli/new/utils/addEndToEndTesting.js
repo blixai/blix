@@ -6,7 +6,7 @@ const {
   writeFile,
   addScriptToPackageJSON,
   addDependenciesToStore
-} = require("../../../index");
+} = require("../../../blix");
 
 let e2eSetup = () => {
   if (store.e2e.e2e === "cafe") {

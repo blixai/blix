@@ -5,7 +5,7 @@ const {
   addDependenciesToStore,
   writeFile,
   addScriptToPackageJSON
-} = require("../../../index");
+} = require("../../../blix");
 
 
 let installReactTesting = () => {

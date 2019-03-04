@@ -2,7 +2,7 @@
 const program = require('commander');
 const updateNotifier = require('update-notifier');
 const pkg = require('./package.json');
-const { store } = require('./index')
+const { store } = require('./blix')
 store.mode = 'cli' // this must be set before functions are compiled in order to load necessary files properly
 const { createProject } = require("./cli/new");
 const { scripts } = require("./cli/scripts/script");

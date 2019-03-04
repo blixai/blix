@@ -12,7 +12,7 @@ const {
     addScriptToPackageJSON,
     installAllPackages,
     appendFile
-} = require('../../index')
+} = require('../../blix')
 
 
 exports.vue = () => {

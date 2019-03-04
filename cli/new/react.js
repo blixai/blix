@@ -14,7 +14,7 @@ const {
   addScriptToPackageJSON,
   appendFile,
   installAllPackages
-} = require('../../index')
+} = require('../../blix')
 
 
 // load common files
