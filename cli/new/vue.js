@@ -30,6 +30,8 @@ exports.vue = () => {
 
     writeFile(`postcss.config.js`, postcssConfig);
     writeFile(`.babelrc`, babel);
+    
+    this.cssLibrary()
 
     this.createWebpack()
 
@@ -166,6 +168,16 @@ exports.vuexScripts = () => {
 
 exports.vueRouterVuexScripts = () => {
     
+}
+
+exports.cssLibrary = () => {
+    if (store.vueCSS === 'vuetify') {
+        addDependenciesToStore('vuetify', 'dev')
+    } else if (store.vueCSS === 'element') {
+        addDependenciesToStore('element-ui', 'dev')
+    } else if (store.vueCSS === 'bootstrap') {
+        addDependenciesToStore('bootstrap-vue bootstrap', 'dev')
+    }
 }
 
 exports.packages = () => {

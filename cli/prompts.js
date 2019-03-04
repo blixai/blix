@@ -114,6 +114,17 @@ const reactCSS = {
   ]
 }
 
+const vueCSS = {
+  type: "list",
+  message: "Select a CSS Library",
+  name: "css",
+  choices: [
+    { name: 'Vuetify', value: 'vuetify' },
+    { name: 'Element-UI', value: 'element' },
+    { name: 'Bootstrap-Vue', value: 'bootstrap' }
+  ]
+}
+
 const linterPrompt = {
   type: "list",
   message: 'Select a linter',
@@ -150,6 +161,7 @@ module.exports = {
   reactTesting,
   vueTesting,
   reactCSS,
+  vueCSS,
   linterPrompt,
   helpCommands
 };

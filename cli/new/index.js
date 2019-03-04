@@ -23,6 +23,7 @@ const {
   reactTesting,
   vueTesting,
   reactCSS,
+  vueCSS,
   linterPrompt
 } = require("../prompts");
 
@@ -103,6 +104,8 @@ exports.reactProject = reactProject
 
 const vueProject = async vueType => {
   store.vueType = vueType
+  let cssOption = await prompt([vueCSS])
+  store.vueCSS = cssOption.css
   store.e2e = await prompt([e2e]);
   store.backend = await prompt([backend]);
 
