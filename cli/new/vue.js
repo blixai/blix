@@ -1,10 +1,18 @@
-const helpers = require('../../index')
 const { createCommonFilesAndFolders } = require("./utils/createCommonFiles");
 const addAPIScript = require('./utils/addAPIScript')
 const { createBackend } = require("./backend");
 const { e2eSetup } = require("./utils/addEndToEndTesting");
 const { newProjectInstructions } = require('./utils/newProjectInstructions')
-const { loadFile, store } = helpers
+const { 
+    loadFile,
+    store,
+    mkdirSync,
+    writeFile,
+    addDependenciesToStore,
+    addScriptToPackageJSON,
+    installAllPackages,
+    appendFile
+} = require('../../index')
 
 
 exports.vue = () => {
@@ -13,15 +21,15 @@ exports.vue = () => {
     
     createCommonFilesAndFolders()
 
-    helpers.mkdirSync('dist')
-    helpers.mkdirSync('src')
-    helpers.mkdirSync('src/api')
-    helpers.mkdirSync('src/mixins')
+    mkdirSync('dist')
+    mkdirSync('src')
+    mkdirSync('src/api')
+    mkdirSync('src/mixins')
 
     this.createSrcContents()
 
-    helpers.writeFile(`postcss.config.js`, postcssConfig);
-    helpers.writeFile(`.babelrc`, babel);
+    writeFile(`postcss.config.js`, postcssConfig);
+    writeFile(`.babelrc`, babel);
 
     this.createWebpack()
 
@@ -36,7 +44,7 @@ exports.vue = () => {
         store.backendType = "standard"
         createBackend()
       } else {
-        helpers.installAllPackages()
+        installAllPackages()
         newProjectInstructions()
       }
 }
@@ -58,9 +66,9 @@ exports.vueOnly = () => {
     let main = loadFile('frontend/vue/main.js')
     let App = loadFile('frontend/vue/App.vue')
 
-    helpers.writeFile('src/main.js', main)
-    helpers.writeFile('src/App.vue', App)
-    helpers.mkdirSync('src/components')
+    writeFile('src/main.js', main)
+    writeFile('src/App.vue', App)
+    mkdirSync('src/components')
 }
 
 exports.vueRouter = () => {
@@ -70,15 +78,15 @@ exports.vueRouter = () => {
     let Home = loadFile('frontend/vue-router/Home.vue')
     let Navbar = loadFile('frontend/vue-router/Navbar.vue')
 
-    helpers.writeFile('src/main.js', main)
-    helpers.writeFile('src/App.vue', App)
-    helpers.writeFile('src/router.js', router)
-    helpers.mkdirSync('src/views')
-    helpers.writeFile('src/views/Home.vue', Home)
-    helpers.mkdirSync('src/components')
-    helpers.writeFile('src/components/Navbar.vue', Navbar)
+    writeFile('src/main.js', main)
+    writeFile('src/App.vue', App)
+    writeFile('src/router.js', router)
+    mkdirSync('src/views')
+    writeFile('src/views/Home.vue', Home)
+    mkdirSync('src/components')
+    writeFile('src/components/Navbar.vue', Navbar)
     
-    helpers.addDependenciesToStore('vue-router', 'dev')
+    addDependenciesToStore('vue-router', 'dev')
 }
 
 exports.vuex = () => {
@@ -86,13 +94,13 @@ exports.vuex = () => {
     let App = loadFile('frontend/vue/App.vue')
     let store = loadFile('frontend/vuex/store.js')
 
-    helpers.writeFile('src/main.js', main)
-    helpers.writeFile('src/App.vue', App)
-    helpers.mkdirSync('src/store')
-    helpers.writeFile('src/store/index.js', store)
-    helpers.mkdirSync('src/components')
+    writeFile('src/main.js', main)
+    writeFile('src/App.vue', App)
+    mkdirSync('src/store')
+    writeFile('src/store/index.js', store)
+    mkdirSync('src/components')
 
-    helpers.addDependenciesToStore('vuex', 'dev')
+    addDependenciesToStore('vuex', 'dev')
 }
 
 exports.vueRouterVuex = () => {
@@ -103,34 +111,34 @@ exports.vueRouterVuex = () => {
     let Navbar = loadFile('frontend/vue-router/Navbar.vue')
     let store = loadFile('frontend/vuex/store.js')
 
-    helpers.writeFile('src/main.js', main)
-    helpers.writeFile('src/App.vue', App)
-    helpers.writeFile('src/router.js', router)
-    helpers.mkdirSync('src/store')
-    helpers.writeFile('src/store/index.js', store)
-    helpers.mkdirSync('src/views')
-    helpers.writeFile('src/views/Home.vue', Home)
-    helpers.mkdirSync('src/components')
-    helpers.writeFile('src/components/Navbar.vue', Navbar)
+    writeFile('src/main.js', main)
+    writeFile('src/App.vue', App)
+    writeFile('src/router.js', router)
+    mkdirSync('src/store')
+    writeFile('src/store/index.js', store)
+    mkdirSync('src/views')
+    writeFile('src/views/Home.vue', Home)
+    mkdirSync('src/components')
+    writeFile('src/components/Navbar.vue', Navbar)
     
-    helpers.addDependenciesToStore('vue-router vuex', 'dev')
+    addDependenciesToStore('vue-router vuex', 'dev')
 }
 
 exports.scripts = () => {
     if (!store.backend.backend) {
         let htmlFile = loadFile('frontend/other/index.html')
-        helpers.addScriptToPackageJSON(
+        addScriptToPackageJSON(
           "start",
           "webpack-dev-server --output-public-path=/dist/ --inline --hot --open --port 3000 --mode='development'"
         );
-        helpers.writeFile(`index.html`, htmlFile);
+        writeFile(`index.html`, htmlFile);
     }
 
-    helpers.addScriptToPackageJSON(
+    addScriptToPackageJSON(
         "dev",
         "webpack --watch --mode='development'"
     );
-    helpers.addScriptToPackageJSON("build", "webpack --mode='production'");
+    addScriptToPackageJSON("build", "webpack --mode='production'");
 
     if (store.vueType === 'vue') {
         this.vueScripts()
@@ -143,9 +151,9 @@ exports.vueScripts = () => {
     let component = loadFile('scripts/frontend/vue/component.js')
     let template = loadFile('scripts/frontend/vue/templates/component.vue')
     
-    helpers.writeFile('scripts/component.js', component)
-    helpers.writeFile('scripts/templates/component.vue', template)
-    helpers.addScriptToPackageJSON('component', 'node scripts/component.js')
+    writeFile('scripts/component.js', component)
+    writeFile('scripts/templates/component.vue', template)
+    addScriptToPackageJSON('component', 'node scripts/component.js')
 }
 
 exports.vueRouterScripts = () => {
@@ -162,9 +170,9 @@ exports.vueRouterVuexScripts = () => {
 
 exports.packages = () => {
     if (!store.backend.backend) {
-        helpers.addDependenciesToStore("webpack-dev-server", 'dev')
+        addDependenciesToStore("webpack-dev-server", 'dev')
     }
-    helpers.addDependenciesToStore("vue vue-loader vue-style-loader vue-template-compiler webpack webpack-cli babel-loader css-loader @babel/core @babel/preset-env @babel/plugin-transform-runtime @babel/runtime style-loader cssnano postcss postcss-preset-env postcss-import postcss-loader blix@next", 'dev')
+    addDependenciesToStore("vue vue-loader vue-style-loader vue-template-compiler webpack webpack-cli babel-loader css-loader @babel/core @babel/preset-env @babel/plugin-transform-runtime @babel/runtime style-loader cssnano postcss postcss-preset-env postcss-import postcss-loader blix@next", 'dev')
 }
 
 exports.createWebpack = () => {
@@ -172,10 +180,10 @@ exports.createWebpack = () => {
     let webpackWithHotReloading = loadFile('frontend/webpack/vue_webpackWithHotReloading.js')
 
     if (store.backend.backend) {
-      helpers.writeFile(`webpack.config.js`, webpackWithHotReloading);
+      writeFile(`webpack.config.js`, webpackWithHotReloading);
       let hotReloadIndex = `\n\nif (module.hot) {\n\tconsole.clear()\n\tmodule.hot.accept();\n}`
-      helpers.appendFile(`src/main.js`, hotReloadIndex)
+      appendFile(`src/main.js`, hotReloadIndex)
     } else {
-      helpers.writeFile(`webpack.config.js`, webpack);
+      writeFile(`webpack.config.js`, webpack);
     }
   }
