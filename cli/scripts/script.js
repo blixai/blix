@@ -2,9 +2,14 @@ const fs = require("fs");
 const path = require("path");
 const inquirer = require('inquirer');
 const prompt = inquirer.prompt;
-const helpers = require("../../index");
 const addAPIScript = require('../new/utils/addAPIScript')
-const { loadFile } = helpers
+const {
+  loadFile,
+  writeFile,
+  checkScriptsFolderExist,
+  addScriptToPackageJSON,
+  appendFile
+} = require('../../index')
 
 // helper function to load files
 const commands = {
@@ -110,16 +115,16 @@ exports.scripts = scripts
 
 
 exports.addAction = () => {
-  helpers.addScriptToPackageJSON("action", "node scripts/action.js");
-  helpers.checkScriptsFolderExist()
+  addScriptToPackageJSON("action", "node scripts/action.js");
+  checkScriptsFolderExist()
 
   let action = loadFile("scripts/frontend/redux/action.js");
   let actionTemplate = loadFile("scripts/frontend/redux/templates/action.js");
   let reducerTemplate = loadFile("scripts/frontend/redux/templates/reducer.js");
 
-  helpers.writeFile("scripts/action.js", action);
-  helpers.writeFile("scripts/templates/action.js", actionTemplate);
-  helpers.writeFile("scripts/templates/reducer.js", reducerTemplate);
+  writeFile("scripts/action.js", action);
+  writeFile("scripts/templates/action.js", actionTemplate);
+  writeFile("scripts/templates/reducer.js", reducerTemplate);
 
   console.log("")
   console.log("Added script to project, to run: npm run action")
@@ -132,8 +137,8 @@ exports.addAction = () => {
 
 
 const addModel = async () => {
-  helpers.addScriptToPackageJSON("model", "node scripts/model.js");
-  helpers.checkScriptsFolderExist();
+  addScriptToPackageJSON("model", "node scripts/model.js");
+  checkScriptsFolderExist();
 
   let ans = await prompt([model])
   
@@ -142,8 +147,8 @@ const addModel = async () => {
     let model = loadFile("scripts/backend/mongoose.js");
     let schemaTemplate = loadFile("scripts/backend/templates/mongoose.js");
 
-    helpers.writeFile("scripts/model.js", model);
-    helpers.writeFile("scripts/templates/schemaTemplate.js", schemaTemplate);
+    writeFile("scripts/model.js", model);
+    writeFile("scripts/templates/schemaTemplate.js", schemaTemplate);
     console.log("")
     console.log("Added script to project, to run: npm run model <name>")
     console.log("This creates a new model in server/models")
@@ -160,11 +165,11 @@ const addModel = async () => {
       "backend/bookshelf.js"
     );
     // create files 
-    helpers.writeFile("scripts/model.js", model);
-    helpers.writeFile("scripts/templates/migration.js", migration);
-    helpers.writeFile("scripts/templates/bookshelf.js", bookshelf);
+    writeFile("scripts/model.js", model);
+    writeFile("scripts/templates/migration.js", migration);
+    writeFile("scripts/templates/bookshelf.js", bookshelf);
     // bookshelf required file needs to be placed inside the project, preferably the models folder
-    helpers.writeFile("server/models/bookshelf.js", bookshelfRequiredFile);
+    writeFile("server/models/bookshelf.js", bookshelfRequiredFile);
     console.log("")
     console.log("Added script to project, to run: npm run model <name>")
     console.log("This creates a new model in server/models, and new migration in db/migrations ")
@@ -178,11 +183,11 @@ exports.addModel = addModel
 
 exports.addReact = () => {
   // always add script first because if there is no package.json it'll process.exit()
-  helpers.addScriptToPackageJSON("component", "node scripts/component.js");
-  helpers.checkScriptsFolderExist();
+  addScriptToPackageJSON("component", "node scripts/component.js");
+  checkScriptsFolderExist();
 
   let react = loadFile("scripts/frontend/react/component.js");
-  helpers.writeFile("scripts/component.js", react);
+  writeFile("scripts/component.js", react);
   this.checkReactTemplatesExist()
 
   console.log("")
@@ -192,8 +197,8 @@ exports.addReact = () => {
 
 
 exports.addRedux = () => {
-  helpers.addScriptToPackageJSON("component", "node scripts/component.js");
-  helpers.checkScriptsFolderExist();
+  addScriptToPackageJSON("component", "node scripts/component.js");
+  checkScriptsFolderExist();
 
   // load component script and templates 
   this.checkReactTemplatesExist()
@@ -201,8 +206,8 @@ exports.addRedux = () => {
   let redux = loadFile("scripts/frontend/redux/component.js");
   let container = loadFile("scripts/frontend/redux/templates/container.js");
   // write files
-  helpers.writeFile("scripts/component.js", redux);
-  helpers.writeFile("scripts/templates/container.js", container);
+  writeFile("scripts/component.js", redux);
+  writeFile("scripts/templates/container.js", container);
 
   console.log("")
   console.log("Added script to project, to run: npm run component <name>")
@@ -211,14 +216,14 @@ exports.addRedux = () => {
 
 
 exports.addClientView = () => {
-  helpers.addScriptToPackageJSON("view", "node scripts/view.js")
-  helpers.checkScriptsFolderExist()
+  addScriptToPackageJSON("view", "node scripts/view.js")
+  checkScriptsFolderExist()
   this.checkReactTemplatesExist()
 
   // if true project uses redux
   if (fs.existsSync('./src/store')) {
     let reduxViewScript = loadFile("scripts/frontend/redux/view.js")
-    helpers.writeFile("scripts/view.js", reduxViewScript)
+    writeFile("scripts/view.js", reduxViewScript)
 
     console.log("")
     console.log("Added script to project, to run: npm run view <name>")
@@ -226,7 +231,7 @@ exports.addClientView = () => {
     console.log("If view already exists it will just ask what containers/components from src/components to import into that view.")
   } else {
     let reactRouterViewScript = loadFile("scripts/frontend/react-router/view.js")
-    helpers.writeFile("scripts/view.js", reactRouterViewScript)
+    writeFile("scripts/view.js", reactRouterViewScript)
 
     console.log("")
     console.log("Added script to project, to run: npm run view <name>")
@@ -245,23 +250,23 @@ exports.checkReactTemplatesExist = () => {
     let statefulComponent = loadFile("scripts/frontend/react/templates/statefulComponent.js")
     let statelessComponent = loadFile("scripts/frontend/react/templates/statelessComponent.js")
 
-    helpers.writeFile("scripts/templates/statefulComponent.js", statefulComponent)
-    helpers.writeFile("scripts/templates/statelessComponent.js", statelessComponent)
+    writeFile("scripts/templates/statefulComponent.js", statefulComponent)
+    writeFile("scripts/templates/statelessComponent.js", statelessComponent)
   }
 }
 
 
 exports.addController = () => {
-  helpers.addScriptToPackageJSON("controller", "node scripts/controller.js");
-  helpers.checkScriptsFolderExist();
+  addScriptToPackageJSON("controller", "node scripts/controller.js");
+  checkScriptsFolderExist();
 
   let controller = loadFile("scripts/backend/controller.js");
   let controllerTemplate = loadFile("scripts/backend/templates/controller.js");
   let routes = loadFile("scripts/backend/templates/routes.js");
 
-  helpers.writeFile("scripts/controller.js", controller);
-  helpers.writeFile("scripts/templates/controller.js", controllerTemplate);
-  helpers.writeFile("scripts/templates/routes.js", routes);
+  writeFile("scripts/controller.js", controller);
+  writeFile("scripts/templates/controller.js", controllerTemplate);
+  writeFile("scripts/templates/routes.js", routes);
 
   console.log("")
   console.log("Added script to project, to run: npm run controller <name>")
@@ -270,9 +275,9 @@ exports.addController = () => {
 
 
 const createNewScript = async name => {
-  helpers.addScriptToPackageJSON(name, `node scripts/${name}.js`);
-  helpers.checkScriptsFolderExist();
-  helpers.writeFile(`scripts/${name}.js`, "");
+  addScriptToPackageJSON(name, `node scripts/${name}.js`);
+  checkScriptsFolderExist();
+  writeFile(`scripts/${name}.js`, "");
   
   let a = await prompt([template])
   a = a.template;
@@ -281,8 +286,8 @@ const createNewScript = async name => {
     ans = ans.templateName;
     let importTemplate = fs.readFileSync(path.resolve(__dirname, './templates/customScript.js'), 'utf8');
     importTemplate = importTemplate.replace(/Name/g, ans)
-    helpers.appendFile(`./scripts/${name}.js`, importTemplate)
-    helpers.writeFile(`scripts/templates/${ans}.js`, "");
+    appendFile(`./scripts/${name}.js`, importTemplate)
+    writeFile(`scripts/templates/${ans}.js`, "");
 
     console.log("");
     console.log(`Added script to project, to run npm run ${name}`)
@@ -298,7 +303,7 @@ const createNewScript = async name => {
 exports.createNewScript = createNewScript
 
 exports.addAPI = () => {
-  helpers.checkScriptsFolderExist()
+  checkScriptsFolderExist()
 
   addAPIScript()
 
