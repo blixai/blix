@@ -9,7 +9,6 @@ import { execute } from './process'
 import { _logCaughtError } from '../.internal/blixInternal'
 import {
     mkdirSync,
-    writeFile
 } from './fs'
 
 

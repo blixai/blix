@@ -1,11 +1,19 @@
-const helpers = require('../../index')
 const {createCommonFilesAndFolders} = require('./utils/createCommonFiles')
 const {testBackend} = require('./utils/addBackendTests')
 const {addLinter} = require('./utils/addLinter')
 const {addMongooseToScripts} = require('./utils/addMongoDB')
 const {addBookshelfToScripts} = require('./utils/addBookshelf')
 const {newProjectInstructions} = require('./utils/newProjectInstructions')
-const { loadFile, store } = helpers
+const { 
+  loadFile,
+  store,
+  mkdirSync,
+  writeFile,
+  installAllPackages,
+  addDependenciesToStore,
+  addScriptToPackageJSON,
+  appendFile
+} = require('../../index')
 
 // load files
 const cluster = loadFile('backend/common/cluster.js')
@@ -17,17 +25,17 @@ exports.createBackend = () => {
     createCommonFilesAndFolders()
   }
   // create folders
-  helpers.mkdirSync(`server`)
-  helpers.mkdirSync(`server/models`)
-  helpers.mkdirSync(`server/controllers`)
-  helpers.mkdirSync(`server/helpers`)
+  mkdirSync(`server`)
+  mkdirSync(`server/models`)
+  mkdirSync(`server/controllers`)
+  mkdirSync(`server/helpers`)
   if (store.backendType !== 'api') {
-    helpers.mkdirSync(`assets`)
+    mkdirSync(`assets`)
   }
 
   // create files: routes.js cluster.js
-  helpers.writeFile(`server/routes.js`, routes)
-  helpers.writeFile(`server/cluster.js`, cluster)
+  writeFile(`server/routes.js`, routes)
+  writeFile(`server/cluster.js`, cluster)
 
   if (store.backendType === 'standard') {
     // type when there is a frontend framework and for the most part the backend is a soa but serves some assets and files
@@ -53,7 +61,7 @@ exports.createBackend = () => {
   //add variables to .env file
   this.envSetup()
 
-  helpers.installAllPackages()
+  installAllPackages()
   // new project instructions and add to readms
   newProjectInstructions()
 }
@@ -64,11 +72,11 @@ exports.standard = () => {
   let controller = loadFile('backend/standard/home.js')
 
   // mode for when there is a frontend framework
-  helpers.mkdirSync(`server/views`)
-  helpers.mkdirSync(`server/views/home`)
-  helpers.writeFile(`server/views/home/index.html`, html)
-  helpers.writeFile(`server/server.js`, server)
-  helpers.writeFile(`server/controllers/home.js`, controller)
+  mkdirSync(`server/views`)
+  mkdirSync(`server/views/home`)
+  writeFile(`server/views/home/index.html`, html)
+  writeFile(`server/server.js`, server)
+  writeFile(`server/controllers/home.js`, controller)
 }
 
 exports.mvcType = () => {
@@ -78,22 +86,22 @@ exports.mvcType = () => {
   const pug = loadFile('backend/mvc/index.pug')
   const controller = loadFile('backend/mvc/home.js')
 
-  helpers.mkdirSync(`server/views`)
-  helpers.mkdirSync(`server/views/home`)
+  mkdirSync(`server/views`)
+  mkdirSync(`server/views/home`)
 
-  helpers.writeFile(`server/views/error.pug`, error)
-  helpers.writeFile(`server/views/layout.pug`, layout)
-  helpers.writeFile(`server/views/home/index.pug`, pug)
-  helpers.writeFile(`server/server.js`, server)
-  helpers.writeFile('server/controllers/home.js', controller)
+  writeFile(`server/views/error.pug`, error)
+  writeFile(`server/views/layout.pug`, layout)
+  writeFile(`server/views/home/index.pug`, pug)
+  writeFile(`server/server.js`, server)
+  writeFile('server/controllers/home.js', controller)
 }
 
 exports.apiType = () => {
   let server = loadFile('backend/api/server.js')
   let controller = loadFile('backend/api/home.js')
 
-  helpers.writeFile(`server/server.js`, server)
-  helpers.writeFile(`server/controllers/home.js`, controller)
+  writeFile(`server/server.js`, server)
+  writeFile(`server/controllers/home.js`, controller)
   // only the api type needs the linter, otherwise the frontend will have already asked and added it
   addLinter()
 }
@@ -112,35 +120,35 @@ exports.scripts = mode => {
   let routesTemplate = loadFile('scripts/backend/templates/routes.js')
 
   if (mode === 'standard') {
-    helpers.addScriptToPackageJSON('start', `nodemon --watch server server/cluster.js`)
+    addScriptToPackageJSON('start', `nodemon --watch server server/cluster.js`)
   } else {
-    helpers.addScriptToPackageJSON('start', 'nodemon server/cluster.js')
+    addScriptToPackageJSON('start', 'nodemon server/cluster.js')
   }
   // controller script
-  helpers.addScriptToPackageJSON('controller', 'node scripts/controller.js')
+  addScriptToPackageJSON('controller', 'node scripts/controller.js')
   // create files
-  helpers.writeFile(`scripts/controller.js`, controller)
-  helpers.writeFile(`scripts/templates/controller.js`, controllerTemplate)
-  helpers.writeFile(`scripts/templates/routes.js`, routesTemplate)
+  writeFile(`scripts/controller.js`, controller)
+  writeFile(`scripts/templates/controller.js`, controllerTemplate)
+  writeFile(`scripts/templates/routes.js`, routesTemplate)
 }
 
 exports.packages = mode => {
   if (mode === 'standard') {
-    helpers.addDependenciesToStore(
+    addDependenciesToStore(
       'express nodemon body-parser compression helmet dotenv morgan cookie-parser'
     )
-    helpers.addDependenciesToStore('webpack-dev-middleware webpack-hot-middleware', 'dev')
+    addDependenciesToStore('webpack-dev-middleware webpack-hot-middleware', 'dev')
   } else if (mode === 'mvc') {
-    helpers.addDependenciesToStore(
+    addDependenciesToStore(
       'express nodemon body-parser compression helmet dotenv morgan cookie-parser pug'
     )
   } else {
-    helpers.addDependenciesToStore(
+    addDependenciesToStore(
       'express nodemon body-parser compression helmet dotenv morgan'
     )
   }
 }
 
 exports.envSetup = () => {
-  helpers.appendFile(`.env`, '\nWORKERS=1')
+  appendFile(`.env`, '\nWORKERS=1')
 }
