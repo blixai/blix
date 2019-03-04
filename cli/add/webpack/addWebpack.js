@@ -74,18 +74,18 @@ const createConfig = async (input, output, react) => {
   let webpack = loadFile('./webpack.config.js')
   let babel
   if (react) {
-    babel = loadFile('../../new/files/frontend/babel/reactBabel')
+    babel = loadFile('frontend/babel/reactBabel')
     helpers.addDependenciesToStore('react react-dom')
     helpers.addDependenciesToStore('webpack babel-loader css-loader @babel/core @babel/preset-env style-loader sass-loader node-sass cssnano postcss postcss-preset-env postcss-import postcss-loader webpack-cli @babel/preset-react', 'dev')
   } else {
-    babel = loadFile('../../new/files/frontend/babel/.babelrc')
+    babel = loadFile('frontend/babel/.babelrc')
     helpers.addDependenciesToStore('webpack babel-loader css-loader @babel/core @babel/preset-env style-loader sass-loader node-sass cssnano postcss postcss-preset-env postcss-import postcss-loader webpack-cli', 'dev')
   }
 
   webpack = webpack.replace(/INPUT/g, input)
   webpack = webpack.replace(/OUTPUT/g, output)
 
-  let postcss = loadFile('../../new/files/frontend/postcss.config.js')
+  let postcss = loadFile('frontend/postcss.config.js')
   helpers.writeFile('postcss.config.js', postcss)
 
   helpers.writeFile('webpack.config.js', webpack)

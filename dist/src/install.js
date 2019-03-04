@@ -43,7 +43,8 @@ var fs = require('fs');
 var child_process_1 = require("child_process");
 var chalk = require('chalk');
 var store = require('./store');
-var prompt = require('inquirer');
+var inquirer = require('inquirer');
+var prompt = inquirer.prompt;
 var yarnPrompt = require('../cli/prompts').yarnPrompt;
 var process_1 = require("./process");
 var blixInternal_1 = require("../.internal/blixInternal");
@@ -128,7 +129,7 @@ function addScriptToPackageJSON(command, script) {
         var json = JSON.parse(buffer);
         json.scripts[command] = script;
         var newPackage = JSON.stringify(json, null, 2);
-        fs_1.writeFile(filePath, newPackage);
+        fs.writeFileSync(filePath, newPackage);
         console.log(chalk(templateObject_1 || (templateObject_1 = __makeTemplateObject(["{cyan insert} ", " script into package.json"], ["{cyan insert} ", " script into package.json"])), command));
     }
     catch (err) {

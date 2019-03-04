@@ -47,12 +47,6 @@ var store = require('./store');
 var blixInternal_1 = require("../.internal/blixInternal");
 var logger_1 = require("./logger");
 function writeFile(filePath, file, message) {
-    if (!filePath) {
-        return logger_1.logError("No file path specified.");
-    }
-    else if (!file) {
-        file = '';
-    }
     try {
         filePath = store.name ? "./" + store.name + "/" + filePath : './' + filePath;
         var filePathLog = filePath.slice(2);
@@ -206,7 +200,7 @@ exports.moveAllFilesInDir = moveAllFilesInDir;
 function loadFile(file, folderPath) {
     var filePathStartCharacters = file.slice(0, 2);
     if (!folderPath) {
-        folderPath = store.mode === 'cli' ? '../cli/files/' : '/scripts/templates/';
+        folderPath = store.mode === 'cli' ? '../../cli/files/' : '/scripts/templates/';
     }
     if (filePathStartCharacters === './') {
         file = file.slice(1);

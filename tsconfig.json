@@ -15,8 +15,7 @@
         "./src/**/*", 
         ".internal/blixInternal.ts", 
         "src/store.js",
-        "./cli/prompts.js",
-        "./cli/files/**/*"
+        "./cli/prompts.js"
     ],
     "exclude": [
         "node_modules",

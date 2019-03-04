@@ -2,7 +2,8 @@ const fs = require('fs')
 import { execSync } from 'child_process'
 const chalk = require('chalk');
 const store = require('./store')
-const prompt = require('inquirer')
+const inquirer = require('inquirer')
+const prompt = inquirer.prompt
 const { yarnPrompt } = require('../cli/prompts')
 import { execute } from './process'
 import { _logCaughtError } from '../.internal/blixInternal'
@@ -78,8 +79,8 @@ export function addScriptToPackageJSON(command: string, script: string) {
         let json = JSON.parse(buffer);
         json.scripts[command] = script;
         let newPackage = JSON.stringify(json, null, 2);
-        writeFile(filePath, newPackage);
-        console.log(chalk`{cyan insert} ${command} script into package.json`)
+        fs.writeFileSync(filePath, newPackage)
+        console.log(chalk`{cyan insert} ${command} script into package.json`);
     } catch (err) {
         _logCaughtError(`Failed to add script ${command} to package.json`, err)
     }
@@ -88,14 +89,14 @@ export function addScriptToPackageJSON(command: string, script: string) {
 export function installDependencies(packages: string, type?: string) {
     try {
         if (store.name) {
-        process.chdir(`./${store.name}`)
+            process.chdir(`./${store.name}`)
         }
         if (store.useYarn) {
-        let command = type === 'dev' ? `yarn add ${packages} --dev` : `yarn add ${packages}`
-        execute(command)
+            let command = type === 'dev' ? `yarn add ${packages} --dev` : `yarn add ${packages}`
+            execute(command)
         } else {
-        let command = type === 'dev' ? `npm install --save-dev ${packages}` : `npm install --save ${packages}`
-        execute(command);
+            let command = type === 'dev' ? `npm install --save-dev ${packages}` : `npm install --save ${packages}`
+            execute(command);
         }
         if (store.name) process.chdir('../')
     } catch(err) {

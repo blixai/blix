@@ -8,11 +8,6 @@ import { logError, logWarning } from './logger'
 
 
 export function writeFile(filePath: string, file: string, message?: string) {
-    if (!filePath) {
-        return logError(`No file path specified.`)
-    } else if (!file) {
-        file = ''
-    }
     try {
         filePath = store.name ? `./${store.name}/` + filePath : './' + filePath
         let filePathLog = filePath.slice(2)
@@ -144,7 +139,7 @@ export function moveAllFilesInDir(dirToSearch: string, dirToMoveTo: string) {
 export function loadFile(file: string, folderPath: string): string {
     let filePathStartCharacters = file.slice(0, 2)
     if (!folderPath) {
-        folderPath = store.mode === 'cli' ? '../cli/files/' : '/scripts/templates/'
+        folderPath = store.mode === 'cli' ? '../../cli/files/' : '/scripts/templates/'
     }
     if (filePathStartCharacters === './') {
         file = file.slice(1)
