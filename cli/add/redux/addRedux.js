@@ -12,7 +12,7 @@ const {
   addScriptToPackageJSON,
   rename,
   installDependencies
-} = require('../../../index');
+} = require('../../../blix');
 
 
 // files

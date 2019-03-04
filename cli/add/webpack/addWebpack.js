@@ -11,7 +11,7 @@ const {
   writeFile,
   installAllPackages,
   checkIfScriptIsTaken
-} = require('../../../index')
+} = require('../../../blix')
 
 
 let webpackEntry = {

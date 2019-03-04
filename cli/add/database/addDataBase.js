@@ -9,7 +9,7 @@ const {
   yarn,
   checkScriptsFolderExist,
   installAllPackages
-} = require('../../../index')
+} = require('../../../blix')
 
 const addDatabase = async () => {
   store.database = await prompt([database])
@@ -22,7 +22,7 @@ const addDatabase = async () => {
   } else if (store.database.database === 'pg') {
     addBookshelfToScripts()
   }
-  
+
   installAllPackages()
   addProjectInstructions()
 }

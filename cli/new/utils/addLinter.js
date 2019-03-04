@@ -4,7 +4,7 @@ const {
   addScriptToPackageJSON,
   addDependenciesToStore,
   writeFile
-} = require('../../../index')
+} = require('../../../blix')
 
 let prettierConfig = loadFile('common/linter/prettier.js')
 let eslintBasicConfig = loadFile('common/linter/eslintBasic.js')

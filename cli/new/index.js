@@ -1,5 +1,4 @@
 const fs = require("fs");
-const helpers = require('../../index')
 const inquirer = require("inquirer");
 const prompt = inquirer.prompt;
 const { createBackend } = require("./backend");
@@ -7,7 +6,10 @@ const { vue } = require("./vue");
 const { react } = require("./react");
 const { vanillaJS } = require("./vanillaJS");
 const chalk = require('chalk')
-const { store } = helpers
+const {
+  store,
+  yarn
+} = require('../../blix')
 
 // console prompts
 const {
@@ -33,7 +35,7 @@ const promptPreset = async () => {
     store.backend = { backend: true }
     store.serverTesting = 'jest'
     store.database = 'mongo'
-    await helpers.yarn()
+    await yarn()
     react()
   } else {
     this.promptFrontend()
@@ -93,7 +95,7 @@ const reactProject = async reactType => {
     store.serverTesting = await prompt([serverTesting]);
     store.database = await prompt([database]);
   }
-  await helpers.yarn()
+  await yarn()
   react();
 };
 
@@ -108,7 +110,7 @@ const vueProject = async vueType => {
     store.serverTesting = await prompt([serverTesting]);
     store.database = await prompt([database]);
   }
-  await helpers.yarn()
+  await yarn()
   vue()
 }
 
@@ -121,7 +123,7 @@ const backendOnly = async () => {
   store.database = await prompt([database]);
   store.backendType = "api" 
   store.backend = { backend: true }
-  await helpers.yarn()
+  await yarn()
   createBackend();
 };
 

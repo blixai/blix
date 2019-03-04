@@ -6,7 +6,7 @@ const {
   writeFile,
   addDependenciesToStore,
   addScriptToPackageJSON
-} = require("../../../index");
+} = require("../../../blix");
 
 
 let filePath = ''

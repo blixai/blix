@@ -3,7 +3,7 @@ const {
     writeFile,
     addScriptToPackageJSON,
     addDependenciesToStore
-} = require('../../../index')
+} = require('../../../blix')
 
 
 const addAPIScript = () => {

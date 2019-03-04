@@ -9,8 +9,9 @@ const {
   checkScriptsFolderExist,
   addScriptToPackageJSON,
   checkIfScriptIsTaken,
-  installAllPackages
-} = require('../../../index')
+  installAllPackages,
+  loadFile
+} = require('../../../blix')
 const { addProjectInstructions } = require('../addProjectInstructions')
 
 const { testBackend } = require('../../new/utils/addBackendTests')
@@ -23,7 +24,6 @@ const {
   addDatabase
 } = require('../../new/backend')
 
-const { loadFile } = helpers
 
 
 const { serverTesting, database, backendType } = require('../../prompts')

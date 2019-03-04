@@ -5,7 +5,7 @@ const {
     checkIfScriptIsTaken,
     execute,
     logError
-} = require('../../index')
+} = require('../../blix')
 
 exports.generate = (scriptArg, otherArgs = '') => {
     if (!fs.existsSync('package.json')) {

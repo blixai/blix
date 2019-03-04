@@ -9,7 +9,7 @@ const {
   checkScriptsFolderExist,
   addScriptToPackageJSON,
   appendFile
-} = require('../../index')
+} = require('../../blix')
 
 // helper function to load files
 const commands = {

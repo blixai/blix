@@ -1,5 +1,5 @@
 const fs = require('fs')
-const { store } = require('../../../index')
+const { store } = require('../../../blix')
 const chalk = require('chalk')
 const link = 'blixjs.com'
 

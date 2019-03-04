@@ -1,4 +1,4 @@
-const helpers = require("../../../index");
+const helpers = require("../../../blix");
 const { 
   loadFile,
   writeFile,

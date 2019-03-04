@@ -15,7 +15,7 @@ const {
     addScriptToPackageJSON,
     moveAllFilesInDir,
     rename
-} = require('../../../index')
+} = require('../../../blix')
 
 
 let continuePrompt = {

@@ -6,7 +6,7 @@ const {
   installDependencies,
   checkIfScriptIsTaken,
   addScriptToPackageJSON
-} = require('../../../index')
+} = require('../../../blix')
 
 let webpackOutput = {
   type: 'list',

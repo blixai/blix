@@ -13,7 +13,7 @@ const {
   addDependenciesToStore,
   addScriptToPackageJSON,
   appendFile
-} = require('../../index')
+} = require('../../blix')
 
 // load files
 const cluster = loadFile('backend/common/cluster.js')

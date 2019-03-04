@@ -5,7 +5,7 @@ const {
   mkdirSync,
   writeFile,
   execute
-} = require("../../../index")
+} = require("../../../blix")
 
 /// create things like .gitignore, scripts folder, scripts templates folder, README.md, .env, and package.json
 const createCommonFilesAndFolders = () => {

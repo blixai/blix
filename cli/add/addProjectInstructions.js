@@ -1,6 +1,5 @@
-const { insert } = require('../../index')
 const { options } = require('../new/utils/newProjectInstructions')
-const { store } = require('../../index')
+const { store, insert } = require('../../blix')
 const chalk = require('chalk')
 
 exports.selected = []
