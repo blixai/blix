@@ -14,8 +14,7 @@
     "include": [
         "./src/**/*", 
         ".internal/blixInternal.ts", 
-        "src/store.js",
-        "./cli/prompts.js"
+        "src/store.js"
     ],
     "exclude": [
         "node_modules",

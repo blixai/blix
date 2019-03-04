@@ -114,12 +114,6 @@ const reactCSS = {
   ]
 }
 
-const yarnPrompt = {
-  type: 'confirm',
-  message: 'Do you want to use Yarn to install packages',
-  name: "yarn"
-}
-
 const linterPrompt = {
   type: "list",
   message: 'Select a linter',
@@ -156,7 +150,6 @@ module.exports = {
   reactTesting,
   vueTesting,
   reactCSS,
-  yarnPrompt,
   linterPrompt,
   helpCommands
 };

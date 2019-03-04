@@ -10,7 +10,7 @@ function logError(msg) {
 }
 exports.logError = logError;
 function logWarning(msg) {
-    console.warn(chalk_1.default(templateObject_2 || (templateObject_2 = __makeTemplateObject(["{yello ", "}"], ["{yello ", "}"])), msg));
+    console.warn(chalk_1.default(templateObject_2 || (templateObject_2 = __makeTemplateObject(["{yellow ", "}"], ["{yellow ", "}"])), msg));
 }
 exports.logWarning = logWarning;
 function log() {

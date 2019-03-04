@@ -224,3 +224,4 @@ function loadFile(file, folderPath) {
 }
 exports.loadFile = loadFile;
 var templateObject_1, templateObject_2, templateObject_3, templateObject_4, templateObject_5, templateObject_6, templateObject_7;
+// TODO method to loadJSON files

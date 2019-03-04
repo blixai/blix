@@ -4,7 +4,6 @@ const chalk = require('chalk');
 const store = require('./store')
 const inquirer = require('inquirer')
 const prompt = inquirer.prompt
-const { yarnPrompt } = require('../cli/prompts')
 import { execute } from './process'
 import { _logCaughtError } from '../.internal/blixInternal'
 import {
@@ -27,6 +26,12 @@ export function canUseYarn() {
         return false;
     }
 }
+
+const yarnPrompt = {
+    type: 'confirm',
+    message: 'Do you want to use Yarn to install packages',
+    name: "yarn"
+  }
 
 export async function yarn() {
     if (canUseYarn() && store.useYarn === '') {

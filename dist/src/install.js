@@ -45,7 +45,6 @@ var chalk = require('chalk');
 var store = require('./store');
 var inquirer = require('inquirer');
 var prompt = inquirer.prompt;
-var yarnPrompt = require('../cli/prompts').yarnPrompt;
 var process_1 = require("./process");
 var blixInternal_1 = require("../.internal/blixInternal");
 var fs_1 = require("./fs");
@@ -67,6 +66,11 @@ function canUseYarn() {
     }
 }
 exports.canUseYarn = canUseYarn;
+var yarnPrompt = {
+    type: 'confirm',
+    message: 'Do you want to use Yarn to install packages',
+    name: "yarn"
+};
 function yarn() {
     return __awaiter(this, void 0, void 0, function () {
         var yarnAnswer;
