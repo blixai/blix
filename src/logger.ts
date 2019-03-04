@@ -5,7 +5,7 @@ export function logError(msg: string) {
 }
 
 export function logWarning(msg: string) {
-    console.warn(chalk`{yello ${msg}}`)
+    console.warn(chalk`{yellow ${msg}}`)
 }
 
 export function log() {

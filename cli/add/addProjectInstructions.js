@@ -1,4 +1,4 @@
-const helpers = require('../../dist/src')
+const { insert } = require('../../index')
 const { options } = require('../new/utils/newProjectInstructions')
 const { store } = require('../../index')
 const chalk = require('chalk')
@@ -45,7 +45,7 @@ exports.readMeFormatter = () => {
     })
   
     if (outputString) {
-        helpers.insert(`README.md`, `${outputString}\n`, '## Project Scripts')
+        insert(`README.md`, `${outputString}\n`, '## Project Scripts')
     }
 }
 

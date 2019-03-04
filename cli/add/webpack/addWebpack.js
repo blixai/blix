@@ -1,10 +1,17 @@
 let fs         = require('fs')
-let path       = require('path')
 let glob       = require('glob')
 let inquirer   = require('inquirer')
 let prompt     = inquirer.prompt
-let helpers    = require('../../../dist/src')
-const { loadFile } = helpers
+const { 
+  loadFile,
+  getCWDName,
+  yarn,
+  addDependenciesToStore,
+  addScriptToPackageJSON,
+  writeFile,
+  installAllPackages,
+  checkIfScriptIsTaken
+} = require('../../../index')
 
 
 let webpackEntry = {
@@ -29,7 +36,7 @@ let addReact = {
 let noPackageJSON = {
   type: 'confirm',
   name: 'answer',
-  message: `No package.json file found. You're in the ${helpers.getCWDName()} directory. Do you wish continue: `
+  message: `No package.json file found. You're in the ${getCWDName()} directory. Do you wish continue: `
 }
 
 const fileChecks = async () => {
@@ -63,7 +70,7 @@ exports.webpack = webpack
 const reactQuestion = async (ans, output) => {
   let react = await prompt([addReact])
   react = react.react
-  await helpers.yarn()
+  await yarn()
   this.createConfig(ans, output, react)
 }
 
@@ -75,43 +82,43 @@ const createConfig = async (input, output, react) => {
   let babel
   if (react) {
     babel = loadFile('frontend/babel/reactBabel')
-    helpers.addDependenciesToStore('react react-dom')
-    helpers.addDependenciesToStore('webpack babel-loader css-loader @babel/core @babel/preset-env style-loader sass-loader node-sass cssnano postcss postcss-preset-env postcss-import postcss-loader webpack-cli @babel/preset-react', 'dev')
+    addDependenciesToStore('react react-dom')
+    addDependenciesToStore('webpack babel-loader css-loader @babel/core @babel/preset-env style-loader sass-loader node-sass cssnano postcss postcss-preset-env postcss-import postcss-loader webpack-cli @babel/preset-react', 'dev')
   } else {
     babel = loadFile('frontend/babel/.babelrc')
-    helpers.addDependenciesToStore('webpack babel-loader css-loader @babel/core @babel/preset-env style-loader sass-loader node-sass cssnano postcss postcss-preset-env postcss-import postcss-loader webpack-cli', 'dev')
+    addDependenciesToStore('webpack babel-loader css-loader @babel/core @babel/preset-env style-loader sass-loader node-sass cssnano postcss postcss-preset-env postcss-import postcss-loader webpack-cli', 'dev')
   }
 
   webpack = webpack.replace(/INPUT/g, input)
   webpack = webpack.replace(/OUTPUT/g, output)
 
   let postcss = loadFile('frontend/postcss.config.js')
-  helpers.writeFile('postcss.config.js', postcss)
+  writeFile('postcss.config.js', postcss)
 
-  helpers.writeFile('webpack.config.js', webpack)
+  writeFile('webpack.config.js', webpack)
   if (!fs.existsSync('./.babelrc')) {
-    helpers.writeFile('.babelrc', babel)
+    writeFile('.babelrc', babel)
   }
 
   this.addScripts() 
 
-  await helpers.installAllPackages()
+  await installAllPackages()
 }
 
 exports.createConfig = createConfig
 
 const addScripts = () => {
   try {
-    if (helpers.checkIfScriptIsTaken('build')) {
-      helpers.addScriptToPackageJSON('build:prod', "webpack --mode='production'")
+    if (checkIfScriptIsTaken('build')) {
+      addScriptToPackageJSON('build:prod', "webpack --mode='production'")
     } else {
-      helpers.addScriptToPackageJSON('build', "webpack --mode='production'")
+      addScriptToPackageJSON('build', "webpack --mode='production'")
     }
 
-    if (helpers.checkIfScriptIsTaken('dev')) {
-      helpers.addScriptToPackageJSON('build:dev', "webpack --watch --mode='development'") 
+    if (checkIfScriptIsTaken('dev')) {
+      addScriptToPackageJSON('build:dev', "webpack --watch --mode='development'") 
     } else {
-      helpers.addScriptToPackageJSON('dev', "webpack --watch --mode='development'")
+      addScriptToPackageJSON('dev', "webpack --watch --mode='development'")
     }
   } catch (e) {
     console.error(`Couldn't add webpack development and production scripts to package json.`)

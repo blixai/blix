@@ -1,24 +1,29 @@
 let inquirer = require('inquirer')
 let prompt   = inquirer.prompt
 const { addProjectInstructions } = require('../addProjectInstructions')
-const helpers = require('../../../dist/src')
 const { database } = require('../../prompts')
 const { addMongooseToScripts } = require('../../new/utils/addMongoDB')
 const { addBookshelfToScripts } = require('../../new/utils/addBookshelf')
-const { store } = helpers
+const {
+  store,
+  yarn,
+  checkScriptsFolderExist,
+  installAllPackages
+} = require('../../../index')
 
 const addDatabase = async () => {
   store.database = await prompt([database])
-  await helpers.yarn()
+  await yarn()
 
-  helpers.checkScriptsFolderExist()
+  checkScriptsFolderExist()
 
   if (store.database.database === 'mongo') {
     addMongooseToScripts()
   } else if (store.database.database === 'pg') {
     addBookshelfToScripts()
   }
-  helpers.installAllPackages()
+  
+  installAllPackages()
   addProjectInstructions()
 }
 

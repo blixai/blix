@@ -1,8 +1,16 @@
 let inquirer = require('inquirer')
 let prompt = inquirer.prompt
-const helpers = require('../../../index')
 const fs = require('fs')
-const { store } = helpers
+const { 
+  store,
+  yarn,
+  mkdirSync,
+  writeFile,
+  checkScriptsFolderExist,
+  addScriptToPackageJSON,
+  checkIfScriptIsTaken,
+  installAllPackages
+} = require('../../../index')
 const { addProjectInstructions } = require('../addProjectInstructions')
 
 const { testBackend } = require('../../new/utils/addBackendTests')
@@ -24,7 +32,7 @@ let addBackend = async () => {
   store.backendType = await prompt([backendType])
   let serverTestingSelection = await prompt([serverTesting])
   store.database = await prompt([database])
-  await helpers.yarn()
+  await yarn()
   this.createBackend(store.backendType, serverTestingSelection, store.database)
 }
 
@@ -39,16 +47,16 @@ exports.createBackend = (mode, serverTestingSelection, databaseSelection) => {
     console.error('Server folder already exists')
     process.exit(1)
   }
-  helpers.mkdirSync('server')
-  helpers.mkdirSync('server/models')
-  helpers.mkdirSync('server/controllers')
-  helpers.mkdirSync('server/helpers')
+  mkdirSync('server')
+  mkdirSync('server/models')
+  mkdirSync('server/controllers')
+  mkdirSync('server/helpers')
   if (mode !== 'api') {
-    helpers.mkdirSync('assets')
+    mkdirSync('assets')
   }
 
-  helpers.writeFile('server/routes.js', routes)
-  helpers.writeFile('server/cluster.js', cluster)
+  writeFile('server/routes.js', routes)
+  writeFile('server/cluster.js', cluster)
 
   if (mode.mode === 'standard') {
     // type when there is a frontend framework and for the most part the backend is a soa but serves some assets and files
@@ -60,12 +68,12 @@ exports.createBackend = (mode, serverTestingSelection, databaseSelection) => {
     // api mode json only, no views, no cookies
     apiType()
   }
-  helpers.checkScriptsFolderExist()
+  checkScriptsFolderExist()
   addDatabase(databaseSelection)
   this.checkScripts(mode.mode)
   packages(mode)
   testBackend(serverTestingSelection)
-  helpers.installAllPackages()
+  installAllPackages()
   addProjectInstructions()
 }
 
@@ -80,14 +88,14 @@ exports.pugScript = () => {
   const script = loadFile('scripts/backend/pugPage.js')
   const pugTemplate = loadFile('scripts/backend/templates/pug.pug')
 
-  if (helpers.checkIfScriptIsTaken('view')) {
+  if (checkIfScriptIsTaken('view')) {
     // view script is taken
-    helpers.addScriptToPackageJSON('server:view', 'node scripts/pug.js')
-    helpers.writeFile('scripts/pug.js', script)
+    addScriptToPackageJSON('server:view', 'node scripts/pug.js')
+    writeFile('scripts/pug.js', script)
   } else {
-    helpers.addScriptToPackageJSON('view', 'node scripts/view.js')
-    helpers.writeFile('scripts/view.js', script)
+    addScriptToPackageJSON('view', 'node scripts/view.js')
+    writeFile('scripts/view.js', script)
   }
-  helpers.writeFile('scripts/templates/pugTemplate.pug', pugTemplate)
+  writeFile('scripts/templates/pugTemplate.pug', pugTemplate)
 }
 

@@ -1,10 +1,21 @@
 let fs = require('fs')
 let path = require('path')
-let helpers = require('../../../dist/src')
 let inquirer = require('inquirer')
 let prompt = inquirer.prompt
 let { addProjectInstructions } = require('../addProjectInstructions')
-const { loadFile, store } = helpers
+const { 
+    loadFile,
+    store,
+    yarn,
+    installDependencies,
+    writeFile,
+    mkdirSync,
+    checkIfScriptIsTaken,
+    checkScriptsFolderExist,
+    addScriptToPackageJSON,
+    moveAllFilesInDir,
+    rename
+} = require('../../../index')
 
 
 let continuePrompt = {
@@ -24,8 +35,8 @@ exports.addReactRouter = async () => {
 }
 
 exports.projectType = async () => {
-    await helpers.yarn()
-    helpers.installDependencies('react-router-dom', 'dev')
+    await yarn()
+    installDependencies('react-router-dom', 'dev')
     // make sure there is a src folder
     if (!fs.existsSync('./src')) {
         console.error('No src/ directory found. Unable to add React-Router.')
@@ -49,58 +60,58 @@ exports.projectType = async () => {
 }
 
 exports.createView = type => {
-    helpers.mkdirSync('src/views')
+    mkdirSync('src/views')
 
     if (type === 'redux') {
         let homeView = loadFile('frontend/react-router/HomeAppContainerView.js')
-        helpers.writeFile('src/views/Home.js', homeView)
+        writeFile('src/views/Home.js', homeView)
     } else if (type === 'unknown') {
         let homeView = fs.readFileSync(path.resolve(__dirname, './HomeViewBasic.js'), 'utf8')
-        helpers.writeFile('src/views/Home.js', homeView)
+        writeFile('src/views/Home.js', homeView)
     } else {
         let homeView = loadFile('frontend/react-router/HomeAppView.js')
-        helpers.writeFile('src/views/Home.js', homeView)
+        writeFile('src/views/Home.js', homeView)
     }
 
     let AppRouter = loadFile('frontend/react-router/Router.js')
-    helpers.writeFile('src/Router.js', AppRouter)
+    writeFile('src/Router.js', AppRouter)
 
     if (type === 'redux') {
         let index = loadFile('frontend/reactRouter-redux/index.js')
-        helpers.writeFile('src/index.js', index)
+        writeFile('src/index.js', index)
     } else {
         let index = loadFile('frontend/react-router/index.js')
-        helpers.writeFile('src/index.js', index)
+        writeFile('src/index.js', index)
     }
 
     // scripts
-    helpers.checkScriptsFolderExist()
+    checkScriptsFolderExist()
     // if no component script/templates add them
-    if (!helpers.checkIfScriptIsTaken('component')) {
+    if (!checkIfScriptIsTaken('component')) {
         if (type !== 'unknown') {
             let stateful = loadFile('scripts/frontend/react/templates/statefulComponent.js')
             let stateless = loadFile('scripts/frontend/react/templates/statelessComponent.js')
     
-            helpers.writeFile('scripts/templates/statelessComponent.js', stateless)
-            helpers.writeFile('scripts/templates/statefulComponent.js', stateful)
+            writeFile('scripts/templates/statelessComponent.js', stateless)
+            writeFile('scripts/templates/statefulComponent.js', stateful)
 
             if (type === 'redux') {
                 let componentScript = loadFile('scripts/frontend/reactRouter-redux/component.js')
-                helpers.writeFile('scripts/component.js', componentScript)
+                writeFile('scripts/component.js', componentScript)
             } else {
                let componentScript = loadFile('scripts/frontend/react-router/component.js') 
-               helpers.writeFile('scripts/component.js', componentScript)
+               writeFile('scripts/component.js', componentScript)
             }
 
-            helpers.addScriptToPackageJSON('component', 'node scripts/component.js')
+            addScriptToPackageJSON('component', 'node scripts/component.js')
         }
     } else {
         if (type === 'redux') {
             let componentScript = loadFile('scripts/frontend/reactRouter-redux/component.js')
-            helpers.writeFile('scripts/component.js', componentScript)
+            writeFile('scripts/component.js', componentScript)
         } else {
            let componentScript = loadFile('scripts/frontend/react-router/component.js') 
-           helpers.writeFile('scripts/component.js', componentScript) 
+           writeFile('scripts/component.js', componentScript) 
         }
     }
 
@@ -108,19 +119,19 @@ exports.createView = type => {
     if (type === 'redux') {
         // redux type script
         let viewScript = loadFile('scripts/frontend/reactRouter-redux/view.js')
-        helpers.writeFile('scripts/view.js', viewScript)
-        helpers.addScriptToPackageJSON('view', 'node scripts/view.js')
+        writeFile('scripts/view.js', viewScript)
+        addScriptToPackageJSON('view', 'node scripts/view.js')
     } else if (type !== 'unknown') {
         // need to check if components script and templates already exist
         let viewScript = loadFile('scripts/frontend/react-router/view.js')
-        helpers.writeFile('scripts/view.js', viewScript)
-        helpers.addScriptToPackageJSON('view', 'node scripts/view.js')
+        writeFile('scripts/view.js', viewScript)
+        addScriptToPackageJSON('view', 'node scripts/view.js')
     }
 
     // redux action script update
-    if (type === 'redux' && helpers.checkIfScriptIsTaken('action')) {
+    if (type === 'redux' && checkIfScriptIsTaken('action')) {
         let newActionScript = loadFile('scripts/frontend/reactRouter-redux/action.js')
-        helpers.writeFile('scripts/action.js', newActionScript)
+        writeFile('scripts/action.js', newActionScript)
     }
 
     if (type === 'redux') {
@@ -132,34 +143,34 @@ exports.createView = type => {
 }
 
 exports.blixRedux = () => {
-    helpers.mkdirSync('src/components')
-    helpers.mkdirSync('src/components/App')
-    helpers.moveAllFilesInDir('./src/App', './src/components/App')
+    mkdirSync('src/components')
+    mkdirSync('src/components/App')
+    moveAllFilesInDir('./src/App', './src/components/App')
 
     this.createView('redux')
 }
 
 exports.blixReact = () => {
-    helpers.mkdirSync('src/components')
-    helpers.mkdirSync('src/components/App')
-    helpers.moveAllFilesInDir('./src/App', './src/components/App')
+    mkdirSync('src/components')
+    mkdirSync('src/components/App')
+    moveAllFilesInDir('./src/App', './src/components/App')
 
     this.createView()
 }
 
 exports.createReactApp = () => {
-    helpers.mkdirSync('src/components')
-    helpers.mkdirSync('src/components/App')
+    mkdirSync('src/components')
+    mkdirSync('src/components/App')
 
-    helpers.rename('./src/App.js', './src/components/App/App.js')
+    rename('./src/App.js', './src/components/App/App.js')
     if (fs.existsSync('./src/App.css')) {
-        helpers.rename('./src/App.css', './src/components/App/App.css')
+        rename('./src/App.css', './src/components/App/App.css')
     }
     if (fs.existsSync('./src/logo.svg')) {
-        helpers.rename('./src/logo.svg', './src/components/App/logo.svg')
+        rename('./src/logo.svg', './src/components/App/logo.svg')
     }
     if (fs.existsSync('./src/App.test.js')) {
-        helpers.rename('./src/App.test.js', './src/components/App/App.test.js')
+        rename('./src/App.test.js', './src/components/App/App.test.js')
     }
     this.createView()
 }
