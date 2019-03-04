@@ -1,10 +1,11 @@
-const fs = require("fs");
 const { 
   loadFile, 
   store,
   addDependenciesToStore,
   writeFile,
-  addScriptToPackageJSON
+  addScriptToPackageJSON,
+  writeJSONFile,
+  loadUserJSONFile
 } = require("../../../blix");
 
 
@@ -32,10 +33,9 @@ let installReactTesting = () => {
       "\\.(css|less)$": "identity-obj-proxy"
     }
   };
-  let json = JSON.parse(fs.readFileSync(`./${name}/package.json`, "utf8"));
+  let json = loadUserJSONFile(`${name}/package.json`,)
   json["jest"] = jest;
-  let newPackage = JSON.stringify(json, null, 2);
-  fs.writeFileSync(`./${name}/package.json`, newPackage);
+  writeJSONFile(`package.json`, json);
   addScriptToPackageJSON("test", "jest");
 };
 

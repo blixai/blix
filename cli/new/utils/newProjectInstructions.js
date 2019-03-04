@@ -80,7 +80,7 @@ exports.consoleFormatter = (options) => {
 
 exports.newProjectInstructions = () => {
   let name = store.name
-  console.clear()
+  if (!store.env === 'development') console.clear()
   console.log("")
   console.log(`Success! Created new project ${name} at ${process.cwd() + '/' + name}`);
   console.log();

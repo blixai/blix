@@ -5,14 +5,17 @@ const {
   mkdirSync,
   writeFile,
   addDependenciesToStore,
-  addScriptToPackageJSON
+  addScriptToPackageJSON,
+  loadUserJSONFile,
+  writeJSONFile
 } = require("../../../blix");
 
 
-let filePath = ''
-
-const checkOrCreateServerTestFolder = () => {
-  if (!fs.existsSync(`./${filePath}test/server`)) {
+function checkOrCreateServerTestFolder () {
+  if (!fs.existsSync(`${store.name}/test`)) {
+    mkdirSync(`test`)
+  }
+  if (!fs.existsSync(`.${store.name}/test/server`)) {
     mkdirSync(`test/server`);
   }
 };
@@ -23,7 +26,7 @@ const mochaTestBackend = () => {
   checkOrCreateServerTestFolder();
   writeFile(`test/server/test.spec.js`, loadFile("testing/backend/mocha.js"))
 
-  let json = JSON.parse(fs.readFileSync(`./${filePath}package.json`, "utf8"));
+  let json = loadUserJSONFile(`${store.name}/package.json`);
   if (json.hasOwnProperty("jest")) {
     json.jest["modulePathIgnorePatterns"] = [
       "<rootDir>/test/e2e/",
@@ -31,8 +34,7 @@ const mochaTestBackend = () => {
       "<rootDir>/test/server/"
     ];
   }
-  let newPackage = JSON.stringify(json, null, 2);
-  fs.writeFileSync(`package.json`, newPackage);
+  writeJSONFile(`package.json`, json);
 };
 
 const testJestBackend = () => {
@@ -42,7 +44,7 @@ const testJestBackend = () => {
     `test/server/test.spec.js`,
     loadFile("testing/backend/jest.js")
   );
-  let json = JSON.parse(fs.readFileSync(`./${filePath}package.json`, "utf8"));
+  let json = loadUserJSONFile(`${store.name}/package.json`);
   // TODO create function to add keys to package.json directly
   if (!json.hasOwnProperty("jest")) {
     let jest = {
@@ -55,15 +57,12 @@ const testJestBackend = () => {
     };
     json["jest"] = jest;
   }
-  let newPackage = JSON.stringify(json, null, 2);
-  fs.writeFileSync(`package.json`, newPackage);
+
+  writeJSONFile(`package.json`, json);
   addScriptToPackageJSON("jest", "jest");
 };
 
 let testBackend = () => {
-  if (store.name){
-    filePath = store.name + '/'
-  } 
   store.serverTesting.server === "mocha"
     ? mochaTestBackend()
     : store.serverTesting.server === "jest"

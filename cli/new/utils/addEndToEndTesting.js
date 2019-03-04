@@ -5,7 +5,9 @@ const {
   mkdirSync,
   writeFile,
   addScriptToPackageJSON,
-  addDependenciesToStore
+  addDependenciesToStore,
+  loadUserJSONFile,
+  writeJSONFile
 } = require("../../../blix");
 
 let e2eSetup = () => {
@@ -26,7 +28,7 @@ const addJestToPackageJson = () => {
       "\\.(css|less)$": "identity-obj-proxy"
     }
   };
-  let json = JSON.parse(fs.readFileSync(`./${store.name}/package.json`, "utf8"));
+  let json = loadUserJSONFile(`./${store.name}/package.json`);
   if (!json.hasOwnProperty("jest")) {
     json["jest"] = jest;
   } else {
@@ -35,8 +37,7 @@ const addJestToPackageJson = () => {
       "<rootDir>/cypress/"
     ];
   }
-  let newPackage = JSON.stringify(json, null, 2);
-  fs.writeFileSync(`package.json`, newPackage);
+  writeJSONFile(`package.json`, json);
 }
 
 const installCypress = () => {

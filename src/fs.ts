@@ -161,4 +161,70 @@ export function loadFile(file: string, folderPath: string): string {
     }
 }
 
-// TODO method to loadJSON files
+export function loadJSONFile(file: string, folderPath: string): string {
+    // TODO ensure the file type is .json
+    let filePathStartCharacters = file.slice(0, 2)
+    if (!folderPath) {
+        folderPath = store.mode === 'cli' ? '../../cli/files/' : '/scripts/templates'
+    }
+
+    if (filePathStartCharacters === './') {
+        file = file.slice(1)
+    }
+
+    try {
+        if (store.mode === 'cli') {
+            file = fs.readFileSync(path.resolve(__dirname, folderPath + file), 'utf8')
+        } else {
+            file = fs.readFileSync(process.cwd() + folderPath + file, 'utf8')
+        }
+        if (!file) {
+            throw `JSON file ${file} not found!`
+        }
+        return JSON.parse(file)
+    } catch (err) {
+        _logCaughtError(`Failed to load json file ${file}`, err)
+        return ""
+    }
+}
+
+export function writeJSONFile(filePath: string, file: object) {
+    try {
+        let fileString = JSON.stringify(file, null, 2)
+        filePath = store.name ? `./${store.name}/` + filePath : './' + filePath
+        let filePathLog = filePath.slice(2)
+        if (fs.existsSync(filePath)) {
+            fs.writeFileSync(filePath, fileString)
+            console.log(chalk`{yellow mutate} ${filePathLog}`);
+        } else {
+            fs.writeFileSync(filePath, fileString)
+            console.log(chalk`{green create} ${filePathLog}`);
+        }
+    } catch (err) {
+        _logCaughtError(`Failed to write to file ${filePath}`, err)
+    }
+}
+
+/**
+ * load a package.json from the cli user directly, often used for package.json checks/file manipulation 
+ * @param file 
+ */
+export function loadUserJSONFile(file: string): string {
+    // TODO ensure the file type is .json
+    let filePathStartCharacters = file.slice(0, 2)
+
+    if (filePathStartCharacters === './') {
+        file = file.slice(1)
+    }
+
+    try {
+        file = fs.readFileSync('./' + file, 'utf8')
+        if (!file) {
+            throw `JSON file ${file} not found!`
+        }
+        return JSON.parse(file)
+    } catch (err) {
+        _logCaughtError(`Failed to load json file ${file}`, err)
+        return ""
+    }
+}

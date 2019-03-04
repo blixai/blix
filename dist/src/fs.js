@@ -223,5 +223,73 @@ function loadFile(file, folderPath) {
     }
 }
 exports.loadFile = loadFile;
-var templateObject_1, templateObject_2, templateObject_3, templateObject_4, templateObject_5, templateObject_6, templateObject_7;
-// TODO method to loadJSON files
+function loadJSONFile(file, folderPath) {
+    // TODO ensure the file type is .json
+    var filePathStartCharacters = file.slice(0, 2);
+    if (!folderPath) {
+        folderPath = store.mode === 'cli' ? '../../cli/files/' : '/scripts/templates';
+    }
+    if (filePathStartCharacters === './') {
+        file = file.slice(1);
+    }
+    try {
+        if (store.mode === 'cli') {
+            file = fs.readFileSync(path.resolve(__dirname, folderPath + file), 'utf8');
+        }
+        else {
+            file = fs.readFileSync(process.cwd() + folderPath + file, 'utf8');
+        }
+        if (!file) {
+            throw "JSON file " + file + " not found!";
+        }
+        return JSON.parse(file);
+    }
+    catch (err) {
+        blixInternal_1._logCaughtError("Failed to load json file " + file, err);
+        return "";
+    }
+}
+exports.loadJSONFile = loadJSONFile;
+function writeJSONFile(filePath, file) {
+    try {
+        var fileString = JSON.stringify(file, null, 2);
+        filePath = store.name ? "./" + store.name + "/" + filePath : './' + filePath;
+        var filePathLog = filePath.slice(2);
+        if (fs.existsSync(filePath)) {
+            fs.writeFileSync(filePath, fileString);
+            console.log(chalk(templateObject_8 || (templateObject_8 = __makeTemplateObject(["{yellow mutate} ", ""], ["{yellow mutate} ", ""])), filePathLog));
+        }
+        else {
+            fs.writeFileSync(filePath, fileString);
+            console.log(chalk(templateObject_9 || (templateObject_9 = __makeTemplateObject(["{green create} ", ""], ["{green create} ", ""])), filePathLog));
+        }
+    }
+    catch (err) {
+        blixInternal_1._logCaughtError("Failed to write to file " + filePath, err);
+    }
+}
+exports.writeJSONFile = writeJSONFile;
+/**
+ * load a package.json from the cli user directly, often used for package.json checks/file manipulation
+ * @param file
+ */
+function loadUserJSONFile(file) {
+    // TODO ensure the file type is .json
+    var filePathStartCharacters = file.slice(0, 2);
+    if (filePathStartCharacters === './') {
+        file = file.slice(1);
+    }
+    try {
+        file = fs.readFileSync('./' + file, 'utf8');
+        if (!file) {
+            throw "JSON file " + file + " not found!";
+        }
+        return JSON.parse(file);
+    }
+    catch (err) {
+        blixInternal_1._logCaughtError("Failed to load json file " + file, err);
+        return "";
+    }
+}
+exports.loadUserJSONFile = loadUserJSONFile;
+var templateObject_1, templateObject_2, templateObject_3, templateObject_4, templateObject_5, templateObject_6, templateObject_7, templateObject_8, templateObject_9;
