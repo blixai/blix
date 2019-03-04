@@ -1,7 +1,12 @@
-const fs = require("fs");
-const helpers = require("../../../dist/src");
-const path = require("path");
-const { loadFile } = helpers
+const helpers = require("../../../index");
+const { 
+  loadFile,
+  writeFile,
+  addScriptToPackageJSON,
+  modifyKnex,
+  installKnexGlobal,
+  addDependenciesToStore
+} = helpers
 
 
 const addBookshelfToScripts = () => {
@@ -14,16 +19,16 @@ const addBookshelfToScripts = () => {
   const bookshelfModel = loadFile("backend/models/bookshelf.js");
 
   // write loaded files to new project
-  helpers.writeFile(`server/models/bookshelf.js`, bookshelfModel);
+  writeFile(`server/models/bookshelf.js`, bookshelfModel);
   // the following files are loaded into the scripts folder
-  helpers.writeFile(`scripts/model.js`, bookshelf);
-  helpers.writeFile(`scripts/templates/migration.js`, migration);
-  helpers.writeFile(`scripts/templates/bookshelf.js`, model);
+  writeFile(`scripts/model.js`, bookshelf);
+  writeFile(`scripts/templates/migration.js`, migration);
+  writeFile(`scripts/templates/bookshelf.js`, model);
 
-  helpers.addScriptToPackageJSON("model", "node scripts/model.js");
-  helpers.installKnexGlobal();
-  helpers.modifyKnex();
-  helpers.addDependenciesToStore("pg bookshelf knex");
+  addScriptToPackageJSON("model", "node scripts/model.js");
+  installKnexGlobal();
+  modifyKnex();
+  addDependenciesToStore("pg bookshelf knex");
 };
 
 module.exports = {

@@ -1,21 +1,27 @@
-const helpers = require("../../../index");
 const fs = require("fs");
-const { loadFile, store } = helpers
+const { 
+  loadFile,
+  store,
+  mkdirSync,
+  writeFile,
+  addDependenciesToStore,
+  addScriptToPackageJSON
+} = require("../../../index");
 
 
 let filePath = ''
 
 const checkOrCreateServerTestFolder = () => {
   if (!fs.existsSync(`./${filePath}test/server`)) {
-    helpers.mkdirSync(`test/server`);
+    mkdirSync(`test/server`);
   }
 };
 
 const mochaTestBackend = () => {
-  helpers.addDependenciesToStore("mocha chai chai-http", 'dev');
-  helpers.addScriptToPackageJSON("mocha", "mocha test/server");
+  addDependenciesToStore("mocha chai chai-http", 'dev');
+  addScriptToPackageJSON("mocha", "mocha test/server");
   checkOrCreateServerTestFolder();
-  helpers.writeFile(`test/server/test.spec.js`, loadFile("testing/backend/mocha.js"))
+  writeFile(`test/server/test.spec.js`, loadFile("testing/backend/mocha.js"))
 
   let json = JSON.parse(fs.readFileSync(`./${filePath}package.json`, "utf8"));
   if (json.hasOwnProperty("jest")) {
@@ -30,13 +36,14 @@ const mochaTestBackend = () => {
 };
 
 const testJestBackend = () => {
-  helpers.addDependenciesToStore("jest supertest", 'dev');
+  addDependenciesToStore("jest supertest", 'dev');
   checkOrCreateServerTestFolder();
-  helpers.writeFile(
+  writeFile(
     `test/server/test.spec.js`,
     loadFile("testing/backend/jest.js")
   );
   let json = JSON.parse(fs.readFileSync(`./${filePath}package.json`, "utf8"));
+  // TODO create function to add keys to package.json directly
   if (!json.hasOwnProperty("jest")) {
     let jest = {
       modulePathIgnorePatterns: ["<rootDir>/test/e2e/", "<rootDir>/cypress"],
@@ -50,7 +57,7 @@ const testJestBackend = () => {
   }
   let newPackage = JSON.stringify(json, null, 2);
   fs.writeFileSync(`package.json`, newPackage);
-  helpers.addScriptToPackageJSON("jest", "jest");
+  addScriptToPackageJSON("jest", "jest");
 };
 
 let testBackend = () => {

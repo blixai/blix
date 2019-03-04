@@ -1,6 +1,12 @@
 const fs = require("fs");
-const helpers = require("../../../index");
-const { loadFile, store } = helpers
+const { 
+  loadFile, 
+  store,
+  mkdirSync,
+  writeFile,
+  addScriptToPackageJSON,
+  addDependenciesToStore
+} = require("../../../index");
 
 let e2eSetup = () => {
   if (store.e2e.e2e === "cafe") {
@@ -12,6 +18,7 @@ let e2eSetup = () => {
 
 const addJestToPackageJson = () => {
   let jest = {
+    // TODO either create jest config file or improve package.json handling
     modulePathIgnorePatterns: ["<rootDir>/test/e2e/", "<rootDir>/cypress"],
     moduleNameMapper: {
       "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$":
@@ -33,11 +40,11 @@ const addJestToPackageJson = () => {
 }
 
 const installCypress = () => {
-  helpers.addScriptToPackageJSON("e2e", "cypress open");
-  helpers.addDependenciesToStore("cypress", 'dev');
-  helpers.mkdirSync(`cypress`);
-  helpers.mkdirSync(`cypress/integration`);
-  helpers.writeFile(
+  addScriptToPackageJSON("e2e", "cypress open");
+  addDependenciesToStore("cypress", 'dev');
+  mkdirSync(`cypress`);
+  mkdirSync(`cypress/integration`);
+  writeFile(
     `cypress/integration/test.js`,
     loadFile("frontend/e2e/cypress.js")
   );
@@ -45,10 +52,10 @@ const installCypress = () => {
 };
 
 const installTestCafe = () => {
-  helpers.addScriptToPackageJSON("e2e", "testcafe chrome test/e2e");
-  helpers.addDependenciesToStore("testcafe", 'dev');
-  helpers.mkdirSync(`test/e2e`);
-  helpers.writeFile(
+  addScriptToPackageJSON("e2e", "testcafe chrome test/e2e");
+  addDependenciesToStore("testcafe", 'dev');
+  mkdirSync(`test/e2e`);
+  writeFile(
     `test/e2e/test.js`,
     loadFile("files/frontend/e2e/testcafe.js")
   );

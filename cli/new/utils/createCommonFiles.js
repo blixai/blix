@@ -1,7 +1,11 @@
-const helpers = require("../../../index");
-const execSync = require('child_process').execSync;
 const chalk = require('chalk')
-const { loadFile, store } = helpers
+const { 
+  loadFile, 
+  store,
+  mkdirSync,
+  writeFile,
+  execute
+} = require("../../../index")
 
 /// create things like .gitignore, scripts folder, scripts templates folder, README.md, .env, and package.json
 const createCommonFilesAndFolders = () => {
@@ -10,10 +14,10 @@ const createCommonFilesAndFolders = () => {
   );
   try{
     // creates new project folder first, this is important for all new projects
-    helpers.mkdirSync(``)
+    mkdirSync(``)
     try {
       process.chdir(`./${store.name}`)
-      execSync('git init')
+      execute('git init')
       process.chdir('../')
     } catch (err) {
       if (store.env === 'development') {
@@ -23,23 +27,23 @@ const createCommonFilesAndFolders = () => {
       }
       process.chdir('../')
     }
-    helpers.writeFile(
+    writeFile(
       `.gitignore`,
       loadFile("common/gitIgnore.txt")
     );
-    helpers.writeFile(
+    writeFile(
       `README.md`,
       loadFile("common/README.md")
     );
-    helpers.writeFile(
+    writeFile(
       `package.json`,
       loadFile("common/package.json")
     );
 
-    helpers.writeFile(`.env`, "");
-    helpers.mkdirSync(`scripts`);
-    helpers.mkdirSync(`scripts/templates`);
-    helpers.mkdirSync(`test`);
+    writeFile(`.env`, "");
+    mkdirSync(`scripts`);
+    mkdirSync(`scripts/templates`);
+    mkdirSync(`test`);
   } catch(err){
     if (store.env === 'development') {
       console.error(err)

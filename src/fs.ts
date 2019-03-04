@@ -160,3 +160,5 @@ export function loadFile(file: string, folderPath: string): string {
         return ""
     }
 }
+
+// TODO method to loadJSON files
