@@ -23,11 +23,13 @@
     "blix": "./cli.js"
   },
   "dependencies": {
+    "@types/mustache": "^0.8.32",
     "@types/node": "^11.10.4",
     "chalk": "^2.4.1",
     "commander": "^2.19.0",
     "glob": "^7.1.2",
     "inquirer": "^4.0.1",
+    "mustache": "^3.0.1",
     "update-notifier": "^2.5.0"
   },
   "devDependencies": {

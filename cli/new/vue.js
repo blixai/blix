@@ -11,7 +11,8 @@ const {
     addDependenciesToStore,
     addScriptToPackageJSON,
     installAllPackages,
-    appendFile
+    appendFile,
+    loadTemplate
 } = require('../../blix')
 
 

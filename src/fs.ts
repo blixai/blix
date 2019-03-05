@@ -3,6 +3,7 @@ const path = require('path')
 const chalk = require('chalk')
 import { prompt } from "inquirer"
 const store = require('./store')
+const Mustache = require('mustache')
 import { _logCaughtError } from '../.internal/blixInternal'
 import { logError, logWarning } from './logger'
 
@@ -227,4 +228,30 @@ export function loadUserJSONFile(file: string): string {
         _logCaughtError(`Failed to load json file ${file}`, err)
         return ""
     }
+}
+
+export function loadTemplate(file: string, options?: object, folderPath?: string): string {
+    let filePathStartCharacters = file.slice(0, 2)
+    if (!folderPath) {
+        folderPath = store.mode === 'cli' ? '../../cli/files/' : '/scripts/templates/'
+    }
+    if (filePathStartCharacters === './') {
+        file = file.slice(1)
+    }
+    
+    try {
+        if (store.mode === 'cli') {
+            file = fs.readFileSync(path.resolve(__dirname, folderPath + file), 'utf8')      
+        } else {
+            file = fs.readFileSync(process.cwd() + folderPath + file, 'utf8')
+        }
+        if (!file) {
+            throw `File ${file} not found!`
+        }
+        let renderedFile = Mustache.render(file, options)
+        return renderedFile;
+    } catch (err) {
+        _logCaughtError(`Failed to load template ${file}`, err)
+        return ""
+    } 
 }

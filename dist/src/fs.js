@@ -44,6 +44,7 @@ var path = require('path');
 var chalk = require('chalk');
 var inquirer_1 = require("inquirer");
 var store = require('./store');
+var Mustache = require('mustache');
 var blixInternal_1 = require("../.internal/blixInternal");
 var logger_1 = require("./logger");
 function writeFile(filePath, file, message) {
@@ -292,4 +293,31 @@ function loadUserJSONFile(file) {
     }
 }
 exports.loadUserJSONFile = loadUserJSONFile;
+function loadTemplate(file, options, folderPath) {
+    var filePathStartCharacters = file.slice(0, 2);
+    if (!folderPath) {
+        folderPath = store.mode === 'cli' ? '../../cli/files/' : '/scripts/templates/';
+    }
+    if (filePathStartCharacters === './') {
+        file = file.slice(1);
+    }
+    try {
+        if (store.mode === 'cli') {
+            file = fs.readFileSync(path.resolve(__dirname, folderPath + file), 'utf8');
+        }
+        else {
+            file = fs.readFileSync(process.cwd() + folderPath + file, 'utf8');
+        }
+        if (!file) {
+            throw "File " + file + " not found!";
+        }
+        var renderedFile = Mustache.render(file, options);
+        return renderedFile;
+    }
+    catch (err) {
+        blixInternal_1._logCaughtError("Failed to load template " + file, err);
+        return "";
+    }
+}
+exports.loadTemplate = loadTemplate;
 var templateObject_1, templateObject_2, templateObject_3, templateObject_4, templateObject_5, templateObject_6, templateObject_7, templateObject_8, templateObject_9;
