@@ -92,11 +92,10 @@ const reactTesting = {
 
 const vueTesting = {
   type: "list",
-  message: "Select a unit testing library for Vue",
+  message: "Select a unit test runner for Vue",
   name: "vueTesting",
   choices: [
-    { name: "Vue Testing Utils", value: "utils" },
-    { name: "Karma.js", value: "karma" },
+    { name: "Mocha", value: "mocha" },
     { name: "Jest", value: "jest" },
     { name: "None", value: "none" }
   ]
@@ -121,7 +120,8 @@ const vueCSS = {
   choices: [
     { name: 'Vuetify', value: 'vuetify' },
     { name: 'Element-UI', value: 'element' },
-    { name: 'Bootstrap-Vue', value: 'bootstrap' }
+    { name: 'Bootstrap-Vue', value: 'bootstrap' },
+    { name: 'None', value: '' }
   ]
 }
 

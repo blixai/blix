@@ -3,6 +3,7 @@ const addAPIScript = require('./utils/addAPIScript')
 const { createBackend } = require("./backend");
 const { e2eSetup } = require("./utils/addEndToEndTesting");
 const { newProjectInstructions } = require('./utils/newProjectInstructions')
+const { addVueTesting } = require('./utils/addVueTesting')
 const { 
     loadFile,
     store,
@@ -31,6 +32,10 @@ exports.vue = () => {
 
     writeFile(`postcss.config.js`, postcssConfig);
     writeFile(`.babelrc`, babel);
+
+    // addVueTesting()
+
+
     
     this.cssLibrary()
 
@@ -179,6 +184,10 @@ exports.cssLibrary = () => {
     } else if (store.vueCSS === 'bootstrap') {
         addDependenciesToStore('bootstrap-vue bootstrap', 'dev')
     }
+}
+
+exports.addLinter = () => {
+    
 }
 
 exports.packages = () => {

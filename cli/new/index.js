@@ -106,6 +106,8 @@ const vueProject = async vueType => {
   store.vueType = vueType
   let cssOption = await prompt([vueCSS])
   store.vueCSS = cssOption.css
+  let linter = await prompt([linterPrompt])
+  store.linter = linter.linter
   store.vueTesting = await prompt([vueTesting])
   store.e2e = await prompt([e2e]);
   store.backend = await prompt([backend]);

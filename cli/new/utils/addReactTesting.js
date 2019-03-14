@@ -33,7 +33,7 @@ let installReactTesting = () => {
       "\\.(css|less)$": "identity-obj-proxy"
     }
   };
-  let json = loadUserJSONFile(`${name}/package.json`,)
+  let json = loadUserJSONFile(`${name}/package.json`)
   json["jest"] = jest;
   writeJSONFile(`package.json`, json);
   addScriptToPackageJSON("test", "jest");
