@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 const program = require('commander');
+const debug = require('debug')
 const updateNotifier = require('update-notifier');
 const pkg = require('./package.json');
 const { store } = require('./blix')
@@ -54,16 +55,16 @@ program
   .action(() => scripts())
 
 program
-  .command('generate <script> [args...]')
+  .command('generate [args...]')
   .allowUnknownOption()
   .alias('g')
-  .description('run scripts in a project')
-  .action((script, args) => {
+  .description('run scripts in a project or use common Blix templates')
+  .action((args) => {
     if (process.argv.length > 4) {
       let options = process.argv.slice(4)
-      generate(script, options)
+      generate(options)
     } else {
-      generate(script, args)
+      generate(args)
     }
   })
 
@@ -71,7 +72,9 @@ program
 
 program.parse(process.argv);
 
-if (program.verbose) store.env = 'development'
+if (program.verbose) {
+  store.env = 'development'
+}
 
 if (!process.argv.slice(2).length) {
   program.outputHelp()

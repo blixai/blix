@@ -1,20 +1,23 @@
 const fs = require('fs')
-const chalk = require('chalk')
-let possibleScripts = ['component', 'view', 'model', 'page', 'controller', 'action', 'api']
 const { 
     checkIfScriptIsTaken,
     execute,
     logError
 } = require('../../blix')
+const { _logCaughtError } = require('../../internal')
 
-exports.generate = (scriptArg, otherArgs = '') => {
+exports.generate = (args) => {
     if (!fs.existsSync('package.json')) {
-        logError(`Unable to find package.json. Are you in a project`)
-        process.exit(1)
-    } else if (!scriptArg) {
-        this.scriptNotFound(true)
+        // TODO use Blix templates
+    } else if (!args) {
+
+        // TODO prompt if user wants to generate a blix template
+        return
     }
-    if (possibleScripts.includes(scriptArg) && checkIfScriptIsTaken(scriptArg)) {
+
+    // TODO split the args string by spaces and then check if the first index exists
+
+    if (checkIfScriptIsTaken(scriptArg)) {
         if (otherArgs) {
             otherArgs = otherArgs.join(' ')
         }
@@ -26,25 +29,15 @@ exports.generate = (scriptArg, otherArgs = '') => {
             }
             // execSync(`node scripts/${scriptArg}.js ${otherArgs}`, { stdio: [0, 1, 2] })
         } catch (err) {
-            logError('Something went wrong.')
-            logError(err)
+            _logCaughtError("Unable execute the provided package.json script.", err)
         }
     } else {
         this.scriptNotFound()
     }
 }
 
-exports.scriptNotFound = (noArg) => {
-    if (noArg) {
-        logError('No command type entered.')
-    } else {
-        logError(`It seems you're trying to run a command that doesn't exist.`)
-    }
-    possibleScripts.forEach(script => {
-        if (checkIfScriptIsTaken(script)) {
-            console.log('Try: ' + chalk.green`blix generate ` + chalk`{cyan ${script}}`)
-        }
-    })
+exports.scriptNotFound = () => {
+    logError(`It seems you're trying to run a command that doesn't exist.`)
     console.log('Please try again.')
     process.exit() 
 }
