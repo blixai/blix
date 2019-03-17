@@ -5,13 +5,14 @@ import { prompt } from "inquirer"
 const store = require('./store')
 const Mustache = require('mustache')
 import { _logCaughtError } from '../.internal/blixInternal'
+import { prettyPath } from './utils'
 import { logError, logWarning } from './logger'
 
 
 export function writeFile(filePath: string, file: string, message?: string) {
     try {
         filePath = store.name ? `./${store.name}/` + filePath : './' + filePath
-        let filePathLog = filePath.slice(2)
+        let filePathLog = prettyPath(filePath)
         if (fs.existsSync(filePath)) {
             fs.writeFileSync(filePath, file)
             message ? console.log(message) : console.log(chalk`{yellow mutate} ${filePathLog}`);
@@ -33,7 +34,7 @@ export function mkdirSync(folderPath: string, message?: string) {
     
     try {
         folderPath = store.name ? `./${store.name}/` + folderPath : './' + folderPath
-        let folderPathLog = folderPath.slice(2)
+        let folderPathLog = prettyPath(folderPath)
         fs.mkdirSync(folderPath)
         message ? console.log(message) : console.log(chalk`{green create} ${folderPathLog}`)
     } catch (err) {
@@ -56,15 +57,11 @@ export async function insert(fileToInsertInto: string, whatToInsert: string, lin
     if (!fileToInsertInto) {
         return logError(`No file specified.`)
     } else if (!whatToInsert) {
-        return console.error(chalk`{red No string to insert specified.}`) 
+        return logError('No string to insert specified.') 
     }
     // this needs to get extracted into its own helper
-    let fileToInsertIntoLog
-    if (fileToInsertInto.slice(1, 2) === './') {
-    fileToInsertIntoLog = fileToInsertInto.slice(2)
-    } else {
-    fileToInsertIntoLog = fileToInsertInto
-    }
+    let fileToInsertIntoLog = prettyPath(fileToInsertInto)
+
 
     let filePrompt = { type: 'list', name: 'lineNumber', message: 'Select a line to insert below', choices: [] }
     // if no lineToInsertAt then readfile and pass to inquirer prompt
@@ -78,9 +75,9 @@ export async function insert(fileToInsertInto: string, whatToInsert: string, lin
     } else if (isNaN(Number(lineToInsertAt))) {
         let indexToFind = file.indexOf(lineToInsertAt)
         if (indexToFind !== -1) {
-        lineToInsertAt = indexToFind + 1
+            lineToInsertAt = indexToFind + 1
         } else {
-        lineToInsertAt = file.length + 1
+            lineToInsertAt = file.length + 1
         }
     }
     file.splice(lineToInsertAt, 0, whatToInsert)
@@ -103,7 +100,7 @@ export function appendFile(file: string, stringToAppend: string) {
     try {
         file = store.name ? `./${store.name}/` + file : './' + file
         fs.appendFileSync(file, stringToAppend)
-        file = file.slice(2)
+        file = prettyPath(file)
         console.log(chalk`{cyan append} ${file}`)
     } catch (err) {
         _logCaughtError(`Failed to append ${file}.`, err);
@@ -130,7 +127,7 @@ export function moveAllFilesInDir(dirToSearch: string, dirToMoveTo: string) {
 
     try {
         fs.rmdirSync(dirToSearch)
-        dirToSearch = dirToSearch.slice(2)
+        dirToSearch = prettyPath(dirToSearch)
         console.log(chalk`{red delete} ${dirToSearch}`)
     } catch (err) {
         _logCaughtError(`Failed to delete ${dirToSearch}.`, err)
@@ -138,13 +135,10 @@ export function moveAllFilesInDir(dirToSearch: string, dirToMoveTo: string) {
 }
 
 export function loadFile(file: string, folderPath: string): string {
-    let filePathStartCharacters = file.slice(0, 2)
     if (!folderPath) {
         folderPath = store.mode === 'cli' ? '../../cli/files/' : '/scripts/templates/'
     }
-    if (filePathStartCharacters === './') {
-        file = file.slice(1)
-    }
+    file = prettyPath(file)
     
     try {
         if (store.mode === 'cli') {
@@ -164,14 +158,11 @@ export function loadFile(file: string, folderPath: string): string {
 
 export function loadJSONFile(file: string, folderPath: string): string {
     // TODO ensure the file type is .json
-    let filePathStartCharacters = file.slice(0, 2)
     if (!folderPath) {
         folderPath = store.mode === 'cli' ? '../../cli/files/' : '/scripts/templates'
     }
 
-    if (filePathStartCharacters === './') {
-        file = file.slice(1)
-    }
+    file = prettyPath(file)
 
     try {
         if (store.mode === 'cli') {
@@ -193,7 +184,7 @@ export function writeJSONFile(filePath: string, file: object) {
     try {
         let fileString = JSON.stringify(file, null, 2)
         filePath = store.name ? `./${store.name}/` + filePath : './' + filePath
-        let filePathLog = filePath.slice(2)
+        let filePathLog = prettyPath(filePath) 
         if (fs.existsSync(filePath)) {
             fs.writeFileSync(filePath, fileString)
             console.log(chalk`{yellow mutate} ${filePathLog}`);
@@ -212,11 +203,8 @@ export function writeJSONFile(filePath: string, file: object) {
  */
 export function loadUserJSONFile(file: string): string {
     // TODO ensure the file type is .json
-    let filePathStartCharacters = file.slice(0, 2)
 
-    if (filePathStartCharacters === './') {
-        file = file.slice(1)
-    }
+    file = prettyPath(file)
 
     try {
         file = fs.readFileSync('./' + file, 'utf8')
@@ -231,13 +219,10 @@ export function loadUserJSONFile(file: string): string {
 }
 
 export function loadTemplate(file: string, options?: object, folderPath?: string): string {
-    let filePathStartCharacters = file.slice(0, 2)
     if (!folderPath) {
         folderPath = store.mode === 'cli' ? '../../cli/files/' : '/scripts/templates/'
     }
-    if (filePathStartCharacters === './') {
-        file = file.slice(1)
-    }
+        file = prettyPath(file)
     
     try {
         if (store.mode === 'cli') {

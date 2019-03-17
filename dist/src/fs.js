@@ -46,11 +46,12 @@ var inquirer_1 = require("inquirer");
 var store = require('./store');
 var Mustache = require('mustache');
 var blixInternal_1 = require("../.internal/blixInternal");
+var utils_1 = require("./utils");
 var logger_1 = require("./logger");
 function writeFile(filePath, file, message) {
     try {
         filePath = store.name ? "./" + store.name + "/" + filePath : './' + filePath;
-        var filePathLog = filePath.slice(2);
+        var filePathLog = utils_1.prettyPath(filePath);
         if (fs.existsSync(filePath)) {
             fs.writeFileSync(filePath, file);
             message ? console.log(message) : console.log(chalk(templateObject_1 || (templateObject_1 = __makeTemplateObject(["{yellow mutate} ", ""], ["{yellow mutate} ", ""])), filePathLog));
@@ -74,7 +75,7 @@ function mkdirSync(folderPath, message) {
     }
     try {
         folderPath = store.name ? "./" + store.name + "/" + folderPath : './' + folderPath;
-        var folderPathLog = folderPath.slice(2);
+        var folderPathLog = utils_1.prettyPath(folderPath);
         fs.mkdirSync(folderPath);
         message ? console.log(message) : console.log(chalk(templateObject_3 || (templateObject_3 = __makeTemplateObject(["{green create} ", ""], ["{green create} ", ""])), folderPathLog));
     }
@@ -105,14 +106,9 @@ function insert(fileToInsertInto, whatToInsert, lineToInsertAt) {
                         return [2 /*return*/, logger_1.logError("No file specified.")];
                     }
                     else if (!whatToInsert) {
-                        return [2 /*return*/, console.error(chalk(templateObject_4 || (templateObject_4 = __makeTemplateObject(["{red No string to insert specified.}"], ["{red No string to insert specified.}"]))))];
+                        return [2 /*return*/, logger_1.logError('No string to insert specified.')];
                     }
-                    if (fileToInsertInto.slice(1, 2) === './') {
-                        fileToInsertIntoLog = fileToInsertInto.slice(2);
-                    }
-                    else {
-                        fileToInsertIntoLog = fileToInsertInto;
-                    }
+                    fileToInsertIntoLog = utils_1.prettyPath(fileToInsertInto);
                     filePrompt = { type: 'list', name: 'lineNumber', message: 'Select a line to insert below', choices: [] };
                     _a.label = 1;
                 case 1:
@@ -140,7 +136,7 @@ function insert(fileToInsertInto, whatToInsert, lineToInsertAt) {
                     file.splice(lineToInsertAt, 0, whatToInsert);
                     file = file.join('\n');
                     fs.writeFileSync(fileToInsertInto, file);
-                    console.log(chalk(templateObject_5 || (templateObject_5 = __makeTemplateObject(["{cyan insert} ", ""], ["{cyan insert} ", ""])), fileToInsertIntoLog));
+                    console.log(chalk(templateObject_4 || (templateObject_4 = __makeTemplateObject(["{cyan insert} ", ""], ["{cyan insert} ", ""])), fileToInsertIntoLog));
                     return [3 /*break*/, 6];
                 case 5:
                     err_1 = _a.sent();
@@ -162,8 +158,8 @@ function appendFile(file, stringToAppend) {
     try {
         file = store.name ? "./" + store.name + "/" + file : './' + file;
         fs.appendFileSync(file, stringToAppend);
-        file = file.slice(2);
-        console.log(chalk(templateObject_6 || (templateObject_6 = __makeTemplateObject(["{cyan append} ", ""], ["{cyan append} ", ""])), file));
+        file = utils_1.prettyPath(file);
+        console.log(chalk(templateObject_5 || (templateObject_5 = __makeTemplateObject(["{cyan append} ", ""], ["{cyan append} ", ""])), file));
     }
     catch (err) {
         blixInternal_1._logCaughtError("Failed to append " + file + ".", err);
@@ -190,8 +186,8 @@ function moveAllFilesInDir(dirToSearch, dirToMoveTo) {
     }
     try {
         fs.rmdirSync(dirToSearch);
-        dirToSearch = dirToSearch.slice(2);
-        console.log(chalk(templateObject_7 || (templateObject_7 = __makeTemplateObject(["{red delete} ", ""], ["{red delete} ", ""])), dirToSearch));
+        dirToSearch = utils_1.prettyPath(dirToSearch);
+        console.log(chalk(templateObject_6 || (templateObject_6 = __makeTemplateObject(["{red delete} ", ""], ["{red delete} ", ""])), dirToSearch));
     }
     catch (err) {
         blixInternal_1._logCaughtError("Failed to delete " + dirToSearch + ".", err);
@@ -199,13 +195,10 @@ function moveAllFilesInDir(dirToSearch, dirToMoveTo) {
 }
 exports.moveAllFilesInDir = moveAllFilesInDir;
 function loadFile(file, folderPath) {
-    var filePathStartCharacters = file.slice(0, 2);
     if (!folderPath) {
         folderPath = store.mode === 'cli' ? '../../cli/files/' : '/scripts/templates/';
     }
-    if (filePathStartCharacters === './') {
-        file = file.slice(1);
-    }
+    file = utils_1.prettyPath(file);
     try {
         if (store.mode === 'cli') {
             file = fs.readFileSync(path.resolve(__dirname, folderPath + file), 'utf8');
@@ -226,13 +219,10 @@ function loadFile(file, folderPath) {
 exports.loadFile = loadFile;
 function loadJSONFile(file, folderPath) {
     // TODO ensure the file type is .json
-    var filePathStartCharacters = file.slice(0, 2);
     if (!folderPath) {
         folderPath = store.mode === 'cli' ? '../../cli/files/' : '/scripts/templates';
     }
-    if (filePathStartCharacters === './') {
-        file = file.slice(1);
-    }
+    file = utils_1.prettyPath(file);
     try {
         if (store.mode === 'cli') {
             file = fs.readFileSync(path.resolve(__dirname, folderPath + file), 'utf8');
@@ -255,14 +245,14 @@ function writeJSONFile(filePath, file) {
     try {
         var fileString = JSON.stringify(file, null, 2);
         filePath = store.name ? "./" + store.name + "/" + filePath : './' + filePath;
-        var filePathLog = filePath.slice(2);
+        var filePathLog = utils_1.prettyPath(filePath);
         if (fs.existsSync(filePath)) {
             fs.writeFileSync(filePath, fileString);
-            console.log(chalk(templateObject_8 || (templateObject_8 = __makeTemplateObject(["{yellow mutate} ", ""], ["{yellow mutate} ", ""])), filePathLog));
+            console.log(chalk(templateObject_7 || (templateObject_7 = __makeTemplateObject(["{yellow mutate} ", ""], ["{yellow mutate} ", ""])), filePathLog));
         }
         else {
             fs.writeFileSync(filePath, fileString);
-            console.log(chalk(templateObject_9 || (templateObject_9 = __makeTemplateObject(["{green create} ", ""], ["{green create} ", ""])), filePathLog));
+            console.log(chalk(templateObject_8 || (templateObject_8 = __makeTemplateObject(["{green create} ", ""], ["{green create} ", ""])), filePathLog));
         }
     }
     catch (err) {
@@ -276,10 +266,7 @@ exports.writeJSONFile = writeJSONFile;
  */
 function loadUserJSONFile(file) {
     // TODO ensure the file type is .json
-    var filePathStartCharacters = file.slice(0, 2);
-    if (filePathStartCharacters === './') {
-        file = file.slice(1);
-    }
+    file = utils_1.prettyPath(file);
     try {
         file = fs.readFileSync('./' + file, 'utf8');
         if (!file) {
@@ -294,13 +281,10 @@ function loadUserJSONFile(file) {
 }
 exports.loadUserJSONFile = loadUserJSONFile;
 function loadTemplate(file, options, folderPath) {
-    var filePathStartCharacters = file.slice(0, 2);
     if (!folderPath) {
         folderPath = store.mode === 'cli' ? '../../cli/files/' : '/scripts/templates/';
     }
-    if (filePathStartCharacters === './') {
-        file = file.slice(1);
-    }
+    file = utils_1.prettyPath(file);
     try {
         if (store.mode === 'cli') {
             file = fs.readFileSync(path.resolve(__dirname, folderPath + file), 'utf8');
@@ -320,4 +304,4 @@ function loadTemplate(file, options, folderPath) {
     }
 }
 exports.loadTemplate = loadTemplate;
-var templateObject_1, templateObject_2, templateObject_3, templateObject_4, templateObject_5, templateObject_6, templateObject_7, templateObject_8, templateObject_9;
+var templateObject_1, templateObject_2, templateObject_3, templateObject_4, templateObject_5, templateObject_6, templateObject_7, templateObject_8;
