@@ -13,8 +13,10 @@ const {
   addDependenciesToStore,
   addScriptToPackageJSON,
   appendFile,
-  installAllPackages
+  installAllPackages,
+  clearConsole
 } = require('../../blix')
+const ora = require('ora')
 
 
 // load common files
@@ -50,6 +52,8 @@ const ReduxHomeView = loadFile("frontend/redux/Home.js");
 const NavbarContainer = loadFile("frontend/redux/NavbarContainer.js");
 
 exports.react = () => {
+  clearConsole('Blix')
+  const reactSpinner = ora('Loading and writing frontend files and folders').start()
   createCommonFilesAndFolders();
 
   // create react files
@@ -77,12 +81,15 @@ exports.react = () => {
   // e2e setup
   e2eSetup();
 
+  reactSpinner.succeed()
+
   // add scripts
+  const scriptSpinner = ora('Creating frontend scripts').start()
   this.scripts();
+  scriptSpinner.succeed()
 
   // add packages to store
   this.packages();
-
   // create backend
   if (store.backend && store.backend.backend) {
     store.backendType = "standard"

@@ -7,6 +7,7 @@ const Mustache = require('mustache')
 import { _logCaughtError } from '../.internal/blixInternal'
 import { prettyPath } from './utils'
 import { logError, logWarning } from './logger'
+const debug = require('debug')('blix:fs')
 
 
 export function writeFile(filePath: string, file: string, message?: string) {

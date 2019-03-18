@@ -31,6 +31,7 @@
     "glob": "^7.1.2",
     "inquirer": "^4.0.1",
     "mustache": "^3.0.1",
+    "ora": "^3.2.0",
     "supports-color": "^6.1.0",
     "update-notifier": "^2.5.0"
   },

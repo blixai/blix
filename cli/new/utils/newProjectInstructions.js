@@ -1,5 +1,5 @@
 const fs = require('fs')
-const { store } = require('../../../blix')
+const { store, clearConsole } = require('../../../blix')
 const chalk = require('chalk')
 const link = 'blixjs.com'
 
@@ -80,7 +80,7 @@ exports.consoleFormatter = (options) => {
 
 exports.newProjectInstructions = () => {
   let name = store.name
-  if (!store.env === 'development') console.clear()
+  if (store.env !== 'development') clearConsole('Blix')
   console.log("")
   console.log(`Success! Created new project ${name} at ${process.cwd() + '/' + name}`);
   console.log();

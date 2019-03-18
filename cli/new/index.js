@@ -5,10 +5,11 @@ const { createBackend } = require("./backend");
 const { vue } = require("./vue");
 const { react } = require("./react");
 const { vanillaJS } = require("./vanillaJS");
-const chalk = require('chalk')
 const {
   store,
-  yarn
+  yarn,
+  clearConsole,
+  logError
 } = require('../../blix')
 
 // console prompts
@@ -146,12 +147,12 @@ exports.promptForName = promptForName
 // create project ensures there shouldn't be errors before starting the prompts
 const createProject = () => {
   if (!store.name) {
-    console.clear()
+    clearConsole()
     this.promptForName()
     return
   }
   if (fs.existsSync(`./${store.name}`)) {
-    console.error(chalk`{red A project named ${store.name} already exists!}`);
+    logError(`A project named ${store.name} already exists!`)
     this.promptForName()
     return
   }

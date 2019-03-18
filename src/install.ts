@@ -1,4 +1,5 @@
 const fs = require('fs')
+const ora = require('ora');
 import { execSync } from 'child_process'
 const chalk = require('chalk');
 const store = require('./store')
@@ -91,6 +92,9 @@ export function addScriptToPackageJSON(command: string, script: string) {
 };
 
 export function installDependencies(packages: string, type?: string) {
+    let spinnerText = type === 'dev' ? 'Downloading development dependencies' : 'Downloading dependencies'
+    const spinner = ora(spinnerText).start();
+    
     try {
         if (store.name) {
             process.chdir(`./${store.name}`)
@@ -103,8 +107,10 @@ export function installDependencies(packages: string, type?: string) {
             execute(command);
         }
         if (store.name) process.chdir('../')
+        spinner.succeed()
     } catch(err) {
         if (store.name) process.chdir('../')
+        spinner.fail()
         _logCaughtError('Something went wrong while installing the packages', err)
     }
 };

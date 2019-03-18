@@ -40,6 +40,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var fs = require('fs');
+var ora = require('ora');
 var child_process_1 = require("child_process");
 var chalk = require('chalk');
 var store = require('./store');
@@ -143,6 +144,8 @@ function addScriptToPackageJSON(command, script) {
 exports.addScriptToPackageJSON = addScriptToPackageJSON;
 ;
 function installDependencies(packages, type) {
+    var spinnerText = type === 'dev' ? 'Downloading development dependencies' : 'Downloading dependencies';
+    var spinner = ora(spinnerText).start();
     try {
         if (store.name) {
             process.chdir("./" + store.name);
@@ -157,10 +160,12 @@ function installDependencies(packages, type) {
         }
         if (store.name)
             process.chdir('../');
+        spinner.succeed();
     }
     catch (err) {
         if (store.name)
             process.chdir('../');
+        spinner.fail();
         blixInternal_1._logCaughtError('Something went wrong while installing the packages', err);
     }
 }

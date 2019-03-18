@@ -48,6 +48,7 @@ var Mustache = require('mustache');
 var blixInternal_1 = require("../.internal/blixInternal");
 var utils_1 = require("./utils");
 var logger_1 = require("./logger");
+var debug = require('debug')('blix:fs');
 function writeFile(filePath, file, message) {
     try {
         filePath = store.name ? "./" + store.name + "/" + filePath : './' + filePath;
