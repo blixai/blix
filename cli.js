@@ -9,11 +9,15 @@ const { createProject } = require("./cli/new");
 const { scripts } = require("./cli/scripts/script");
 const add = require("./cli/add/add");
 const { generate } = require('./cli/generate')
+const { clearConsole } = require('./blix')
 let pjson = require("./package.json");
 let version = pjson.version
+store.blixVersion = version
 let currentNodeVersion = process.versions.node;
 let semver = currentNodeVersion.split('.');
 let major = semver[0];
+
+clearConsole()
 
 if (major < 8) {
   console.error(

@@ -18,7 +18,8 @@ var store = {
     devDependencies: '',
     useYarn: '',
     reactCSS: '',
-    linter: ''
+    linter: '',
+    tasks: [],
 };
 function checkIfEnvChange(key, value) {
     if (key === 'env' && value === 'development') {

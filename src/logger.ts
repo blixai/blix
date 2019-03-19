@@ -1,5 +1,7 @@
 import chalk from 'chalk';
 const readline = require('readline')
+const store = require('./store')
+const logSymbols = require('log-symbols');
 
 export function logError(msg: string) {
     console.error(chalk`{red ${msg}}`)
@@ -11,6 +13,21 @@ export function logWarning(msg: string) {
 
 export function log() {
         
+}
+
+export function logTaskStatus(task: string, status: string, symbol?: string) {
+    let stringToStore = '';
+    if (symbol) {
+        stringToStore = `${symbol} ${task}`
+    } else {
+        stringToStore = `${logSymbols[task] ? logSymbols[task] : logSymbols.success} ${task}`
+    }
+    store.tasks.push(stringToStore)
+
+    clearConsole()
+    store.tasks.forEach((task: string) => {
+       console.log(task) 
+    });
 }
 
 // logger action methods
@@ -53,6 +70,9 @@ export function clearConsole(title?: string) {
         readline.clearScreenDown(process.stdout)
         if (title) {
           console.log(chalk.bold.cyan(title))
+        } else if (store.mode === 'cli' && store.blixVersion) {
+            console.log(chalk.bold.cyan(`Blix v${store.blixVersion}`))
+            console.log()
         }
     }
 }

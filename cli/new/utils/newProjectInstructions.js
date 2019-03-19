@@ -80,8 +80,7 @@ exports.consoleFormatter = (options) => {
 
 exports.newProjectInstructions = () => {
   let name = store.name
-  if (store.env !== 'development') clearConsole('Blix')
-  console.log("")
+  if (store.env !== 'development') clearConsole()
   console.log(`Success! Created new project ${name} at ${process.cwd() + '/' + name}`);
   console.log();
   console.log('Inside that directory you can run these custom scripts:')

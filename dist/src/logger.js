@@ -6,6 +6,8 @@ var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cook
 Object.defineProperty(exports, "__esModule", { value: true });
 var chalk_1 = require("chalk");
 var readline = require('readline');
+var store = require('./store');
+var logSymbols = require('log-symbols');
 function logError(msg) {
     console.error(chalk_1.default(templateObject_1 || (templateObject_1 = __makeTemplateObject(["{red ", "}"], ["{red ", "}"])), msg));
 }
@@ -17,6 +19,21 @@ exports.logWarning = logWarning;
 function log() {
 }
 exports.log = log;
+function logTaskStatus(task, status, symbol) {
+    var stringToStore = '';
+    if (symbol) {
+        stringToStore = symbol + " " + task;
+    }
+    else {
+        stringToStore = (logSymbols[task] ? logSymbols[task] : logSymbols.success) + " " + task;
+    }
+    store.tasks.push(stringToStore);
+    clearConsole();
+    store.tasks.forEach(function (task) {
+        console.log(task);
+    });
+}
+exports.logTaskStatus = logTaskStatus;
 // logger action methods
 var ActionLogger = /** @class */ (function () {
     function ActionLogger() {
@@ -52,6 +69,10 @@ function clearConsole(title) {
         readline.clearScreenDown(process.stdout);
         if (title) {
             console.log(chalk_1.default.bold.cyan(title));
+        }
+        else if (store.mode === 'cli' && store.blixVersion) {
+            console.log(chalk_1.default.bold.cyan("Blix v" + store.blixVersion));
+            console.log();
         }
     }
 }

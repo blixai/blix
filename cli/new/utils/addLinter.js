@@ -3,7 +3,8 @@ const {
   store,
   addScriptToPackageJSON,
   addDependenciesToStore,
-  writeFile
+  writeFile,
+  logTaskStatus
 } = require('../../../blix')
 
 let prettierConfig = loadFile('common/linter/prettier.js')
@@ -33,6 +34,10 @@ const addLinter = () => {
     addDependenciesToStore('eslint eslint-plugin-react eslint-config-prettier eslint-plugin-prettier prettier', 'dev')
     writeFile(`.eslintrc.js`, eslintPrettier)
     eslintPackageJsonScripts()
+  }
+
+  if (store['linter']) {
+    logTaskStatus('Configured linter', 'success')
   }
 }
 

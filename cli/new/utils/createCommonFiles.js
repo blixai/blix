@@ -4,7 +4,9 @@ const {
   store,
   mkdirSync,
   writeFile,
-  execute
+  execute,
+  logTaskStatus,
+  logError
 } = require("../../../blix")
 
 /// create things like .gitignore, scripts folder, scripts templates folder, README.md, .env, and package.json
@@ -21,9 +23,9 @@ const createCommonFilesAndFolders = () => {
       process.chdir('../')
     } catch (err) {
       if (store.env === 'development') {
-        console.error(err)
+        logError(err)
       } else {
-        console.error(chalk.red`Error: failed to initialize a git repository`)
+        logError('Error: failed to initialize a git repository')
       }
       process.chdir('../')
     }
@@ -46,9 +48,9 @@ const createCommonFilesAndFolders = () => {
     mkdirSync(`test`);
   } catch(err){
     if (store.env === 'development') {
-      console.error(err)
+      logError(err)
     } else {
-      console.error(chalk.red`Error Creating Common Files`)
+      logError('Error Creating Common Files')
     }
   }
 };

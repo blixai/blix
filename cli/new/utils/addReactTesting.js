@@ -5,7 +5,8 @@ const {
   writeFile,
   addScriptToPackageJSON,
   writeJSONFile,
-  loadUserJSONFile
+  loadUserJSONFile,
+  logTaskStatus
 } = require("../../../blix");
 
 
@@ -37,6 +38,10 @@ let installReactTesting = () => {
   json["jest"] = jest;
   writeJSONFile(`package.json`, json);
   addScriptToPackageJSON("test", "jest");
+
+  if (store['reactTesting']) {
+    logTaskStatus('React tests configured', 'success')
+  }
 };
 
 module.exports = {installReactTesting};

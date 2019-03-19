@@ -7,7 +7,8 @@ const {
   addScriptToPackageJSON,
   addDependenciesToStore,
   loadUserJSONFile,
-  writeJSONFile
+  writeJSONFile,
+  logTaskStatus
 } = require("../../../blix");
 
 let e2eSetup = () => {
@@ -50,6 +51,7 @@ const installCypress = () => {
     loadFile("frontend/e2e/cypress.js")
   );
   addJestToPackageJson()
+  logTaskStatus('Configured Cypress.io', 'success')
 };
 
 const installTestCafe = () => {
@@ -61,6 +63,7 @@ const installTestCafe = () => {
     loadFile("files/frontend/e2e/testcafe.js")
   );
   addJestToPackageJson()
+  logTaskStatus('Configured TestCafe', 'success')
 };
 
 module.exports = {
