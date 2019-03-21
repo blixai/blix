@@ -15,7 +15,8 @@ const {
   appendFile,
   installAllPackages,
   clearConsole,
-  logTaskStatus
+  logTaskStatus,
+  Task
 } = require('../../blix')
 
 
@@ -53,6 +54,9 @@ const NavbarContainer = loadFile("frontend/redux/NavbarContainer.js");
 
 exports.react = () => {
   clearConsole()
+  let reactTask = new Task('React', [])
+  reactTask.start()
+
   createCommonFilesAndFolders();
 
   // create react files
@@ -80,8 +84,7 @@ exports.react = () => {
   // e2e setup
   e2eSetup();
 
-  logTaskStatus('React project files created', 'success')
-
+  reactTask.finished()
   // add scripts
   this.scripts();
 

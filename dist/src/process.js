@@ -12,3 +12,4 @@ function execute(command, showOutput) {
     }
 }
 exports.execute = execute;
+// TODO function to safely change process directory

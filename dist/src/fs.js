@@ -1,8 +1,4 @@
 "use strict";
-var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
-    if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
-    return cooked;
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -41,33 +37,34 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var fs = require('fs');
 var path = require('path');
-var chalk = require('chalk');
 var inquirer_1 = require("inquirer");
 var store = require('./store');
 var Mustache = require('mustache');
 var blixInternal_1 = require("../.internal/blixInternal");
 var utils_1 = require("./utils");
 var logger_1 = require("./logger");
-var debug = require('debug')('blix:fs');
-function writeFile(filePath, file, message) {
+var events_1 = require("./events");
+function writeFile(filePath, file) {
     try {
         filePath = store.name ? "./" + store.name + "/" + filePath : './' + filePath;
         var filePathLog = utils_1.prettyPath(filePath);
         if (fs.existsSync(filePath)) {
             fs.writeFileSync(filePath, file);
-            message ? console.log(message) : console.log(chalk(templateObject_1 || (templateObject_1 = __makeTemplateObject(["{yellow mutate} ", ""], ["{yellow mutate} ", ""])), filePathLog));
+            logger_1.ActionLogger.mutate(filePathLog);
         }
         else {
             fs.writeFileSync(filePath, file);
-            message ? console.log(message) : console.log(chalk(templateObject_2 || (templateObject_2 = __makeTemplateObject(["{green create} ", ""], ["{green create} ", ""])), filePathLog));
+            logger_1.ActionLogger.create(filePathLog);
         }
+        events_1.emit({ status: 'success', action: 'write file', file: filePath });
     }
     catch (err) {
+        events_1.emit({ status: 'error', action: 'write file', file: filePath });
         blixInternal_1._logCaughtError("Couldn't create file " + filePath, err);
     }
 }
 exports.writeFile = writeFile;
-function mkdirSync(folderPath, message) {
+function mkdirSync(folderPath) {
     if (!folderPath && !store.name) {
         return logger_1.logError("Unable to create folder");
     }
@@ -78,9 +75,11 @@ function mkdirSync(folderPath, message) {
         folderPath = store.name ? "./" + store.name + "/" + folderPath : './' + folderPath;
         var folderPathLog = utils_1.prettyPath(folderPath);
         fs.mkdirSync(folderPath);
-        message ? console.log(message) : console.log(chalk(templateObject_3 || (templateObject_3 = __makeTemplateObject(["{green create} ", ""], ["{green create} ", ""])), folderPathLog));
+        logger_1.ActionLogger.create(folderPathLog);
+        events_1.emit({ status: 'success', action: 'make folder', folder: folderPath });
     }
     catch (err) {
+        events_1.emit({ status: 'error', action: 'make folder', folder: folderPath });
         blixInternal_1._logCaughtError("Error making directory " + folderPath, err);
     }
 }
@@ -91,8 +90,10 @@ function rename(oldName, newName) {
         oldName = oldName.slice(2);
         newName = newName.slice(2);
         logger_1.logWarning("move   " + oldName + " into " + newName);
+        events_1.emit({ status: 'success', action: 'rename' });
     }
     catch (err) {
+        events_1.emit({ status: 'error', action: 'rename' });
         blixInternal_1._logCaughtError("Error renaming " + oldName, err);
     }
 }
@@ -137,10 +138,12 @@ function insert(fileToInsertInto, whatToInsert, lineToInsertAt) {
                     file.splice(lineToInsertAt, 0, whatToInsert);
                     file = file.join('\n');
                     fs.writeFileSync(fileToInsertInto, file);
-                    console.log(chalk(templateObject_4 || (templateObject_4 = __makeTemplateObject(["{cyan insert} ", ""], ["{cyan insert} ", ""])), fileToInsertIntoLog));
+                    logger_1.ActionLogger.insert(fileToInsertIntoLog);
+                    events_1.emit({ status: 'success', action: 'insert' });
                     return [3 /*break*/, 6];
                 case 5:
                     err_1 = _a.sent();
+                    events_1.emit({ status: 'errror', action: 'insert' });
                     blixInternal_1._logCaughtError("Failed to insert into " + fileToInsertIntoLog, err_1);
                     return [3 /*break*/, 6];
                 case 6: return [2 /*return*/];
@@ -160,7 +163,8 @@ function appendFile(file, stringToAppend) {
         file = store.name ? "./" + store.name + "/" + file : './' + file;
         fs.appendFileSync(file, stringToAppend);
         file = utils_1.prettyPath(file);
-        console.log(chalk(templateObject_5 || (templateObject_5 = __makeTemplateObject(["{cyan append} ", ""], ["{cyan append} ", ""])), file));
+        logger_1.ActionLogger.append(file);
+        events_1.emit({ status: 'success', action: 'appendFile' });
     }
     catch (err) {
         blixInternal_1._logCaughtError("Failed to append " + file + ".", err);
@@ -188,9 +192,11 @@ function moveAllFilesInDir(dirToSearch, dirToMoveTo) {
     try {
         fs.rmdirSync(dirToSearch);
         dirToSearch = utils_1.prettyPath(dirToSearch);
-        console.log(chalk(templateObject_6 || (templateObject_6 = __makeTemplateObject(["{red delete} ", ""], ["{red delete} ", ""])), dirToSearch));
+        logger_1.ActionLogger.deleted(dirToSearch);
+        events_1.emit({ status: 'success', action: 'moveAllFilesInDir' });
     }
     catch (err) {
+        events_1.emit({ status: 'error', action: 'moveAllFilesInDir' });
         blixInternal_1._logCaughtError("Failed to delete " + dirToSearch + ".", err);
     }
 }
@@ -249,11 +255,11 @@ function writeJSONFile(filePath, file) {
         var filePathLog = utils_1.prettyPath(filePath);
         if (fs.existsSync(filePath)) {
             fs.writeFileSync(filePath, fileString);
-            console.log(chalk(templateObject_7 || (templateObject_7 = __makeTemplateObject(["{yellow mutate} ", ""], ["{yellow mutate} ", ""])), filePathLog));
+            logger_1.ActionLogger.mutate(filePathLog);
         }
         else {
             fs.writeFileSync(filePath, fileString);
-            console.log(chalk(templateObject_8 || (templateObject_8 = __makeTemplateObject(["{green create} ", ""], ["{green create} ", ""])), filePathLog));
+            logger_1.ActionLogger.create(filePathLog);
         }
     }
     catch (err) {
@@ -305,4 +311,3 @@ function loadTemplate(file, options, folderPath) {
     }
 }
 exports.loadTemplate = loadTemplate;
-var templateObject_1, templateObject_2, templateObject_3, templateObject_4, templateObject_5, templateObject_6, templateObject_7, templateObject_8;

@@ -9,4 +9,5 @@ __export(require("./install"));
 __export(require("./logger"));
 __export(require("./process"));
 __export(require("./utils"));
+__export(require("./cli"));
 exports.store = require('./store');

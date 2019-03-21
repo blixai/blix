@@ -20,7 +20,7 @@ export function logTaskStatus(task: string, status: string, symbol?: string) {
     if (symbol) {
         stringToStore = `${symbol} ${task}`
     } else {
-        stringToStore = `${logSymbols[task] ? logSymbols[task] : logSymbols.success} ${task}`
+        stringToStore = `${logSymbols[status] ? logSymbols[status] : logSymbols.success} ${task}`
     }
     store.tasks.push(stringToStore)
 
@@ -40,7 +40,7 @@ export class ActionLogger {
         console.log(chalk`{green create} ${msg}`)
     }
 
-    static delete(msg: string) {
+    static deleted(msg: string) {
         console.log(chalk`{red delete} ${msg}`)
     }
 

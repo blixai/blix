@@ -1,32 +1,34 @@
 const fs = require('fs')
 const path = require('path')
-const chalk = require('chalk')
 import { prompt } from "inquirer"
 const store = require('./store')
 const Mustache = require('mustache')
 import { _logCaughtError } from '../.internal/blixInternal'
 import { prettyPath } from './utils'
-import { logError, logWarning } from './logger'
-const debug = require('debug')('blix:fs')
+import { logError, logWarning, ActionLogger } from './logger'
+import { emit } from './events'
 
 
-export function writeFile(filePath: string, file: string, message?: string) {
+
+export function writeFile(filePath: string, file: string) {
     try {
         filePath = store.name ? `./${store.name}/` + filePath : './' + filePath
         let filePathLog = prettyPath(filePath)
         if (fs.existsSync(filePath)) {
             fs.writeFileSync(filePath, file)
-            message ? console.log(message) : console.log(chalk`{yellow mutate} ${filePathLog}`);
+            ActionLogger.mutate(filePathLog)
         } else {
             fs.writeFileSync(filePath, file)
-            message ? console.log(message) : console.log(chalk`{green create} ${filePathLog}`);
+            ActionLogger.create(filePathLog)
         }
+        emit({ status: 'success', action: 'write file', file: filePath })
     } catch (err) {
+        emit({ status: 'error', action: 'write file', file: filePath })
         _logCaughtError(`Couldn't create file ${filePath}`, err)
     }
 }
 
-export function mkdirSync(folderPath: string, message?: string) {
+export function mkdirSync(folderPath: string) {
     if (!folderPath && !store.name) {
         return logError(`Unable to create folder`)
     } else if (!folderPath) {
@@ -37,8 +39,10 @@ export function mkdirSync(folderPath: string, message?: string) {
         folderPath = store.name ? `./${store.name}/` + folderPath : './' + folderPath
         let folderPathLog = prettyPath(folderPath)
         fs.mkdirSync(folderPath)
-        message ? console.log(message) : console.log(chalk`{green create} ${folderPathLog}`)
+        ActionLogger.create(folderPathLog)
+        emit({ status: 'success', action: 'make folder', folder: folderPath })
     } catch (err) {
+        emit({ status: 'error', action: 'make folder', folder: folderPath })
         _logCaughtError(`Error making directory ${folderPath}`, err)
     }
 }
@@ -49,7 +53,9 @@ export function rename(oldName: string, newName: string) {
         oldName = oldName.slice(2)
         newName = newName.slice(2)
         logWarning(`move   ${oldName} into ${newName}`)
+        emit({ status: 'success', action: 'rename' })
     } catch (err) {
+        emit({ status: 'error', action: 'rename' })
         _logCaughtError(`Error renaming ${oldName}`, err)
     }
 }
@@ -84,9 +90,10 @@ export async function insert(fileToInsertInto: string, whatToInsert: string, lin
     file.splice(lineToInsertAt, 0, whatToInsert)
     file = file.join('\n')
     fs.writeFileSync(fileToInsertInto, file)
-
-    console.log(chalk`{cyan insert} ${fileToInsertIntoLog}`)
+    ActionLogger.insert(fileToInsertIntoLog)
+    emit({ status: 'success', action: 'insert' })
     } catch (err) {
+        emit({ status: 'errror', action: 'insert' })
         _logCaughtError(`Failed to insert into ${fileToInsertIntoLog}`, err)
     }
 }
@@ -102,7 +109,8 @@ export function appendFile(file: string, stringToAppend: string) {
         file = store.name ? `./${store.name}/` + file : './' + file
         fs.appendFileSync(file, stringToAppend)
         file = prettyPath(file)
-        console.log(chalk`{cyan append} ${file}`)
+        ActionLogger.append(file)
+        emit({ status: 'success', action: 'appendFile' })
     } catch (err) {
         _logCaughtError(`Failed to append ${file}.`, err);
     }
@@ -129,8 +137,10 @@ export function moveAllFilesInDir(dirToSearch: string, dirToMoveTo: string) {
     try {
         fs.rmdirSync(dirToSearch)
         dirToSearch = prettyPath(dirToSearch)
-        console.log(chalk`{red delete} ${dirToSearch}`)
+        ActionLogger.deleted(dirToSearch)
+        emit({ status: 'success', action: 'moveAllFilesInDir' })
     } catch (err) {
+        emit({ status: 'error', action: 'moveAllFilesInDir' })
         _logCaughtError(`Failed to delete ${dirToSearch}.`, err)
     }
 }
@@ -188,10 +198,10 @@ export function writeJSONFile(filePath: string, file: object) {
         let filePathLog = prettyPath(filePath) 
         if (fs.existsSync(filePath)) {
             fs.writeFileSync(filePath, fileString)
-            console.log(chalk`{yellow mutate} ${filePathLog}`);
+            ActionLogger.mutate(filePathLog)
         } else {
             fs.writeFileSync(filePath, fileString)
-            console.log(chalk`{green create} ${filePathLog}`);
+            ActionLogger.create(filePathLog)
         }
     } catch (err) {
         _logCaughtError(`Failed to write to file ${filePath}`, err)

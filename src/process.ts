@@ -10,3 +10,6 @@ export function execute(command: string, showOutput?: boolean) {
         spawnSync(command, { stdio: 'ignore', shell: true })
     }
 }
+
+
+// TODO function to safely change process directory

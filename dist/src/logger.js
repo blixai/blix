@@ -25,7 +25,7 @@ function logTaskStatus(task, status, symbol) {
         stringToStore = symbol + " " + task;
     }
     else {
-        stringToStore = (logSymbols[task] ? logSymbols[task] : logSymbols.success) + " " + task;
+        stringToStore = (logSymbols[status] ? logSymbols[status] : logSymbols.success) + " " + task;
     }
     store.tasks.push(stringToStore);
     clearConsole();
@@ -42,7 +42,7 @@ var ActionLogger = /** @class */ (function () {
     ActionLogger.create = function (msg) {
         console.log(chalk_1.default(templateObject_3 || (templateObject_3 = __makeTemplateObject(["{green create} ", ""], ["{green create} ", ""])), msg));
     };
-    ActionLogger.delete = function (msg) {
+    ActionLogger.deleted = function (msg) {
         console.log(chalk_1.default(templateObject_4 || (templateObject_4 = __makeTemplateObject(["{red delete} ", ""], ["{red delete} ", ""])), msg));
     };
     ActionLogger.mutate = function (msg) {
