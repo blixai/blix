@@ -5,18 +5,12 @@ var logger_1 = require("./logger");
 var events_1 = require("./events");
 var debug = require('debug')("blix:task"); // TODO figure out how to attach to each instance to further namespace by task name
 var Task = /** @class */ (function () {
-    // TODO figure out how to work with interfaces so we can capture each event for debugging
-    function Task(name, subtasks, symbol) {
-        this.name = '';
-        this.subtasks = [];
+    function Task(name, symbol) {
         this.symbol = '';
         this.successEvents = 0;
         this.errorEvents = 0;
         this.receivedEvents = [];
         this.name = name;
-        if (subtasks) {
-            this.subtasks = subtasks;
-        }
         if (symbol) {
             this.symbol = symbol;
         }
@@ -29,7 +23,7 @@ var Task = /** @class */ (function () {
         else {
             store.tasks = [this.name];
         }
-        events_1.eventsBus.addListener(this.name, this.taskListener.bind(this)); // make sure to bind this or context is lost
+        events_1.eventsBus.addListener(this.name, this._taskListener.bind(this)); // make sure to bind this or context is lost
     };
     Task.prototype.start = function () {
         // could probably accept args like show spinner, hide console, ....
@@ -50,7 +44,7 @@ var Task = /** @class */ (function () {
         }
         debug("Total actions received by %s : %d", this.name, this.receivedEvents.length);
     };
-    Task.prototype.taskListener = function (event) {
+    Task.prototype._taskListener = function (event) {
         debug('incoming event %o', event);
         // if status is an error count it, basically count errors, successes, at the end tally them for a percentage
         if (event && event.status && event.status === 'success') {

@@ -1,31 +1,22 @@
 const store = require('./store')
-import { logTaskStatus, logWarning } from './logger'
+import { logTaskStatus } from './logger'
 import { eventsBus } from './events'
 const debug = require('debug')(`blix:task`) // TODO figure out how to attach to each instance to further namespace by task name
 
 
 export class Task {
-    readonly name: string = '';
-    readonly subtasks: string[] = [];
+    readonly name: string;
     readonly symbol: string = '';
     successEvents: number = 0;
     errorEvents: number = 0;
     receivedEvents: object[] = [];
 
-
-
-     // TODO figure out how to work with interfaces so we can capture each event for debugging
-
     constructor(
         name: string, 
-        subtasks?: [],
         symbol?: string
     ) {
 
         this.name = name
-        if (subtasks) {
-            this.subtasks = subtasks
-        }
         if (symbol) {
             this.symbol = symbol
         }
@@ -39,7 +30,7 @@ export class Task {
         } else {
             store.tasks = [this.name]
         }
-        eventsBus.addListener(this.name, this.taskListener.bind(this)) // make sure to bind this or context is lost
+        eventsBus.addListener(this.name, this._taskListener.bind(this)) // make sure to bind this or context is lost
     }
 
     start() {
@@ -61,7 +52,7 @@ export class Task {
         debug(`Total actions received by %s : %d`, this.name, this.receivedEvents.length)
     }
 
-    taskListener(event: any) {
+    private _taskListener(event: any) {
         debug('incoming event %o', event)
 
         // if status is an error count it, basically count errors, successes, at the end tally them for a percentage

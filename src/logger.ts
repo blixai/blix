@@ -11,9 +11,6 @@ export function logWarning(msg: string) {
     console.warn(chalk`{yellow ${msg}}`)
 }
 
-export function log() {
-        
-}
 
 export function logTaskStatus(task: string, status: string, symbol?: string) {
     let stringToStore = '';
