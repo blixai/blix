@@ -1,8 +1,4 @@
 "use strict";
-var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
-    if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
-    return cooked;
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -42,13 +38,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var fs = require('fs');
 var ora = require('ora');
 var child_process_1 = require("child_process");
-var chalk = require('chalk');
 var store = require('./store');
 var inquirer = require('inquirer');
 var prompt = inquirer.prompt;
 var process_1 = require("./process");
 var blixInternal_1 = require("../.internal/blixInternal");
 var fs_1 = require("./fs");
+var logger_1 = require("./logger");
 function canUseYarn() {
     if (fs.existsSync('yarn.lock')) {
         store.useYarn = true;
@@ -113,12 +109,25 @@ function checkIfScriptIsTaken(scriptName) {
 }
 exports.checkIfScriptIsTaken = checkIfScriptIsTaken;
 function installAllPackages() {
-    if (store.dependencies) {
-        installDependencies(store.dependencies);
-    }
-    if (store.devDependencies) {
-        installDependencies(store.devDependencies, 'dev');
-    }
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    if (!store.dependencies) return [3 /*break*/, 2];
+                    return [4 /*yield*/, installDependencies(store.dependencies)];
+                case 1:
+                    _a.sent();
+                    _a.label = 2;
+                case 2:
+                    if (!store.devDependencies) return [3 /*break*/, 4];
+                    return [4 /*yield*/, installDependencies(store.devDependencies, 'dev')];
+                case 3:
+                    _a.sent();
+                    _a.label = 4;
+                case 4: return [2 /*return*/];
+            }
+        });
+    });
 }
 exports.installAllPackages = installAllPackages;
 function addScriptToPackageJSON(command, script) {
@@ -135,7 +144,7 @@ function addScriptToPackageJSON(command, script) {
         json.scripts[command] = script;
         var newPackage = JSON.stringify(json, null, 2);
         fs.writeFileSync(filePath, newPackage);
-        console.log(chalk(templateObject_1 || (templateObject_1 = __makeTemplateObject(["{cyan insert} ", " script into package.json"], ["{cyan insert} ", " script into package.json"])), command));
+        logger_1.logInsert(command + " script into package.json");
     }
     catch (err) {
         blixInternal_1._logCaughtError("Failed to add script " + command + " to package.json", err);
@@ -144,30 +153,47 @@ function addScriptToPackageJSON(command, script) {
 exports.addScriptToPackageJSON = addScriptToPackageJSON;
 ;
 function installDependencies(packages, type) {
-    var spinnerText = type === 'dev' ? 'Downloading development dependencies' : 'Downloading dependencies';
-    var spinner = ora(spinnerText).start();
-    try {
-        if (store.name) {
-            process.chdir("./" + store.name);
-        }
-        if (store.useYarn) {
-            var command = type === 'dev' ? "yarn add " + packages + " --dev" : "yarn add " + packages;
-            process_1.execute(command);
-        }
-        else {
-            var command = type === 'dev' ? "npm install --save-dev " + packages : "npm install --save " + packages;
-            process_1.execute(command);
-        }
-        if (store.name)
-            process.chdir('../');
-        spinner.succeed();
-    }
-    catch (err) {
-        if (store.name)
-            process.chdir('../');
-        spinner.fail();
-        blixInternal_1._logCaughtError('Something went wrong while installing the packages', err);
-    }
+    return __awaiter(this, void 0, void 0, function () {
+        var spinnerText, spinner, command, command, err_1;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    spinnerText = type === 'dev' ? ' Downloading development dependencies' : ' Downloading dependencies';
+                    spinner = ora(spinnerText).start();
+                    _a.label = 1;
+                case 1:
+                    _a.trys.push([1, 6, , 7]);
+                    if (store.name) {
+                        process.chdir("./" + store.name);
+                    }
+                    if (!store.useYarn) return [3 /*break*/, 3];
+                    command = type === 'dev' ? "yarn add " + packages + " --dev" : "yarn add " + packages;
+                    return [4 /*yield*/, process_1.execute(command)];
+                case 2:
+                    _a.sent();
+                    return [3 /*break*/, 5];
+                case 3:
+                    command = type === 'dev' ? "npm install --save-dev " + packages : "npm install --save " + packages;
+                    return [4 /*yield*/, process_1.execute(command)];
+                case 4:
+                    _a.sent();
+                    _a.label = 5;
+                case 5:
+                    if (store.name)
+                        process.chdir('../');
+                    spinner.succeed();
+                    return [3 /*break*/, 7];
+                case 6:
+                    err_1 = _a.sent();
+                    if (store.name)
+                        process.chdir('../');
+                    spinner.fail();
+                    blixInternal_1._logCaughtError('Something went wrong while installing the packages', err_1);
+                    return [3 /*break*/, 7];
+                case 7: return [2 /*return*/];
+            }
+        });
+    });
 }
 exports.installDependencies = installDependencies;
 ;
@@ -195,4 +221,19 @@ function addDependenciesToStore(deps, type) {
     }
 }
 exports.addDependenciesToStore = addDependenciesToStore;
-var templateObject_1;
+/**
+ * @param { string[] } dirs - strings of directories to create, sync, in order
+ */
+function createMultipleFolders(dirs) {
+    dirs.forEach(function (directory) {
+        fs_1.mkdirSync(directory);
+    });
+}
+exports.createMultipleFolders = createMultipleFolders;
+function createMultipleFiles() {
+}
+exports.createMultipleFiles = createMultipleFiles;
+function createFilesAndFolders() {
+    // TODO if typeof of string then mkdir, if typeof object then mkfiles
+}
+exports.createFilesAndFolders = createFilesAndFolders;

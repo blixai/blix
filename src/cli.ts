@@ -9,7 +9,7 @@ export class Task {
     readonly symbol: string = '';
     successEvents: number = 0;
     errorEvents: number = 0;
-    receivedEvents: object[] = [];
+    receivedEvents: any[] = [];
 
     constructor(
         name: string, 
@@ -25,11 +25,6 @@ export class Task {
     }
 
     init() {
-        if (store['tasks']) {
-            store.tasks.push(this.name)
-        } else {
-            store.tasks = [this.name]
-        }
         eventsBus.addListener(this.name, this._taskListener.bind(this)) // make sure to bind this or context is lost
     }
 
@@ -43,7 +38,7 @@ export class Task {
         eventsBus.removeAllListeners(this.name)
         // calculete success vs failures
         if (this.successEvents > this.errorEvents) {
-            logTaskStatus(this.name, 'success') 
+            logTaskStatus(this.name, 'success', this.symbol) 
         } else if (this.successEvents < this.errorEvents) {
             logTaskStatus(this.name, 'error')
         } else {

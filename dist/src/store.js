@@ -24,7 +24,7 @@ var store = {
 function checkIfEnvChange(key, value) {
     if (key === 'env' && value === 'development') {
         debug.enable('blix:*');
-        storeDebug('Store debugging enabled');
+        storeDebug('\nStore debugging enabled');
     }
     else if (key === 'env' && value !== 'development') {
         if (debug.enabled) {

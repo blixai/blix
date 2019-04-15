@@ -1,15 +1,13 @@
 const fs = require('fs')
 const ora = require('ora');
 import { execSync } from 'child_process'
-const chalk = require('chalk');
 const store = require('./store')
 const inquirer = require('inquirer')
 const prompt = inquirer.prompt
 import { execute } from './process'
 import { _logCaughtError } from '../.internal/blixInternal'
-import {
-    mkdirSync,
-} from './fs'
+import { mkdirSync } from './fs'
+import { logInsert } from './logger'
 
 
 export function canUseYarn() {
@@ -61,13 +59,13 @@ export function checkIfScriptIsTaken(scriptName: string): boolean {
     }
 }
 
-export function installAllPackages() {
+export async function installAllPackages() {
     if (store.dependencies) {
-        installDependencies(store.dependencies)
+        await installDependencies(store.dependencies)
     }
     
     if (store.devDependencies) {
-        installDependencies(store.devDependencies, 'dev')
+        await installDependencies(store.devDependencies, 'dev')
     }
 }
 
@@ -85,14 +83,14 @@ export function addScriptToPackageJSON(command: string, script: string) {
         json.scripts[command] = script;
         let newPackage = JSON.stringify(json, null, 2);
         fs.writeFileSync(filePath, newPackage)
-        console.log(chalk`{cyan insert} ${command} script into package.json`);
+        logInsert(`${command} script into package.json`)
     } catch (err) {
         _logCaughtError(`Failed to add script ${command} to package.json`, err)
     }
 };
 
-export function installDependencies(packages: string, type?: string) {
-    let spinnerText = type === 'dev' ? 'Downloading development dependencies' : 'Downloading dependencies'
+export async function installDependencies(packages: string, type?: string) {
+    let spinnerText = type === 'dev' ? ' Downloading development dependencies' : ' Downloading dependencies'
     const spinner = ora(spinnerText).start();
     
     try {
@@ -101,10 +99,10 @@ export function installDependencies(packages: string, type?: string) {
         }
         if (store.useYarn) {
             let command = type === 'dev' ? `yarn add ${packages} --dev` : `yarn add ${packages}`
-            execute(command)
+            await execute(command)
         } else {
             let command = type === 'dev' ? `npm install --save-dev ${packages}` : `npm install --save ${packages}`
-            execute(command);
+            await execute(command);
         }
         if (store.name) process.chdir('../')
         spinner.succeed()
@@ -136,4 +134,22 @@ export function addDependenciesToStore(deps: string, type?: string) {
             store.dependencies += ' ' + deps
         }
     }
+}
+
+/**
+ * @param { string[] } dirs - strings of directories to create, sync, in order
+ */
+export function createMultipleFolders(dirs: [string]) {
+    dirs.forEach(directory => {
+        mkdirSync(directory)
+    })
+}
+
+export function createMultipleFiles() {
+    
+}
+
+
+export function createFilesAndFolders() {
+    // TODO if typeof of string then mkdir, if typeof object then mkfiles
 }

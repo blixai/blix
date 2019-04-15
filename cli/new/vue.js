@@ -53,7 +53,10 @@ exports.vue = () => {
         createBackend()
       } else {
         installAllPackages()
-        newProjectInstructions()
+            .then(() => newProjectInstructions())
+            .catch((err) => {
+                // TODO error handling
+            })
       }
 }
 

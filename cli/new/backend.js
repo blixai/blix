@@ -63,8 +63,10 @@ exports.createBackend = () => {
     this.envSetup()
 
     installAllPackages()
-    // new project instructions and add to readms
-    newProjectInstructions()
+        .then(() => newProjectInstructions())
+        .catch((err) => {
+            // TODO log error or raw error depending on env
+        })
 }
 
 exports.standard = () => {

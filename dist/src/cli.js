@@ -17,12 +17,6 @@ var Task = /** @class */ (function () {
         this.init();
     }
     Task.prototype.init = function () {
-        if (store['tasks']) {
-            store.tasks.push(this.name);
-        }
-        else {
-            store.tasks = [this.name];
-        }
         events_1.eventsBus.addListener(this.name, this._taskListener.bind(this)); // make sure to bind this or context is lost
     };
     Task.prototype.start = function () {
@@ -34,7 +28,7 @@ var Task = /** @class */ (function () {
         events_1.eventsBus.removeAllListeners(this.name);
         // calculete success vs failures
         if (this.successEvents > this.errorEvents) {
-            logger_1.logTaskStatus(this.name, 'success');
+            logger_1.logTaskStatus(this.name, 'success', this.symbol);
         }
         else if (this.successEvents < this.errorEvents) {
             logger_1.logTaskStatus(this.name, 'error');

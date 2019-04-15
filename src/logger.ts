@@ -17,46 +17,53 @@ export function logTaskStatus(task: string, status: string, symbol?: string) {
     if (symbol) {
         stringToStore = `${symbol} ${task}`
     } else {
-        stringToStore = `${logSymbols[status] ? logSymbols[status] : logSymbols.success} ${task}`
+        stringToStore = `${logSymbols[status] ? logSymbols[status] : logSymbols.success}  ${task}`
     }
     store.tasks.push(stringToStore)
 
     clearConsole()
     store.tasks.forEach((task: string) => {
-       console.log(task) 
+       console.log(task)
     });
 }
 
 // logger action methods
 
-export class ActionLogger {
-
-    // TODO create the ability to check terminal width and cap string length from wrapping
-
-    static create(msg: string) {
-        console.log(chalk`{green create} ${msg}`)
+  export function logCreate(msg: string) {
+        if (store.env === 'development' && store.mode !== 'cli') {
+            console.log(chalk`{green create} ${msg}`)
+        }
     }
 
-    static deleted(msg: string) {
-        console.log(chalk`{red delete} ${msg}`)
+ export function logDeleted(msg: string) {
+        if (store.env === 'development' && store.mode !== 'cli') {
+            console.log(chalk`{red delete} ${msg}`)
+        }
     }
 
-    static mutate(msg: string) {
-        console.log(chalk`{yellow mutate} ${msg}`)
+  export function logMutate(msg: string) {
+        if (store.env === 'development' && store.mode !== 'cli') {
+            console.log(chalk`{yellow mutate} ${msg}`)
+        }
     }
 
-    static insert(msg: string) {
-        console.log(chalk`{cyan insert} ${msg}`)
+ export function logInsert(msg: string) {
+        if (store.env === 'development' && store.mode !== 'cli') {
+            console.log(chalk`{cyan insert} ${msg}`)
+        }
     }
 
-    static append(msg: string) {
-        console.log(chalk`{cyan append} ${msg}`)
+ export function logAppend(msg: string) {
+        if (store.env === 'development' && store.mode !== 'cli') {
+            console.log(chalk`{cyan append} ${msg}`)
+        }
     }
 
-    static invoke(msg: string) {
-        console.log(chalk`{blue invoke} ${msg}`)
+  export function logInvoke(msg: string) {
+        if (store.env === 'development' && store.mode !== 'cli') {
+            console.log(chalk`{blue invoke} ${msg}`)
+        }
     }
-}
 
 export function clearConsole(title?: string) {
     if (process.stdout.isTTY) {

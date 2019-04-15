@@ -50,11 +50,11 @@ function writeFile(filePath, file) {
         var filePathLog = utils_1.prettyPath(filePath);
         if (fs.existsSync(filePath)) {
             fs.writeFileSync(filePath, file);
-            logger_1.ActionLogger.mutate(filePathLog);
+            logger_1.logMutate(filePathLog);
         }
         else {
             fs.writeFileSync(filePath, file);
-            logger_1.ActionLogger.create(filePathLog);
+            logger_1.logCreate(filePathLog);
         }
         events_1.emit({ status: 'success', action: 'write file', file: filePath });
     }
@@ -75,7 +75,7 @@ function mkdirSync(folderPath) {
         folderPath = store.name ? "./" + store.name + "/" + folderPath : './' + folderPath;
         var folderPathLog = utils_1.prettyPath(folderPath);
         fs.mkdirSync(folderPath);
-        logger_1.ActionLogger.create(folderPathLog);
+        logger_1.logCreate(folderPathLog);
         events_1.emit({ status: 'success', action: 'make folder', folder: folderPath });
     }
     catch (err) {
@@ -87,8 +87,8 @@ exports.mkdirSync = mkdirSync;
 function rename(oldName, newName) {
     try {
         fs.renameSync(oldName, newName);
-        oldName = oldName.slice(2);
-        newName = newName.slice(2);
+        oldName = utils_1.prettyPath(oldName);
+        newName = utils_1.prettyPath(newName);
         logger_1.logWarning("move   " + oldName + " into " + newName);
         events_1.emit({ status: 'success', action: 'rename' });
     }
@@ -138,7 +138,7 @@ function insert(fileToInsertInto, whatToInsert, lineToInsertAt) {
                     file.splice(lineToInsertAt, 0, whatToInsert);
                     file = file.join('\n');
                     fs.writeFileSync(fileToInsertInto, file);
-                    logger_1.ActionLogger.insert(fileToInsertIntoLog);
+                    logger_1.logInsert(fileToInsertIntoLog);
                     events_1.emit({ status: 'success', action: 'insert' });
                     return [3 /*break*/, 6];
                 case 5:
@@ -163,7 +163,7 @@ function appendFile(file, stringToAppend) {
         file = store.name ? "./" + store.name + "/" + file : './' + file;
         fs.appendFileSync(file, stringToAppend);
         file = utils_1.prettyPath(file);
-        logger_1.ActionLogger.append(file);
+        logger_1.logAppend(file);
         events_1.emit({ status: 'success', action: 'appendFile' });
     }
     catch (err) {
@@ -192,7 +192,7 @@ function moveAllFilesInDir(dirToSearch, dirToMoveTo) {
     try {
         fs.rmdirSync(dirToSearch);
         dirToSearch = utils_1.prettyPath(dirToSearch);
-        logger_1.ActionLogger.deleted(dirToSearch);
+        logger_1.logDeleted(dirToSearch);
         events_1.emit({ status: 'success', action: 'moveAllFilesInDir' });
     }
     catch (err) {
@@ -255,11 +255,11 @@ function writeJSONFile(filePath, file) {
         var filePathLog = utils_1.prettyPath(filePath);
         if (fs.existsSync(filePath)) {
             fs.writeFileSync(filePath, fileString);
-            logger_1.ActionLogger.mutate(filePathLog);
+            logger_1.logMutate(filePathLog);
         }
         else {
             fs.writeFileSync(filePath, fileString);
-            logger_1.ActionLogger.create(filePathLog);
+            logger_1.logCreate(filePathLog);
         }
     }
     catch (err) {
@@ -311,3 +311,5 @@ function loadTemplate(file, options, folderPath) {
     }
 }
 exports.loadTemplate = loadTemplate;
+// TODO function that stores references to load multiple files, and then executes write files / dirs on it's own.
+//      similiar to how we load all the packages to install and then execute at one time. 

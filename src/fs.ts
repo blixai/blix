@@ -5,7 +5,15 @@ const store = require('./store')
 const Mustache = require('mustache')
 import { _logCaughtError } from '../.internal/blixInternal'
 import { prettyPath } from './utils'
-import { logError, logWarning, ActionLogger } from './logger'
+import { 
+    logError,
+    logWarning,
+    logCreate,
+    logDeleted,
+    logMutate,
+    logInsert,
+    logAppend,
+} from './logger'
 import { emit } from './events'
 
 
@@ -16,10 +24,10 @@ export function writeFile(filePath: string, file: string) {
         let filePathLog = prettyPath(filePath)
         if (fs.existsSync(filePath)) {
             fs.writeFileSync(filePath, file)
-            ActionLogger.mutate(filePathLog)
+            logMutate(filePathLog)
         } else {
             fs.writeFileSync(filePath, file)
-            ActionLogger.create(filePathLog)
+            logCreate(filePathLog)
         }
         emit({ status: 'success', action: 'write file', file: filePath })
     } catch (err) {
@@ -39,7 +47,7 @@ export function mkdirSync(folderPath: string) {
         folderPath = store.name ? `./${store.name}/` + folderPath : './' + folderPath
         let folderPathLog = prettyPath(folderPath)
         fs.mkdirSync(folderPath)
-        ActionLogger.create(folderPathLog)
+        logCreate(folderPathLog)
         emit({ status: 'success', action: 'make folder', folder: folderPath })
     } catch (err) {
         emit({ status: 'error', action: 'make folder', folder: folderPath })
@@ -50,8 +58,9 @@ export function mkdirSync(folderPath: string) {
 export function rename(oldName: string, newName: string) {
     try {
         fs.renameSync(oldName, newName)
-        oldName = oldName.slice(2)
-        newName = newName.slice(2)
+        
+        oldName = prettyPath(oldName)
+        newName = prettyPath(newName)
         logWarning(`move   ${oldName} into ${newName}`)
         emit({ status: 'success', action: 'rename' })
     } catch (err) {
@@ -90,7 +99,7 @@ export async function insert(fileToInsertInto: string, whatToInsert: string, lin
     file.splice(lineToInsertAt, 0, whatToInsert)
     file = file.join('\n')
     fs.writeFileSync(fileToInsertInto, file)
-    ActionLogger.insert(fileToInsertIntoLog)
+    logInsert(fileToInsertIntoLog)
     emit({ status: 'success', action: 'insert' })
     } catch (err) {
         emit({ status: 'errror', action: 'insert' })
@@ -109,7 +118,7 @@ export function appendFile(file: string, stringToAppend: string) {
         file = store.name ? `./${store.name}/` + file : './' + file
         fs.appendFileSync(file, stringToAppend)
         file = prettyPath(file)
-        ActionLogger.append(file)
+        logAppend(file)
         emit({ status: 'success', action: 'appendFile' })
     } catch (err) {
         _logCaughtError(`Failed to append ${file}.`, err);
@@ -137,7 +146,7 @@ export function moveAllFilesInDir(dirToSearch: string, dirToMoveTo: string) {
     try {
         fs.rmdirSync(dirToSearch)
         dirToSearch = prettyPath(dirToSearch)
-        ActionLogger.deleted(dirToSearch)
+        logDeleted(dirToSearch)
         emit({ status: 'success', action: 'moveAllFilesInDir' })
     } catch (err) {
         emit({ status: 'error', action: 'moveAllFilesInDir' })
@@ -198,10 +207,10 @@ export function writeJSONFile(filePath: string, file: object) {
         let filePathLog = prettyPath(filePath) 
         if (fs.existsSync(filePath)) {
             fs.writeFileSync(filePath, fileString)
-            ActionLogger.mutate(filePathLog)
+            logMutate(filePathLog)
         } else {
             fs.writeFileSync(filePath, fileString)
-            ActionLogger.create(filePathLog)
+            logCreate(filePathLog)
         }
     } catch (err) {
         _logCaughtError(`Failed to write to file ${filePath}`, err)
@@ -251,3 +260,7 @@ export function loadTemplate(file: string, options?: object, folderPath?: string
         return ""
     } 
 }
+
+
+// TODO function that stores references to load multiple files, and then executes write files / dirs on it's own.
+//      similiar to how we load all the packages to install and then execute at one time. 
