@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const EventEmitter = require('events');
-const store = require('./store');
-const debug = require('debug')('blix:events');
+var EventEmitter = require('events');
+var store = require('./store');
+var debug = require('debug')('blix:events');
 exports.eventsBus = new EventEmitter();
 function emit(data) {
     debug('emit called with %o', data);

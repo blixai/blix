@@ -1,9 +1,9 @@
 "use strict";
-const debug = require('debug');
-const storeDebug = require('debug')('blix:store');
-const getDebug = require('debug')('blix:store:get');
-const setDebug = require('debug')('blix:store:set');
-const store = {
+var debug = require('debug');
+var storeDebug = require('debug')('blix:store');
+var getDebug = require('debug')('blix:store:get');
+var setDebug = require('debug')('blix:store:set');
+var store = {
     name: '',
     frontend: '',
     backend: '',
@@ -33,20 +33,20 @@ function checkIfEnvChange(key, value) {
         debug.disable();
     }
 }
-const handler = {
-    get(target, key) {
-        let result = Reflect.get(target, key);
+var handler = {
+    get: function (target, key) {
+        var result = Reflect.get(target, key);
         if (debug.enabled) {
             getDebug('get %o. Current value is: %o', key, result);
         }
         return result;
     },
-    set(_, key, value) {
+    set: function (_, key, value) {
         checkIfEnvChange(key, value);
         if (debug.enabled) {
             setDebug('set %o to %o', key, value);
         }
-        return Reflect.set(...arguments);
+        return Reflect.set.apply(Reflect, arguments);
     }
 };
 store = new Proxy(store, handler);

@@ -1,11 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const child_process_1 = require("child_process");
-const store = require('./store');
+var child_process_1 = require("child_process");
+var store = require('./store');
 // child_process exec sync wrapper 
 function execute(command, showOutput) {
-    return new Promise((resolve, reject) => {
-        let child;
+    return new Promise(function (resolve, reject) {
+        var child;
         if (showOutput || store.env === 'development') {
             child = child_process_1.spawn(command, { stdio: [0, 1, 2], shell: true });
         }
@@ -13,16 +13,16 @@ function execute(command, showOutput) {
             child = child_process_1.spawn(command, { stdio: 'ignore', shell: true });
         }
         if (child.stderr && child.stdout) {
-            child.stderr.on('data', (data) => {
-                console.log(`child stdout:\n${data}`);
+            child.stderr.on('data', function (data) {
+                console.log("child stdout:\n" + data);
             });
-            child.stderr.on('data', (data) => {
-                console.log(`child stdout:\n${data}`);
+            child.stderr.on('data', function (data) {
+                console.log("child stdout:\n" + data);
             });
         }
-        child.on('close', code => {
+        child.on('close', function (code) {
             if (code !== 0) {
-                reject(`Execute failed: ${command}`);
+                reject("Execute failed: " + command);
                 return;
             }
             resolve();

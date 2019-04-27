@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 function getCWDName() {
-    let rawCWD = process.cwd();
-    let cwdArr = rawCWD.split('/');
-    let cwdName = cwdArr.pop() || "";
+    var rawCWD = process.cwd();
+    var cwdArr = rawCWD.split('/');
+    var cwdName = cwdArr.pop() || "";
     return cwdName;
 }
 exports.getCWDName = getCWDName;
@@ -13,7 +13,7 @@ function capitalize(word) {
 exports.capitalize = capitalize;
 // TODO need a sleep function
 function prettyPath(path) {
-    let pathStartCharacters = path.slice(0, 2);
+    var pathStartCharacters = path.slice(0, 2);
     if (pathStartCharacters === './') {
         path = path.slice(2);
     }
