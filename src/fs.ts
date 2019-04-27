@@ -262,5 +262,46 @@ export function loadTemplate(file: string, options?: object, folderPath?: string
 }
 
 
+
+/**
+* @param { string[] } dirs - strings of directories to create, sync, in order
+*/
+export function createMultipleFolders(dirs: [string]) {
+   dirs.forEach(directory => {
+       mkdirSync(directory)
+   })
+}
+
+export function createMultipleFiles() {
+   
+}
+
+
+export function createFilesAndFolders() {
+   // TODO if typeof of string then mkdir, if typeof object then mkfiles
+}
+
 // TODO function that stores references to load multiple files, and then executes write files / dirs on it's own.
 //      similiar to how we load all the packages to install and then execute at one time. 
+
+/*
+// TODO create a function that creates files and folders by just the structure
+// eg pass as a arg
+
+startFolderPath: {
+    folder: {
+        file
+    },
+    file,
+    file,
+    folder: {
+        folder: {
+            folder: {
+                file
+            }
+        },
+        file
+    }
+};
+
+*/

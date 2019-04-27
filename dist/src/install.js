@@ -221,19 +221,3 @@ function addDependenciesToStore(deps, type) {
     }
 }
 exports.addDependenciesToStore = addDependenciesToStore;
-/**
- * @param { string[] } dirs - strings of directories to create, sync, in order
- */
-function createMultipleFolders(dirs) {
-    dirs.forEach(function (directory) {
-        fs_1.mkdirSync(directory);
-    });
-}
-exports.createMultipleFolders = createMultipleFolders;
-function createMultipleFiles() {
-}
-exports.createMultipleFiles = createMultipleFiles;
-function createFilesAndFolders() {
-    // TODO if typeof of string then mkdir, if typeof object then mkfiles
-}
-exports.createFilesAndFolders = createFilesAndFolders;

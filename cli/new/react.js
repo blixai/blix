@@ -17,41 +17,26 @@ const {
     clearConsole,
     logTaskStatus,
     Task,
-    createDirs
+    createMultipleFolders
 } = require('../../blix')
 
 
-// load common files
-const babel = loadFile("frontend/babel/reactBabel");
-const webpack = loadFile("frontend/webpack/react.js");
-const webpackWithHotReloading = loadFile('frontend/webpack/reactWithHotReloading.js');
-const postcssConfig = loadFile("frontend/postcss.config.js");
-
-// load html file for projects without backends
-const htmlFile = loadFile("frontend/other/index.html");
+// load css file
 const cssFile = loadFile("frontend/other/App.css");
 
-// load react files
-const index = loadFile("frontend/react/index.js");
+// load common react files
 const app = loadFile("frontend/react/App.js");
 
-// load react-router files
-const reactRouterIndex = loadFile("frontend/react-router/index.js");
+// load common react-router files
 const appRouter = loadFile("frontend/react-router/Router.js");
 const Navbar = loadFile("frontend/react-router/Navbar.js");
 const NavbarCSS = loadFile("frontend/react-router/Navbar.css");
-const HomeView = loadFile("frontend/react-router/Home.js");
 const globalStyle = loadFile("frontend/react-router/global.css");
 
-// load redux files
-const reduxIndex = loadFile('frontend/redux/index.js')
-const reduxAppContainer = loadFile('frontend/redux/AppContainer.js')
-const reactRouterReduxIndex = loadFile("frontend/reactRouter-redux/index.js");
+// load common redux files
 const configStore = loadFile("frontend/redux/configStore.js");
 const rootReducer = loadFile("frontend/redux/rootReducer.js");
-const ReduxHomeView = loadFile("frontend/redux/Home.js");
 
-const NavbarContainer = loadFile("frontend/redux/NavbarContainer.js");
 
 exports.react = () => {
     clearConsole()
@@ -59,7 +44,7 @@ exports.react = () => {
     createCommonFilesAndFolders();
 
     // create react files
-    createDirs([
+    createMultipleFolders([
         'dist',
         'src',
         'src/api'
@@ -69,8 +54,8 @@ exports.react = () => {
     this.createSrcContents();
 
     // create webpack postcssConfig and babelrc files
-    writeFile(`postcss.config.js`, postcssConfig);
-    writeFile(`.babelrc`, babel);
+    writeFile(`postcss.config.js`, loadFile("frontend/postcss.config.js"));
+    writeFile(`.babelrc`, loadFile("frontend/babel/reactBabel"));
 
     this.createWebpack()
 
@@ -126,6 +111,8 @@ exports.createSrcContents = () => {
 };
 
 exports.reactOnly = () => {
+    const index = loadFile("frontend/react/index.js");
+
     mkdirSync(`src/App`);
     writeFile(`src/index.js`, index);
     writeFile(`src/App/App.js`, app);
@@ -133,6 +120,9 @@ exports.reactOnly = () => {
 };
 
 exports.reactRouter = () => {
+    const reactRouterIndex = loadFile("frontend/react-router/index.js");
+    const HomeView = loadFile("frontend/react-router/Home.js");
+
     writeFile(`src/index.js`, reactRouterIndex);
     writeFile(`src/Router.js`, appRouter);
 
@@ -150,6 +140,9 @@ exports.reactRouter = () => {
 };
 
 exports.redux = () => {
+    const reduxIndex = loadFile('frontend/redux/index.js')
+    const reduxAppContainer = loadFile('frontend/redux/AppContainer.js')
+
     writeFile(`src/index.js`, reduxIndex)
     mkdirSync(`src/App`)
     writeFile(`src/App/App.js`, app)
@@ -168,6 +161,10 @@ exports.redux = () => {
 }
 
 exports.reactRouterRedux = () => {
+    const NavbarContainer = loadFile("frontend/redux/NavbarContainer.js");
+    const ReduxHomeView = loadFile("frontend/redux/Home.js");
+    const reactRouterReduxIndex = loadFile("frontend/reactRouter-redux/index.js")
+
     writeFile(`src/index.js`, reactRouterReduxIndex);
     writeFile(`src/Router.js`, appRouter);
     // components folder, every component will have a folder with associated css, tests, and/or container for that component
@@ -199,12 +196,14 @@ exports.reactRouterRedux = () => {
 exports.scripts = () => {
     let scriptsTask = new Task('Create Blix scripts for project!', '✨')
     scriptsTask.start()
+
+
     if (!store.backend.backend) {
         addScriptToPackageJSON(
             "start",
             "webpack-dev-server --output-public-path=/dist/ --inline --hot --open --port 3000 --mode='development'"
         );
-        writeFile(`index.html`, htmlFile);
+        writeFile(`index.html`, loadFile("frontend/other/index.html"));
     }
     addScriptToPackageJSON(
         "dev",
@@ -312,6 +311,9 @@ exports.packages = () => {
 };
 
 exports.createWebpack = () => {
+    const webpack = loadFile("frontend/webpack/react.js");
+    const webpackWithHotReloading = loadFile('frontend/webpack/reactWithHotReloading.js');
+
     if (store.backend.backend) {
         writeFile(`webpack.config.js`, webpackWithHotReloading);
         let hotReloadIndex = `\nif (module.hot) {\n\tconsole.clear()\n\tmodule.hot.accept();\n}`

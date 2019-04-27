@@ -113,6 +113,7 @@ export async function installDependencies(packages: string, type?: string) {
     }
 };
 
+
 /**
  * 
  * @param {string} deps - string of space separated packages to install
@@ -134,22 +135,4 @@ export function addDependenciesToStore(deps: string, type?: string) {
             store.dependencies += ' ' + deps
         }
     }
-}
-
-/**
- * @param { string[] } dirs - strings of directories to create, sync, in order
- */
-export function createMultipleFolders(dirs: [string]) {
-    dirs.forEach(directory => {
-        mkdirSync(directory)
-    })
-}
-
-export function createMultipleFiles() {
-    
-}
-
-
-export function createFilesAndFolders() {
-    // TODO if typeof of string then mkdir, if typeof object then mkfiles
-}
+ }
