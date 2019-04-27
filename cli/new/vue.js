@@ -13,7 +13,8 @@ const {
     addScriptToPackageJSON,
     installAllPackages,
     appendFile,
-    loadTemplate
+    loadTemplate,
+    createMultipleFolders
 } = require('../../blix')
 
 
@@ -22,11 +23,12 @@ exports.vue = () => {
     const babel = loadFile('frontend/babel/vuebabel')
     
     createCommonFilesAndFolders()
-
-    mkdirSync('dist')
-    mkdirSync('src')
-    mkdirSync('src/api')
-    mkdirSync('src/mixins')
+    createMultipleFolders([
+        'dist',
+        'src',
+        'src/api',
+        'src/mixins'
+    ])
 
     this.createSrcContents()
 
@@ -35,8 +37,6 @@ exports.vue = () => {
 
     // addVueTesting()
 
-
-    
     this.cssLibrary()
 
     this.createWebpack()

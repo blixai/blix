@@ -13,7 +13,8 @@ const {
     addDependenciesToStore,
     addScriptToPackageJSON,
     appendFile,
-    logTaskStatus
+    logTaskStatus,
+    createMultipleFolders
 } = require('../../blix')
 
 // load files
@@ -26,10 +27,13 @@ exports.createBackend = () => {
         createCommonFilesAndFolders()
     }
     // create folders
-    mkdirSync(`server`)
-    mkdirSync(`server/models`)
-    mkdirSync(`server/controllers`)
-    mkdirSync(`server/helpers`)
+    createMultipleFolders([
+       'server',
+       'server/models',
+       'server/controllers',
+       'server/helpers' 
+    ])
+
     if (store.backendType !== 'api') {
         mkdirSync(`assets`)
     }
