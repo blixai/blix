@@ -1,0 +1,67 @@
+Arguments: 
+  /usr/local/Cellar/node/11.5.0/bin/node /usr/local/Cellar/yarn/1.12.3/libexec/bin/yarn.js
+
+PATH: 
+  /Users/devonbull/.cargo/bin:/usr/local/opt/mongodb@3.4/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Apple/usr/bin:/Library/Apple/bin:/Applications/Postgres.app/Contents/Versions/latest/bin:/Users/devonbull/.cargo/bin:/usr/local/opt/mongodb@3.4/bin
+
+Yarn version: 
+  1.12.3
+
+Node version: 
+  11.5.0
+
+Platform: 
+  darwin x64
+
+Trace: 
+  SyntaxError: /Users/devonbull/personal/blix_projects/blix/packages/cli/package.json: Unexpected token } in JSON at position 502
+      at JSON.parse (<anonymous>)
+      at /usr/local/Cellar/yarn/1.12.3/libexec/lib/cli.js:1631:59
+      at Generator.next (<anonymous>)
+      at step (/usr/local/Cellar/yarn/1.12.3/libexec/lib/cli.js:304:30)
+      at /usr/local/Cellar/yarn/1.12.3/libexec/lib/cli.js:315:13
+
+npm manifest: 
+  {
+    "name": "blix",
+    "version": "1.2.4",
+    "description": "Yeoman on steroids: quickly create a multitude of Javascript applications from scratch and automate tasks with hackable scrips or add scripts and tools to existing projects.",
+    "main": "blix.js",
+    "scripts": {
+      "lint": "prettier --single-quote --no-semi --write '**/*.js'",
+      "test": "jest --watch",
+      "test:coverage": "jest --collectCoverage",
+      "test:ci": "jest --coverage",
+      "send-coverage": "./node_modules/.bin/codecov",
+    },
+    "keywords": [
+      "cli",
+      "generator",
+      "scripts"
+    ],
+    "author": "Devon Bull",
+    "license": "MIT",
+    "bin": {
+      "blix": "./index.js"
+    },
+    "dependencies": {
+      "debug": "^4.1.1",
+      "glob": "^7.1.2",
+      "inquirer": "^4.0.1",
+      "update-notifier": "^2.5.0"
+    },
+    "devDependencies": {
+      "jest": "^23.6.0",
+      "prettier": "^1.14.2"
+    },
+    "homepage": "https://github.com/blixjs/blix",
+    "engines": {
+      "node": ">=8.11.3"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
