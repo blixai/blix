@@ -1,6 +1,6 @@
 {
   "name": "blix",
-  "version": "1.3.2-alpha.0",
+  "version": "1.3.4-alpha.0",
   "description": "Yeoman on steroids: quickly create a multitude of Javascript applications from scratch and automate tasks with hackable scrips or add scripts and tools to existing projects.",
   "main": "blix.js",
   "scripts": {
@@ -21,7 +21,7 @@
     "blix": "./index.js"
   },
   "dependencies": {
-    "@blixi/core": "^0.0.1",
+    "@blixi/core": "^0.0.2",
     "chalk": "^2.4.1",
     "commander": "^2.19.0",
     "debug": "^4.1.1",
