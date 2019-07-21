@@ -1,9 +1,11 @@
-const { createCommonFilesAndFolders } = require('./utils/createCommonFiles')
-const { testBackend } = require('./utils/addBackendTests')
-const { addLinter } = require('./utils/addLinter')
-const { addMongooseToScripts } = require('./utils/addMongoDB')
-const { addBookshelfToScripts } = require('./utils/addBookshelf')
-const { newProjectInstructions } = require('./utils/newProjectInstructions')
+const {
+    addLinter,
+    addBookshelfToScripts,
+    addMongooseToScripts,
+    createCommonFilesAndFolders,
+    newProjectInstructions,
+    testBackend
+} = require("@blixi/cli-new-utils")
 const {
     loadFile,
     store,

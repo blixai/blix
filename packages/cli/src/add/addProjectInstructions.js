@@ -1,4 +1,4 @@
-const { options } = require('../new/utils/newProjectInstructions')
+const { options } = require('@blixi/cli-new-utils')
 const { store, insert } = require('@blixi/core')
 const chalk = require('chalk')
 

@@ -1,9 +1,11 @@
 let inquirer = require('inquirer')
 let prompt   = inquirer.prompt
 const { addProjectInstructions } = require('../addProjectInstructions')
-const { database } = require('../../../prompts')
-const { addMongooseToScripts } = require('../../new/utils/addMongoDB')
-const { addBookshelfToScripts } = require('../../new/utils/addBookshelf')
+const { database } = require('@blixi/cli-prompts')
+const {
+  addBookshelfToScripts,
+  addMongooseToScripts
+} = require('@blixi/cli-new-utils')
 const {
   store,
   yarn,
