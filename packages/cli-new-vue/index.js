@@ -2,8 +2,9 @@ const { createBackend } = require("@blixi/cli-new-backend");
 const {
     addAPIScript,
     addVueTesting,
+    createCommonFilesAndFolders,
     e2eSetup,
-    newProjectInstructions
+    newProjectInstructions,
 } = require('@blixi/cli-new-utils')
 
 
