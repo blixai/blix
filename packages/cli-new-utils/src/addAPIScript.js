@@ -17,4 +17,4 @@ const addAPIScript = () => {
     addDependenciesToStore('axios')
 }
 
-module.exports = addAPIScript
+module.exports = { addAPIScript }
