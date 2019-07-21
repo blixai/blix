@@ -206,12 +206,7 @@ function loadFile(file, folderPath) {
     }
     file = utils_1.prettyPath(file);
     try {
-        if (store.mode === 'cli') {
-            file = fs.readFileSync(path.resolve(process.cwd() + folderPath + file), 'utf8');
-        }
-        else {
-            file = fs.readFileSync(process.cwd() + folderPath + file, 'utf8');
-        }
+        file = fs.readFileSync(process.cwd() + folderPath + file, 'utf8');
         if (!file) {
             throw "File " + file + " not found!";
         }

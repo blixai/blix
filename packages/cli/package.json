@@ -21,7 +21,7 @@
     "blix": "./index.js"
   },
   "dependencies": {
-    "@blixi/core": "^0.0.2",
+    "@blixi/core": "^0.0.3",
     "chalk": "^2.4.1",
     "commander": "^2.19.0",
     "debug": "^4.1.1",
