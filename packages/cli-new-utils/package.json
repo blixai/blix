@@ -6,10 +6,10 @@
     "author": "Devon Bull",
     "license": "MIT",
     "dependencies": {
-        "@blixi/core": "0.0.4"
+        "@blixi/core": "^0.0.4"
     },
     "homepage": "https://github.com/blixjs/blix",
     "engines": {
-      "node": ">=8.11.3"
+        "node": ">=8.11.3"
     }
-  }
+}
