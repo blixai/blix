@@ -202,12 +202,12 @@ function moveAllFilesInDir(dirToSearch, dirToMoveTo) {
 exports.moveAllFilesInDir = moveAllFilesInDir;
 function loadFile(file, folderPath) {
     if (!folderPath) {
-        folderPath = store.mode === 'cli' ? '../../cli/src/files/' : '/scripts/templates/';
+        folderPath = store.mode === 'cli' ? '/src/files/' : '/scripts/templates/';
     }
     file = utils_1.prettyPath(file);
     try {
         if (store.mode === 'cli') {
-            file = fs.readFileSync(path.resolve(__dirname, folderPath + file), 'utf8');
+            file = fs.readFileSync(path.resolve(process.cwd() + folderPath + file), 'utf8');
         }
         else {
             file = fs.readFileSync(process.cwd() + folderPath + file, 'utf8');
@@ -267,7 +267,7 @@ function writeJSONFile(filePath, file) {
 }
 exports.writeJSONFile = writeJSONFile;
 /**
- * load a package.json from the cli user directly, often used for package.json checks/file manipulation
+ * @description load a package.json from the cli user directly, often used for package.json checks/file manipulation
  * @param file
  */
 function loadUserJSONFile(file) {
