@@ -17,7 +17,8 @@ const {
     clearConsole,
     logTaskStatus,
     Task,
-    createMultipleFolders
+    createMultipleFolders,
+    createFilesAndFolders
 } = require('../../blix')
 
 
@@ -79,12 +80,14 @@ exports.react = () => {
         store.backendType = "standard"
         createBackend()
         // createBackend("backend", store.serverTesting, store.database);
-    } else {
+    } else if (!store.skipInstallation) {
         installAllPackages()
             .then(() => newProjectInstructions())
             .catch((err) => {
-                // TODO fallback/logging
+                // TODO - fallback/logging
             });
+    } else {
+        newProjectInstructions()
     }
 };
 
@@ -122,19 +125,29 @@ exports.reactOnly = () => {
 exports.reactRouter = () => {
     const reactRouterIndex = loadFile("frontend/react-router/index.js");
     const HomeView = loadFile("frontend/react-router/Home.js");
+    createFilesAndFolders(``, {
+        src: {
 
-    writeFile(`src/index.js`, reactRouterIndex);
-    writeFile(`src/Router.js`, appRouter);
+            'index.js': reactRouterIndex,
+            'Router.js': appRouter,
 
-    mkdirSync(`src/components`);
-    mkdirSync(`src/components/Navbar`);
-    writeFile(`src/components/Navbar/Navbar.js`, Navbar);
-    writeFile(`src/components/Navbar/Navbar.css`, NavbarCSS);
-    mkdirSync(`src/views`);
-    writeFile(`src/views/Home.js`, HomeView);
-    // styles folder
-    mkdirSync(`src/styles`);
-    writeFile(`src/styles/global.css`, globalStyle);
+            components: {
+                Navbar: {
+                    'Navbar.js': Navbar,
+                    'Navbar.css': NavbarCSS
+                }
+            },
+
+            views: {
+                'Home.js': HomeView
+            },
+
+            styles: {
+                'global.css': globalStyle
+            }
+        }
+    })
+
     // install react-router-dom for src/index.js file
     addDependenciesToStore("react-router-dom", 'dev');
 };
@@ -143,21 +156,23 @@ exports.redux = () => {
     const reduxIndex = loadFile('frontend/redux/index.js')
     const reduxAppContainer = loadFile('frontend/redux/AppContainer.js')
 
-    writeFile(`src/index.js`, reduxIndex)
-    mkdirSync(`src/App`)
-    writeFile(`src/App/App.js`, app)
-    writeFile(`src/App/AppContainer.js`, reduxAppContainer)
-    writeFile(`src/App/App.css`, cssFile)
-
-    mkdirSync(`src/actions`)
-    writeFile(`src/actions/index.js`, "")
-
-    mkdirSync(`src/reducers`)
-    writeFile(`src/reducers/rootReducer.js`, rootReducer);
-    writeFile(`src/configStore.js`, configStore);
+    createFilesAndFolders('src', {
+        'index.js': reduxIndex,
+        App: {
+            'App.js': app,
+            'AppContainer.js': reduxAppContainer,
+            'App.css': cssFile
+        },
+        actions: {
+            'index.js': ''
+        },
+        reducers: {
+            'rootReducer.js': rootReducer,
+        },
+        'configStore.js': configStore
+    })
 
     addDependenciesToStore("redux react-redux", 'dev')
-
 }
 
 exports.reactRouterRedux = () => {
@@ -165,30 +180,31 @@ exports.reactRouterRedux = () => {
     const ReduxHomeView = loadFile("frontend/redux/Home.js");
     const reactRouterReduxIndex = loadFile("frontend/reactRouter-redux/index.js")
 
-    writeFile(`src/index.js`, reactRouterReduxIndex);
-    writeFile(`src/Router.js`, appRouter);
-    // components folder, every component will have a folder with associated css, tests, and/or container for that component
-    mkdirSync(`src/components`);
-    mkdirSync(`src/components/Navbar`);
-    writeFile(`src/components/Navbar/Navbar.js`, Navbar);
-    writeFile(
-        `src/components/Navbar/NavbarContainer.js`,
-        NavbarContainer
-    );
-    writeFile(`src/components/Navbar/Navbar.css`, NavbarCSS);
-    // views folder
-    mkdirSync(`src/views`);
-    writeFile(`src/views/Home.js`, ReduxHomeView);
-    // styles folder for views
-    mkdirSync(`src/styles`);
-    writeFile(`src/styles/global.css`, globalStyle);
+    createFilesAndFolders('src', {
+        'index.js': reactRouterReduxIndex,
+        'Router.js': appRouter,
+        components: {
+            Navbar: {
+                'Navbar.js': Navbar,
+                'NavbarContainer.js': NavbarContainer,
+                'Navbar.css': NavbarCSS
+            }
+        },
+        views: {
+            'Home.js': ReduxHomeView
+        },
+        styles: {
+            'global.css': globalStyle
+        },
+        actions: {
+            'index.js': ""
+        },
+        reducers: {
+            'rootReducer.js': rootReducer
+        },
+        'configStore.js': configStore
+    })
 
-    // need to make actions folder and store file and configure store and reducers folder with rootReducer.js
-    mkdirSync(`src/actions`);
-    writeFile(`src/actions/index.js`, "");
-    mkdirSync(`src/reducers`);
-    writeFile(`src/reducers/rootReducer.js`, rootReducer);
-    writeFile(`src/configStore.js`, configStore);
     //install react-router-dom and other redux specific libs
     addDependenciesToStore("redux react-redux react-router-dom", 'dev');
 };
@@ -227,9 +243,9 @@ exports.scripts = () => {
 };
 
 exports.reactScripts = () => {
-    let component = loadFile("scripts/frontend/react/component.js")
-    let statefulComponentTemplate = loadFile('scripts/frontend/react/templates/statefulComponent.js')
-    let statelessComponentTemplate = loadFile("scripts/frontend/react/templates/statelessComponent.js")
+    const component = loadFile("scripts/frontend/react/component.js")
+    const statefulComponentTemplate = loadFile('scripts/frontend/react/templates/statefulComponent.js')
+    const statelessComponentTemplate = loadFile("scripts/frontend/react/templates/statelessComponent.js")
 
     writeFile(`scripts/component.js`, component);
     writeFile(`scripts/templates/statefulComponent.js`, statefulComponentTemplate);
@@ -238,10 +254,10 @@ exports.reactScripts = () => {
 };
 
 exports.reactRouterScripts = () => {
-    let component = loadFile("scripts/frontend/react-router/component.js")
-    let statefulComponentTemplate = loadFile("scripts/frontend/react/templates/statefulComponent.js")
-    let statelessComponentTemplate = loadFile("scripts/frontend/react/templates/statelessComponent.js")
-    let view = loadFile('scripts/frontend/react-router/view.js')
+    const component = loadFile("scripts/frontend/react-router/component.js")
+    const statefulComponentTemplate = loadFile("scripts/frontend/react/templates/statefulComponent.js")
+    const statelessComponentTemplate = loadFile("scripts/frontend/react/templates/statelessComponent.js")
+    const view = loadFile('scripts/frontend/react-router/view.js')
 
     writeFile(`scripts/component.js`, component);
     writeFile(`scripts/templates/statefulComponent.js`, statefulComponentTemplate);
@@ -253,13 +269,13 @@ exports.reactRouterScripts = () => {
 };
 
 exports.reduxScripts = () => {
-    let action = loadFile("scripts/frontend/redux/action.js")
-    let actionTemplate = loadFile("scripts/frontend/redux/templates/action.js")
-    let reducerTemplate = loadFile("scripts/frontend/redux/templates/reducer.js")
-    let component = loadFile("scripts/frontend/redux/component.js")
-    let statelessComponentTemplate = loadFile("scripts/frontend/react/templates/statelessComponent.js")
-    let containerTemplate = loadFile("scripts/frontend/redux/templates/container.js")
-    let statefulComponentTemplate = loadFile("scripts/frontend/react/templates/statefulComponent.js")
+    const action = loadFile("scripts/frontend/redux/action.js")
+    const actionTemplate = loadFile("scripts/frontend/redux/templates/action.js")
+    const reducerTemplate = loadFile("scripts/frontend/redux/templates/reducer.js")
+    const component = loadFile("scripts/frontend/redux/component.js")
+    const statelessComponentTemplate = loadFile("scripts/frontend/react/templates/statelessComponent.js")
+    const containerTemplate = loadFile("scripts/frontend/redux/templates/container.js")
+    const statefulComponentTemplate = loadFile("scripts/frontend/react/templates/statefulComponent.js")
 
     // action script and templates
     writeFile(`scripts/action.js`, action)
@@ -277,25 +293,29 @@ exports.reduxScripts = () => {
 }
 
 exports.reactRouterReduxScripts = () => {
-    let action = loadFile("scripts/frontend/reactRouter-redux/action.js")
-    let actionTemplate = loadFile("scripts/frontend/redux/templates/action.js")
-    let reducerTemplate = loadFile("scripts/frontend/redux/templates/reducer.js")
-    let component = loadFile("scripts/frontend/reactRouter-redux/component.js")
-    let statelessComponentTemplate = loadFile("scripts/frontend/react/templates/statelessComponent.js")
-    let containerTemplate = loadFile("scripts/frontend/redux/templates/container.js")
-    let statefulComponentTemplate = loadFile("scripts/frontend/react/templates/statefulComponent.js")
-    let view = loadFile('scripts/frontend/reactRouter-redux/view.js')
-    // action script and templates
-    writeFile(`scripts/action.js`, action)
-    writeFile(`scripts/templates/action.js`, actionTemplate);
-    writeFile(`scripts/templates/reducer.js`, reducerTemplate);
-    // component script and templates
-    writeFile(`scripts/component.js`, component);
-    writeFile(`scripts/templates/statefulComponent.js`, statefulComponentTemplate);
-    writeFile(`scripts/templates/statelessComponent.js`, statelessComponentTemplate);
-    writeFile(`scripts/templates/container.js`, containerTemplate);
-    // view script
-    writeFile(`scripts/view.js`, view);
+    const action = loadFile("scripts/frontend/reactRouter-redux/action.js")
+    const actionTemplate = loadFile("scripts/frontend/redux/templates/action.js")
+    const reducerTemplate = loadFile("scripts/frontend/redux/templates/reducer.js")
+    const component = loadFile("scripts/frontend/reactRouter-redux/component.js")
+    const statelessComponentTemplate = loadFile("scripts/frontend/react/templates/statelessComponent.js")
+    const containerTemplate = loadFile("scripts/frontend/redux/templates/container.js")
+    const statefulComponentTemplate = loadFile("scripts/frontend/react/templates/statefulComponent.js")
+    const view = loadFile('scripts/frontend/reactRouter-redux/view.js')
+
+    createFilesAndFolders('scripts', {
+        'action.js': action,
+        templates: {
+            'action.js': actionTemplate,
+            'reducer.js': reducerTemplate
+        },
+        'component.js': component,
+        templates: {
+            'statefulComponent.js': statefulComponentTemplate,
+            'statelessComponent.js': statelessComponentTemplate,
+            'container.js': containerTemplate
+        },
+        'view.js': view
+    })
 
     // add scripts for action and component to package.json
     addScriptToPackageJSON("component", "node scripts/component.js");

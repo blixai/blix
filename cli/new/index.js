@@ -37,7 +37,9 @@ const promptPreset = async () => {
     store.backend = { backend: true }
     store.serverTesting = 'jest'
     store.database = 'mongo'
-    await yarn()
+    if (!store.skipInstallation) {
+      await yarn()
+    }
     react()
   } else {
     this.promptFrontend()

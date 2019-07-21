@@ -15,6 +15,7 @@ import {
     logAppend,
 } from './logger'
 import { emit } from './events'
+const debug = require('debug')('blix:fs')
 
 
 
@@ -272,36 +273,57 @@ export function createMultipleFolders(dirs: [string]) {
    })
 }
 
+/**
+ * 
+ */
 export function createMultipleFiles() {
    
 }
 
-
-export function createFilesAndFolders() {
-   // TODO if typeof of string then mkdir, if typeof object then mkfiles
-}
-
-// TODO function that stores references to load multiple files, and then executes write files / dirs on it's own.
-//      similiar to how we load all the packages to install and then execute at one time. 
-
-/*
-// TODO create a function that creates files and folders by just the structure
-// eg pass as a arg
-
-startFolderPath: {
-    folder: {
-        file
-    },
-    file,
-    file,
-    folder: {
+/**
+ * @description creates files and folders by just passing an object with the structure
+ * @example
+    createFilesAndFolders(startFolderPath, {
+        folder: {
+            'file.ex'
+        },
+        'file.js',
+        'file.py',
         folder: {
             folder: {
-                file
-            }
-        },
-        file
+                folder: {
+                    'file.md'
+                }
+            },
+            'file.rb'
+        }
+    });
+ * 
+ * 
+ *  
+ * 
+ * @param filePath - where to start building the new files and folders from 
+ * @param filesAndFolderObject - object
+ */
+export function createFilesAndFolders(filePath: string, filesAndFolderObject: any) {
+    if (filePath && filePath.trim() === '') {
+        filePath = './'
     }
-};
 
-*/
+    // for each level, recursively call itself and pass the new start path 
+    let fileKeys = Object.keys(filesAndFolderObject);
+
+    fileKeys.forEach(key => {
+        let currentPath = filePath + '/' + key
+        if (typeof filesAndFolderObject[key] === 'string') {
+            writeFile(currentPath, filesAndFolderObject[key])
+        } else if (typeof filesAndFolderObject[key] === 'object') {
+            let pathToCheck = store.name ? `./${store.name}/${currentPath}`: currentPath
+            if (!fs.existsSync(pathToCheck)) {
+                mkdirSync(currentPath)
+            }
+            createFilesAndFolders(currentPath, filesAndFolderObject[key])
+        }
+    })
+}
+

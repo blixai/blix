@@ -65,7 +65,9 @@ exports.createBackend = () => {
 
     //add variables to .env file
     this.envSetup()
-
+    if (store.skipInstallation) {
+        return newProjectInstructions()
+    }
     installAllPackages()
         .then(() => newProjectInstructions())
         .catch((err) => {

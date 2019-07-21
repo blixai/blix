@@ -41,10 +41,14 @@ program
 
 program
     .command('new [name]')
+    .option('-s, --skip', 'Skips installation') // TODO - while it's fine to skip it needs to still add the packages to the package.json but not install
     .description('create a new project')
-    .action((name) => {
+    .action((name, cmd) => {
         if (name) {
             store.name = name
+        }
+        if (cmd.skip) {
+            store.skipInstallation = true
         }
         createProject()
     })
