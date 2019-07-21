@@ -9,7 +9,7 @@ const {
   loadUserJSONFile,
   writeJSONFile,
   logTaskStatus
-} = require("@blix/core");
+} = require("@blixi/core");
 
 let e2eSetup = () => {
   if (store.e2e.e2e === "cafe") {

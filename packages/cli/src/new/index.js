@@ -10,7 +10,7 @@ const {
   yarn,
   clearConsole,
   logError
-} = require('@blix/core')
+} = require('@blixi/core')
 
 // console prompts
 const {

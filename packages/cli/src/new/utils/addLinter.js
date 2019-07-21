@@ -5,7 +5,7 @@ const {
   addDependenciesToStore,
   writeFile,
   logTaskStatus
-} = require('@blix/core')
+} = require('@blixi/core')
 
 let prettierConfig = loadFile('common/linter/prettier.js')
 let eslintBasicConfig = loadFile('common/linter/eslintBasic.js')

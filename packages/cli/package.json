@@ -21,7 +21,7 @@
     "blix": "./index.js"
   },
   "dependencies": {
-    "@blix/core": "^0.0.1",
+    "@blixi/core": "^0.0.1",
     "chalk": "^2.4.1",
     "debug": "^4.1.1",
     "glob": "^7.1.2",
@@ -35,5 +35,6 @@
   "homepage": "https://github.com/blixjs/blix",
   "engines": {
     "node": ">=8.11.3"
-  }
+  },
+  "gitHead": "eb41d041f140750480e2035c9d25226d9c84742d"
 }

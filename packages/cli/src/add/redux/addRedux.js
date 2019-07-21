@@ -12,7 +12,7 @@ const {
   addScriptToPackageJSON,
   rename,
   installDependencies
-} = require('@blix/core');
+} = require('@blixi/core');
 
 
 // files

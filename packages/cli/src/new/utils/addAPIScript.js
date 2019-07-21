@@ -3,7 +3,7 @@ const {
     writeFile,
     addScriptToPackageJSON,
     addDependenciesToStore
-} = require('@blix/core')
+} = require('@blixi/core')
 
 
 const addAPIScript = () => {

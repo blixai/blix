@@ -1,5 +1,5 @@
 {
-  "name": "@blix/core",
+  "name": "@blixi/core",
   "version": "0.0.1",
   "description": "Core helper library for Blix cli",
   "main": "./dist/index.js",
@@ -26,5 +26,6 @@
     "mustache": "^3.0.1",
     "ora": "^3.4.0",
     "supports-color": "^7.0.0"
-  }
+  },
+  "gitHead": "eb41d041f140750480e2035c9d25226d9c84742d"
 }

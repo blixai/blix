@@ -8,7 +8,7 @@ const {
     writeFile,
     appendFile,
     mkdirSync
-} = require('@blix/core')
+} = require('@blixi/core')
 
 const addVueTesting = () => {
     addDependenciesToStore('@vue/test-utils vue-template-compiler', 'dev')

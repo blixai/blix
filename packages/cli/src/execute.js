@@ -1,4 +1,4 @@
-const { logError } = require("@blix/core")
+const { logError } = require("@blixi/core")
 const { lstatSync, readdirSync, existsSync, readFileSync } = require('fs')
 const { join } = require('path')
 const { spawn } = require('child_process')

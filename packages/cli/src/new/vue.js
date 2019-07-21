@@ -15,7 +15,7 @@ const {
     appendFile,
     loadTemplate,
     createMultipleFolders
-} = require('@blix/core')
+} = require('@blixi/core')
 
 
 exports.vue = () => {

@@ -9,7 +9,7 @@ const {
   yarn,
   checkScriptsFolderExist,
   installAllPackages
-} = require('@blix/core')
+} = require('@blixi/core')
 
 const addDatabase = async () => {
   store.database = await prompt([database])

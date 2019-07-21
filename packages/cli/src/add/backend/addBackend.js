@@ -11,7 +11,7 @@ const {
   checkIfScriptIsTaken,
   installAllPackages,
   loadFile
-} = require('@blix/core')
+} = require('@blixi/core')
 const { addProjectInstructions } = require('../addProjectInstructions')
 
 const { testBackend } = require('../../new/utils/addBackendTests')

@@ -1,5 +1,5 @@
 const { options } = require('../new/utils/newProjectInstructions')
-const { store, insert } = require('@blix/core')
+const { store, insert } = require('@blixi/core')
 const chalk = require('chalk')
 
 exports.selected = []

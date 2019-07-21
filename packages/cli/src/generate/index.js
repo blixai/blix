@@ -4,7 +4,7 @@ const {
     execute,
     logError,
     _logCaughtError
-} = require('@blix/core')
+} = require('@blixi/core')
 
 exports.generate = (args) => {
     if (!fs.existsSync('package.json')) {

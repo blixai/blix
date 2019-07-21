@@ -19,7 +19,7 @@ const {
     Task,
     createMultipleFolders,
     createFilesAndFolders
-} = require('@blix/core')
+} = require('@blixi/core')
 
 
 // load css file

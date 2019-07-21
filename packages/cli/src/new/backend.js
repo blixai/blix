@@ -15,7 +15,7 @@ const {
     appendFile,
     logTaskStatus,
     createMultipleFolders
-} = require('@blix/core')
+} = require('@blixi/core')
 
 // load files
 const cluster = loadFile('backend/common/cluster.js')

@@ -7,7 +7,7 @@ const {
   writeJSONFile,
   loadUserJSONFile,
   logTaskStatus
-} = require("@blix/core");
+} = require("@blixi/core");
 
 
 let installReactTesting = () => {

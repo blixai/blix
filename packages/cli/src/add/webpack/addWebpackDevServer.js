@@ -6,7 +6,7 @@ const {
   installDependencies,
   checkIfScriptIsTaken,
   addScriptToPackageJSON
-} = require('@blix/core')
+} = require('@blixi/core')
 
 let webpackOutput = {
   type: 'list',
