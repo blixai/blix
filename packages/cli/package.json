@@ -1,6 +1,6 @@
 {
   "name": "blix",
-  "version": "1.3.4-alpha.0",
+  "version": "1.3.5-alpha.0",
   "description": "Yeoman on steroids: quickly create a multitude of Javascript applications from scratch and automate tasks with hackable scrips or add scripts and tools to existing projects.",
   "main": "blix.js",
   "scripts": {
