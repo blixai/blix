@@ -1,10 +1,12 @@
-const { createCommonFilesAndFolders } = require("./utils/createCommonFiles");
-const { addLinter } = require('./utils/addLinter')
-const { installReactTesting } = require("./utils/addReactTesting");
-const { e2eSetup } = require("./utils/addEndToEndTesting");
-const { newProjectInstructions } = require('./utils/newProjectInstructions')
-const addAPIScript = require('./utils/addAPIScript')
-const { createBackend } = require("./backend");
+const {
+    addAPIScript,
+    addLinter,
+    createCommonFilesAndFolders,
+    e2eSetup,
+    installReactTesting,
+    newProjectInstructions
+} = require('@blixi/cli-new-utils')
+const { createBackend } = require("@blixi/cli-new-backend");
 const {
     loadFile,
     store,

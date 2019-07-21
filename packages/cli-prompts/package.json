@@ -1,0 +1,15 @@
+{
+  "name": "@blixi/cli-prompts",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "author": "Devon Bull",
+  "license": "MIT",
+  "dependencies": {
+    "chalk": "^2.4.1"
+  },
+  "homepage": "https://github.com/blixjs/blix",
+  "engines": {
+    "node": ">=8.11.3"
+  }
+}
