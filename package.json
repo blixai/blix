@@ -1,38 +1,7 @@
 {
-  "name": "blix",
-  "version": "1.2.4",
-  "description": "Yeoman on steroids: quickly create a multitude of Javascript applications from scratch and automate tasks with hackable scrips or add scripts and tools to existing projects.",
-  "main": "index.js",
-  "scripts": {
-    "lint": "prettier --single-quote --no-semi --write '**/*.js'",
-    "test": "jest --watch",
-    "test:coverage": "jest --collectCoverage",
-    "test:ci": "jest --coverage",
-    "send-coverage": "./node_modules/.bin/codecov"
-  },
-  "keywords": [
-    "cli",
-    "generator",
-    "scripts"
-  ],
-  "author": "Devon Bull",
-  "license": "MIT",
-  "bin": {
-    "blix": "./cli.js"
-  },
-  "dependencies": {
-    "chalk": "^2.4.1",
-    "commander": "^2.19.0",
-    "glob": "^7.1.2",
-    "inquirer": "^4.0.1",
-    "update-notifier": "^2.5.0"
-  },
+  "name": "root",
+  "private": true,
   "devDependencies": {
-    "jest": "^23.6.0",
-    "prettier": "^1.14.2"
-  },
-  "homepage": "https://github.com/blixjs/blix",
-  "engines": {
-    "node": ">=8.11.3"
+    "lerna": "^3.16.1"
   }
 }

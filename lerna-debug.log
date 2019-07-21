@@ -1,0 +1,10 @@
+0 silly argv { _: [ 'add' ],
+0 silly argv   globs: [],
+0 silly argv   lernaVersion: '3.16.1',
+0 silly argv   '$0': '/usr/local/bin/lerna',
+0 silly argv   pkg: 'internal-utils' }
+1 notice cli v3.16.1
+2 verbose rootPath /Users/devonbull/personal/blix_projects/blix
+3 info versioning independent
+4 error Error: 404 Not Found - GET https://registry.npmjs.org/internal-utils - Not found
+4 error     at res.buffer.catch.then.body (/Users/devonbull/personal/blix_projects/blix/node_modules/@evocateur/npm-registry-fetch/check-response.js:104:15)

@@ -1,0 +1,10 @@
+export declare function logError(msg: string): void;
+export declare function logWarning(msg: string): void;
+export declare function logTaskStatus(task: string, status: string, symbol?: string): void;
+export declare function logCreate(msg: string): void;
+export declare function logDeleted(msg: string): void;
+export declare function logMutate(msg: string): void;
+export declare function logInsert(msg: string): void;
+export declare function logAppend(msg: string): void;
+export declare function logInvoke(msg: string): void;
+export declare function clearConsole(title?: string): void;

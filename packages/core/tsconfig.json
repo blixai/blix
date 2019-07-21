@@ -1,0 +1,24 @@
+{
+    "compilerOptions": {
+        "outDir": "./dist",
+        "target": "es5",
+        "allowJs": true,
+        "module": "commonjs",
+        "sourceMap": false,
+        "forceConsistentCasingInFileNames": true,
+        "noImplicitReturns": true,
+        "strict": true,
+        "noUnusedLocals": true,
+        "baseUrl": "."
+    },
+    "include": [
+        "./src/**/*", 
+        ".internal/blixInternal.ts", 
+        "src/store.js"
+    ],
+    "exclude": [
+        "node_modules",
+        "**/*.spec.ts",
+    ],
+    "compileOnSave": true,
+}

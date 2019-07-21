@@ -16,9 +16,6 @@
   <a href="https://github.com/blixjs/blix/graphs/contributors">
      <img src="https://img.shields.io/github/contributors/blixjs/blix.svg" alt="contributors"/> 
   </a>
-  <a href="https://circleci.com/gh/blixjs/blix/tree/v_2.0.0">
-    <img src="https://img.shields.io/circleci/project/github/blixjs/blix/v_2.0.0.svg" alt="Circle CI Status">
-  </a>
   <a href="https://codecov.io/gh/blixjs/blix">
     <img src="https://codecov.io/gh/blixjs/blix/branch/v_2.0.0/graph/badge.svg" alt="coverage"/>
   </a>

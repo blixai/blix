@@ -1,0 +1,32 @@
+{
+  "name": "@blixi/core",
+  "version": "0.0.4",
+  "description": "Core helper library for Blix cli",
+  "main": "./dist/index.js",
+  "author": "Devon Bull",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch"
+  },
+  "devDependencies": {
+    "jest": "^24.8.0",
+    "typescript": "^3.5.3"
+  },
+  "dependencies": {
+    "@blixi/files": "^0.0.1",
+    "@types/inquirer": "0.0.44",
+    "@types/mustache": "^0.8.32",
+    "@types/node": "^12.6.8",
+    "chalk": "^2.4.2",
+    "debug": "^4.1.1",
+    "glob": "^7.1.4",
+    "inquirer": "^4.0.1",
+    "log-symbols": "^3.0.0",
+    "mustache": "^3.0.1",
+    "ora": "^3.4.0",
+    "supports-color": "^7.0.0"
+  },
+  "gitHead": "fde3e5c428a69b200923e876233515fc7b7dc497"
+}
