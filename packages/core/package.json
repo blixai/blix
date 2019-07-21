@@ -1,6 +1,6 @@
 {
   "name": "@blixi/core",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Core helper library for Blix cli",
   "main": "./dist/index.js",
   "author": "Devon Bull",
