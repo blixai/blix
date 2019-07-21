@@ -14,6 +14,7 @@ import {
     logAppend,
 } from './logger'
 import { emit } from './events'
+const { _loadFile } = require('@blixi/files');
 
 
 export function writeFile(filePath: string, file: string) {
@@ -154,11 +155,15 @@ export function moveAllFilesInDir(dirToSearch: string, dirToMoveTo: string) {
 
 export function loadFile(file: string, folderPath: string): string {
     if (!folderPath) {
-        folderPath = store.mode === 'cli' ? '/src/files/' : '/scripts/templates/'
+        folderPath = '/scripts/templates/'
     }
     file = prettyPath(file)
     try {
-        file = fs.readFileSync(process.cwd() + folderPath + file, 'utf8')      
+        if (store.mode === "cli") {
+            file = _loadFile(file)   
+        } else {
+            file = fs.readFileSync(process.cwd() + folderPath + file, 'utf8')      
+        }
         if (!file) {
             throw `File ${file} not found!`
         }

@@ -43,6 +43,7 @@ var Mustache = require('mustache');
 var utils_1 = require("./utils");
 var logger_1 = require("./logger");
 var events_1 = require("./events");
+var _loadFile = require('@blixi/files')._loadFile;
 function writeFile(filePath, file) {
     try {
         filePath = store.name ? "./" + store.name + "/" + filePath : './' + filePath;
@@ -202,11 +203,16 @@ function moveAllFilesInDir(dirToSearch, dirToMoveTo) {
 exports.moveAllFilesInDir = moveAllFilesInDir;
 function loadFile(file, folderPath) {
     if (!folderPath) {
-        folderPath = store.mode === 'cli' ? '/src/files/' : '/scripts/templates/';
+        folderPath = '/scripts/templates/';
     }
     file = utils_1.prettyPath(file);
     try {
-        file = fs.readFileSync(process.cwd() + folderPath + file, 'utf8');
+        if (store.mode === "cli") {
+            file = _loadFile(file);
+        }
+        else {
+            file = fs.readFileSync(process.cwd() + folderPath + file, 'utf8');
+        }
         if (!file) {
             throw "File " + file + " not found!";
         }

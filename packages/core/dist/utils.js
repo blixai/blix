@@ -1,15 +1,8 @@
 "use strict";
-var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
-    if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
-    return cooked;
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 var store = require('./store');
 var logger_1 = require("./logger");
 var process_1 = require("./process");
-var fs = require('fs');
-var path = require('path');
-var chalk = require('chalk');
 function getCWDName() {
     var rawCWD = process.cwd();
     var cwdArr = rawCWD.split('/');
@@ -30,28 +23,6 @@ function prettyPath(path) {
     return path;
 }
 exports.prettyPath = prettyPath;
-function _loadFile(filePath) {
-    var filePathStartCharacters = filePath.slice(0, 2);
-    var folderPath = './new/files/';
-    if (filePathStartCharacters === './') {
-        filePath = filePath.slice(1);
-    }
-    try {
-        var file = fs.readFileSync(path.resolve(__dirname, folderPath + filePath), 'utf8');
-        if (!file) {
-            throw "File " + file + " not found!";
-        }
-        if (store.env === 'development') {
-            console.log(chalk(templateObject_1 || (templateObject_1 = __makeTemplateObject(["{cyan load} file ", ""], ["{cyan load} file ", ""])), filePath));
-        }
-        return file;
-    }
-    catch (err) {
-        _logCaughtError("Failed to load internal Blix file.", err);
-        return "";
-    }
-}
-exports._loadFile = _loadFile;
 function _installDependencies(packages, type) {
     try {
         if (store.name) {
@@ -84,4 +55,3 @@ function _logCaughtError(message, err) {
     }
 }
 exports._logCaughtError = _logCaughtError;
-var templateObject_1;

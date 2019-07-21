@@ -1,9 +1,6 @@
 const store = require('./store')
 import { logError } from './logger'
 import { execute } from './process'
-const fs = require('fs')
-const path = require('path')
-const chalk = require('chalk')
 
 export function getCWDName(): string {
     let rawCWD: string = process.cwd()
@@ -26,29 +23,6 @@ export function prettyPath (path: string): string {
    }
 
    return path
-}
-
-export function _loadFile(filePath: string): string {
-    let filePathStartCharacters = filePath.slice(0, 2)
-    let folderPath = './new/files/'
-
-    if (filePathStartCharacters === './') {
-        filePath = filePath.slice(1)
-    }
-    
-    try {
-        let file = fs.readFileSync(path.resolve(__dirname, folderPath + filePath), 'utf8')      
-        if (!file) {
-            throw `File ${file} not found!`
-        }
-        if (store.env === 'development') {
-            console.log(chalk`{cyan load} file ${filePath}`)
-        }
-        return file;
-    } catch (err) {
-        _logCaughtError("Failed to load internal Blix file.", err);
-        return ""
-    }
 }
 
 export function _installDependencies(packages: string, type: string) {
