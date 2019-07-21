@@ -37,14 +37,14 @@ function _installDependencies(packages, type) {
         if (store.name) {
             process.chdir("./" + store.name);
         }
+        var command = void 0;
         if (store.useYarn) {
-            var command = type === 'dev' ? "yarn add " + packages + " --dev" : "yarn add " + packages;
-            process_1.execute(command);
+            command = type === 'dev' ? "yarn add " + packages + " --dev" : "yarn add " + packages;
         }
         else {
-            var command = type === 'dev' ? "npm install --save-dev " + packages : "npm install --save " + packages;
-            process_1.execute(command);
+            command = type === 'dev' ? "npm install --save-dev " + packages : "npm install --save " + packages;
         }
+        process_1.execute(command);
         if (store.name)
             process.chdir('../');
     }

@@ -35,13 +35,14 @@ export function _installDependencies(packages: string, type: string) {
         if (store.name) {
             process.chdir(`./${store.name}`)
         }
+        let command: string
         if (store.useYarn) {
-            let command = type === 'dev' ? `yarn add ${packages} --dev` : `yarn add ${packages}`
-            execute(command)
+            command = type === 'dev' ? `yarn add ${packages} --dev` : `yarn add ${packages}`
         } else {
-            let command = type === 'dev' ? `npm install --save-dev ${packages}` : `npm install --save ${packages}`
-            execute(command);
+            command = type === 'dev' ? `npm install --save-dev ${packages}` : `npm install --save ${packages}`
         }
+        execute(command)
+
         if (store.name) process.chdir('../')
     } catch(err) {
         if (store.name) process.chdir('../')

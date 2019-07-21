@@ -10,8 +10,8 @@ const {
 
 const addProjectInstructionsModule = require('../../add/addProjectInstructions')
 
-const store = require('../../new/store')
-const { options } = require('../../new/utils/newProjectInstructions')
+const store = require('../new/store')
+const { options } = require('../new/utils/newProjectInstructions')
 const helpers = require('../../helpers')
 const chalk = require('chalk')
 

@@ -299,9 +299,6 @@ export function createMultipleFiles() {
         }
     });
  * 
- * 
- *  
- * 
  * @param filePath - where to start building the new files and folders from 
  * @param filesAndFolderObject - object
  */
