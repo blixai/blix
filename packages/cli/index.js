@@ -6,6 +6,7 @@ const pkg = require('./package.json');
 const { store, clearConsole } = require('@blixi/core')
 store.mode = 'cli' // this must be set before functions are compiled in order to load necessary files properly
 const { createProject } = require("@blixi/cli-new");
+const { notes } = require("./src/notes")
 const { scripts } = require("./src/scripts/script");
 const add = require("./src/add/add");
 const { generate } = require('./src/generate')
@@ -81,6 +82,10 @@ program
         }
     })
 
+program
+    .command('notes')
+    .description('get all developer notes.')
+    .action((args) => notes())
 
 
 program.parse(process.argv);
