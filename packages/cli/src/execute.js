@@ -25,8 +25,14 @@ async function runScript(directoryToSearch) {
         try {
             const packageJSON = readFileSync(`${directoryToSearch}/package.json`, "utf8")
             const scriptsObject = JSON.parse(packageJSON)["scripts"]
-            scriptChoices.choices = Object.keys(scriptsObject)
+            scriptChoices.choices = Object.keys(scriptsObject).map(scriptName => {
+                return {
+                    name: `${scriptName} : ${scriptsObject[scriptName]}`,
+                    value: scriptName
+                }
+            })
             const selectedChoice = await prompt([scriptChoices])
+            console.log(selectedChoice)
             executeSelectedCommand(selectedChoice.script, directoryToSearch)
         } catch (err) {
             logError(err)
