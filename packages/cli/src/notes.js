@@ -17,7 +17,7 @@ messageChecks = {
     },
     todo: {
       regex:    /(?:^|[^:])(\/\/|\{\{\!|\!|\{\#|\*)(\-\-)?\s*@?TODO\b\s*(?:\(([^:]*)\))*\s*:?\s*(.*)/i,
-      label:    ' TODO',
+      label:    ' ✓ TODO',
       colorer:  chalk.magenta
     },
     hack: {
@@ -131,6 +131,9 @@ function formatMessageOutput (individualMessage, totalNumberOfLines) {
     finalNoteString += finalLabelString;
   
     if (individualMessage.message && individualMessage.message.length) {
+      if (individualMessage.message.charAt(0) === "-") {
+        individualMessage.message =  individualMessage.message.substring(2)
+      }
       finalNoteString += individualMessage.colorer(individualMessage.message);
     } else {
       finalNoteString += chalk.grey('[[no message to display]]');
