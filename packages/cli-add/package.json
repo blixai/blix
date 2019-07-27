@@ -1,0 +1,21 @@
+{
+    "name": "@blixi/cli-add",
+    "version": "0.0.1",
+    "description": "Add command for Blix CLI to add tooling to an existing project",
+    "main": "index.js",
+    "author": "Devon Bull",
+    "license": "MIT",
+    "dependencies": {
+        "@blixi/cli-new-backend": "^0.0.2",
+        "@blixi/cli-prompts": "^0.0.1",
+        "@blixi/core": "^0.0.4",
+        "chalk": "^2.4.1",
+        "debug": "^4.1.1",
+        "glob": "^7.1.2",
+        "inquirer": "^4.0.1"
+    },
+    "homepage": "https://github.com/blixjs/blix",
+    "engines": {
+        "node": ">=8.11.3"
+    }
+}
