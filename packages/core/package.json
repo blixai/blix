@@ -1,6 +1,6 @@
 {
   "name": "@blixi/core",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Core helper library for Blix cli",
   "main": "./dist/index.js",
   "author": "Devon Bull",
@@ -15,7 +15,7 @@
     "typescript": "^3.5.3"
   },
   "dependencies": {
-    "@blixi/files": "^0.0.1",
+    "@blixi/files": "^0.0.2",
     "@types/inquirer": "0.0.44",
     "@types/mustache": "^0.8.32",
     "@types/node": "^12.6.8",

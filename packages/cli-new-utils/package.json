@@ -1,12 +1,12 @@
 {
     "name": "@blixi/cli-new-utils",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "description": "",
     "main": "src/index.js",
     "author": "Devon Bull",
     "license": "MIT",
     "dependencies": {
-        "@blixi/core": "^0.0.4"
+        "@blixi/core": "^0.0.5"
     },
     "homepage": "https://github.com/blixjs/blix",
     "engines": {
