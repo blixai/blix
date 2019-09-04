@@ -6,6 +6,7 @@ const pkg = require('./package.json');
 const { store, clearConsole } = require('@blixi/core')
 store.mode = 'cli' // this must be set before functions are compiled in order to load necessary files properly
 const { createProject } = require("@blixi/cli-new");
+const { template } = require('@blixi/cli-template');
 const { notes } = require("./src/notes")
 const { scripts } = require("./src/scripts/script");
 const add = require("@blixi/cli-add");
@@ -86,6 +87,11 @@ program
     .command('notes')
     .description('get all developer notes.')
     .action((args) => notes())
+
+program
+    .command('template')
+    .description('Select custom file templates to store in a project, use once, or globally store with Blix')
+    .action((args) => template(args))
 
 
 program.parse(process.argv);

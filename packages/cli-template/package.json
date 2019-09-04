@@ -1,0 +1,12 @@
+{
+    "name": "@blixi/cli-template",
+    "version": "0.0.1",
+    "description": "",
+    "main": "index.js",
+    "author": "Devon Bull",
+    "license": "MIT",
+    "homepage": "https://github.com/blixjs/blix",
+    "engines": {
+      "node": ">=8.11.3"
+    }
+  }
