@@ -4,7 +4,7 @@ const { join } = require('path')
 const { spawn } = require('child_process')
 const inquirer = require('inquirer')
 const prompt = inquirer.prompt
-
+const chalk = require('chalk')
 
 const scriptChoices = {
     type: 'list',
@@ -20,6 +20,12 @@ const projectSelector = {
     choices: []
 }
 
+const additionalArgs = {
+    type: 'input',
+    name: 'args',
+    message: chalk.underline('Add any additional args') + ':  '
+}
+
 async function runScript(directoryToSearch) {
     if (existsSync(`${directoryToSearch}/package.json`)) {
         try {
@@ -32,7 +38,6 @@ async function runScript(directoryToSearch) {
                 }
             })
             const selectedChoice = await prompt([scriptChoices])
-            console.log(selectedChoice)
             executeSelectedCommand(selectedChoice.script, directoryToSearch)
         } catch (err) {
             logError(err)
@@ -43,7 +48,6 @@ async function runScript(directoryToSearch) {
             projectSelector.choices = foundDirectories
             const selectedProject = await prompt([projectSelector])
             runScript(`./${directoryToSearch}/${selectedProject.project}`)
-
         } catch (err) {
             logError(err)
         }
@@ -59,12 +63,16 @@ function findDirectories(dir) {
     return dirs(dir)
 }
 
-function executeSelectedCommand(choice, directoryToSearch) {
+async function executeSelectedCommand(choice, directoryToSearch) {
     let packageCommand = "npm run"
     if (existsSync('yarn.lock')) {
         packageCommand = "yarn"
     }
-    spawn(`${packageCommand} ${choice}`, { cwd: directoryToSearch, stdio: [0, 1, 2], shell: true })
+    additionalArgs.message += `${packageCommand} ${choice}`
+    const finalArgs = await prompt([additionalArgs])
+    const finalCommand = `${packageCommand} ${choice} ${finalArgs.args}`;
+    console.log(`\n\n${chalk.bold('>> Executing Selected Command: ')} ${chalk.yellow(finalCommand)}`)
+    spawn(finalCommand, { cwd: directoryToSearch, stdio: [0, 1, 2], shell: true })
 }
 
 module.exports = {
