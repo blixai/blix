@@ -1,12 +1,17 @@
 {
-    "name": "@blixi/cli-template",
-    "version": "0.0.1",
-    "description": "",
-    "main": "index.js",
-    "author": "Devon Bull",
-    "license": "MIT",
-    "homepage": "https://github.com/blixjs/blix",
-    "engines": {
-      "node": ">=8.11.3"
-    }
+  "name": "@blixi/cli-template",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "author": "Devon Bull",
+  "license": "MIT",
+  "homepage": "https://github.com/blixjs/blix",
+  "engines": {
+    "node": ">=8.11.3"
+  },
+  "dependencies": {
+    "@blixi/core": "^0.0.5",
+    "mustache": "^3.0.1",
+    "inquirer": "^4.0.1"
   }
+}

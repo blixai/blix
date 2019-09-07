@@ -2,7 +2,6 @@ const fs = require('fs')
 const path = require('path')
 import { prompt } from "inquirer"
 const store = require('./store')
-const Mustache = require('mustache')
 import { prettyPath, _logCaughtError } from './utils'
 import { 
     logError,
@@ -15,6 +14,7 @@ import {
 } from './logger'
 import { emit } from './events'
 const { _loadFile } = require('@blixi/files');
+const { _loadTemplate } = require('@blixi/templates');
 
 
 export function writeFile(filePath: string, file: string) {
@@ -236,23 +236,22 @@ export function loadUserJSONFile(file: string): string {
     }
 }
 
-export function loadTemplate(file: string, options?: object, folderPath?: string): string {
+export function loadTemplate(file: string, folderPath?: string): string {
     if (!folderPath) {
-        folderPath = store.mode === 'cli' ? '../../cli/files/' : '/scripts/templates/'
+        folderPath = '/scripts/templates/'
     }
-        file = prettyPath(file)
+    file = prettyPath(file)
     
     try {
-        if (store.mode === 'cli') {
-            file = fs.readFileSync(path.resolve(__dirname, folderPath + file), 'utf8')      
+        if (store.mode === "cli") {
+            file = _loadTemplate(file)   
         } else {
-            file = fs.readFileSync(process.cwd() + folderPath + file, 'utf8')
+            file = fs.readFileSync(process.cwd() + folderPath + file, 'utf8')      
         }
         if (!file) {
             throw `File ${file} not found!`
         }
-        let renderedFile = Mustache.render(file, options)
-        return renderedFile;
+        return file;
     } catch (err) {
         _logCaughtError(`Failed to load template ${file}`, err)
         return ""

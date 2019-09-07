@@ -10,7 +10,6 @@ const { template } = require('@blixi/cli-template');
 const { notes } = require("./src/notes")
 const { scripts } = require("./src/scripts/script");
 const add = require("@blixi/cli-add");
-const { generate } = require('./src/generate')
 const { runScript } = require("./src/do")
 let pjson = require("./package.json");
 let version = pjson.version
@@ -68,20 +67,6 @@ program
     .command('do')
     .description('show a dropdown selector of package.json scripts. Select one and press enter to execute')
     .action(() => runScript("."))
-
-program
-    .command('generate [args...]')
-    .allowUnknownOption()
-    .alias('g')
-    .description('run scripts in a project or use common Blix templates')
-    .action((args) => {
-        if (process.argv.length > 4) {
-            let options = process.argv.slice(4)
-            generate(options)
-        } else {
-            generate(args)
-        }
-    })
 
 program
     .command('notes')
