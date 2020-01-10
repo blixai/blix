@@ -5,9 +5,6 @@
 </p>
 <p align="center">
   <a href="https://www.npmjs.com/package/blix">
-    <img src="https://img.shields.io/npm/v/blix/next.svg" alt="npm next version"/>
-  </a>
-  <a href="https://www.npmjs.com/package/blix">
     <img src="https://img.shields.io/npm/v/blix.svg" alt="npm version">
   </a>
   <a href="https://github.com/blixjs/blix/blob/v_2.0.0/LICENSE">
