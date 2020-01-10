@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 const program = require('commander');
 const debug = require('debug')
-const updateNotifier = require('update-notifier');
 const pkg = require('./package.json');
 const { store, clearConsole } = require('@blixi/core')
 store.mode = 'cli' // this must be set before functions are compiled in order to load necessary files properly
@@ -30,8 +29,6 @@ if (major < 8) {
     process.exit(1);
 }
 
-
-updateNotifier({ pkg }).notify();
 
 program
     .version(version, '-v, --version')
@@ -74,7 +71,6 @@ program
 
 
 program.parse(process.argv);
-
 if (program.verbose) {
     store.env = 'development'
 }

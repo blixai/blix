@@ -31,8 +31,7 @@
     "commander": "^2.19.0",
     "debug": "^4.1.1",
     "glob": "^7.1.2",
-    "inquirer": "^4.0.1",
-    "update-notifier": "^2.5.0"
+    "inquirer": "^4.0.1"
   },
   "devDependencies": {
     "jest": "^23.6.0",
