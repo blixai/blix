@@ -43,7 +43,6 @@ var utils_1 = require("./utils");
 var logger_1 = require("./logger");
 var events_1 = require("./events");
 var _loadFile = require('@blixi/files')._loadFile;
-var _loadTemplate = require('@blixi/templates')._loadTemplate;
 function writeFile(filePath, file) {
     try {
         filePath = store.name ? "./" + store.name + "/" + filePath : './' + filePath;
@@ -287,29 +286,6 @@ function loadUserJSONFile(file) {
     }
 }
 exports.loadUserJSONFile = loadUserJSONFile;
-function loadTemplate(file, folderPath) {
-    if (!folderPath) {
-        folderPath = '/scripts/templates/';
-    }
-    file = utils_1.prettyPath(file);
-    try {
-        if (store.mode === "cli") {
-            file = _loadTemplate(file);
-        }
-        else {
-            file = fs.readFileSync(process.cwd() + folderPath + file, 'utf8');
-        }
-        if (!file) {
-            throw "File " + file + " not found!";
-        }
-        return file;
-    }
-    catch (err) {
-        utils_1._logCaughtError("Failed to load template " + file, err);
-        return "";
-    }
-}
-exports.loadTemplate = loadTemplate;
 /**
 * @param { string[] } dirs - strings of directories to create, sync, in order
 */
