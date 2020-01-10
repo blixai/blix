@@ -14,7 +14,6 @@ import {
 } from './logger'
 import { emit } from './events'
 const { _loadFile } = require('@blixi/files');
-const { _loadTemplate } = require('@blixi/templates');
 
 
 export function writeFile(filePath: string, file: string) {
@@ -235,30 +234,6 @@ export function loadUserJSONFile(file: string): string {
         return ""
     }
 }
-
-export function loadTemplate(file: string, folderPath?: string): string {
-    if (!folderPath) {
-        folderPath = '/scripts/templates/'
-    }
-    file = prettyPath(file)
-    
-    try {
-        if (store.mode === "cli") {
-            file = _loadTemplate(file)   
-        } else {
-            file = fs.readFileSync(process.cwd() + folderPath + file, 'utf8')      
-        }
-        if (!file) {
-            throw `File ${file} not found!`
-        }
-        return file;
-    } catch (err) {
-        _logCaughtError(`Failed to load template ${file}`, err)
-        return ""
-    } 
-}
-
-
 
 /**
 * @param { string[] } dirs - strings of directories to create, sync, in order
