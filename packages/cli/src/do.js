@@ -31,6 +31,9 @@ async function runScript(directoryToSearch) {
         try {
             const packageJSON = readFileSync(`${directoryToSearch}/package.json`, "utf8")
             const scriptsObject = JSON.parse(packageJSON)["scripts"]
+
+            if (!scriptsObject) throw new ReferenceError("No scripts found.")
+
             scriptChoices.choices = Object.keys(scriptsObject).map(scriptName => {
                 return {
                     name: `${scriptName} : ${scriptsObject[scriptName]}`,
