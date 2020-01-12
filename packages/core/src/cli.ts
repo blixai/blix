@@ -1,7 +1,7 @@
 const store = require('./store')
 import { logTaskStatus } from './logger'
 import { eventsBus } from './events'
-const debug = require('debug')(`blix:task`) // TODO figure out how to attach to each instance to further namespace by task name
+const debug = require('debug')(`blix:core:cli:task`) // TODO figure out how to attach to each instance to further namespace by task name
 
 
 export class Task {

@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var store = require('./store');
 var logger_1 = require("./logger");
 var events_1 = require("./events");
-var debug = require('debug')("blix:task"); // TODO figure out how to attach to each instance to further namespace by task name
+var debug = require('debug')("blix:core:cli:task"); // TODO figure out how to attach to each instance to further namespace by task name
 var Task = /** @class */ (function () {
     function Task(name, symbol) {
         this.symbol = '';

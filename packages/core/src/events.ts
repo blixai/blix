@@ -1,6 +1,6 @@
 const EventEmitter = require('events')
 const store = require('./store')
-const debug = require('debug')('blix:events')
+const debug = require('debug')('blix:core:events:emit')
 
 export const eventsBus = new EventEmitter()
 

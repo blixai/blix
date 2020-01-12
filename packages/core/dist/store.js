@@ -1,8 +1,8 @@
 "use strict";
 var debug = require('debug');
-var storeDebug = require('debug')('blix:store');
-var getDebug = require('debug')('blix:store:get');
-var setDebug = require('debug')('blix:store:set');
+var storeDebug = require('debug')('blix:core:store');
+var getDebug = require('debug')('blix:core:store:get');
+var setDebug = require('debug')('blix:core:store:set');
 var store = {
     name: '',
     frontend: '',
@@ -20,6 +20,8 @@ var store = {
     reactCSS: '',
     linter: '',
     tasks: [],
+    blixNeedsUpdate: false,
+    blixFailedToCheckForUpdates: false,
 };
 function checkIfEnvChange(key, value) {
     if (key === 'env' && value === 'development') {

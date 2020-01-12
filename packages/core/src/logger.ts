@@ -3,6 +3,13 @@ const readline = require('readline')
 const store = require('./store')
 const logSymbols = require('log-symbols');
 
+const createDebug = require("debug")("blix:core:fs:create")
+const deleteDebug = require("debug")("blix:core:fs:delete")
+const mutateDebug = require("debug")("blix:core:fs:mutate")
+const insertDebug = require("debug")("blix:core:fs:insert")
+const appendDebug = require("debug")("blix:core:fs:append")
+const invokeDebug = require("debug")("blix:core:fs:invoke")
+
 export function logError(msg: string) {
     console.error(chalk`{red ${msg}}`)
 }
@@ -20,50 +27,56 @@ export function logTaskStatus(task: string, status: string, symbol?: string) {
         stringToStore = `${logSymbols[status] ? logSymbols[status] : logSymbols.success}  ${task}`
     }
     store.tasks.push(stringToStore)
-
-    clearConsole()
+    if (store.env !== "development") {
+        clearConsole()
+    }
     store.tasks.forEach((task: string) => {
-       console.log(task)
+        console.log(task)
     });
 }
 
 // logger action methods
 
-  export function logCreate(msg: string) {
-        if (store.env === 'development' && store.mode !== 'cli') {
-            console.log(chalk`{green create} ${msg}`)
-        }
+export function logCreate(msg: string) {
+    if (store.env === 'development') {
+        createDebug('create %s', msg)
     }
+}
 
- export function logDeleted(msg: string) {
-        if (store.env === 'development' && store.mode !== 'cli') {
-            console.log(chalk`{red delete} ${msg}`)
-        }
+export function logDeleted(msg: string) {
+    if (store.env === 'development') {
+        deleteDebug('delete %s', msg)
     }
+}
 
-  export function logMutate(msg: string) {
-        if (store.env === 'development' && store.mode !== 'cli') {
-            console.log(chalk`{yellow mutate} ${msg}`)
-        }
+export function logMutate(msg: string) {
+    if (store.env === 'development') {
+        mutateDebug('mutate %s', msg)
     }
+}
 
- export function logInsert(msg: string) {
-        if (store.env === 'development' && store.mode !== 'cli') {
-            console.log(chalk`{cyan insert} ${msg}`)
-        }
+export function logInsert(msg: string) {
+    if (store.env === 'development') {
+        insertDebug('insert %s', msg)
     }
+}
 
- export function logAppend(msg: string) {
-        if (store.env === 'development' && store.mode !== 'cli') {
-            console.log(chalk`{cyan append} ${msg}`)
-        }
+export function logAppend(msg: string) {
+    if (store.env === 'development') {
+        appendDebug('append %s', msg)
     }
+}
 
-  export function logInvoke(msg: string) {
-        if (store.env === 'development' && store.mode !== 'cli') {
-            console.log(chalk`{blue invoke} ${msg}`)
-        }
+export function logInvoke(msg: string) {
+    if (store.env === 'development') {
+        invokeDebug('invoke %s', msg)
+        console.log(chalk`{blue invoke} ${msg}`)
     }
+}
+
+function _basicConsoleHeader (blixVersion: string) {
+    return chalk.bold.cyan(`Blix v${blixVersion}`)
+}
 
 export function clearConsole(title?: string) {
     if (process.stdout.isTTY) {
@@ -73,9 +86,14 @@ export function clearConsole(title?: string) {
         readline.cursorTo(process.stdout, 0, 0)
         readline.clearScreenDown(process.stdout)
         if (title) {
-          console.log(chalk.bold.cyan(title))
-        } else if (store.mode === 'cli' && store.blixVersion) {
-            console.log(chalk.bold.cyan(`Blix v${store.blixVersion}`))
+            console.log(chalk.bold.cyan(title))
+        } else if (store.mode === 'cli' && store.blixNeedsUpdate) {
+            console.log(_basicConsoleHeader(store.blixVersion))
+            console.log()
+            console.log(chalk.bold.red(`Blix update available. Please update to the latest version${store.blixLatestVersion ? ': ' + store.blixLatestVersion : '' }`))
+            console.log()
+        } else if (store.mode === 'cli') {
+            console.log(_basicConsoleHeader(store.blixVersion))
             console.log()
         }
     }

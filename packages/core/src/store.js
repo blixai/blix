@@ -1,7 +1,7 @@
 const debug = require('debug')
-const storeDebug = require('debug')('blix:store')
-const getDebug = require('debug')('blix:store:get')
-const setDebug = require('debug')('blix:store:set')
+const storeDebug = require('debug')('blix:core:store')
+const getDebug = require('debug')('blix:core:store:get')
+const setDebug = require('debug')('blix:core:store:set')
 
 const store = {
   name: '',
@@ -20,6 +20,8 @@ const store = {
   reactCSS: '',
   linter: '',
   tasks: [],
+  blixNeedsUpdate: false,
+  blixFailedToCheckForUpdates: false,
 }
 
 function checkIfEnvChange (key, value) {
