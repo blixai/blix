@@ -8,6 +8,7 @@
     "dependencies": {
         "@blixai/cli-new-backend": "^0.0.7",
         "@blixai/cli-prompts": "^0.0.4",
+        "@blixai/cli-new-utils": "0.0.7",
         "@blixai/core": "^0.1.2",
         "chalk": "^2.4.1",
         "debug": "^4.1.1",

@@ -42,7 +42,7 @@ var store = require('./store');
 var utils_1 = require("./utils");
 var logger_1 = require("./logger");
 var events_1 = require("./events");
-var _loadFile = require('@blixi/files')._loadFile;
+var _loadFile = require('@blixai/files')._loadFile;
 function writeFile(filePath, file) {
     try {
         filePath = store.name ? "./" + store.name + "/" + filePath : './' + filePath;
