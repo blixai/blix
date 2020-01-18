@@ -1,5 +1,5 @@
 {
-    "name": "@blixi/cli-new-backend",
+    "name": "@blixai/cli-new-backend",
     "version": "0.0.5",
     "description": "",
     "main": "src/index.js",

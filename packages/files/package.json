@@ -1,5 +1,5 @@
 {
-  "name": "@blixi/files",
+  "name": "@blixai/files",
   "version": "0.0.2",
   "description": "Load files consistently across blix projects",
   "author": "DBULL7 <devjbull@gmail.com>",

@@ -1,5 +1,5 @@
 {
-  "name": "@blixi/core",
+  "name": "@blixai/core",
   "version": "0.1.0",
   "description": "Core helper library for Blix cli",
   "main": "./dist/index.js",
