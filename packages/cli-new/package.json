@@ -1,6 +1,6 @@
 {
   "name": "@blixai/cli-new",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "New command for Blix CLI",
   "author": "DBULL7 <devjbull@gmail.com>",
   "homepage": "https://github.com/blixjs/blix#readme",

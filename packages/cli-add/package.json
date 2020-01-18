@@ -1,6 +1,6 @@
 {
     "name": "@blixai/cli-add",
-    "version": "0.0.4",
+    "version": "0.0.5",
     "description": "Add command for Blix CLI to add tooling to an existing project",
     "main": "index.js",
     "author": "Devon Bull",
