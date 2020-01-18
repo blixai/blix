@@ -1,4 +1,4 @@
-const helpers = require("@blixi/core");
+const helpers = require("@blixai/core");
 const { 
   loadFile,
   writeFile,

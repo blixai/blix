@@ -1,4 +1,4 @@
-const { logError } = require("@blixi/core")
+const { logError } = require("@blixai/core")
 const { readFileSync } = require('fs')
 const { join, resolve } = require('path')
 const { sync } = require('glob')

@@ -11,10 +11,10 @@ const {
   checkIfScriptIsTaken,
   installAllPackages,
   loadFile
-} = require('@blixi/core')
+} = require('@blixai/core')
 const { addProjectInstructions } = require('../addProjectInstructions')
 
-const { testBackend } = require('@blixi/cli-new-utils')
+const { testBackend } = require('@blixai/cli-new-utils')
 const {
   packages,
   standard,
@@ -22,11 +22,11 @@ const {
   apiType,
   scripts,
   addDatabase
-} = require('@blixi/cli-new-backend')
+} = require('@blixai/cli-new-backend')
 
 
 
-const { serverTesting, database, backendType } = require('@blixi/cli-prompts')
+const { serverTesting, database, backendType } = require('@blixai/cli-prompts')
 
 let addBackend = async () => {
   store.backendType = await prompt([backendType])

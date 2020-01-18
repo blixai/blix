@@ -1,5 +1,5 @@
 const fs = require('fs')
-const { store, clearConsole } = require('@blixi/core')
+const { store, clearConsole } = require('@blixai/core')
 const chalk = require('chalk')
 const link = 'blixjs.com'
 

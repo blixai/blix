@@ -13,7 +13,7 @@ import {
     logAppend,
 } from './logger'
 import { emit } from './events'
-const { _loadFile } = require('@blixi/files');
+const { _loadFile } = require('@blixai/files');
 
 
 export function writeFile(filePath: string, file: string) {

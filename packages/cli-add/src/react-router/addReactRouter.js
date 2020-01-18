@@ -15,7 +15,7 @@ const {
     addScriptToPackageJSON,
     moveAllFilesInDir,
     rename
-} = require('@blixi/core')
+} = require('@blixai/core')
 
 
 let continuePrompt = {

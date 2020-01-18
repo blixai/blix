@@ -1,11 +1,11 @@
-# `@blixi/files`
+# `@blixai/files`
 
 > TODO: description
 
 ## Usage
 
 ```
-const files = require('@blixi/files');
+const files = require('@blixai/files');
 
 // TODO: DEMONSTRATE API
 ```

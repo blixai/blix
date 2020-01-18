@@ -9,7 +9,7 @@ const {
     loadUserJSONFile,
     writeJSONFile,
     logTaskStatus
-} = require("@blixi/core");
+} = require("@blixai/core");
 
 
 function checkOrCreateServerTestFolder() {

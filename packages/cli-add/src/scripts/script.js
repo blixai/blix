@@ -9,7 +9,7 @@ const {
   checkScriptsFolderExist,
   addScriptToPackageJSON,
   appendFile
-} = require('@blixi/core')
+} = require('@blixai/core')
 
 // helper function to load files
 const commands = {

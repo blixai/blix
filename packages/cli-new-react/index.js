@@ -5,8 +5,8 @@ const {
     e2eSetup,
     installReactTesting,
     newProjectInstructions
-} = require('@blixi/cli-new-utils')
-const { createBackend } = require("@blixi/cli-new-backend");
+} = require('@blixai/cli-new-utils')
+const { createBackend } = require("@blixai/cli-new-backend");
 const {
     loadFile,
     store,
@@ -21,7 +21,7 @@ const {
     Task,
     createMultipleFolders,
     createFilesAndFolders
-} = require('@blixi/core')
+} = require('@blixai/core')
 
 
 // load css file

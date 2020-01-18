@@ -8,7 +8,7 @@ const {
   addDependenciesToStore,
   appendFile,
   getCWDName
-} = require("@blixi/core");
+} = require("@blixai/core");
 
 
 //

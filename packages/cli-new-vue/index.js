@@ -1,11 +1,11 @@
-const { createBackend } = require("@blixi/cli-new-backend");
+const { createBackend } = require("@blixai/cli-new-backend");
 const {
     addAPIScript,
     addVueTesting,
     createCommonFilesAndFolders,
     e2eSetup,
     newProjectInstructions,
-} = require('@blixi/cli-new-utils')
+} = require('@blixai/cli-new-utils')
 
 
 const { 
@@ -19,7 +19,7 @@ const {
     appendFile,
     loadTemplate,
     createMultipleFolders
-} = require('@blixi/core')
+} = require('@blixai/core')
 
 
 exports.vue = () => {

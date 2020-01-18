@@ -1,5 +1,5 @@
-const { options } = require('@blixi/cli-new-utils')
-const { store, insert } = require('@blixi/core')
+const { options } = require('@blixai/cli-new-utils')
+const { store, insert } = require('@blixai/core')
 const chalk = require('chalk')
 
 exports.selected = []

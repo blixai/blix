@@ -5,7 +5,7 @@ const {
     createCommonFilesAndFolders,
     newProjectInstructions,
     testBackend
-} = require("@blixi/cli-new-utils")
+} = require("@blixai/cli-new-utils")
 const {
     loadFile,
     store,
@@ -17,7 +17,7 @@ const {
     appendFile,
     logTaskStatus,
     createMultipleFolders
-} = require('@blixi/core')
+} = require('@blixai/core')
 
 // load files
 const cluster = loadFile('backend/common/cluster.js')

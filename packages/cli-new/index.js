@@ -1,15 +1,15 @@
 const fs = require("fs");
 const inquirer = require("inquirer");
 const prompt = inquirer.prompt;
-const { createBackend } = require("@blixi/cli-new-backend");
-const { vue } = require("@blixi/cli-new-vue");
-const { react } = require("@blixi/cli-new-react");
+const { createBackend } = require("@blixai/cli-new-backend");
+const { vue } = require("@blixai/cli-new-vue");
+const { react } = require("@blixai/cli-new-react");
 const {
   store,
   yarn,
   clearConsole,
   logError
-} = require('@blixi/core')
+} = require('@blixai/core')
 
 // console prompts
 const {
@@ -25,7 +25,7 @@ const {
   reactCSS,
   vueCSS,
   linterPrompt
-} = require("@blixi/cli-prompts");
+} = require("@blixai/cli-prompts");
 
 const promptPreset = async () => {
   const answer = await prompt([defaultOrCustom])

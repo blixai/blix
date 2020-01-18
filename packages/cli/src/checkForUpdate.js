@@ -1,5 +1,5 @@
 const checkForUpdate = require("update-check")
-const { store } = require('@blixi/core')
+const { store } = require('@blixai/core')
 const debug = require("debug")("blix:cli:checkForUpdate")
 
 const checkIfUpdate = async (pjson) => {

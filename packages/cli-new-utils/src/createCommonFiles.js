@@ -7,7 +7,7 @@ const {
   execute,
   logTaskStatus,
   logError
-} = require("@blixi/core")
+} = require("@blixai/core")
 
 /// create things like .gitignore, scripts folder, scripts templates folder, README.md, .env, and package.json
 const createCommonFilesAndFolders = () => {

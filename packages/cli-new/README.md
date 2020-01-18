@@ -1,11 +1,11 @@
-# `@blixi/cli-new`
+# `@blixai/cli-new`
 
 > TODO: description
 
 ## Usage
 
 ```
-const cliNew = require('@blixi/cli-new');
+const cliNew = require('@blixai/cli-new');
 
 // TODO: DEMONSTRATE API
 ```

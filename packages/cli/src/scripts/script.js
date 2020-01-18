@@ -2,14 +2,14 @@ const fs = require("fs");
 const path = require("path");
 const inquirer = require('inquirer');
 const prompt = inquirer.prompt;
-const { addAPIScript } = require('@blixi/cli-new-utils')
+const { addAPIScript } = require('@blixai/cli-new-utils')
 const {
   loadFile,
   writeFile,
   checkScriptsFolderExist,
   addScriptToPackageJSON,
   appendFile
-} = require('@blixi/core')
+} = require('@blixai/core')
 
 // helper function to load files
 const commands = {

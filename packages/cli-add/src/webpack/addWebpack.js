@@ -11,7 +11,7 @@ const {
   writeFile,
   installAllPackages,
   checkIfScriptIsTaken
-} = require('@blixi/core')
+} = require('@blixai/core')
 
 
 let webpackEntry = {

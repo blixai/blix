@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 const program = require('commander');
 const terminalLink = require('terminal-link');
-const { store, clearConsole, logError } = require('@blixi/core')
+const { store, clearConsole, logError } = require('@blixai/core')
 store.mode = 'cli' // this must be set before functions are compiled in order to load necessary files properly
-const { createProject } = require("@blixi/cli-new");
+const { createProject } = require("@blixai/cli-new");
 const { notes } = require("./src/notes")
 const { scripts } = require("./src/scripts/script");
-const add = require("@blixi/cli-add");
+const add = require("@blixai/cli-add");
 const { runScript } = require("./src/do")
 const checkIfUpdate = require("./src/checkForUpdate")
 let pjson = require("./package.json");

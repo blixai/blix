@@ -1,17 +1,17 @@
 let inquirer = require('inquirer')
 let prompt   = inquirer.prompt
 const { addProjectInstructions } = require('../addProjectInstructions')
-const { database } = require('@blixi/cli-prompts')
+const { database } = require('@blixai/cli-prompts')
 const {
   addBookshelfToScripts,
   addMongooseToScripts
-} = require('@blixi/cli-new-utils')
+} = require('@blixai/cli-new-utils')
 const {
   store,
   yarn,
   checkScriptsFolderExist,
   installAllPackages
-} = require('@blixi/core')
+} = require('@blixai/core')
 
 const addDatabase = async () => {
   store.database = await prompt([database])
