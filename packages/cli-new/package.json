@@ -1,6 +1,6 @@
 {
   "name": "@blixai/cli-new",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "New command for Blix CLI",
   "author": "DBULL7 <devjbull@gmail.com>",
   "homepage": "https://github.com/blixjs/blix#readme",
@@ -10,12 +10,12 @@
     "access": "public"
   },
   "dependencies": {
-    "@blixai/cli-new-backend": "^0.0.8",
-    "@blixai/cli-new-react": "^0.0.8",
-    "@blixai/cli-new-utils": "^0.0.8",
-    "@blixai/cli-new-vue": "^0.0.9",
-    "@blixai/cli-prompts": "^0.0.5",
-    "@blixai/core": "^0.1.3",
+    "@blixai/cli-new-backend": "^0.0.9",
+    "@blixai/cli-new-react": "^0.0.9",
+    "@blixai/cli-new-utils": "^0.0.9",
+    "@blixai/cli-new-vue": "^0.0.10",
+    "@blixai/cli-prompts": "^0.0.6",
+    "@blixai/core": "^0.1.4",
     "inquirer": "^4.0.1"
   },
   "repository": {

@@ -1,6 +1,6 @@
 {
   "name": "blix",
-  "version": "1.5.3",
+  "version": "1.5.4",
   "description": "Yeoman on steroids: quickly create a multitude of Javascript applications from scratch and automate tasks with hackable scrips or add scripts and tools to existing projects.",
   "main": "./src/index.js",
   "scripts": {
@@ -33,12 +33,12 @@
     "blix": "./src/index.js"
   },
   "dependencies": {
-    "@blixai/cli-add": "^0.0.7",
-    "@blixai/cli-new": "^0.0.9",
-    "@blixai/cli-new-backend": "^0.0.8",
-    "@blixai/cli-new-utils": "^0.0.8",
-    "@blixai/cli-prompts": "^0.0.5",
-    "@blixai/core": "^0.1.3",
+    "@blixai/cli-add": "^0.0.8",
+    "@blixai/cli-new": "^0.0.10",
+    "@blixai/cli-new-backend": "^0.0.9",
+    "@blixai/cli-new-utils": "^0.0.9",
+    "@blixai/cli-prompts": "^0.0.6",
+    "@blixai/core": "^0.1.4",
     "chalk": "^2.4.1",
     "commander": "^2.19.0",
     "debug": "^4.1.1",

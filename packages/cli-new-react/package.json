@@ -1,14 +1,14 @@
 {
     "name": "@blixai/cli-new-react",
-    "version": "0.0.8",
+    "version": "0.0.9",
     "description": "",
     "main": "index.js",
     "author": "Devon Bull",
     "license": "MIT",
     "dependencies": {
-        "@blixai/cli-new-backend": "^0.0.8",
-        "@blixai/cli-new-utils": "^0.0.8",
-        "@blixai/core": "^0.1.3"
+        "@blixai/cli-new-backend": "^0.0.9",
+        "@blixai/cli-new-utils": "^0.0.9",
+        "@blixai/core": "^0.1.4"
     },
     "homepage": "https://github.com/blixjs/blix",
     "engines": {
