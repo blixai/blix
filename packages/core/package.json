@@ -15,7 +15,7 @@
     "typescript": "^3.5.3"
   },
   "dependencies": {
-    "@blixai/files": "^0.0.2",
+    "@blixai/files": "^0.0.3",
     "@types/inquirer": "0.0.44",
     "@types/mustache": "^0.8.32",
     "@types/node": "^12.6.8",
