@@ -1,6 +1,6 @@
 {
   "name": "@blixai/files",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Load files consistently across blix projects",
   "author": "DBULL7 <devjbull@gmail.com>",
   "homepage": "https://github.com/blixjs/blix#readme",

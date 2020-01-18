@@ -1,13 +1,13 @@
 {
     "name": "@blixai/cli-new-backend",
-    "version": "0.0.6",
+    "version": "0.0.7",
     "description": "",
     "main": "src/index.js",
     "author": "Devon Bull",
     "license": "MIT",
     "dependencies": {
-        "@blixai/cli-new-utils": "^0.0.6",
-        "@blixai/core": "^0.1.1"
+        "@blixai/cli-new-utils": "^0.0.7",
+        "@blixai/core": "^0.1.2"
     },
     "homepage": "https://github.com/blixjs/blix",
     "engines": {

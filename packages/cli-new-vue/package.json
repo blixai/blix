@@ -1,14 +1,14 @@
 {
     "name": "@blixai/cli-new-vue",
-    "version": "0.0.7",
+    "version": "0.0.8",
     "description": "",
     "main": "index.js",
     "author": "Devon Bull",
     "license": "MIT",
     "dependencies": {
-        "@blixai/cli-new-backend": "^0.0.6",
-        "@blixai/cli-new-utils": "^0.0.6",
-        "@blixai/core": "^0.1.1"
+        "@blixai/cli-new-backend": "^0.0.7",
+        "@blixai/cli-new-utils": "^0.0.7",
+        "@blixai/core": "^0.1.2"
     },
     "homepage": "https://github.com/blixjs/blix",
     "engines": {
