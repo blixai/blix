@@ -12,5 +12,6 @@
     "homepage": "https://github.com/blixjs/blix",
     "engines": {
         "node": ">=8.11.3"
-    }
+    },
+    "gitHead": "6aab8ec73f6d8f00b3d86ed056f8fb062f66985a"
 }
