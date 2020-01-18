@@ -6,9 +6,9 @@
     "author": "Devon Bull",
     "license": "MIT",
     "dependencies": {
-        "@blixi/cli-new-backend": "^0.0.5",
-        "@blixi/cli-prompts": "^0.0.2",
-        "@blixi/core": "^0.1.0",
+        "@blixai/cli-new-backend": "^0.0.6",
+        "@blixai/cli-prompts": "^0.0.3",
+        "@blixai/core": "^0.1.1",
         "chalk": "^2.4.1",
         "debug": "^4.1.1",
         "glob": "^7.1.2",

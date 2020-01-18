@@ -6,7 +6,7 @@
     "author": "Devon Bull",
     "license": "MIT",
     "dependencies": {
-        "@blixi/core": "^0.1.0"
+        "@blixai/core": "^0.1.1"
     },
     "homepage": "https://github.com/blixjs/blix",
     "engines": {

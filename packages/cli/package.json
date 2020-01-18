@@ -13,20 +13,32 @@
   "keywords": [
     "cli",
     "generator",
-    "scripts"
+    "scripts",
+    "front-end",
+    "development",
+    "dev",
+    "build",
+    "web",
+    "tool",
+    "scaffold",
+    "generator",
+    "generate",
+    "app",
+    "boilerplate",
+    "templates"
   ],
   "author": "Devon Bull",
   "license": "MIT",
   "bin": {
-    "blix": "./index.js"
+    "blix": "./src/index.js"
   },
   "dependencies": {
-    "@blixi/cli-add": "^0.0.4",
-    "@blixi/cli-new": "^0.0.6",
-    "@blixi/cli-new-backend": "^0.0.5",
-    "@blixi/cli-new-utils": "^0.0.5",
-    "@blixi/cli-prompts": "^0.0.2",
-    "@blixi/core": "^0.1.0",
+    "@blixai/cli-add": "^0.0.5",
+    "@blixai/cli-new": "^0.0.6",
+    "@blixai/cli-new-backend": "^0.0.5",
+    "@blixai/cli-new-utils": "^0.0.5",
+    "@blixai/cli-prompts": "^0.0.2",
+    "@blixai/core": "^0.1.1",
     "chalk": "^2.4.1",
     "commander": "^2.19.0",
     "debug": "^4.1.1",
@@ -43,5 +55,6 @@
   "engines": {
     "node": ">=8.11.3"
   },
+  "files": ["src"],
   "gitHead": "6aab8ec73f6d8f00b3d86ed056f8fb062f66985a"
 }

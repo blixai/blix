@@ -1,5 +1,4 @@
 .DS_Store
-node_modules
+node_modules/
 .vscode
-tests/tmpTests
-tests/coverage
+tests/
