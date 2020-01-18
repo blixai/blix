@@ -1,14 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var fs = require("fs");
-var store = require('./store');
-var utils_1 = require("./utils");
-var utils_2 = require("./utils");
-var process_1 = require("./process");
-var fs_1 = require("./fs");
+const fs = require("fs");
+const store = require('./store');
+const utils_1 = require("./utils");
+const utils_2 = require("./utils");
+const process_1 = require("./process");
+const fs_1 = require("./fs");
 function modifyKnex() {
-    var name;
-    var connectionName;
+    let name;
+    let connectionName;
     if (store.name) {
         connectionName = store.name;
         name = './' + store.name + '/';
@@ -18,16 +18,16 @@ function modifyKnex() {
         connectionName = utils_2.getCWDName();
     }
     try {
-        var newKnex = "module.exports = {\n\n\tdevelopment: {\n\t\tclient: 'pg',\n\t\tconnection: 'postgres://localhost/" + connectionName + "',\n\t\tmigrations: {\n\t\t\tdirectory: './db/migrations'\n\t\t},\n\t\tseeds: {\n\t\t\tdirectory: 'db/seeds/dev'\n\t\t},\n\t\tuseNullAsDefault: true\n\t},\n\n\tproduction: {\n\t\tclient: 'pg',\n\t\tconnection: process.env.DATABASE_URL + '?ssl=true',\n\t\tmigrations: {\n\t\t\tdirectory: 'db/migrations'\n\t\t},\n\t\tseeds: {\n\t\t\tdirectory: 'db/seeds/dev'\n\t\t},\n\t\tuseNullAsDefault: true\n\t}\n\n};";
-        if (fs.existsSync(name + "knexfile.js")) {
-            fs.truncateSync(name + "knexfile.js", 0);
-            fs_1.appendFile(name + "knexfile.js", newKnex);
+        let newKnex = `module.exports = {\n\n\tdevelopment: {\n\t\tclient: 'pg',\n\t\tconnection: 'postgres://localhost/${connectionName}',\n\t\tmigrations: {\n\t\t\tdirectory: './db/migrations'\n\t\t},\n\t\tseeds: {\n\t\t\tdirectory: 'db/seeds/dev'\n\t\t},\n\t\tuseNullAsDefault: true\n\t},\n\n\tproduction: {\n\t\tclient: 'pg',\n\t\tconnection: process.env.DATABASE_URL + '?ssl=true',\n\t\tmigrations: {\n\t\t\tdirectory: 'db/migrations'\n\t\t},\n\t\tseeds: {\n\t\t\tdirectory: 'db/seeds/dev'\n\t\t},\n\t\tuseNullAsDefault: true\n\t}\n\n};`;
+        if (fs.existsSync(`${name}knexfile.js`)) {
+            fs.truncateSync(`${name}knexfile.js`, 0);
+            fs_1.appendFile(`${name}knexfile.js`, newKnex);
         }
         else {
-            fs_1.writeFile("knexfile.js", newKnex);
+            fs_1.writeFile(`knexfile.js`, newKnex);
         }
-        fs_1.mkdirSync("db");
-        fs_1.mkdirSync("db/migrations");
+        fs_1.mkdirSync(`db`);
+        fs_1.mkdirSync(`db/migrations`);
     }
     catch (err) {
         utils_1._logCaughtError('Error modifying Knex', err);
@@ -36,22 +36,22 @@ function modifyKnex() {
 exports.modifyKnex = modifyKnex;
 ;
 function installKnexGlobal() {
-    var name;
+    let name;
     if (store.name) {
         name = store.name;
         try {
-            process.chdir("./" + name);
+            process.chdir(`./${name}`);
             if (store.useYarn) {
-                process_1.execute("yarn add knex global");
+                process_1.execute(`yarn add knex global`);
             }
             else {
-                process_1.execute("npm install -g knex");
+                process_1.execute(`npm install -g knex`);
             }
-            process_1.execute("createdb " + name);
+            process_1.execute(`createdb ${name}`);
             process.chdir('../');
         }
         catch (err) {
-            utils_1._logCaughtError("Error creating db: make sure postgres is installed and running and try again by entering: createdb " + name, err);
+            utils_1._logCaughtError(`Error creating db: make sure postgres is installed and running and try again by entering: createdb ${name}`, err);
             process.chdir('../');
         }
     }
@@ -64,10 +64,10 @@ function installKnexGlobal() {
             else {
                 process_1.execute('npm install -g knex');
             }
-            process_1.execute("createdb " + name);
+            process_1.execute(`createdb ${name}`);
         }
         catch (err) {
-            utils_1._logCaughtError("Error creating db: make sure postgres is installed and running and try again by entering: createdb " + name, err);
+            utils_1._logCaughtError(`Error creating db: make sure postgres is installed and running and try again by entering: createdb ${name}`, err);
         }
     }
 }

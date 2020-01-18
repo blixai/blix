@@ -1,1 +1,1 @@
-export declare function execute(command: string, showOutput?: boolean): Promise<{}>;
+export declare function execute(command: string, showOutput?: boolean): Promise<unknown>;

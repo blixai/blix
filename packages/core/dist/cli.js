@@ -1,11 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var store = require('./store');
-var logger_1 = require("./logger");
-var events_1 = require("./events");
-var debug = require('debug')("blix:core:cli:task"); // TODO figure out how to attach to each instance to further namespace by task name
-var Task = /** @class */ (function () {
-    function Task(name, symbol) {
+const store = require('./store');
+const logger_1 = require("./logger");
+const events_1 = require("./events");
+const debug = require('debug')(`blix:core:cli:task`); // TODO figure out how to attach to each instance to further namespace by task name
+class Task {
+    constructor(name, symbol) {
         this.symbol = '';
         this.successEvents = 0;
         this.errorEvents = 0;
@@ -16,14 +16,14 @@ var Task = /** @class */ (function () {
         }
         this.init();
     }
-    Task.prototype.init = function () {
+    init() {
         events_1.eventsBus.addListener(this.name, this._taskListener.bind(this)); // make sure to bind this or context is lost
-    };
-    Task.prototype.start = function () {
+    }
+    start() {
         // could probably accept args like show spinner, hide console, ....
         store.currentTask = this.name;
-    };
-    Task.prototype.finished = function () {
+    }
+    finished() {
         store.currentTask = '';
         events_1.eventsBus.removeAllListeners(this.name);
         // calculete success vs failures
@@ -36,9 +36,9 @@ var Task = /** @class */ (function () {
         else {
             logger_1.logTaskStatus(this.name, 'warning');
         }
-        debug("Total actions received by %s : %d", this.name, this.receivedEvents.length);
-    };
-    Task.prototype._taskListener = function (event) {
+        debug(`Total actions received by %s : %d`, this.name, this.receivedEvents.length);
+    }
+    _taskListener(event) {
         debug('incoming event %o', event);
         // if status is an error count it, basically count errors, successes, at the end tally them for a percentage
         if (event && event.status && event.status === 'success') {
@@ -48,7 +48,6 @@ var Task = /** @class */ (function () {
             this.errorEvents += 1;
         }
         this.receivedEvents.push(event);
-    };
-    return Task;
-}());
+    }
+}
 exports.Task = Task;

@@ -2,7 +2,7 @@
   "name": "blix",
   "version": "1.5.3",
   "description": "Yeoman on steroids: quickly create a multitude of Javascript applications from scratch and automate tasks with hackable scrips or add scripts and tools to existing projects.",
-  "main": "blix.js",
+  "main": "./src/index.js",
   "scripts": {
     "lint": "prettier --single-quote --no-semi --write '**/*.js'",
     "test": "jest --watch",

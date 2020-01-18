@@ -24,7 +24,7 @@ const store = {
   blixFailedToCheckForUpdates: false,
 }
 
-function checkIfEnvChange (key, value) {
+function checkIfEnvChange (key: string, value: string) {
   if (key === 'env' && value === 'development') {
     debug.enable('blix:*')
     storeDebug('\nStore debugging enabled')
@@ -37,22 +37,20 @@ function checkIfEnvChange (key, value) {
 }
 
 const handler = {
-  get(target, key) {
+  get(target: any, key: string) {
     let result = Reflect.get(target, key);
     if (debug.enabled) {
       getDebug('get %o. Current value is: %o', key, result);
     }
     return result
   },
-  set(_, key, value) {
+  set(_: object, key: string, value: any) {
     checkIfEnvChange(key, value)
     if (debug.enabled) {
       setDebug('set %o to %o', key, value)
     }
-    return Reflect.set(...arguments);
+    return Reflect.set(_, key, value);
   }
 }
 
-store = new Proxy(store, handler)
-
-module.exports = store
+module.exports = new Proxy(store, handler)

@@ -8,11 +8,10 @@ export declare function loadFile(file: string, folderPath: string): string;
 export declare function loadJSONFile(file: string, folderPath: string): string;
 export declare function writeJSONFile(filePath: string, file: object): void;
 /**
- * load a package.json from the cli user directly, often used for package.json checks/file manipulation
+ * @description load a package.json from the cli user directly, often used for package.json checks/file manipulation
  * @param file
  */
 export declare function loadUserJSONFile(file: string): string;
-export declare function loadTemplate(file: string, options?: object, folderPath?: string): string;
 /**
 * @param { string[] } dirs - strings of directories to create, sync, in order
 */

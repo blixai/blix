@@ -24,7 +24,7 @@ exports.addMongooseToScripts = () => {
 };
 
 exports.addMongoDBToProject = () => {
-  let name = store.name ? store.name + '/' : name = ''
+  let name = store.name ? store.name + '/' : ''
   
   let connectionString = `const mongoose = require('mongoose')\nmongoose.connect(process.env.MONGO, { useNewUrlParser: true })\n`
   insert(`./${name}server/server.js`, connectionString, 0)
