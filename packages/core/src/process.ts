@@ -1,6 +1,6 @@
 /* tslint:disable:no-console */
 import { spawn } from 'child_process'
-import store from './store'
+const store = require('./store')
 
 // child_process exec sync wrapper
 export function execute(command: string, showOutput?: boolean) {

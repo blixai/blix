@@ -6,8 +6,8 @@ import { execSync } from 'child_process'
 import { mkdirSync } from './fs'
 import { logInsert } from './logger'
 import { execute } from './process'
-import store from './store'
 import { _logCaughtError } from './utils'
+const store = require('./store')
 
 export function canUseYarn() {
   if (fs.existsSync('yarn.lock')) {

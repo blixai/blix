@@ -1,8 +1,8 @@
 import { existsSync, truncateSync } from 'fs'
 import { appendFile, mkdirSync, writeFile } from './fs'
 import { execute } from './process'
-import store from './store'
 import { _logCaughtError, getCWDName } from './utils'
+const store = require('./store')
 
 export function modifyKnex() {
   let name

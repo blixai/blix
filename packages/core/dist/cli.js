@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Debug = require("debug");
 const events_1 = require("./events");
 const logger_1 = require("./logger");
-const store_1 = require("./store");
+const store = require('./store');
 const debug = Debug(`blix:core:cli:task`); // TODO figure out how to attach to each instance to further namespace by task name
 class Task {
     constructor(name, symbol) {
@@ -22,11 +22,11 @@ class Task {
     }
     start() {
         // could probably accept args like show spinner, hide console, ....
-        store_1.default.currentTask = this.name;
+        store.currentTask = this.name;
     }
     finished() {
         // TODO make a boolean param of show debugged or clearConsole
-        store_1.default.currentTask = '';
+        store.currentTask = '';
         events_1.eventsBus.removeAllListeners(this.name);
         // calculete success vs failures
         if (this.successEvents > this.errorEvents) {

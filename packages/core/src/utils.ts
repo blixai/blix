@@ -1,6 +1,6 @@
 import { logError } from './logger'
 import { execute } from './process'
-import store from './store'
+const store = require('./store')
 
 export function getCWDName(): string {
   const rawCWD: string = process.cwd()

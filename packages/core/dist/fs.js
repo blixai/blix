@@ -15,11 +15,11 @@ const path = require("path");
 const { _loadFile } = require('@blixai/files'); // tslint:disable-line
 const events_1 = require("./events");
 const logger_1 = require("./logger");
-const store_1 = require("./store");
 const utils_1 = require("./utils");
+const store = require('./store');
 function writeFile(filePath, file) {
     try {
-        filePath = store_1.default.name ? `./${store_1.default.name}/` + filePath : './' + filePath;
+        filePath = store.name ? `./${store.name}/` + filePath : './' + filePath;
         const filePathLog = utils_1.prettyPath(filePath);
         if (fs.existsSync(filePath)) {
             fs.writeFileSync(filePath, file);
@@ -38,15 +38,15 @@ function writeFile(filePath, file) {
 }
 exports.writeFile = writeFile;
 function mkdirSync(folderPath) {
-    if (!folderPath && !store_1.default.name) {
+    if (!folderPath && !store.name) {
         return logger_1.logError(`Unable to create folder`);
     }
     else if (!folderPath) {
         folderPath = '';
     }
     try {
-        folderPath = store_1.default.name
-            ? `./${store_1.default.name}/` + folderPath
+        folderPath = store.name
+            ? `./${store.name}/` + folderPath
             : './' + folderPath;
         const folderPathLog = utils_1.prettyPath(folderPath);
         fs.mkdirSync(folderPath);
@@ -91,7 +91,7 @@ function insert(fileToInsertInto, whatToInsert, lineToInsertAt) {
         };
         // if no lineToInsertAt then readfile and pass to inquirer prompt
         try {
-            let file = fs
+            const file = fs
                 .readFileSync(fileToInsertInto, 'utf8')
                 .toString()
                 .split('\n');
@@ -130,7 +130,7 @@ function appendFile(file, stringToAppend) {
         return logger_1.logError(`No string to append provided.`);
     }
     try {
-        file = store_1.default.name ? `./${store_1.default.name}/` + file : './' + file;
+        file = store.name ? `./${store.name}/` + file : './' + file;
         fs.appendFileSync(file, stringToAppend);
         file = utils_1.prettyPath(file);
         logger_1.logAppend(file);
@@ -180,7 +180,7 @@ function loadFile(file, folderPath) {
     }
     file = utils_1.prettyPath(file);
     try {
-        if (store_1.default.mode === 'cli') {
+        if (store.mode === 'cli') {
             file = _loadFile(file);
         }
         else {
@@ -201,11 +201,11 @@ function loadJSONFile(file, folderPath) {
     // TODO ensure the file type is .json
     if (!folderPath) {
         folderPath =
-            store_1.default.mode === 'cli' ? '../../cli/files/' : '/scripts/templates';
+            store.mode === 'cli' ? '../../cli/files/' : '/scripts/templates';
     }
     file = utils_1.prettyPath(file);
     try {
-        if (store_1.default.mode === 'cli') {
+        if (store.mode === 'cli') {
             file = fs.readFileSync(path.resolve(__dirname, folderPath + file), 'utf8');
         }
         else {
@@ -225,7 +225,7 @@ exports.loadJSONFile = loadJSONFile;
 function writeJSONFile(filePath, file) {
     try {
         const fileString = JSON.stringify(file, null, 2);
-        filePath = store_1.default.name ? `./${store_1.default.name}/` + filePath : './' + filePath;
+        filePath = store.name ? `./${store.name}/` + filePath : './' + filePath;
         const filePathLog = utils_1.prettyPath(filePath);
         if (fs.existsSync(filePath)) {
             fs.writeFileSync(filePath, fileString);
@@ -306,8 +306,8 @@ function createFilesAndFolders(filePath, filesAndFolderObject) {
             writeFile(currentPath, filesAndFolderObject[key]);
         }
         else if (typeof filesAndFolderObject[key] === 'object') {
-            const pathToCheck = store_1.default.name
-                ? `./${store_1.default.name}/${currentPath}`
+            const pathToCheck = store.name
+                ? `./${store.name}/${currentPath}`
                 : currentPath;
             if (!fs.existsSync(pathToCheck)) {
                 mkdirSync(currentPath);

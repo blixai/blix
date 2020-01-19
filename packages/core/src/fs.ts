@@ -12,8 +12,8 @@ import {
   logMutate,
   logWarning,
 } from './logger'
-import store from './store'
 import { _logCaughtError, prettyPath } from './utils'
+const store = require('./store')
 
 export function writeFile(filePath: string, file: string) {
   try {
@@ -89,7 +89,7 @@ export async function insert(
   }
   // if no lineToInsertAt then readfile and pass to inquirer prompt
   try {
-    let file: any = fs
+    const file: any = fs
       .readFileSync(fileToInsertInto, 'utf8')
       .toString()
       .split('\n')

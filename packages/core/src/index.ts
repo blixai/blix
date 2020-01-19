@@ -5,4 +5,4 @@ export * from './logger'
 export * from './process'
 export * from './utils'
 export * from './cli'
-export * from './store'
+export const store = require('./store')

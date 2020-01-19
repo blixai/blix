@@ -6,7 +6,7 @@ const storeDebug = Debug('blix:core:store')
 
 const rootNamespace = 'blix:*'
 
-const store = {
+const storeDefaults = {
   backend: '',
   backendType: '',
   blixFailedToCheckForUpdates: false,
@@ -56,4 +56,4 @@ const handler = {
   },
 }
 
-export default new Proxy(store, handler)
+module.exports = new Proxy(storeDefaults, handler)

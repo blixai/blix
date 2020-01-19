@@ -3,7 +3,7 @@ import chalk from 'chalk'
 import Debug from 'debug'
 import * as logSymbols from 'log-symbols'
 import * as readline from 'readline'
-import store from './store'
+const store = require('./store')
 
 const createDebug = Debug('blix:core:fs:create')
 const deleteDebug = Debug('blix:core:fs:delete')

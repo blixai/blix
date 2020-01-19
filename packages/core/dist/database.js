@@ -3,14 +3,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const fs_1 = require("fs");
 const fs_2 = require("./fs");
 const process_1 = require("./process");
-const store_1 = require("./store");
 const utils_1 = require("./utils");
+const store = require('./store');
 function modifyKnex() {
     let name;
     let connectionName;
-    if (store_1.default.name) {
-        connectionName = store_1.default.name;
-        name = './' + store_1.default.name + '/';
+    if (store.name) {
+        connectionName = store.name;
+        name = './' + store.name + '/';
     }
     else {
         name = './';
@@ -35,11 +35,11 @@ function modifyKnex() {
 exports.modifyKnex = modifyKnex;
 function installKnexGlobal() {
     let name;
-    if (store_1.default.name) {
-        name = store_1.default.name;
+    if (store.name) {
+        name = store.name;
         try {
             process.chdir(`./${name}`);
-            if (store_1.default.useYarn) {
+            if (store.useYarn) {
                 process_1.execute(`yarn add knex global`);
             }
             else {

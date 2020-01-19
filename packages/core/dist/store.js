@@ -5,7 +5,7 @@ const getDebug = debug_1.default('blix:core:store:get');
 const setDebug = debug_1.default('blix:core:store:set');
 const storeDebug = debug_1.default('blix:core:store');
 const rootNamespace = 'blix:*';
-const store = {
+const storeDefaults = {
     backend: '',
     backendType: '',
     blixFailedToCheckForUpdates: false,
@@ -53,4 +53,4 @@ const handler = {
         return Reflect.set(_, key, value);
     },
 };
-exports.default = new Proxy(store, handler);
+module.exports = new Proxy(storeDefaults, handler);

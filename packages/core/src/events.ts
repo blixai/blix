@@ -1,6 +1,6 @@
 import * as Debug from 'debug'
 import * as EventEmitter from 'events'
-import store from './store'
+const store = require('./store')
 
 const debug = Debug('blix:core:events:emit')
 

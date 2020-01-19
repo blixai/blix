@@ -2,12 +2,12 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 /* tslint:disable:no-console */
 const child_process_1 = require("child_process");
-const store_1 = require("./store");
+const store = require('./store');
 // child_process exec sync wrapper
 function execute(command, showOutput) {
     return new Promise((resolve, reject) => {
         let child;
-        if (showOutput || store_1.default.env === 'development') {
+        if (showOutput || store.env === 'development') {
             child = child_process_1.spawn(command, { stdio: [0, 1, 2], shell: true });
         }
         else {

@@ -16,15 +16,15 @@ const child_process_1 = require("child_process");
 const fs_1 = require("./fs");
 const logger_1 = require("./logger");
 const process_1 = require("./process");
-const store_1 = require("./store");
 const utils_1 = require("./utils");
+const store = require('./store');
 function canUseYarn() {
     if (fs.existsSync('yarn.lock')) {
-        store_1.default.useYarn = true;
+        store.useYarn = true;
         return true;
     }
     else if (fs.existsSync('package-lock.json')) {
-        store_1.default.useYarn = false;
+        store.useYarn = false;
         return false;
     }
     try {
@@ -43,9 +43,9 @@ const yarnPrompt = {
 };
 function yarn() {
     return __awaiter(this, void 0, void 0, function* () {
-        if (canUseYarn() && store_1.default.useYarn === '') {
+        if (canUseYarn() && store.useYarn === '') {
             const yarnAnswer = yield inquirer.prompt([yarnPrompt]);
-            store_1.default.useYarn = yarnAnswer.yarn;
+            store.useYarn = yarnAnswer.yarn;
         }
     });
 }
@@ -74,19 +74,19 @@ function checkIfScriptIsTaken(scriptName) {
 exports.checkIfScriptIsTaken = checkIfScriptIsTaken;
 function installAllPackages() {
     return __awaiter(this, void 0, void 0, function* () {
-        if (store_1.default.dependencies) {
-            yield installDependencies(store_1.default.dependencies);
+        if (store.dependencies) {
+            yield installDependencies(store.dependencies);
         }
-        if (store_1.default.devDependencies) {
-            yield installDependencies(store_1.default.devDependencies, 'dev');
+        if (store.devDependencies) {
+            yield installDependencies(store.devDependencies, 'dev');
         }
     });
 }
 exports.installAllPackages = installAllPackages;
 function addScriptToPackageJSON(command, script) {
     let filePath = '';
-    if (store_1.default.name) {
-        filePath = `./${store_1.default.name}/package.json`;
+    if (store.name) {
+        filePath = `./${store.name}/package.json`;
     }
     else {
         filePath = './package.json';
@@ -111,10 +111,10 @@ function installDependencies(packages, type) {
             : ' Downloading dependencies';
         const spinner = ora(spinnerText).start();
         try {
-            if (store_1.default.name) {
-                process.chdir(`./${store_1.default.name}`);
+            if (store.name) {
+                process.chdir(`./${store.name}`);
             }
-            if (store_1.default.useYarn) {
+            if (store.useYarn) {
                 const command = type === 'dev' ? `yarn add ${packages} --dev` : `yarn add ${packages}`;
                 yield process_1.execute(command);
             }
@@ -124,13 +124,13 @@ function installDependencies(packages, type) {
                     : `npm install --save ${packages}`;
                 yield process_1.execute(command);
             }
-            if (store_1.default.name) {
+            if (store.name) {
                 process.chdir('../');
             }
             spinner.succeed();
         }
         catch (err) {
-            if (store_1.default.name) {
+            if (store.name) {
                 process.chdir('../');
             }
             spinner.fail();
@@ -146,19 +146,19 @@ exports.installDependencies = installDependencies;
  */
 function addDependenciesToStore(deps, type) {
     if (type) {
-        if (!store_1.default.devDependencies) {
-            store_1.default.devDependencies = deps;
+        if (!store.devDependencies) {
+            store.devDependencies = deps;
         }
         else {
-            store_1.default.devDependencies += ' ' + deps;
+            store.devDependencies += ' ' + deps;
         }
     }
     if (!type) {
-        if (!store_1.default.dependencies) {
-            store_1.default.dependencies = deps;
+        if (!store.dependencies) {
+            store.dependencies = deps;
         }
         else {
-            store_1.default.dependencies += ' ' + deps;
+            store.dependencies += ' ' + deps;
         }
     }
 }

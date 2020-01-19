@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const logger_1 = require("./logger");
 const process_1 = require("./process");
-const store_1 = require("./store");
+const store = require('./store');
 function getCWDName() {
     const rawCWD = process.cwd();
     const cwdArr = rawCWD.split('/');
@@ -25,11 +25,11 @@ function prettyPath(path) {
 exports.prettyPath = prettyPath;
 function _installDependencies(packages, type) {
     try {
-        if (store_1.default.name) {
-            process.chdir(`./${store_1.default.name}`);
+        if (store.name) {
+            process.chdir(`./${store.name}`);
         }
         let command;
-        if (store_1.default.useYarn) {
+        if (store.useYarn) {
             command =
                 type === 'dev' ? `yarn add ${packages} --dev` : `yarn add ${packages}`;
         }
@@ -40,12 +40,12 @@ function _installDependencies(packages, type) {
                     : `npm install --save ${packages}`;
         }
         process_1.execute(command);
-        if (store_1.default.name) {
+        if (store.name) {
             process.chdir('../');
         }
     }
     catch (err) {
-        if (store_1.default.name) {
+        if (store.name) {
             process.chdir('../');
         }
         _logCaughtError('Something went wrong installing the packages', err);
@@ -53,7 +53,7 @@ function _installDependencies(packages, type) {
 }
 exports._installDependencies = _installDependencies;
 function _logCaughtError(message, err) {
-    if (store_1.default.env === 'development') {
+    if (store.env === 'development') {
         logger_1.logError(`${message}. Error: ${err}`);
     }
     else {
