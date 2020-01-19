@@ -1,11 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const fs = require("fs");
-const store = require('./store');
-const utils_1 = require("./utils");
-const utils_2 = require("./utils");
+const fs_1 = require("fs");
+const fs_2 = require("./fs");
 const process_1 = require("./process");
-const fs_1 = require("./fs");
+const utils_1 = require("./utils");
+const store = require('./store');
 function modifyKnex() {
     let name;
     let connectionName;
@@ -15,26 +14,25 @@ function modifyKnex() {
     }
     else {
         name = './';
-        connectionName = utils_2.getCWDName();
+        connectionName = utils_1.getCWDName();
     }
     try {
-        let newKnex = `module.exports = {\n\n\tdevelopment: {\n\t\tclient: 'pg',\n\t\tconnection: 'postgres://localhost/${connectionName}',\n\t\tmigrations: {\n\t\t\tdirectory: './db/migrations'\n\t\t},\n\t\tseeds: {\n\t\t\tdirectory: 'db/seeds/dev'\n\t\t},\n\t\tuseNullAsDefault: true\n\t},\n\n\tproduction: {\n\t\tclient: 'pg',\n\t\tconnection: process.env.DATABASE_URL + '?ssl=true',\n\t\tmigrations: {\n\t\t\tdirectory: 'db/migrations'\n\t\t},\n\t\tseeds: {\n\t\t\tdirectory: 'db/seeds/dev'\n\t\t},\n\t\tuseNullAsDefault: true\n\t}\n\n};`;
-        if (fs.existsSync(`${name}knexfile.js`)) {
-            fs.truncateSync(`${name}knexfile.js`, 0);
-            fs_1.appendFile(`${name}knexfile.js`, newKnex);
+        const newKnex = `module.exports = {\n\n\tdevelopment: {\n\t\tclient: 'pg',\n\t\tconnection: 'postgres://localhost/${connectionName}',\n\t\tmigrations: {\n\t\t\tdirectory: './db/migrations'\n\t\t},\n\t\tseeds: {\n\t\t\tdirectory: 'db/seeds/dev'\n\t\t},\n\t\tuseNullAsDefault: true\n\t},\n\n\tproduction: {\n\t\tclient: 'pg',\n\t\tconnection: process.env.DATABASE_URL + '?ssl=true',\n\t\tmigrations: {\n\t\t\tdirectory: 'db/migrations'\n\t\t},\n\t\tseeds: {\n\t\t\tdirectory: 'db/seeds/dev'\n\t\t},\n\t\tuseNullAsDefault: true\n\t}\n\n};`;
+        if (fs_1.existsSync(`${name}knexfile.js`)) {
+            fs_1.truncateSync(`${name}knexfile.js`, 0);
+            fs_2.appendFile(`${name}knexfile.js`, newKnex);
         }
         else {
-            fs_1.writeFile(`knexfile.js`, newKnex);
+            fs_2.writeFile(`knexfile.js`, newKnex);
         }
-        fs_1.mkdirSync(`db`);
-        fs_1.mkdirSync(`db/migrations`);
+        fs_2.mkdirSync(`db`);
+        fs_2.mkdirSync(`db/migrations`);
     }
     catch (err) {
         utils_1._logCaughtError('Error modifying Knex', err);
     }
 }
 exports.modifyKnex = modifyKnex;
-;
 function installKnexGlobal() {
     let name;
     if (store.name) {
@@ -56,9 +54,9 @@ function installKnexGlobal() {
         }
     }
     else {
-        name = utils_2.getCWDName();
+        name = utils_1.getCWDName();
         try {
-            if (fs.existsSync('./yarn.lock')) {
+            if (fs_1.existsSync('./yarn.lock')) {
                 process_1.execute('yarn add knex global');
             }
             else {
@@ -72,4 +70,3 @@ function installKnexGlobal() {
     }
 }
 exports.installKnexGlobal = installKnexGlobal;
-;

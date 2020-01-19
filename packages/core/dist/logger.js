@@ -1,15 +1,17 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+/* tslint:disable:no-console */
 const chalk_1 = require("chalk");
-const readline = require('readline');
+const debug_1 = require("debug");
+const logSymbols = require("log-symbols");
+const readline = require("readline");
 const store = require('./store');
-const logSymbols = require('log-symbols');
-const createDebug = require("debug")("blix:core:fs:create");
-const deleteDebug = require("debug")("blix:core:fs:delete");
-const mutateDebug = require("debug")("blix:core:fs:mutate");
-const insertDebug = require("debug")("blix:core:fs:insert");
-const appendDebug = require("debug")("blix:core:fs:append");
-const invokeDebug = require("debug")("blix:core:fs:invoke");
+const createDebug = debug_1.default('blix:core:fs:create');
+const deleteDebug = debug_1.default('blix:core:fs:delete');
+const mutateDebug = debug_1.default('blix:core:fs:mutate');
+const insertDebug = debug_1.default('blix:core:fs:insert');
+const appendDebug = debug_1.default('blix:core:fs:append');
+const invokeDebug = debug_1.default('blix:core:fs:invoke');
 function logError(msg) {
     console.error(chalk_1.default `{red ${msg}}`);
 }
@@ -24,14 +26,16 @@ function logTaskStatus(task, status, symbol) {
         stringToStore = `${symbol} ${task}`;
     }
     else {
+        //  prettier-ignore
+        // @ts-ignore
         stringToStore = `${logSymbols[status] ? logSymbols[status] : logSymbols.success}  ${task}`;
     }
     store.tasks.push(stringToStore);
-    if (store.env !== "development") {
+    if (store.env !== 'development') {
         clearConsole();
     }
-    store.tasks.forEach((task) => {
-        console.log(task);
+    store.tasks.forEach((storedTask) => {
+        console.log(storedTask);
     });
 }
 exports.logTaskStatus = logTaskStatus;

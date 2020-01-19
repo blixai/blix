@@ -9,16 +9,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const fs = require('fs');
-const ora = require('ora');
+const fs = require("fs");
+const inquirer = require("inquirer");
+const ora = require("ora");
 const child_process_1 = require("child_process");
-const store = require('./store');
-const inquirer = require('inquirer');
-const prompt = inquirer.prompt;
-const process_1 = require("./process");
-const utils_1 = require("./utils");
 const fs_1 = require("./fs");
 const logger_1 = require("./logger");
+const process_1 = require("./process");
+const utils_1 = require("./utils");
+const store = require('./store');
 function canUseYarn() {
     if (fs.existsSync('yarn.lock')) {
         store.useYarn = true;
@@ -29,7 +28,7 @@ function canUseYarn() {
         return false;
     }
     try {
-        child_process_1.execSync("yarnpkg --version", { stdio: "ignore" });
+        child_process_1.execSync('yarnpkg --version', { stdio: 'ignore' });
         return true;
     }
     catch (e) {
@@ -38,14 +37,14 @@ function canUseYarn() {
 }
 exports.canUseYarn = canUseYarn;
 const yarnPrompt = {
-    type: 'confirm',
     message: 'Do you want to use Yarn to install packages',
-    name: "yarn"
+    name: 'yarn',
+    type: 'confirm',
 };
 function yarn() {
     return __awaiter(this, void 0, void 0, function* () {
         if (canUseYarn() && store.useYarn === '') {
-            let yarnAnswer = yield prompt([yarnPrompt]);
+            const yarnAnswer = yield inquirer.prompt([yarnPrompt]);
             store.useYarn = yarnAnswer.yarn;
         }
     });
@@ -63,9 +62,9 @@ function checkScriptsFolderExist() {
 exports.checkScriptsFolderExist = checkScriptsFolderExist;
 function checkIfScriptIsTaken(scriptName) {
     try {
-        let buffer = fs.readFileSync('./package.json');
-        let packageJson = JSON.parse(buffer);
-        return scriptName in packageJson['scripts'];
+        const buffer = fs.readFileSync('./package.json');
+        const packageJson = JSON.parse(buffer);
+        return scriptName in packageJson.scripts;
     }
     catch (err) {
         utils_1._logCaughtError(`Error finding ${scriptName} in package.json`, err);
@@ -93,10 +92,10 @@ function addScriptToPackageJSON(command, script) {
         filePath = './package.json';
     }
     try {
-        let buffer = fs.readFileSync(filePath);
-        let json = JSON.parse(buffer);
+        const buffer = fs.readFileSync(filePath);
+        const json = JSON.parse(buffer); // jslint-ignore
         json.scripts[command] = script;
-        let newPackage = JSON.stringify(json, null, 2);
+        const newPackage = JSON.stringify(json, null, 2);
         fs.writeFileSync(filePath, newPackage);
         logger_1.logInsert(`${command} script into package.json`);
     }
@@ -105,37 +104,41 @@ function addScriptToPackageJSON(command, script) {
     }
 }
 exports.addScriptToPackageJSON = addScriptToPackageJSON;
-;
 function installDependencies(packages, type) {
     return __awaiter(this, void 0, void 0, function* () {
-        let spinnerText = type === 'dev' ? ' Downloading development dependencies' : ' Downloading dependencies';
+        const spinnerText = type === 'dev'
+            ? ' Downloading development dependencies'
+            : ' Downloading dependencies';
         const spinner = ora(spinnerText).start();
         try {
             if (store.name) {
                 process.chdir(`./${store.name}`);
             }
             if (store.useYarn) {
-                let command = type === 'dev' ? `yarn add ${packages} --dev` : `yarn add ${packages}`;
+                const command = type === 'dev' ? `yarn add ${packages} --dev` : `yarn add ${packages}`;
                 yield process_1.execute(command);
             }
             else {
-                let command = type === 'dev' ? `npm install --save-dev ${packages}` : `npm install --save ${packages}`;
+                const command = type === 'dev'
+                    ? `npm install --save-dev ${packages}`
+                    : `npm install --save ${packages}`;
                 yield process_1.execute(command);
             }
-            if (store.name)
+            if (store.name) {
                 process.chdir('../');
+            }
             spinner.succeed();
         }
         catch (err) {
-            if (store.name)
+            if (store.name) {
                 process.chdir('../');
+            }
             spinner.fail();
             utils_1._logCaughtError('Something went wrong while installing the packages', err);
         }
     });
 }
 exports.installDependencies = installDependencies;
-;
 /**
  *
  * @param {string} deps - string of space separated packages to install

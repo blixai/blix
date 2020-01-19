@@ -1,12 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const store = require('./store');
 const logger_1 = require("./logger");
 const process_1 = require("./process");
+const store = require('./store');
 function getCWDName() {
-    let rawCWD = process.cwd();
-    let cwdArr = rawCWD.split('/');
-    let cwdName = cwdArr.pop() || "";
+    const rawCWD = process.cwd();
+    const cwdArr = rawCWD.split('/');
+    const cwdName = cwdArr.pop() || '';
     return cwdName;
 }
 exports.getCWDName = getCWDName;
@@ -16,7 +16,7 @@ function capitalize(word) {
 exports.capitalize = capitalize;
 // TODO need a sleep function
 function prettyPath(path) {
-    let pathStartCharacters = path.slice(0, 2);
+    const pathStartCharacters = path.slice(0, 2);
     if (pathStartCharacters === './') {
         path = path.slice(2);
     }
@@ -30,18 +30,24 @@ function _installDependencies(packages, type) {
         }
         let command;
         if (store.useYarn) {
-            command = type === 'dev' ? `yarn add ${packages} --dev` : `yarn add ${packages}`;
+            command =
+                type === 'dev' ? `yarn add ${packages} --dev` : `yarn add ${packages}`;
         }
         else {
-            command = type === 'dev' ? `npm install --save-dev ${packages}` : `npm install --save ${packages}`;
+            command =
+                type === 'dev'
+                    ? `npm install --save-dev ${packages}`
+                    : `npm install --save ${packages}`;
         }
         process_1.execute(command);
-        if (store.name)
+        if (store.name) {
             process.chdir('../');
+        }
     }
     catch (err) {
-        if (store.name)
+        if (store.name) {
             process.chdir('../');
+        }
         _logCaughtError('Something went wrong installing the packages', err);
     }
 }
