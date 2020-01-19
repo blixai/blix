@@ -1,9 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const store = require('./store');
-const logger_1 = require("./logger");
+const Debug = require("debug");
 const events_1 = require("./events");
-const debug = require('debug')(`blix:core:cli:task`); // TODO figure out how to attach to each instance to further namespace by task name
+const logger_1 = require("./logger");
+const store_1 = require("./store");
+const debug = Debug(`blix:core:cli:task`); // TODO figure out how to attach to each instance to further namespace by task name
 class Task {
     constructor(name, symbol) {
         this.symbol = '';
@@ -21,10 +22,11 @@ class Task {
     }
     start() {
         // could probably accept args like show spinner, hide console, ....
-        store.currentTask = this.name;
+        store_1.default.currentTask = this.name;
     }
     finished() {
-        store.currentTask = '';
+        // TODO make a boolean param of show debugged or clearConsole
+        store_1.default.currentTask = '';
         events_1.eventsBus.removeAllListeners(this.name);
         // calculete success vs failures
         if (this.successEvents > this.errorEvents) {

@@ -9,18 +9,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const fs = require('fs');
-const path = require('path');
-const inquirer_1 = require("inquirer");
-const store = require('./store');
-const utils_1 = require("./utils");
-const logger_1 = require("./logger");
+const fs = require("fs");
+const inquirer = require("inquirer");
+const path = require("path");
+const { _loadFile } = require('@blixai/files'); // tslint:disable-line
 const events_1 = require("./events");
-const { _loadFile } = require('@blixai/files');
+const logger_1 = require("./logger");
+const store_1 = require("./store");
+const utils_1 = require("./utils");
 function writeFile(filePath, file) {
     try {
-        filePath = store.name ? `./${store.name}/` + filePath : './' + filePath;
-        let filePathLog = utils_1.prettyPath(filePath);
+        filePath = store_1.default.name ? `./${store_1.default.name}/` + filePath : './' + filePath;
+        const filePathLog = utils_1.prettyPath(filePath);
         if (fs.existsSync(filePath)) {
             fs.writeFileSync(filePath, file);
             logger_1.logMutate(filePathLog);
@@ -38,15 +38,17 @@ function writeFile(filePath, file) {
 }
 exports.writeFile = writeFile;
 function mkdirSync(folderPath) {
-    if (!folderPath && !store.name) {
+    if (!folderPath && !store_1.default.name) {
         return logger_1.logError(`Unable to create folder`);
     }
     else if (!folderPath) {
         folderPath = '';
     }
     try {
-        folderPath = store.name ? `./${store.name}/` + folderPath : './' + folderPath;
-        let folderPathLog = utils_1.prettyPath(folderPath);
+        folderPath = store_1.default.name
+            ? `./${store_1.default.name}/` + folderPath
+            : './' + folderPath;
+        const folderPathLog = utils_1.prettyPath(folderPath);
         fs.mkdirSync(folderPath);
         logger_1.logCreate(folderPathLog);
         events_1.emit({ status: 'success', action: 'make folder', folder: folderPath });
@@ -80,18 +82,26 @@ function insert(fileToInsertInto, whatToInsert, lineToInsertAt) {
             return logger_1.logError('No string to insert specified.');
         }
         // this needs to get extracted into its own helper
-        let fileToInsertIntoLog = utils_1.prettyPath(fileToInsertInto);
-        let filePrompt = { type: 'list', name: 'lineNumber', message: 'Select a line to insert below', choices: [] };
+        const fileToInsertIntoLog = utils_1.prettyPath(fileToInsertInto);
+        const filePrompt = {
+            choices: [],
+            message: 'Select a line to insert below',
+            name: 'lineNumber',
+            type: 'list',
+        };
         // if no lineToInsertAt then readfile and pass to inquirer prompt
         try {
-            let file = fs.readFileSync(fileToInsertInto, 'utf8').toString().split('\n');
+            let file = fs
+                .readFileSync(fileToInsertInto, 'utf8')
+                .toString()
+                .split('\n');
             if (lineToInsertAt === undefined) {
                 filePrompt.choices = file;
-                let lineToInsertAfter = yield inquirer_1.prompt([filePrompt]);
+                const lineToInsertAfter = yield inquirer.prompt([filePrompt]);
                 lineToInsertAt = file.indexOf(lineToInsertAfter) + 1;
             }
             else if (isNaN(Number(lineToInsertAt))) {
-                let indexToFind = file.indexOf(lineToInsertAt);
+                const indexToFind = file.indexOf(lineToInsertAt);
                 if (indexToFind !== -1) {
                     lineToInsertAt = indexToFind + 1;
                 }
@@ -100,8 +110,8 @@ function insert(fileToInsertInto, whatToInsert, lineToInsertAt) {
                 }
             }
             file.splice(lineToInsertAt, 0, whatToInsert);
-            file = file.join('\n');
-            fs.writeFileSync(fileToInsertInto, file);
+            const finishedFile = file.join('\n');
+            fs.writeFileSync(fileToInsertInto, finishedFile);
             logger_1.logInsert(fileToInsertIntoLog);
             events_1.emit({ status: 'success', action: 'insert' });
         }
@@ -120,7 +130,7 @@ function appendFile(file, stringToAppend) {
         return logger_1.logError(`No string to append provided.`);
     }
     try {
-        file = store.name ? `./${store.name}/` + file : './' + file;
+        file = store_1.default.name ? `./${store_1.default.name}/` + file : './' + file;
         fs.appendFileSync(file, stringToAppend);
         file = utils_1.prettyPath(file);
         logger_1.logAppend(file);
@@ -134,7 +144,10 @@ exports.appendFile = appendFile;
 function moveAllFilesInDir(dirToSearch, dirToMoveTo) {
     try {
         fs.readdirSync(dirToSearch).forEach((file) => {
-            if (file === 'actions' || file === 'components' || file === 'store' || file === 'api') {
+            if (file === 'actions' ||
+                file === 'components' ||
+                file === 'store' ||
+                file === 'api') {
                 return;
             }
             try {
@@ -167,52 +180,53 @@ function loadFile(file, folderPath) {
     }
     file = utils_1.prettyPath(file);
     try {
-        if (store.mode === "cli") {
+        if (store_1.default.mode === 'cli') {
             file = _loadFile(file);
         }
         else {
             file = fs.readFileSync(process.cwd() + folderPath + file, 'utf8');
         }
         if (!file) {
-            throw `File ${file} not found!`;
+            throw new Error(`File ${file} not found!`);
         }
         return file;
     }
     catch (err) {
         utils_1._logCaughtError(`Failed to load file ${file}`, err);
-        return "";
+        return '';
     }
 }
 exports.loadFile = loadFile;
 function loadJSONFile(file, folderPath) {
     // TODO ensure the file type is .json
     if (!folderPath) {
-        folderPath = store.mode === 'cli' ? '../../cli/files/' : '/scripts/templates';
+        folderPath =
+            store_1.default.mode === 'cli' ? '../../cli/files/' : '/scripts/templates';
     }
     file = utils_1.prettyPath(file);
     try {
-        if (store.mode === 'cli') {
+        if (store_1.default.mode === 'cli') {
             file = fs.readFileSync(path.resolve(__dirname, folderPath + file), 'utf8');
         }
         else {
             file = fs.readFileSync(process.cwd() + folderPath + file, 'utf8');
         }
         if (!file) {
-            throw `JSON file ${file} not found!`;
+            throw new Error(`JSON file ${file} not found!`);
         }
         return JSON.parse(file);
     }
     catch (err) {
         utils_1._logCaughtError(`Failed to load json file ${file}`, err);
-        return "";
+        return '';
     }
 }
 exports.loadJSONFile = loadJSONFile;
 function writeJSONFile(filePath, file) {
     try {
-        let fileString = JSON.stringify(file, null, 2);
-        filePath = store.name ? `./${store.name}/` + filePath : './' + filePath;
-        let filePathLog = utils_1.prettyPath(filePath);
+        const fileString = JSON.stringify(file, null, 2);
+        filePath = store_1.default.name ? `./${store_1.default.name}/` + filePath : './' + filePath;
+        const filePathLog = utils_1.prettyPath(filePath);
         if (fs.existsSync(filePath)) {
             fs.writeFileSync(filePath, fileString);
             logger_1.logMutate(filePathLog);
@@ -237,49 +251,45 @@ function loadUserJSONFile(file) {
     try {
         file = fs.readFileSync('./' + file, 'utf8');
         if (!file) {
-            throw `JSON file ${file} not found!`;
+            throw new Error(`JSON file ${file} not found!`);
         }
         return JSON.parse(file);
     }
     catch (err) {
         utils_1._logCaughtError(`Failed to load json file ${file}`, err);
-        return "";
+        return '';
     }
 }
 exports.loadUserJSONFile = loadUserJSONFile;
 /**
-* @param { string[] } dirs - strings of directories to create, sync, in order
-*/
+ * @param { string[] } dirs - strings of directories to create, sync, in order
+ */
 function createMultipleFolders(dirs) {
     dirs.forEach(directory => {
         mkdirSync(directory);
     });
 }
 exports.createMultipleFolders = createMultipleFolders;
-/**
- *
- */
-function createMultipleFiles() {
-}
-exports.createMultipleFiles = createMultipleFiles;
+/*
+@example:
+  createFilesAndFolders(startFolderPath, {
+      folder: {
+          'file.ex'
+      },
+      'file.js',
+      'file.py',
+      folder: {
+          folder: {
+              folder: {
+                  'file.md'
+              }
+          },
+          'file.rb'
+      }
+  });
+*/
 /**
  * @description creates files and folders by just passing an object with the structure
- * @example
-    createFilesAndFolders(startFolderPath, {
-        folder: {
-            'file.ex'
-        },
-        'file.js',
-        'file.py',
-        folder: {
-            folder: {
-                folder: {
-                    'file.md'
-                }
-            },
-            'file.rb'
-        }
-    });
  *
  * @param filePath - where to start building the new files and folders from
  * @param filesAndFolderObject - object
@@ -288,15 +298,17 @@ function createFilesAndFolders(filePath, filesAndFolderObject) {
     if (filePath && filePath.trim() === '') {
         filePath = './';
     }
-    // for each level, recursively call itself and pass the new start path 
-    let fileKeys = Object.keys(filesAndFolderObject);
+    // for each level, recursively call itself and pass the new start path
+    const fileKeys = Object.keys(filesAndFolderObject);
     fileKeys.forEach(key => {
-        let currentPath = filePath + '/' + key;
+        const currentPath = filePath + '/' + key;
         if (typeof filesAndFolderObject[key] === 'string') {
             writeFile(currentPath, filesAndFolderObject[key]);
         }
         else if (typeof filesAndFolderObject[key] === 'object') {
-            let pathToCheck = store.name ? `./${store.name}/${currentPath}` : currentPath;
+            const pathToCheck = store_1.default.name
+                ? `./${store_1.default.name}/${currentPath}`
+                : currentPath;
             if (!fs.existsSync(pathToCheck)) {
                 mkdirSync(currentPath);
             }

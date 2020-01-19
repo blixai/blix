@@ -13,31 +13,11 @@ export declare function writeJSONFile(filePath: string, file: object): void;
  */
 export declare function loadUserJSONFile(file: string): string;
 /**
-* @param { string[] } dirs - strings of directories to create, sync, in order
-*/
+ * @param { string[] } dirs - strings of directories to create, sync, in order
+ */
 export declare function createMultipleFolders(dirs: [string]): void;
 /**
- *
- */
-export declare function createMultipleFiles(): void;
-/**
  * @description creates files and folders by just passing an object with the structure
- * @example
-    createFilesAndFolders(startFolderPath, {
-        folder: {
-            'file.ex'
-        },
-        'file.js',
-        'file.py',
-        folder: {
-            folder: {
-                folder: {
-                    'file.md'
-                }
-            },
-            'file.rb'
-        }
-    });
  *
  * @param filePath - where to start building the new files and folders from
  * @param filesAndFolderObject - object

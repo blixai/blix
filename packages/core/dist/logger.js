@@ -1,15 +1,17 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+/* tslint:disable:no-console */
 const chalk_1 = require("chalk");
-const readline = require('readline');
-const store = require('./store');
-const logSymbols = require('log-symbols');
-const createDebug = require("debug")("blix:core:fs:create");
-const deleteDebug = require("debug")("blix:core:fs:delete");
-const mutateDebug = require("debug")("blix:core:fs:mutate");
-const insertDebug = require("debug")("blix:core:fs:insert");
-const appendDebug = require("debug")("blix:core:fs:append");
-const invokeDebug = require("debug")("blix:core:fs:invoke");
+const debug_1 = require("debug");
+const logSymbols = require("log-symbols");
+const readline = require("readline");
+const store_1 = require("./store");
+const createDebug = debug_1.default('blix:core:fs:create');
+const deleteDebug = debug_1.default('blix:core:fs:delete');
+const mutateDebug = debug_1.default('blix:core:fs:mutate');
+const insertDebug = debug_1.default('blix:core:fs:insert');
+const appendDebug = debug_1.default('blix:core:fs:append');
+const invokeDebug = debug_1.default('blix:core:fs:invoke');
 function logError(msg) {
     console.error(chalk_1.default `{red ${msg}}`);
 }
@@ -24,50 +26,52 @@ function logTaskStatus(task, status, symbol) {
         stringToStore = `${symbol} ${task}`;
     }
     else {
+        //  prettier-ignore
+        // @ts-ignore
         stringToStore = `${logSymbols[status] ? logSymbols[status] : logSymbols.success}  ${task}`;
     }
-    store.tasks.push(stringToStore);
-    if (store.env !== "development") {
+    store_1.default.tasks.push(stringToStore);
+    if (store_1.default.env !== 'development') {
         clearConsole();
     }
-    store.tasks.forEach((task) => {
-        console.log(task);
+    store_1.default.tasks.forEach((storedTask) => {
+        console.log(storedTask);
     });
 }
 exports.logTaskStatus = logTaskStatus;
 // logger action methods
 function logCreate(msg) {
-    if (store.env === 'development') {
+    if (store_1.default.env === 'development') {
         createDebug('create %s', msg);
     }
 }
 exports.logCreate = logCreate;
 function logDeleted(msg) {
-    if (store.env === 'development') {
+    if (store_1.default.env === 'development') {
         deleteDebug('delete %s', msg);
     }
 }
 exports.logDeleted = logDeleted;
 function logMutate(msg) {
-    if (store.env === 'development') {
+    if (store_1.default.env === 'development') {
         mutateDebug('mutate %s', msg);
     }
 }
 exports.logMutate = logMutate;
 function logInsert(msg) {
-    if (store.env === 'development') {
+    if (store_1.default.env === 'development') {
         insertDebug('insert %s', msg);
     }
 }
 exports.logInsert = logInsert;
 function logAppend(msg) {
-    if (store.env === 'development') {
+    if (store_1.default.env === 'development') {
         appendDebug('append %s', msg);
     }
 }
 exports.logAppend = logAppend;
 function logInvoke(msg) {
-    if (store.env === 'development') {
+    if (store_1.default.env === 'development') {
         invokeDebug('invoke %s', msg);
         console.log(chalk_1.default `{blue invoke} ${msg}`);
     }
@@ -86,14 +90,14 @@ function clearConsole(title) {
         if (title) {
             console.log(chalk_1.default.bold.cyan(title));
         }
-        else if (store.mode === 'cli' && store.blixNeedsUpdate) {
-            console.log(_basicConsoleHeader(store.blixVersion));
+        else if (store_1.default.mode === 'cli' && store_1.default.blixNeedsUpdate) {
+            console.log(_basicConsoleHeader(store_1.default.blixVersion));
             console.log();
-            console.log(chalk_1.default.bold.red(`Blix update available. Please update to the latest version${store.blixLatestVersion ? ': ' + store.blixLatestVersion : ''}`));
+            console.log(chalk_1.default.bold.red(`Blix update available. Please update to the latest version${store_1.default.blixLatestVersion ? ': ' + store_1.default.blixLatestVersion : ''}`));
             console.log();
         }
-        else if (store.mode === 'cli') {
-            console.log(_basicConsoleHeader(store.blixVersion));
+        else if (store_1.default.mode === 'cli') {
+            console.log(_basicConsoleHeader(store_1.default.blixVersion));
             console.log();
         }
     }

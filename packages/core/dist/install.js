@@ -9,27 +9,26 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const fs = require('fs');
-const ora = require('ora');
+const fs = require("fs");
+const inquirer = require("inquirer");
+const ora = require("ora");
 const child_process_1 = require("child_process");
-const store = require('./store');
-const inquirer = require('inquirer');
-const prompt = inquirer.prompt;
-const process_1 = require("./process");
-const utils_1 = require("./utils");
 const fs_1 = require("./fs");
 const logger_1 = require("./logger");
+const process_1 = require("./process");
+const store_1 = require("./store");
+const utils_1 = require("./utils");
 function canUseYarn() {
     if (fs.existsSync('yarn.lock')) {
-        store.useYarn = true;
+        store_1.default.useYarn = true;
         return true;
     }
     else if (fs.existsSync('package-lock.json')) {
-        store.useYarn = false;
+        store_1.default.useYarn = false;
         return false;
     }
     try {
-        child_process_1.execSync("yarnpkg --version", { stdio: "ignore" });
+        child_process_1.execSync('yarnpkg --version', { stdio: 'ignore' });
         return true;
     }
     catch (e) {
@@ -38,15 +37,15 @@ function canUseYarn() {
 }
 exports.canUseYarn = canUseYarn;
 const yarnPrompt = {
-    type: 'confirm',
     message: 'Do you want to use Yarn to install packages',
-    name: "yarn"
+    name: 'yarn',
+    type: 'confirm',
 };
 function yarn() {
     return __awaiter(this, void 0, void 0, function* () {
-        if (canUseYarn() && store.useYarn === '') {
-            let yarnAnswer = yield prompt([yarnPrompt]);
-            store.useYarn = yarnAnswer.yarn;
+        if (canUseYarn() && store_1.default.useYarn === '') {
+            const yarnAnswer = yield inquirer.prompt([yarnPrompt]);
+            store_1.default.useYarn = yarnAnswer.yarn;
         }
     });
 }
@@ -63,9 +62,9 @@ function checkScriptsFolderExist() {
 exports.checkScriptsFolderExist = checkScriptsFolderExist;
 function checkIfScriptIsTaken(scriptName) {
     try {
-        let buffer = fs.readFileSync('./package.json');
-        let packageJson = JSON.parse(buffer);
-        return scriptName in packageJson['scripts'];
+        const buffer = fs.readFileSync('./package.json');
+        const packageJson = JSON.parse(buffer);
+        return scriptName in packageJson.scripts;
     }
     catch (err) {
         utils_1._logCaughtError(`Error finding ${scriptName} in package.json`, err);
@@ -75,28 +74,28 @@ function checkIfScriptIsTaken(scriptName) {
 exports.checkIfScriptIsTaken = checkIfScriptIsTaken;
 function installAllPackages() {
     return __awaiter(this, void 0, void 0, function* () {
-        if (store.dependencies) {
-            yield installDependencies(store.dependencies);
+        if (store_1.default.dependencies) {
+            yield installDependencies(store_1.default.dependencies);
         }
-        if (store.devDependencies) {
-            yield installDependencies(store.devDependencies, 'dev');
+        if (store_1.default.devDependencies) {
+            yield installDependencies(store_1.default.devDependencies, 'dev');
         }
     });
 }
 exports.installAllPackages = installAllPackages;
 function addScriptToPackageJSON(command, script) {
     let filePath = '';
-    if (store.name) {
-        filePath = `./${store.name}/package.json`;
+    if (store_1.default.name) {
+        filePath = `./${store_1.default.name}/package.json`;
     }
     else {
         filePath = './package.json';
     }
     try {
-        let buffer = fs.readFileSync(filePath);
-        let json = JSON.parse(buffer);
+        const buffer = fs.readFileSync(filePath);
+        const json = JSON.parse(buffer); // jslint-ignore
         json.scripts[command] = script;
-        let newPackage = JSON.stringify(json, null, 2);
+        const newPackage = JSON.stringify(json, null, 2);
         fs.writeFileSync(filePath, newPackage);
         logger_1.logInsert(`${command} script into package.json`);
     }
@@ -105,37 +104,41 @@ function addScriptToPackageJSON(command, script) {
     }
 }
 exports.addScriptToPackageJSON = addScriptToPackageJSON;
-;
 function installDependencies(packages, type) {
     return __awaiter(this, void 0, void 0, function* () {
-        let spinnerText = type === 'dev' ? ' Downloading development dependencies' : ' Downloading dependencies';
+        const spinnerText = type === 'dev'
+            ? ' Downloading development dependencies'
+            : ' Downloading dependencies';
         const spinner = ora(spinnerText).start();
         try {
-            if (store.name) {
-                process.chdir(`./${store.name}`);
+            if (store_1.default.name) {
+                process.chdir(`./${store_1.default.name}`);
             }
-            if (store.useYarn) {
-                let command = type === 'dev' ? `yarn add ${packages} --dev` : `yarn add ${packages}`;
+            if (store_1.default.useYarn) {
+                const command = type === 'dev' ? `yarn add ${packages} --dev` : `yarn add ${packages}`;
                 yield process_1.execute(command);
             }
             else {
-                let command = type === 'dev' ? `npm install --save-dev ${packages}` : `npm install --save ${packages}`;
+                const command = type === 'dev'
+                    ? `npm install --save-dev ${packages}`
+                    : `npm install --save ${packages}`;
                 yield process_1.execute(command);
             }
-            if (store.name)
+            if (store_1.default.name) {
                 process.chdir('../');
+            }
             spinner.succeed();
         }
         catch (err) {
-            if (store.name)
+            if (store_1.default.name) {
                 process.chdir('../');
+            }
             spinner.fail();
             utils_1._logCaughtError('Something went wrong while installing the packages', err);
         }
     });
 }
 exports.installDependencies = installDependencies;
-;
 /**
  *
  * @param {string} deps - string of space separated packages to install
@@ -143,19 +146,19 @@ exports.installDependencies = installDependencies;
  */
 function addDependenciesToStore(deps, type) {
     if (type) {
-        if (!store.devDependencies) {
-            store.devDependencies = deps;
+        if (!store_1.default.devDependencies) {
+            store_1.default.devDependencies = deps;
         }
         else {
-            store.devDependencies += ' ' + deps;
+            store_1.default.devDependencies += ' ' + deps;
         }
     }
     if (!type) {
-        if (!store.dependencies) {
-            store.dependencies = deps;
+        if (!store_1.default.dependencies) {
+            store_1.default.dependencies = deps;
         }
         else {
-            store.dependencies += ' ' + deps;
+            store_1.default.dependencies += ' ' + deps;
         }
     }
 }
