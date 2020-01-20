@@ -1,6 +1,6 @@
 <p align="center">
-  <a href="https://blixjs.com" target="_blank" rel="noopener noreferrer">
-    <img width="222" src="https://blixjs.com/logo.png" alt="Blix logo">
+  <a href="https://docs.blix.ai" target="_blank" rel="noopener noreferrer">
+    <img width="222" src="https://docs.blix.ai/logo.png" alt="Blix logo">
   </a>
 </p>
 <p align="center">
@@ -18,7 +18,7 @@
   </a>
 </p>
 
-<h2 align="center">For documentation + guides visit our <a href="https://blixjs.com">website</a></h2>
+<h2 align="center">For documentation + guides visit our <a href="https://docs.blix.ai" target="_blank">website</a></h2>
 
 Blix Cli is a multi use tool for 
 1) Creating applications 
@@ -67,7 +67,7 @@ You will then be prompted on what you need for your new project.
 
 For more in-depth walkthroughs check out these quick start examples on our website:
 
-[**New Default Project**](https://www.blixjs.com/guide/examples/default-project.html)
+[**New Default Project**](https://docs.blix.ai/guide/examples/default-project.html)
 
 
-[**Add Redux/React-Router to Create-React-App**](https://www.blixjs.com/guide/examples/add-redux-and-react-router-to-create-react-app.html
+[**Add Redux/React-Router to Create-React-App**](https://docs.blix.ai/guide/examples/add-redux-and-react-router-to-create-react-app.html
