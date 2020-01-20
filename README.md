@@ -70,4 +70,4 @@ For more in-depth walkthroughs check out these quick start examples on our websi
 [**New Default Project**](https://docs.blix.ai/guide/examples/default-project.html)
 
 
-[**Add Redux/React-Router to Create-React-App**](https://docs.blix.ai/guide/examples/add-redux-and-react-router-to-create-react-app.html
+[**Add Redux/React-Router to Create-React-App**](https://docs.blix.ai/guide/examples/add-redux-and-react-router-to-create-react-app.html)
