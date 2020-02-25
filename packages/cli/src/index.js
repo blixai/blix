@@ -89,7 +89,7 @@ const main = async () => {
         );
         process.exit(1);
     }
-    await checkIfUpdate(pjson)
+    await checkIfUpdate(pjson, { interval: 1 })
     
     const debugModeArgs = ["-d", "--debug"]
     const debugModeArgUsed = debugModeArgs.some(arg => process.argv.includes(arg))
