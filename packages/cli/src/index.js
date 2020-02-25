@@ -48,8 +48,11 @@ const executeCommand = (program) => {
 
     program
         .command('do')
+        .option('-l, --last', 'Scroll through the last used commands and press enter to execute')
         .description('show a dropdown selector of package.json scripts. Select one and press enter to execute')
-        .action(() => runScript("."))
+        .action((cmdObject) => {
+            runScript({ usePreviousCommand: cmdObject.last })
+        })
 
     program
         .command('notes')
@@ -86,7 +89,7 @@ const main = async () => {
         );
         process.exit(1);
     }
-    await checkIfUpdate(pjson)
+    await checkIfUpdate(pjson, { interval: 1 })
     
     const debugModeArgs = ["-d", "--debug"]
     const debugModeArgUsed = debugModeArgs.some(arg => process.argv.includes(arg))

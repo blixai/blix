@@ -5,6 +5,9 @@ const { spawn } = require('child_process')
 const inquirer = require('inquirer')
 const prompt = inquirer.prompt
 const chalk = require('chalk')
+const Conf = require('conf');
+
+const configField = 'previousDoCommands'
 
 const scriptChoices = {
     type: 'list',
@@ -26,7 +29,24 @@ const additionalArgs = {
     message: chalk.underline('Add any additional args') + ':  '
 }
 
-async function runScript(directoryToSearch) {
+const selectPreviousCommand = {
+    type: 'list',
+    name: 'command',
+    message: 'Select a previously used "blix do" command',
+    choices: []
+}
+
+async function _findAndRunPreviousCommand() {
+    const config = new Conf({ projectName: 'blix' })
+    selectPreviousCommand.choices = config.get(configField) || []
+    const selectedCommand = await prompt([selectPreviousCommand])
+    spawn(selectedCommand.command, shellObject)
+}
+
+async function runScript({ directoryToSearch = ".", usePreviousCommand = false }) {
+    if (usePreviousCommand) {
+        return _findAndRunPreviousCommand();
+    }
     if (existsSync(`${directoryToSearch}/package.json`)) {
         try {
             const packageJSON = readFileSync(`${directoryToSearch}/package.json`, "utf8")
@@ -41,13 +61,13 @@ async function runScript(directoryToSearch) {
                 }
             })
             const selectedChoice = await prompt([scriptChoices])
-            executeSelectedCommand(selectedChoice.script, directoryToSearch)
+            _executeSelectedCommand({ choice: selectedChoice.script, directoryToSearch })
         } catch (err) {
             logError(err)
         }
     } else {
         try {
-            const foundDirectories = findDirectories(directoryToSearch)
+            const foundDirectories = _findDirectories(directoryToSearch)
             projectSelector.choices = foundDirectories
             const selectedProject = await prompt([projectSelector])
             runScript(`./${directoryToSearch}/${selectedProject.project}`)
@@ -61,21 +81,47 @@ const ignoreList = [
     "node_modules", 
 ]
 
-function findDirectories(dir) {
+const shellObject = { stdio: [0, 1, 2], shell: true }
+
+function _findDirectories(dir) {
     const dirs = p => readdirSync(p).filter(f => lstatSync(join(p, f)).isDirectory() && !ignoreList.includes(f) && f.charAt(0) !== ".")
     return dirs(dir)
 }
 
-async function executeSelectedCommand(choice, directoryToSearch) {
+function _saveCommandToHistory(command) {
+    const config = new Conf({ projectName: 'blix' });
+    if (config.has(configField)) {
+        const previousCommands = config.get(configField)
+        if (Array.isArray(previousCommands)) {
+            const filteredPreviousCommands = previousCommands.filter(cmd => cmd.trim() !== command)
+            if (filteredPreviousCommands.length >= 100) {
+                filteredPreviousCommands.pop()
+            }
+            filteredPreviousCommands.unshift(command)
+            config.set(configField, filteredPreviousCommands)
+        }
+    } else {
+        config.set(configField, [command])
+    }
+}
+
+async function _executeSelectedCommand({ choice, directoryToSearch }) {
     let packageCommand = "npm run"
     if (existsSync('yarn.lock')) {
         packageCommand = "yarn"
     }
     additionalArgs.message += `${packageCommand} ${choice}`
     const finalArgs = await prompt([additionalArgs])
-    const finalCommand = `${packageCommand} ${choice} ${finalArgs.args}`;
+    let finalCommand = '';
+    if (finalArgs.args) {
+        finalCommand = `${packageCommand} ${choice} ${finalArgs.args}`;
+    } else {
+        finalCommand = `${packageCommand} ${choice}`
+    }
+    _saveCommandToHistory(finalCommand)
     console.log(`\n\n${chalk.bold('>> Executing Selected Command: ')} ${chalk.yellow(finalCommand)}`)
-    spawn(finalCommand, { cwd: directoryToSearch, stdio: [0, 1, 2], shell: true })
+    shellObject.cwd = directoryToSearch
+    spawn(finalCommand, shellObject)
 }
 
 module.exports = {

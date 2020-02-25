@@ -1,6 +1,6 @@
 {
   "name": "blix",
-  "version": "1.5.4",
+  "version": "1.6.3",
   "description": "Yeoman on steroids: quickly create a multitude of Javascript applications from scratch and automate tasks with hackable scrips or add scripts and tools to existing projects.",
   "main": "./src/index.js",
   "scripts": {
@@ -41,6 +41,7 @@
     "@blixai/core": "^0.1.4",
     "chalk": "^2.4.1",
     "commander": "^2.19.0",
+    "conf": "^6.2.1",
     "debug": "^4.1.1",
     "glob": "^7.1.2",
     "inquirer": "^4.0.1",
