@@ -94,7 +94,7 @@ function _saveCommandToHistory(command) {
         const previousCommands = config.get(configField)
         if (Array.isArray(previousCommands)) {
             const filteredPreviousCommands = previousCommands.filter(cmd => cmd.trim() !== command)
-            filteredPreviousCommands.push(command)
+            filteredPreviousCommands.unshift(command)
             config.set(configField, filteredPreviousCommands)
         }
     } else {
