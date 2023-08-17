@@ -1,6 +1,6 @@
 <p align="center">
-  <a href="https://docs.blix.ai" target="_blank" rel="noopener noreferrer">
-    <img width="222" src="https://docs.blix.ai/logo.png" alt="Blix logo">
+  <a href="https://docs.blixjs.com" target="_blank" rel="noopener noreferrer">
+    <img width="222" src="https://docs.blixjs.com/logo.png" alt="Blix logo">
   </a>
 </p>
 <p align="center">
@@ -18,7 +18,7 @@
   </a>
 </p>
 
-<h2 align="center">For documentation + guides visit our <a href="https://docs.blix.ai" target="_blank">website</a></h2>
+<h2 align="center">For documentation + guides visit our <a href="https://docs.blixjs.com" target="_blank">website</a></h2>
 
 Blix Cli is a multi use tool for 
 1) Creating applications 
